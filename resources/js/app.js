@@ -7,12 +7,9 @@
 import './bootstrap';
 import Vue from 'vue';
 
-//グローバルコンポーネント
-// import store      from './store';
-//ルーティングの定義をインポートする
-import router     from './router';
-//ルートコンポーネントをインポートする
-import App        from './App.vue';
+import store      from './store'; //グローバルコンポーネント
+import router     from './router'; //ルーティングの定義をインポートする
+import App        from './App.vue'; //ルートコンポーネントをインポートする
 import moment     from 'moment';
 
 /**
@@ -36,6 +33,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 
 new Vue({
   el: '#app',
+  store,
   router, //ルーティングの定義を読み込む
   components: { App }, //ルートコンポーネントの使用を宣言する
   template: '<App />' //ルートコンポーネントを描画する

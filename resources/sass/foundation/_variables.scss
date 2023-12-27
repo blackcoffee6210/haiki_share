@@ -1,0 +1,61 @@
+// Typography
+$line-height-base: 1.6;
+$font-family-base: -apple-system, BlinkMacSystemFont, sans-serif;
+
+// Colors
+$blue: #3490dc;
+$indigo: #6574cd;
+$purple: #9561e2;
+$pink: #f66d9b;
+$red: #e3342f;
+$orange: #f6993f;
+$yellow: #ffed4a;
+$green: #38c172;
+$teal: #4dc0b5;
+$cyan: #6cb2eb;
+$white: #fff;
+
+$bg-color: #f8fafc;
+$font-color: #333;
+$main-color: #f96204;
+$sub-color: #fdbf99;
+$error-color: #ff5252;
+$gray-color: rgba(0,0,0, .2);
+$link-color: #1b94e0;
+
+//Site Width
+$site-width: 980px;
+
+//Break Point
+$breakpoints: (
+  'sp' : 'screen and (max-width: 450px)', //iPhone14 Pro Maxのサイズ
+  'tab': 'screen and (min-width: 451px) and (max-width:820px)', //iPad Airのサイズ
+  'pc' : 'screen and (min-width: 821px) and (max-width: 1199px)',
+  'mon': 'screen and (min-width: 1200px)'
+) !default;
+
+// @mixinは関数のようなものを作れる
+// map-get()の第一引数に変数名、第二引数にマップ型のキーを渡すとマップ型の値が返る
+@mixin mq($breakpoint: sp) {
+  @media #{ map-get($breakpoints, $breakpoint) } {
+    @content;
+  }
+}
+
+// Font size
+$font-size_xs: 1.0rem;
+$font-size_s: 1.2rem;
+$font-size_m: 1.4rem;
+$font-size_default: 1.6rem;
+$font-size_l: 1.8rem;
+$font-size_xl: 2.4rem;
+$font-size_2xl: 3.0rem;
+$font-size_3xl: 3.8rem;
+
+// Space
+$space_s: 5px;
+$space_m: 10px;
+$space_l: 15px;
+$space_xl: 20px;
+$space_2xl: 30px;
+$space_3xl: 40px;

@@ -1,0 +1,9 @@
+.c-link {
+  text-align: center;
+  color: $font-color;
+  display: block;
+  &:hover {
+    color: $font-color;
+    cursor: pointer;
+  }
+}

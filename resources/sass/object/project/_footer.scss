@@ -1,0 +1,40 @@
+.p-footer {
+  height: 70px;
+  border-top: 1px solid $gray-color;
+  padding: 0 $space_xl;
+  box-sizing: border-box;
+  margin-top: $space_3xl;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  @include mq() {
+    width: 100%;
+    padding: 0 $space_m;
+    margin-top: $space_xl;
+  }
+  &__left {
+
+  }
+  &__right {
+  }
+  &__link {
+    font-size: $font-size_m;
+    margin-left: $space_xl;
+    &:first-child {
+      margin: 0;
+    }
+    @include mq() {
+      display: block;
+      margin-left: initial;
+      font-size: $font-size_xs;
+      text-align: right;
+    }
+  }
+  &__copy {
+    font-size: $font-size_m;
+    text-align: right;
+    @include mq() {
+      font-size: $font-size_xs;
+    }
+  }
+}

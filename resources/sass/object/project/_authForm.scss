@@ -1,0 +1,46 @@
+.p-auth-form {
+  background: $white;
+  width: 360px;
+  margin: 0 auto;
+  padding: $space_xl;
+  @include mq() {
+    width: 100%;
+    padding: $space_m;
+  }
+  &__title {
+    margin-bottom: $space_xl;
+    @include mq() {
+      margin-bottom: $space_m;
+    }
+  }
+  &__form {
+    width: 100%;
+  }
+  &__label {
+    margin: $space_xl 0 $space_s 0;
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+  &__input {
+    width: 100%;
+  }
+  &__check-container {
+    margin-top: $space_xl;
+  }
+  &__check {
+    width: 20px;
+    height: 20px;
+    margin-right: $space_s;
+  }
+  &__btn {
+    width: 100%;
+    margin-top: $space_2xl;
+    margin-bottom: $space_xl;
+  }
+  &__u-line {
+    margin-top: $space_m;
+    margin-bottom: $space_m;
+    border-top: 1px solid $gray-color;
+  }
+}

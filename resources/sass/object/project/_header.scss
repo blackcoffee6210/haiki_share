@@ -1,0 +1,168 @@
+.p-header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 70px;
+  position: relative;
+  padding: 0 $space_xl;
+  border-bottom: 1px solid $gray-color;
+  margin-bottom: $space_3xl;
+  //スマートフォンのスタイル
+  @include mq() {
+    height: 50px;
+    padding: 0 $space_m;
+    margin-bottom: $space_l;
+  }
+  @include mq('tab') {
+    margin-bottom: $space_xl;
+  }
+  //ヘッダーの左側
+  &__left {
+    display: flex;
+    align-items: center;
+  }
+  //ロゴ
+  &__logo {
+    font-size: $font-size_3xl;
+    font-weight: bold;
+    margin-right: $space_xl;
+    color: $font-color;
+    &--main-color {
+      color: $main-color;
+      display: inline-block;
+      transform: rotate(-25deg);
+      margin-right: 2px;
+    }
+    &:hover {
+      color: $font-color;
+    }
+    @include mq() {
+      font-size: $font-size_xl;
+    }
+  }
+  //説明文
+  &__sub {
+    font-size: $font-size_m;
+    font-weight: bold;
+    @include mq() {
+      font-size: $font-size_xs;
+    }
+  }
+  //ヘッダーの右側
+  &__right {
+    display: flex;
+    align-items: center;
+  }
+  //ハンバーガーメニュー
+  &__hamburger {
+    display: none;
+    @include mq() {
+      display: block;
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 70px;
+      height: 70px;
+      cursor: pointer;
+      z-index: 11;
+    }
+    //ハンバーガーメニュー三本線
+    &__line {
+      @include mq() {
+        position: absolute;
+        top: 0;
+        left: 20px;
+        width: 32px;
+        height: 2px;
+        background: #333;
+        text-align: center;
+        //上の線
+        &:nth-of-type(1) {
+          top: 16px;
+          transition: .4s ease;
+        }
+        //真ん中の線
+        &:nth-of-type(2) {
+          top: 26px;
+          transition: .4s ease;
+        }
+        //下の線
+        &:nth-of-type(3) {
+          top: 36px;
+          transition: .4s ease;
+        }
+        &.v-line01 {
+          transform: translateY(10px) rotate(-45deg);
+          transition: .4s ease;;
+        }
+        &.v-line02 {
+          transition: .4s ease;
+          opacity: 0;
+        }
+        &.v-line03 {
+          transform: translateY(-10px) rotate(45deg);
+          transition: .4s ease;
+        }
+      }
+    }
+  }
+  //ナビゲーション
+  &__nav {
+    display: block;
+    @include mq() {
+      position: fixed;
+      width: 100%;
+      height: 100vh;
+      padding-top: 100px;
+      top: 0;
+      right: -100%;
+      background: rgba(255, 255, 255, .8);
+      transition: .5s;
+      transform: translateX(100%);
+      z-index: 10;
+      &.v-slide {
+        transition: .5s;
+        transform: translateX(-100%);
+        z-index: 10;
+      }
+    }
+  }
+  &__link {
+    position: relative;
+    margin-right: $space_xl;
+    font-weight: bold;
+    @include mq() {
+      width: 100%;
+      display: block;
+      text-align: center;
+      margin-right: initial;
+      padding: $space_m;
+      font-size: $font-size_m;
+      font-weight: initial;
+    }
+    &:last-child {
+      margin-right: initial;
+    }
+    &::after {
+      position: absolute;
+      content: "";
+      display: block;
+      width: 100%;
+      height: 3px;
+      background: $main-color;
+      bottom: -5px;
+      left: 0;
+      /*横方向0で非表示にする*/
+      -webkit-transform: scale(0, 1);
+      transform: scale(0, 1);
+      -webkit-transform-origin: center top;
+      transform-origin: center top;
+      /*アニメーションの速度設定*/
+      -webkit-transition: all 0.3s ease;
+      transition: all 0.3s ease;
+    }
+    &:hover::after {
+      transform: scale(1, 1);
+    }
+  }
+}

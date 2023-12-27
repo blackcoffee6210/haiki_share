@@ -1,0 +1,26 @@
+.l-main {
+  width: $site-width;
+  margin: 0 auto;
+  display: flex;
+  @include mq() {
+    width: 100%;
+    display: block;
+  }
+  @include mq('tab') {
+    width: 100%;
+    margin: 0 auto;
+    padding-right: $space_xl;
+    padding-left: $space_xl;
+  }
+}
+.l-main__2column {
+  width: 70%;
+  padding-right: $space_xl;
+  @include mq() {
+    width: 100%;
+    padding-right: 0;
+  }
+  @include mq('tab') {
+    padding-right: 0;
+  }
+}

@@ -1,0 +1,38 @@
+.c-btn {
+  display: block;
+  background: $main-color;
+  color: #fff;
+  text-align: center;
+  font-weight: bold;
+  border-radius: 3px;
+  font-size: $font-size_m;
+  min-width: 125px;
+  width: 125px;
+  height: 35px;
+  padding: $space_s $space_m;
+  &:hover {
+    cursor: pointer;
+    opacity: .8;
+    transition: .3s;
+    text-decoration: none;
+    color: #fff;
+  }
+  &--twitter {
+    background: #00acee;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 3px;
+    display: inline-block;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  &--white {
+    color: $font-color;
+    background: $white;
+    border: 1px solid $gray-color;
+    &:hover {
+      color: $font-color;
+    }
+  }
+}

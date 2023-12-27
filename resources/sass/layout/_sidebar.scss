@@ -1,0 +1,6 @@
+.l-sidebar {
+  width: 30%;
+  @include mq() {
+    width: 100%;
+  }
+}
