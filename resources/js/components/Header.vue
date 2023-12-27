@@ -28,9 +28,11 @@
 				
 				<!-- ログインしていないときのメニュー -->
 				<nav v-else class="p-header__nav" :class="{ 'v-slide': active }">
+					<!-- ログインボタン -->
 					<router-link :to="{ name: 'login' }"
 											 class="p-header__link"
 											 @click="toggleNav">ログイン</router-link>
+					<!-- ユーザー登録ボタン -->
 					<router-link :to="{ name: 'register' }"
 											 class="p-header__link"
 											 @click="toggleNav">新規登録</router-link>
@@ -87,27 +89,3 @@ export default {
 	}
 }
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

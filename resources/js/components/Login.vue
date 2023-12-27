@@ -12,7 +12,7 @@
 							 v-model="loginForm.email"
 							 class="c-input p-auth-form__input"
 							 id="email"
-							 placeholder="mail@eureka.com">
+							 placeholder="mail@haiki_share.com">
 				<!-- エラーメッセージ	-->
 				<div v-if="loginErrors">
 					<div v-for="msg in loginErrors.email"
@@ -51,7 +51,7 @@
 			<!-- パスワードリマインダー	-->
 			<router-link :to="{ name: 'passResetEmail' }"
 									 class="c-link">パスワードをお忘れの方はこちら</router-link>
-			<hr class="c-hr">
+			<hr class="p-auth-form__u-line">
 			<!-- 会員登録へ遷移	-->
 			<router-link :to="{ name: 'register' }"
 									 class="c-link">会員登録はこちら</router-link>

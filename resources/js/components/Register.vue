@@ -7,17 +7,17 @@
 				<!-- csrf -->
 				<input type="hidden" name="_token" :value="$store.state.csrf">
 				
-				<!--&lt;!&ndash; name&ndash;&gt;-->
-				<!--<label for="name" class="c-label p-auth-form__label">お名前</label>-->
-				<!--<input type="text"-->
-				<!--			 id="name"-->
-				<!--			 class="c-input p-auth-form__input"-->
-				<!--			 v-model="registerForm.name"-->
-				<!--			 placeholder="ユリィカ君">-->
-				<!--&lt;!&ndash; エラーメッセージ	&ndash;&gt;-->
-				<!--<div v-if="registerErrors">-->
-				<!--	<div v-for="msg in registerErrors.name" :key="msg" class="p-error">{{ msg }}</div>-->
-				<!--</div>-->
+				<!-- name-->
+				<label for="name" class="c-label p-auth-form__label">お名前</label>
+				<input type="text"
+							 id="name"
+							 class="c-input p-auth-form__input"
+							 v-model="registerForm.name"
+							 placeholder="ハイキ君">
+				<!-- エラーメッセージ	-->
+				<div v-if="registerErrors">
+					<div v-for="msg in registerErrors.name" :key="msg" class="p-error">{{ msg }}</div>
+				</div>
 				
 				<!-- email-->
 				<label for="email" class="c-label p-auth-form__label">Eメール</label>
@@ -51,7 +51,7 @@
 							 id="password-confirmation"
 							 class="c-input p-auth-form__input"
 							 v-model="registerForm.password_confirmation"
-							 placeholder="6文字以上の半角英数字">
+							 placeholder="8文字以上の半角英数字">
 				<!-- エラーメッセージ	-->
 				<div v-if="registerErrors">
 					<div v-for="msg in registerErrors.password_confirmation" :key="msg" class="p-error">{{ msg }}</div>
@@ -75,6 +75,7 @@ export default {
 	data() {
 		return {
 			registerForm: {
+				name: '',
 				email: '',
 				password: '',
 				password_confirmation: ''

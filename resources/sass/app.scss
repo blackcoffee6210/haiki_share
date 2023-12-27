@@ -28,22 +28,21 @@
 //@import "object/component/card";
 //@import "object/component/column";
 //@import "object/component/flex";
-//@import "object/component/goTop";
-//@import "object/component/hr";
+@import "object/component/goTop";
 //@import "object/component/icon";
 @import "object/component/input";
 @import "object/component/label";
 @import "object/component/link";
-//@import "object/component/message";
+@import "object/component/message";
 @import "object/component/title";
 
 
 //=================================================================
 //Object/Project
 //=================================================================
-//@import "object/project/error/404";
+@import "object/project/404";
 @import "object/project/error";
-//@import "object/project/agreement";
+@import "object/project/agreement";
 //@import "object/project/article";
 //@import "object/project/articleDetail";
 @import "object/project/authForm";
@@ -58,12 +57,12 @@
 //@import "object/project/loading";
 //@import "object/project/mypage";
 //@import "object/project/pagination";
-//@import "object/project/policy";
+@import "object/project/policy";
 //@import "object/project/postReview";
 //@import "object/project/reviewDetail";
 //@import "object/project/reviewed";
 //@import "object/project/sidebar";
-//@import "object/project/tokutei";
+@import "object/project/tokutei";
 //@import "object/project/top";
 //@import "object/project/userReview";
 //@import "object/project/withdraw";

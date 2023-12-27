@@ -1,0 +1,18 @@
+.c-message {
+  color: $white;
+  border: $main-color;
+  background: #fda066;
+  position: absolute;
+  line-height: 50px;
+  font-weight: bold;
+  width: 100%;
+  height: 50px;
+  top: 70px;
+  text-align: center;
+  font-size: $font-size_default;
+  @include mq() {
+    top: 50px;
+    height: 40px;
+    line-height: 40px;
+  }
+}

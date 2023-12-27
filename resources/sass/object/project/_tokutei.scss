@@ -1,0 +1,58 @@
+.p-tokutei {
+  width: 70%;
+  margin: 0 auto;
+  @include mq() {
+    width: 100%;
+    padding-left: $space_m;
+    padding-right: $space_m;
+  }
+  &__title {
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: $space_3xl;
+    @include mq() {
+      font-size: $font-size_default;
+      margin-bottom: $space_xl;
+    }
+  }
+  &__table {
+    width: 100%;
+  }
+  & th {
+    width: 20%;
+    border-right: 1px solid $white;
+    background: #f6f5f5;
+    border-bottom: 1px solid #ccc;
+    border-right: 1px solid $white;
+    border-bottom: 1px solid #ccc;
+    padding: $space_m;
+    text-align: center;
+    font-weight: normal;
+    color: #444;
+    font-size: $font-size_m;
+    vertical-align: middle;
+    @include mq() {
+      width: 30%;
+      font-size: $font-size_s;
+      padding: $space_s;
+    }
+  }
+  & td {
+    border-bottom: 1px solid #ccc;
+    font-size: $font-size_m;
+    padding: $space_m;
+    color: #444;
+    vertical-align: middle;
+    @include mq() {
+      width: 70%;
+      font-size: $font-size_s;
+      padding: $space_s;
+    }
+  }
+  &__withdraw {
+    color: #444;
+    &:hover {
+      color: #444;
+    }
+  }
+}

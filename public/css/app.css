@@ -566,6 +566,26 @@ body {
   color: #333;
 }
 
+.c-go-top {
+  display: block;
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+  text-align: center;
+  color: #fff;
+  background: #fdbf99;
+  position: fixed;
+  bottom: 60px;
+  right: 60px;
+}
+
+@media screen and (max-width: 450px) {
+  .c-go-top {
+    bottom: 20px;
+    right: 20px;
+  }
+}
+
 .c-input {
   display: block;
   border: 1px solid rgba(0, 0, 0, 0.2);
@@ -591,15 +611,106 @@ body {
   cursor: pointer;
 }
 
+.c-message {
+  color: #fff;
+  border: #f96204;
+  background: #fda066;
+  position: absolute;
+  line-height: 50px;
+  font-weight: bold;
+  width: 100%;
+  height: 50px;
+  top: 70px;
+  text-align: center;
+  font-size: 1.6rem;
+}
+
+@media screen and (max-width: 450px) {
+  .c-message {
+    top: 50px;
+    height: 40px;
+    line-height: 40px;
+  }
+}
+
 .c-title {
   text-align: center;
   font-weight: bold;
+}
+
+.p-404 {
+  text-align: center;
+  width: 600px;
+  margin: 250px auto;
+}
+
+.p-404__title {
+  font-family: Rockwell;
+  font-size: 132px;
+  font-weight: 700;
+  color: #efefef;
+  height: 1em;
+  line-height: 158px;
+}
+
+.p-404__link {
+  color: #f96204;
+  display: inline-block;
 }
 
 .p-error {
   color: #ff5252;
   margin-top: 5px;
   font-size: 12px;
+}
+
+.p-agreement {
+  width: 70%;
+  margin: 0 auto;
+}
+
+@media screen and (max-width: 450px) {
+  .p-agreement {
+    width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+.p-agreement__title {
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+@media screen and (max-width: 450px) {
+  .p-agreement__title {
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+  }
+}
+
+.p-agreement__sub-title {
+  font-weight: bold;
+}
+
+.p-agreement__go-top {
+  display: block;
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+  text-align: center;
+  background: #ddd;
+  position: fixed;
+  bottom: 60px;
+  right: 60px;
+}
+
+@media screen and (max-width: 450px) {
+  .p-agreement__go-top {
+    bottom: 20px;
+    right: 20px;
+  }
 }
 
 .p-auth-form {
@@ -906,5 +1017,131 @@ body {
 
 .p-header__link:hover::after {
   transform: scale(1, 1);
+}
+
+.p-policy {
+  width: 70%;
+  margin: 0 auto;
+}
+
+@media screen and (max-width: 450px) {
+  .p-policy {
+    width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+.p-policy__title {
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+@media screen and (max-width: 450px) {
+  .p-policy__title {
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+  }
+}
+
+.p-policy__sub-title {
+  font-weight: bold;
+}
+
+.p-policy__go-top {
+  display: block;
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+  text-align: center;
+  background: #ddd;
+  position: fixed;
+  bottom: 60px;
+  right: 60px;
+}
+
+@media screen and (max-width: 450px) {
+  .p-policy__go-top {
+    bottom: 20px;
+    right: 20px;
+  }
+}
+
+.p-tokutei {
+  width: 70%;
+  margin: 0 auto;
+}
+
+@media screen and (max-width: 450px) {
+  .p-tokutei {
+    width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+
+.p-tokutei__title {
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+@media screen and (max-width: 450px) {
+  .p-tokutei__title {
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+  }
+}
+
+.p-tokutei__table {
+  width: 100%;
+}
+
+.p-tokutei th {
+  width: 20%;
+  border-right: 1px solid #fff;
+  background: #f6f5f5;
+  border-bottom: 1px solid #ccc;
+  border-right: 1px solid #fff;
+  border-bottom: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+  font-weight: normal;
+  color: #444;
+  font-size: 1.4rem;
+  vertical-align: middle;
+}
+
+@media screen and (max-width: 450px) {
+  .p-tokutei th {
+    width: 30%;
+    font-size: 1.2rem;
+    padding: 5px;
+  }
+}
+
+.p-tokutei td {
+  border-bottom: 1px solid #ccc;
+  font-size: 1.4rem;
+  padding: 10px;
+  color: #444;
+  vertical-align: middle;
+}
+
+@media screen and (max-width: 450px) {
+  .p-tokutei td {
+    width: 70%;
+    font-size: 1.2rem;
+    padding: 5px;
+  }
+}
+
+.p-tokutei__withdraw {
+  color: #444;
+}
+
+.p-tokutei__withdraw:hover {
+  color: #444;
 }
 

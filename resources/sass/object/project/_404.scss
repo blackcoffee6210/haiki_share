@@ -1,0 +1,17 @@
+.p-404 {
+  text-align: center;
+  width: 600px;
+  margin: 250px auto;
+  &__title {
+    font-family: Rockwell;
+    font-size: 132px;
+    font-weight: 700;
+    color: #efefef;
+    height: 1em;
+    line-height: 158px;
+  }
+  &__link {
+    color: $main-color;
+    display: inline-block;
+  }
+}

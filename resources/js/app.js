@@ -25,16 +25,17 @@ import moment     from 'moment';
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
-
-new Vue({
-  el: '#app',
-  store,
-  router, //ルーティングの定義を読み込む
-  components: { App }, //ルートコンポーネントの使用を宣言する
-  template: '<App />' //ルートコンポーネントを描画する
-})
+//アプリ起動時、Vueインスタンス生成前にauth/currentUserアクションを呼び出す
+//画面をリロードしてもログイン状態を保持するための処理
+const createApp = async() => {
+  await store.dispatch('auth/currentUser');
+  //currentUserアクションの非同期処理が終わってからVueインスタンスを生成する
+  new Vue({
+    el: '#app',
+    store,
+    router, //ルーティングの定義を読み込む
+    components: { App }, //ルートコンポーネントの使用を宣言する
+    template: '<App />' //ルートコンポーネントを描画する
+  });
+};
+createApp();

@@ -1,5 +1,5 @@
 //util.jsに定義したステータスコードをインポートする
-import { CREATED, OK, UNPROCESSABLE_ENTITY } from "../util";
+import { CREATED, OK, UNPROCESSABLE_ENTITY, TOO_MANY_REQUEST } from "../util";
 
 //stateはデータの入れ物
 const state = {
@@ -16,13 +16,13 @@ const state = {
 
 //gettersはstateの内容から算出される値
 const getters = {
-  //ログインチェックに使用する（確実に審議値を返すために二重否定にしている）
+  //ログインチェックに使用する（確実に真偽値を返すために二重否定にしている）
   check: state => !! state.user,
   //ログインユーザーの名前を取得
-  //仮にuserがnullの場合に呼ばれてもエラーが発生しないようにから文字を返すようにしている
-  username: state => !! state.user ? state.user.name : '',
+  //仮にuserがnullの場合に呼ばれてもエラーが発生しないように空文字を返すようにしている
+  username: state => state.user ? state.user.name : '',
   //ログインユーザーのIDを取得
-  userId: state => state.user ? state.user.id : ''
+  userId: state => state.user ? state.user.id : '',
 }
 
 //mutationsはstateを更新するためのメソッド
@@ -69,7 +69,7 @@ const actions = {
       //下に書いた処理をfalseを使って抜ける(成功なので)
       return false;
     }
-    //apiStatusにfalseをセット
+    //通信失敗なら、apiStatusにfalseをセット
     context.commit('setApiStatus', false);
     //responseステータスがUNPROCESSABLE（バリデーションエラー）なら後続の処理を行う
     if(response.status === UNPROCESSABLE_ENTITY) {
@@ -82,24 +82,36 @@ const actions = {
       context.commit('error/setCode', response.status, { root: true });
     }
   },
-  //ログインユーザーチェック
-  async currentUser(context) {
+  //ログイン
+  async login(context, data) {
     //apiStatusステートに最初はnullをセットする
     context.commit('setApiStatus', null);
-    //ユーザー情報をAPIから取得する
-    const response = await axios.get('/api/user');
-    //データを変数にセット。ログインしていないときはuserステートの初期値をnullに揃えておく
-    const user = response.data || null;
+    //ログインAPIを呼び出し、返却データを定数responseに渡す
+    const response = await axios.post('/api/login', data);
+
     //responseステータスがOK(200)なら後続の処理を行う
     if(response.status === OK) {
-      //通信成功なので、apiStatusにtrueをセット
+      //通信成功(200 OK)なので、apiStatusステートにtrueをセット
       context.commit('setApiStatus', true);
-      //ユーザーデータをセット。データがない(ログインしていない)場合はnullが入る
-      context.commit('setUser', user);
+      //userステートにresponseデータをセット
+      context.commit('setUser', response.data);
       return false;
     }
+    //通信失敗なら、apiStatusにfalseをセット
     context.commit('setApiStatus', false);
-    context.commit('error/setCode', response.status, { root: true });
+    //responseステータスがUNPROCESSABLE_ENTITY(バリデーションエラー)なら後続の処理を行う
+    if(response.status === UNPROCESSABLE_ENTITY) {
+      context.commit('setLoginErrorMessages', response.data.errors);
+    }
+    //入力エラーの回数が5回を超えたらエラーメッセージをセット
+    else if(response.status === TOO_MANY_REQUEST) {
+      context.commit('setLoginErrorMessages', response.data.errors);
+    }
+    else {
+      //あるストアモジュールから別のモジュールのミューテーションをcommitする場合
+      //第三引数に { root: true }を追加する
+      context.commit('error/setCode', response.status, { root: true });
+    }
   },
   //ログアウト
   async logout(context) {
@@ -119,7 +131,26 @@ const actions = {
     //あるストアモジュールから別のモジュールのミューテーションをcommitする場合
     //第三引数に { root: true }を追加する
     context.commit('error/setCode', response.status, { root: true });
-  }
+  },
+  //ログインユーザーチェック
+  async currentUser(context) {
+    //apiStatusステートに最初はnullをセットする
+    context.commit('setApiStatus', null);
+    //ユーザー情報をAPIから取得する
+    const response = await axios.get('/api/user');
+    //データを変数にセット。ログインしていないときはuserステートの初期値をnullに揃えておく
+    const user = response.data || null;
+    //responseステータスがOK(200)なら後続の処理を行う
+    if(response.status === OK) {
+      //通信成功なので、apiStatusステートにtrueをセット
+      context.commit('setApiStatus', true);
+      //ユーザーデータをセット。データがない(ログインしていない)場合はnullが入る
+      context.commit('setUser', user);
+      return false;
+    }
+    context.commit('setApiStatus', false);
+    context.commit('error/setCode', response.status, { root: true });
+  },
 }
 
 
@@ -131,25 +162,3 @@ export default {
   mutations,
   actions
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
