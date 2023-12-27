@@ -1,0 +1,43 @@
+<?php
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateReviewsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('reviews', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('shop_id');
+            $table->unsignedBigInteger('shop_user_id');
+            $table->string('title');
+            $table->integer('star');
+            $table->string('comment');
+            $table->softDeletes();
+            $table->timestamps();
+
+            //外部キー
+	          $table->foreign('user_id')->references('id')->on('users');
+	          $table->foreign('shop_id')->references('id')->on('shops');
+	          $table->foreign('shop_user_id')->references('id')->on('users');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('reviews');
+    }
+}
