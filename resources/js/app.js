@@ -4,9 +4,16 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require('./bootstrap');
+import './bootstrap';
+import Vue from 'vue';
 
-window.Vue = require('vue');
+//グローバルコンポーネント
+// import store      from './store';
+//ルーティングの定義をインポートする
+import router     from './router';
+//ルートコンポーネントをインポートする
+import App        from './App.vue';
+import moment     from 'moment';
 
 /**
  * The following block of code may be used to automatically register your
@@ -27,6 +34,9 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-const app = new Vue({
-    el: '#app',
-});
+new Vue({
+  el: '#app',
+  router, //ルーティングの定義を読み込む
+  components: { App }, //ルートコンポーネントの使用を宣言する
+  template: '<App />' //ルートコンポーネントを描画する
+})
