@@ -21,7 +21,7 @@
 				<!-- ログイン時のメニュー -->
 				<nav v-if="isLogin" class="p-header__nav" :class="{ 'v-slide': active }">
 					<!-- todo: routerLinkに変える -->
-					<a href="" class="p-header__link" @click="toggleNav">投稿する</a>
+					<a href="" class="p-header__link" @click="toggleNav">出品する</a>
 					<a href="" class="p-header__link" @click="toggleNav">マイページ</a>
 					<button class="p-header__link" @click="logout">ログアウト</button>
 				</nav>

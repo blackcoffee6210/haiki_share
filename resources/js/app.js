@@ -23,7 +23,7 @@ import moment     from 'moment';
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+// Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
 //アプリ起動時、Vueインスタンス生成前にauth/currentUserアクションを呼び出す
 //画面をリロードしてもログイン状態を保持するための処理
