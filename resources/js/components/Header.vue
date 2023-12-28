@@ -7,7 +7,7 @@
 				<router-link class="p-header__logo" :to="{ name: 'index' }">
 					Haiki Share
 				</router-link>
-				<div class="p-header__sub">食品も作り手の思いも無駄にしないフードシェアリングサービス</div>
+				<div class="p-header__sub">食品を無駄にしないフードシェアリングサービス</div>
 			</div>
 			
 			<!-- ナビゲーション-->

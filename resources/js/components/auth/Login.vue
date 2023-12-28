@@ -2,18 +2,18 @@
 	<div class="l-main">
 		<div class="p-auth-form">
 			<!-- 利用者とお店の方の切り替えをするタグ -->
-			<ul class="p-auth-form__tab">
-				<li class="p-auth-form__tab__item"
-						:class="{ 'p-auth-form__tab__item--active': tab === 1 }"
-						@click="tab = 1">利用者の方
+			<ul class="p-auth-form__group">
+				<li class="p-auth-form__group__item"
+						:class="{ 'p-auth-form__group__item--active': loginForm.group === 1 }"
+						@click="loginForm.group = 1">利用者の方
 				</li>
-				<li class="p-auth-form__tab__item"
-						:class="{ 'p-auth-form__tab__item--active': tab === 2 }"
-						@click="tab = 2">お店の方
+				<li class="p-auth-form__group__item"
+						:class="{ 'p-auth-form__group__item--active': loginForm.group === 2 }"
+						@click="loginForm.group = 2">お店の方
 				</li>
 			</ul>
-			<h2 class="c-title p-auth-form__title" v-show="tab === 1">ログイン（利用者）</h2>
-			<h2 class="c-title p-auth-form__title" v-show="tab === 2">ログイン（お店の方）</h2>
+			<h2 class="c-title p-auth-form__title" v-show="loginForm.group === 1">ログイン（利用者）</h2>
+			<h2 class="c-title p-auth-form__title" v-show="loginForm.group === 2">ログイン（お店の方）</h2>
 			<!-- preventをつけてデフォルトのフォーム送信の挙動をキャンセルする -->
 			<form class="p-auth-form__form" @submit.prevent="login">
 				<!-- Email	-->
@@ -82,8 +82,9 @@ export default {
 	name: "Login",
 	data() {
 		return {
-			tab: 1,
+			
 			loginForm: {
+				group: 1,
 				email: '',
 				password: '',
 				remember: false

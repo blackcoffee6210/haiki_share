@@ -2147,8 +2147,8 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
   name: "Login",
   data: function data() {
     return {
-      tab: 1,
       loginForm: {
+        group: 1,
         email: '',
         password: '',
         remember: false
@@ -2628,7 +2628,7 @@ var render = function render() {
     }
   }, [_vm._v("\n\t\t\t\tHaiki Share\n\t\t\t")]), _vm._v(" "), _c("div", {
     staticClass: "p-header__sub"
-  }, [_vm._v("食品も作り手の思いも無駄にしないフードシェアリングサービス")])], 1), _vm._v(" "), _c("div", {
+  }, [_vm._v("食品を無駄にしないフードシェアリングサービス")])], 1), _vm._v(" "), _c("div", {
     staticClass: "p-header__right"
   }, [_c("button", {
     staticClass: "p-header__hamburger",
@@ -2788,41 +2788,41 @@ var render = function render() {
   }, [_c("div", {
     staticClass: "p-auth-form"
   }, [_c("ul", {
-    staticClass: "p-auth-form__tab"
+    staticClass: "p-auth-form__group"
   }, [_c("li", {
-    staticClass: "p-auth-form__tab__item",
+    staticClass: "p-auth-form__group__item",
     "class": {
-      "p-auth-form__tab__item--active": _vm.tab === 1
+      "p-auth-form__group__item--active": _vm.loginForm.group === 1
     },
     on: {
       click: function click($event) {
-        _vm.tab = 1;
+        _vm.loginForm.group = 1;
       }
     }
   }, [_vm._v("利用者の方\n\t\t\t")]), _vm._v(" "), _c("li", {
-    staticClass: "p-auth-form__tab__item",
+    staticClass: "p-auth-form__group__item",
     "class": {
-      "p-auth-form__tab__item--active": _vm.tab === 2
+      "p-auth-form__group__item--active": _vm.loginForm.group === 2
     },
     on: {
       click: function click($event) {
-        _vm.tab = 2;
+        _vm.loginForm.group = 2;
       }
     }
   }, [_vm._v("お店の方\n\t\t\t")])]), _vm._v(" "), _c("h2", {
     directives: [{
       name: "show",
       rawName: "v-show",
-      value: _vm.tab === 1,
-      expression: "tab === 1"
+      value: _vm.loginForm.group === 1,
+      expression: "loginForm.group === 1"
     }],
     staticClass: "c-title p-auth-form__title"
   }, [_vm._v("ログイン（利用者）")]), _vm._v(" "), _c("h2", {
     directives: [{
       name: "show",
       rawName: "v-show",
-      value: _vm.tab === 2,
-      expression: "tab === 2"
+      value: _vm.loginForm.group === 2,
+      expression: "loginForm.group === 2"
     }],
     staticClass: "c-title p-auth-form__title"
   }, [_vm._v("ログイン（お店の方）")]), _vm._v(" "), _c("form", {
@@ -2985,11 +2985,11 @@ var render = function render() {
   }, [_c("div", {
     staticClass: "p-auth-form"
   }, [_c("ul", {
-    staticClass: "p-auth-form__tab"
+    staticClass: "p-auth-form__group"
   }, [_c("li", {
-    staticClass: "p-auth-form__tab__item",
+    staticClass: "p-auth-form__group__item",
     "class": {
-      "p-auth-form__tab__item--active": _vm.registerForm.group === 1
+      "p-auth-form__group__item--active": _vm.registerForm.group === 1
     },
     on: {
       click: function click($event) {
@@ -2997,9 +2997,9 @@ var render = function render() {
       }
     }
   }, [_vm._v("利用者の方\n\t\t\t")]), _vm._v(" "), _c("li", {
-    staticClass: "p-auth-form__tab__item",
+    staticClass: "p-auth-form__group__item",
     "class": {
-      "p-auth-form__tab__item--active": _vm.registerForm.group === 2
+      "p-auth-form__group__item--active": _vm.registerForm.group === 2
     },
     on: {
       click: function click($event) {

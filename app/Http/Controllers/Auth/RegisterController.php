@@ -50,15 +50,15 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-    	  if($data['group'] == 1) {
-    	  	return Validator::make($data, [
-    	  		'group'    => ['required', 'integer'],
+        if($data['group'] == 1) {
+	        return Validator::make($data, [
+	            'group'    => ['required', 'integer'],
 		        'name'     => ['required', 'string', 'max:255'],
-			      'email'    => ['required', 'string', 'email', 'max:255',
-				                    Rule::unique('users', 'email')->whereNull('deleted_at')],
-						'password' => ['required', 'string', 'min:8', 'confirmed']
-		      ]);
-	      }
+		        'email'    => ['required', 'string', 'email', 'max:255',
+			                    Rule::unique('users', 'email')->whereNull('deleted_at')],
+				'password' => ['required', 'string', 'min:8', 'confirmed']
+	        ]);
+        }
         else if($data['group'] == 2) {
 	        return Validator::make($data, [
 		        'group'         => ['required', 'integer'],
@@ -81,25 +81,25 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-    	  if($data['group'] == 1) {
-            return User::create([
-            	'group'    => $data['group'],
-              'name'     => $data['name'],
-              'email'    => $data['email'],
-              'password' => Hash::make($data['password']),
-            ]);
-        }
-    	  else if($data['group'] == 2) {
-    	  	  return User::create([
-    	  	  	'group'         => $data['group'],
+    	if($data['group'] == 1) {
+    		return User::create([
+    			'group'    => $data['group'],
+	            'name'     => $data['name'],
+	            'email'    => $data['email'],
+	            'password' => Hash::make($data['password']),
+	        ]);
+	    }
+    	else if($data['group'] == 2) {
+    		return User::create([
+    			'group'         => $data['group'],
     	  	  	'name'          => $data['name'],
-			        'branch'        => $data['branch'],
-			        'prefecture_id' => $data['prefecture_id'],
-			        'address'       => $data['address'],
-			        'email'         => $data['email'],
-			        'password'      => Hash::make($data['password'])
-		        ]);
-	      }
+	            'branch'        => $data['branch'],
+			    'prefecture_id' => $data['prefecture_id'],
+			    'address'       => $data['address'],
+			    'email'         => $data['email'],
+			    'password'      => Hash::make($data['password'])
+	        ]);
+        }
     }
 
     //レスポンスをカスタマイズしたい場合はregisteredメソッドをオーバーライドする

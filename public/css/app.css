@@ -728,27 +728,27 @@ body {
   }
 }
 
-.p-auth-form__tab {
+.p-auth-form__group {
   position: absolute;
   display: flex;
   top: -40px;
   left: 0;
 }
 
-.p-auth-form__tab__item {
+.p-auth-form__group__item {
   padding: 3px 5px;
   color: rgba(0, 0, 0, 0.2);
   border-bottom: 3px solid rgba(0, 0, 0, 0.2);
   margin-right: 10px;
 }
 
-.p-auth-form__tab__item--active {
+.p-auth-form__group__item--active {
   color: #333;
   border-bottom: 3px solid #f96204;
   font-weight: bold;
 }
 
-.p-auth-form__tab__item:hover {
+.p-auth-form__group__item:hover {
   cursor: pointer;
 }
 

@@ -2,13 +2,13 @@
 	<div class="l-main">
 		<div class="p-auth-form">
 			<!-- 利用者とお店の方の切り替えをするタグ -->
-			<ul class="p-auth-form__tab">
-				<li class="p-auth-form__tab__item"
-						:class="{ 'p-auth-form__tab__item--active': registerForm.group === 1 }"
+			<ul class="p-auth-form__group">
+				<li class="p-auth-form__group__item"
+						:class="{ 'p-auth-form__group__item--active': registerForm.group === 1 }"
 						@click="registerForm.group = 1">利用者の方
 				</li>
-				<li class="p-auth-form__tab__item"
-						:class="{ 'p-auth-form__tab__item--active': registerForm.group === 2 }"
+				<li class="p-auth-form__group__item"
+						:class="{ 'p-auth-form__group__item--active': registerForm.group === 2 }"
 						@click="registerForm.group = 2">お店の方
 				</li>
 			</ul>
