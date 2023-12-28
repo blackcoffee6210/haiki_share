@@ -74,6 +74,7 @@ class RegisterController extends Controller
         ]);
     }
 
+    //レスポンスをカスタマイズしたい場合はregisteredメソッドをオーバーライドする
 		protected function registered(Request $request, $user)
 		{
 			return $user;

@@ -11,8 +11,8 @@
 import { mapState } from 'vuex'
 import Header       from "./components/Header";
 import Message      from "./components/Message";
-import Footer       from "./components/Footer";
-import {INTERNAL_SERVER_ERROR, NOT_FOUND, UNAUTHORIZED } from "./util";
+import Footer       from "./components/footer/Footer";
+import { INTERNAL_SERVER_ERROR, NOT_FOUND, UNAUTHORIZED } from "./util";
 
 export default {
 	name: "App",

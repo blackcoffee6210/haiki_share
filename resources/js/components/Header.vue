@@ -3,6 +3,7 @@
 		<div class="p-header">
 			<!-- ロゴ -->
 			<div class="p-header__left">
+				<!-- RouterLinkを使うとaタグのようなGETリクエストが発生せず、フロントエンドでの画面遷移、VueRouterでコンポーネントの切り替えを行う -->
 				<router-link class="p-header__logo" :to="{ name: 'index' }">
 					Haiki Share
 				</router-link>
@@ -11,7 +12,8 @@
 			
 			<!-- ナビゲーション-->
 			<div class="p-header__right">
-				<!-- ハンバーガーメニュー（スマホ） -->
+				
+				<!-- ハンバーガーメニュー（スマホ用） -->
 				<button @click="toggleNav" class="p-header__hamburger">
 					<span class="p-header__hamburger__line" :class="{ 'v-line01': active }"></span>
 					<span class="p-header__hamburger__line" :class="{ 'v-line02': active }"></span>
@@ -20,9 +22,8 @@
 			
 				<!-- ログイン時のメニュー -->
 				<nav v-if="isLogin" class="p-header__nav" :class="{ 'v-slide': active }">
-					<!-- todo: routerLinkに変える -->
-					<a href="" class="p-header__link" @click="toggleNav">出品する</a>
-					<a href="" class="p-header__link" @click="toggleNav">マイページ</a>
+					<router-link :to="{ name: 'product.create' }" class="p-header__link" @click="toggleNav">出品する</router-link>
+					<router-link :to="{ name: 'user.mypage' }" class="p-header__link" @click="toggleNav">マイページ</router-link>
 					<button class="p-header__link" @click="logout">ログアウト</button>
 				</nav>
 				
@@ -69,7 +70,7 @@ export default {
 		//ログアウト
 		async logout() {
 			await this.$store.dispatch('auth/logout');
-			//通信成功なら商品一覧ページへ移動する
+			//通信成功(true)なら以下の処理を実行
 			if(this.apiStatus) {
 				//「ログアウト」メッセージ登録
 				this.$store.commit('message/setContent', {

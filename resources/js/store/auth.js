@@ -22,7 +22,7 @@ const getters = {
   //仮にuserがnullの場合に呼ばれてもエラーが発生しないように空文字を返すようにしている
   username: state => state.user ? state.user.name : '',
   //ログインユーザーのIDを取得
-  userId: state => state.user ? state.user.id : '',
+  userId: state => state.user ? state.user.id : ''
 }
 
 //mutationsはstateを更新するためのメソッド
@@ -101,6 +101,7 @@ const actions = {
     context.commit('setApiStatus', false);
     //responseステータスがUNPROCESSABLE_ENTITY(バリデーションエラー)なら後続の処理を行う
     if(response.status === UNPROCESSABLE_ENTITY) {
+      //loginErrorMessagesにエラーメッセージをセットする
       context.commit('setLoginErrorMessages', response.data.errors);
     }
     //入力エラーの回数が5回を超えたらエラーメッセージをセット

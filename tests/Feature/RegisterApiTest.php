@@ -27,7 +27,7 @@ class RegisterApiTest extends TestCase
 		$user = User::first();
 		$this->assertEquals($data['name'], $user->name);
 
-		$response->assertStatus(201)
+		$response->assertStatus(201) //登録なのでCREATED(201)のステータスになる
 						 ->assertJson(['name' => $user->name]);
 	}
 }
