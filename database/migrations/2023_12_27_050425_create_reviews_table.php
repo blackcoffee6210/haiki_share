@@ -15,9 +15,9 @@ class CreateReviewsTable extends Migration
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('shop_id');
-            $table->unsignedBigInteger('shop_user_id');
+            $table->unsignedBigInteger('sender_id');
+            $table->unsignedBigInteger('receiver_id');
+            $table->unsignedBigInteger('product_id');
             $table->string('title');
             $table->integer('star');
             $table->string('comment');
@@ -25,9 +25,9 @@ class CreateReviewsTable extends Migration
             $table->timestamps();
 
             //外部キー
-	          $table->foreign('user_id')->references('id')->on('users');
-	          $table->foreign('shop_id')->references('id')->on('shops');
-	          $table->foreign('shop_user_id')->references('id')->on('users');
+	          $table->foreign('sender_id')->references('id')->on('users');
+	          $table->foreign('receiver_id')->references('id')->on('users');
+	          $table->foreign('product_id')->references('id')->on('products');
         });
     }
 

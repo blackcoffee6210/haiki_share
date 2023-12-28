@@ -2147,6 +2147,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
   name: "Login",
   data: function data() {
     return {
+      tab: 1,
       loginForm: {
         email: '',
         password: '',
@@ -2231,14 +2232,17 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
   data: function data() {
     return {
       registerForm: {
+        group: 1,
         name: '',
+        branch: '',
+        prefecture_id: 0,
         email: '',
         password: '',
         password_confirmation: ''
       }
     };
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapState"])({
+  computed: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapState"])({
     //通信失敗の場合、つまりapiStatusがfalseの場合はインデックスへの移動を行わないように制御する
     //trueまたはfalseが入る
     apiStatus: function apiStatus(state) {
@@ -2247,7 +2251,16 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     registerErrors: function registerErrors(state) {
       return state.auth.registerErrorMessages;
     }
-  })),
+  })), {}, {
+    //名前のplaceholderを利用者とお店で切り替える
+    name: function name() {
+      if (this.registerForm.group === 1) {
+        return 'ハイキ君';
+      } else if (this.registerForm.group === 2) {
+        return 'ファミリーストア';
+      }
+    }
+  }),
   methods: {
     register: function register() {
       var _this = this;
@@ -2722,9 +2735,45 @@ var render = function render() {
     staticClass: "l-main"
   }, [_c("div", {
     staticClass: "p-auth-form"
-  }, [_c("h2", {
+  }, [_c("ul", {
+    staticClass: "p-auth-form__tab"
+  }, [_c("li", {
+    staticClass: "p-auth-form__tab__item",
+    "class": {
+      "p-auth-form__tab__item--active": _vm.tab === 1
+    },
+    on: {
+      click: function click($event) {
+        _vm.tab = 1;
+      }
+    }
+  }, [_vm._v("利用者の方\n\t\t\t")]), _vm._v(" "), _c("li", {
+    staticClass: "p-auth-form__tab__item",
+    "class": {
+      "p-auth-form__tab__item--active": _vm.tab === 2
+    },
+    on: {
+      click: function click($event) {
+        _vm.tab = 2;
+      }
+    }
+  }, [_vm._v("お店の方\n\t\t\t")])]), _vm._v(" "), _c("h2", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: _vm.tab === 1,
+      expression: "tab === 1"
+    }],
     staticClass: "c-title p-auth-form__title"
-  }, [_vm._v("ログイン")]), _vm._v(" "), _c("form", {
+  }, [_vm._v("ログイン（利用者）")]), _vm._v(" "), _c("h2", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: _vm.tab === 2,
+      expression: "tab === 2"
+    }],
+    staticClass: "c-title p-auth-form__title"
+  }, [_vm._v("ログイン（お店の方）")]), _vm._v(" "), _c("form", {
     staticClass: "p-auth-form__form",
     on: {
       submit: function submit($event) {
@@ -2737,7 +2786,7 @@ var render = function render() {
     attrs: {
       "for": "email"
     }
-  }, [_vm._v("Eメール")]), _vm._v(" "), _c("input", {
+  }, [_vm._v("Eメール\n\t\t\t")]), _vm._v(" "), _c("input", {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -2763,13 +2812,13 @@ var render = function render() {
     return _c("div", {
       key: msg,
       staticClass: "p-error"
-    }, [_vm._v(_vm._s(msg))]);
+    }, [_vm._v(_vm._s(msg) + "\n\t\t\t\t")]);
   }), 0) : _vm._e(), _vm._v(" "), _c("label", {
     staticClass: "c-label p-auth-form__label",
     attrs: {
       "for": "password"
     }
-  }, [_vm._v("パスワード(半角英数字)")]), _vm._v(" "), _c("input", {
+  }, [_vm._v("パスワード(半角英数字)\n\t\t\t")]), _vm._v(" "), _c("input", {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -2795,7 +2844,7 @@ var render = function render() {
     return _c("div", {
       key: msg,
       staticClass: "p-error"
-    }, [_vm._v(_vm._s(msg))]);
+    }, [_vm._v(_vm._s(msg) + "\n\t\t\t\t")]);
   }), 0) : _vm._e(), _vm._v(" "), _c("div", {
     staticClass: "p-auth-form__check-container"
   }, [_c("input", {
@@ -2836,7 +2885,7 @@ var render = function render() {
     attrs: {
       "for": "remember"
     }
-  }, [_vm._v("ログイン保持")])]), _vm._v(" "), _c("button", {
+  }, [_vm._v("ログイン保持\n\t\t\t\t")])]), _vm._v(" "), _c("button", {
     staticClass: "c-btn p-auth-form__btn",
     attrs: {
       type: "submit"
@@ -2883,9 +2932,45 @@ var render = function render() {
     staticClass: "l-main"
   }, [_c("div", {
     staticClass: "p-auth-form"
-  }, [_c("h2", {
+  }, [_c("ul", {
+    staticClass: "p-auth-form__tab"
+  }, [_c("li", {
+    staticClass: "p-auth-form__tab__item",
+    "class": {
+      "p-auth-form__tab__item--active": _vm.registerForm.group === 1
+    },
+    on: {
+      click: function click($event) {
+        _vm.registerForm.group = 1;
+      }
+    }
+  }, [_vm._v("利用者の方\n\t\t\t")]), _vm._v(" "), _c("li", {
+    staticClass: "p-auth-form__tab__item",
+    "class": {
+      "p-auth-form__tab__item--active": _vm.registerForm.group === 2
+    },
+    on: {
+      click: function click($event) {
+        _vm.registerForm.group = 2;
+      }
+    }
+  }, [_vm._v("お店の方\n\t\t\t")])]), _vm._v(" "), _c("h2", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: _vm.registerForm.group === 1,
+      expression: "registerForm.group === 1"
+    }],
     staticClass: "c-title p-auth-form__title"
-  }, [_vm._v("新規登録")]), _vm._v(" "), _c("form", {
+  }, [_vm._v("新規登録（利用者）")]), _vm._v(" "), _c("h2", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: _vm.registerForm.group === 2,
+      expression: "registerForm.group === 2"
+    }],
+    staticClass: "c-title p-auth-form__title"
+  }, [_vm._v("新規登録（お店の方）")]), _vm._v(" "), _c("form", {
     staticClass: "p-auth-form__form",
     on: {
       submit: function submit($event) {
@@ -2906,7 +2991,21 @@ var render = function render() {
     attrs: {
       "for": "name"
     }
-  }, [_vm._v("お名前")]), _vm._v(" "), _c("input", {
+  }, [_c("span", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: _vm.registerForm.group === 1,
+      expression: "registerForm.group === 1"
+    }]
+  }, [_vm._v("お名前")]), _vm._v(" "), _c("span", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: _vm.registerForm.group === 2,
+      expression: "registerForm.group === 2"
+    }]
+  }, [_vm._v("コンビニ名")])]), _vm._v(" "), _c("input", {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -2917,7 +3016,7 @@ var render = function render() {
     attrs: {
       type: "text",
       id: "name",
-      placeholder: "ハイキ君"
+      placeholder: _vm.name
     },
     domProps: {
       value: _vm.registerForm.name
@@ -2933,7 +3032,148 @@ var render = function render() {
       key: msg,
       staticClass: "p-error"
     }, [_vm._v(_vm._s(msg))]);
-  }), 0) : _vm._e(), _vm._v(" "), _c("label", {
+  }), 0) : _vm._e(), _vm._v(" "), _c("div", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: _vm.registerForm.group === 2,
+      expression: "registerForm.group === 2"
+    }],
+    staticClass: "u-mt20 u-mb5"
+  }, [_c("label", {
+    staticClass: "c-label p-auth-form__label",
+    attrs: {
+      "for": "branch"
+    }
+  }, [_vm._v("支店名")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.registerForm.branch,
+      expression: "registerForm.branch"
+    }],
+    staticClass: "c-input p-auth-form__input",
+    attrs: {
+      type: "text",
+      id: "branch",
+      placeholder: "渋谷109前店"
+    },
+    domProps: {
+      value: _vm.registerForm.branch
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.registerForm, "branch", $event.target.value);
+      }
+    }
+  }), _vm._v(" "), _vm.registerErrors ? _c("div", _vm._l(_vm.registerErrors.branch, function (msg) {
+    return _c("div", {
+      key: msg,
+      staticClass: "p-error"
+    }, [_vm._v(_vm._s(msg))]);
+  }), 0) : _vm._e()]), _vm._v(" "), _c("div", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: _vm.registerForm.group === 2,
+      expression: "registerForm.group === 2"
+    }],
+    staticClass: "u-mt20 u-mb5"
+  }, [_c("label", {
+    staticClass: "c-label p-auth-form__label",
+    attrs: {
+      "for": "prefecture"
+    }
+  }, [_vm._v("都道府県")]), _vm._v(" "), _c("select", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.registerForm.prefecture_id,
+      expression: "registerForm.prefecture_id"
+    }],
+    staticClass: "c-input p-auth-form__input",
+    attrs: {
+      id: "prefecture"
+    },
+    on: {
+      change: function change($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
+          return o.selected;
+        }).map(function (o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val;
+        });
+        _vm.$set(_vm.registerForm, "prefecture_id", $event.target.multiple ? $$selectedVal : $$selectedVal[0]);
+      }
+    }
+  }, [_c("option", {
+    attrs: {
+      value: "0",
+      disabled: ""
+    }
+  }, [_vm._v("都道府県を選択してください")]), _vm._v(" "), _c("option", {
+    attrs: {
+      value: "1"
+    }
+  }, [_vm._v("東京都")]), _vm._v(" "), _c("option", {
+    attrs: {
+      value: "2"
+    }
+  }, [_vm._v("北海道")]), _vm._v(" "), _c("option", {
+    attrs: {
+      value: "3"
+    }
+  }, [_vm._v("愛知県")]), _vm._v(" "), _c("option", {
+    attrs: {
+      value: "4"
+    }
+  }, [_vm._v("沖縄県")])]), _vm._v(" "), _vm.registerErrors ? _c("div", _vm._l(_vm.registerErrors.prefecture_id, function (msg) {
+    return _c("div", {
+      key: msg,
+      staticClass: "p-error"
+    }, [_vm._v(_vm._s(msg))]);
+  }), 0) : _vm._e()]), _vm._v(" "), _c("div", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: _vm.registerForm.group === 2,
+      expression: "registerForm.group === 2"
+    }],
+    staticClass: "u-mt20 u-mb5"
+  }, [_c("label", {
+    staticClass: "c-label p-auth-form__label",
+    attrs: {
+      "for": "address"
+    }
+  }, [_vm._v("住所")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.registerForm.address,
+      expression: "registerForm.address"
+    }],
+    staticClass: "c-input p-auth-form__input",
+    attrs: {
+      type: "text",
+      id: "address",
+      placeholder: "渋谷区宇田川町26-4"
+    },
+    domProps: {
+      value: _vm.registerForm.address
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.registerForm, "address", $event.target.value);
+      }
+    }
+  }), _vm._v(" "), _vm.registerErrors ? _c("div", _vm._l(_vm.registerErrors.address, function (msg) {
+    return _c("div", {
+      key: msg,
+      staticClass: "p-error"
+    }, [_vm._v(_vm._s(msg))]);
+  }), 0) : _vm._e()]), _vm._v(" "), _c("label", {
     staticClass: "c-label p-auth-form__label",
     attrs: {
       "for": "email"
@@ -2981,7 +3221,7 @@ var render = function render() {
     attrs: {
       type: "password",
       id: "password",
-      placeholder: "6文字以上の半角英数字"
+      placeholder: "8文字以上の半角英数字"
     },
     domProps: {
       value: _vm.registerForm.password

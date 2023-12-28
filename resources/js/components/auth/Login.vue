@@ -1,38 +1,53 @@
 <template>
 	<div class="l-main">
 		<div class="p-auth-form">
-			<h2 class="c-title p-auth-form__title">ログイン</h2>
+			<!-- 利用者とお店の方の切り替えをするタグ -->
+			<ul class="p-auth-form__tab">
+				<li class="p-auth-form__tab__item"
+						:class="{ 'p-auth-form__tab__item--active': tab === 1 }"
+						@click="tab = 1">利用者の方
+				</li>
+				<li class="p-auth-form__tab__item"
+						:class="{ 'p-auth-form__tab__item--active': tab === 2 }"
+						@click="tab = 2">お店の方
+				</li>
+			</ul>
+			<h2 class="c-title p-auth-form__title" v-show="tab === 1">ログイン（利用者）</h2>
+			<h2 class="c-title p-auth-form__title" v-show="tab === 2">ログイン（お店の方）</h2>
 			<!-- preventをつけてデフォルトのフォーム送信の挙動をキャンセルする -->
 			<form class="p-auth-form__form" @submit.prevent="login">
-				
 				<!-- Email	-->
 				<label for="email"
-							 class="c-label p-auth-form__label">Eメール</label>
+							 class="c-label p-auth-form__label">Eメール
+				</label>
 				<input type="text"
 							 v-model="loginForm.email"
 							 class="c-input p-auth-form__input"
 							 id="email"
 							 placeholder="mail@haiki_share.com">
-				<!-- エラーメッセージ	-->
+				<!-- Emailエラーメッセージ	-->
 				<div v-if="loginErrors">
 					<div v-for="msg in loginErrors.email"
 							 :key="msg"
-							 class="p-error">{{ msg }}</div>
+							 class="p-error">{{ msg }}
+					</div>
 				</div>
 				
 				<!-- パスワード -->
 				<label for="password"
-							 class="c-label p-auth-form__label">パスワード(半角英数字)</label>
+							 class="c-label p-auth-form__label">パスワード(半角英数字)
+				</label>
 				<input type="password"
 							 v-model="loginForm.password"
 							 class="c-input p-auth-form__input"
 							 id="password"
 							 placeholder="*********">
-				<!-- エラーメッセージ	-->
+				<!-- パスワード エラーメッセージ	-->
 				<div v-if="loginErrors">
 					<div v-for="msg in loginErrors.password"
 							 :key="msg"
-							 class="p-error">{{ msg }}</div>
+							 class="p-error">{{ msg }}
+					</div>
 				</div>
 				
 				<!-- ログイン保持 -->
@@ -42,9 +57,11 @@
 								 class="p-auth-form__check"
 								 v-model="loginForm.remember">
 					<label for="remember"
-								 class="p-auth-form__label--check">ログイン保持</label>
+								 class="p-auth-form__label--check">ログイン保持
+					</label>
 				</div>
 				
+				<!-- ログインボタン -->
 				<button class="c-btn p-auth-form__btn" type="submit">ログイン</button>
 			</form>
 			
@@ -65,6 +82,7 @@ export default {
 	name: "Login",
 	data() {
 		return {
+			tab: 1,
 			loginForm: {
 				email: '',
 				password: '',

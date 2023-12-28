@@ -6,7 +6,7 @@
   position: relative;
   padding: 0 $space_xl;
   border-bottom: 1px solid $gray-color;
-  margin-bottom: $space_3xl;
+  margin-bottom: 50px;
   //スマートフォンのスタイル
   @include mq() {
     height: 50px;

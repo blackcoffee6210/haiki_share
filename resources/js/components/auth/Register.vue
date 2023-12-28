@@ -1,22 +1,82 @@
 <template>
 	<div class="l-main">
 		<div class="p-auth-form">
-			<h2 class="c-title p-auth-form__title">新規登録</h2>
+			<!-- 利用者とお店の方の切り替えをするタグ -->
+			<ul class="p-auth-form__tab">
+				<li class="p-auth-form__tab__item"
+						:class="{ 'p-auth-form__tab__item--active': registerForm.group === 1 }"
+						@click="registerForm.group = 1">利用者の方
+				</li>
+				<li class="p-auth-form__tab__item"
+						:class="{ 'p-auth-form__tab__item--active': registerForm.group === 2 }"
+						@click="registerForm.group = 2">お店の方
+				</li>
+			</ul>
+			<h2 class="c-title p-auth-form__title" v-show="registerForm.group === 1">新規登録（利用者）</h2>
+			<h2 class="c-title p-auth-form__title" v-show="registerForm.group === 2">新規登録（お店の方）</h2>
 			<form class="p-auth-form__form" @submit.prevent="register">
 				
 				<!-- csrf -->
 				<input type="hidden" name="_token" :value="$store.state.csrf">
 				
-				<!-- name-->
-				<label for="name" class="c-label p-auth-form__label">お名前</label>
+				<!-- name -->
+				<label for="name" class="c-label p-auth-form__label">
+					<span v-show="registerForm.group === 1">お名前</span>
+					<span v-show="registerForm.group === 2">コンビニ名</span>
+				</label>
 				<input type="text"
 							 id="name"
 							 class="c-input p-auth-form__input"
 							 v-model="registerForm.name"
-							 placeholder="ハイキ君">
+							 :placeholder="name">
 				<!-- エラーメッセージ	-->
 				<div v-if="registerErrors">
 					<div v-for="msg in registerErrors.name" :key="msg" class="p-error">{{ msg }}</div>
+				</div>
+				
+				<!-- 支店 -->
+				<div v-show="registerForm.group === 2" class="u-mt20 u-mb5">
+					<label for="branch" class="c-label p-auth-form__label">支店名</label>
+					<input type="text"
+								 id="branch"
+								 class="c-input p-auth-form__input"
+								 v-model="registerForm.branch"
+								 placeholder="渋谷109前店">
+					<!-- エラーメッセージ	-->
+					<div v-if="registerErrors">
+						<div v-for="msg in registerErrors.branch" :key="msg" class="p-error">{{ msg }}</div>
+					</div>
+				</div>
+				
+				<!-- 都道府県 -->
+				<div v-show="registerForm.group === 2" class="u-mt20 u-mb5">
+					<label for="prefecture" class="c-label p-auth-form__label">都道府県</label>
+					<select id="prefecture" class="c-input p-auth-form__input" v-model="registerForm.prefecture_id">
+						<option value="0" disabled>都道府県を選択してください</option>
+						<!--todo: DBからデータを引っぱってくる-->
+						<option value="1">東京都</option>
+						<option value="2">北海道</option>
+						<option value="3">愛知県</option>
+						<option value="4">沖縄県</option>
+					</select>
+					<!-- エラーメッセージ	-->
+					<div v-if="registerErrors">
+						<div v-for="msg in registerErrors.prefecture_id" :key="msg" class="p-error">{{ msg }}</div>
+					</div>
+				</div>
+				
+				<!-- 住所 -->
+				<div v-show="registerForm.group === 2" class="u-mt20 u-mb5">
+					<label for="address" class="c-label p-auth-form__label">住所</label>
+					<input type="text"
+								 id="address"
+								 class="c-input p-auth-form__input"
+								 v-model="registerForm.address"
+								 placeholder="渋谷区宇田川町26-4">
+					<!-- エラーメッセージ	-->
+					<div v-if="registerErrors">
+						<div v-for="msg in registerErrors.address" :key="msg" class="p-error">{{ msg }}</div>
+					</div>
 				</div>
 				
 				<!-- email-->
@@ -37,7 +97,7 @@
 							 id="password"
 							 class="c-input p-auth-form__input"
 							 v-model="registerForm.password"
-							 placeholder="6文字以上の半角英数字">
+							 placeholder="8文字以上の半角英数字">
 				<!-- エラーメッセージ	-->
 				<div v-if="registerErrors">
 					<div v-for="msg in registerErrors.password" :key="msg" class="p-error">{{ msg }}</div>
@@ -75,7 +135,10 @@ export default {
 	data() {
 		return {
 			registerForm: {
+				group: 1,
 				name: '',
+				branch: '',
+				prefecture_id: 0,
 				email: '',
 				password: '',
 				password_confirmation: ''
@@ -88,7 +151,15 @@ export default {
 			//trueまたはfalseが入る
 			apiStatus: state => state.auth.apiStatus,
 			registerErrors: state => state.auth.registerErrorMessages
-		})
+		}),
+		//名前のplaceholderを利用者とお店で切り替える
+		name() {
+			if(this.registerForm.group === 1) {
+				return 'ハイキ君';
+			}else if(this.registerForm.group === 2) {
+				return 'ファミリーストア';
+			}
+		}
 	},
 	methods: {
 		async register() {
