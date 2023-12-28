@@ -52,12 +52,11 @@
 				<div v-show="registerForm.group === 2" class="u-mt20 u-mb5">
 					<label for="prefecture" class="c-label p-auth-form__label">都道府県</label>
 					<select id="prefecture" class="c-input p-auth-form__input" v-model="registerForm.prefecture_id">
-						<option value="0" disabled>都道府県を選択してください</option>
-						<!--todo: DBからデータを引っぱってくる-->
-						<option value="1">東京都</option>
-						<option value="2">北海道</option>
-						<option value="3">愛知県</option>
-						<option value="4">沖縄県</option>
+						<option value="" disabled>都道府県を選択してください</option>
+						
+						<option v-for="prefecture in prefectures" :value="prefecture.id" :key="prefecture.id">
+							{{ prefecture.name }}
+						</option>
 					</select>
 					<!-- エラーメッセージ	-->
 					<div v-if="registerErrors">
@@ -129,16 +128,18 @@
 
 <script>
 import { mapState } from 'vuex';
+import { OK } from "../../util";
 
 export default {
 	name: "Register",
 	data() {
 		return {
+			prefectures: [],
 			registerForm: {
 				group: 1,
 				name: '',
 				branch: '',
-				prefecture_id: 0,
+				prefecture_id: '',
 				email: '',
 				password: '',
 				password_confirmation: ''
@@ -149,7 +150,7 @@ export default {
 		...mapState({
 			//通信失敗の場合、つまりapiStatusがfalseの場合はインデックスへの移動を行わないように制御する
 			//trueまたはfalseが入る
-			apiStatus: state => state.auth.apiStatus,
+			apiStatus     : state => state.auth.apiStatus,
 			registerErrors: state => state.auth.registerErrorMessages
 		}),
 		//名前のplaceholderを利用者とお店で切り替える
@@ -162,6 +163,18 @@ export default {
 		}
 	},
 	methods: {
+		//都道府県取得
+		async getPrefectures() {
+			const response = await axios.get('/api/prefecture');
+			//responseステータスがOKじゃなかったら
+			if(response.status !== OK) {
+				this.$store.commit('error/setCode', response.status);
+				return false;
+			}
+			//プロパティに値をセットする
+			this.prefectures = response.data;
+		},
+		//ユーザー登録
 		async register() {
 			//dispatchメソッドでauthストアのregisterアクションを呼び出す
 			//第一引数はアクション名、第二引数はフォームの入力値を渡す
@@ -183,6 +196,14 @@ export default {
 	},
 	created() {
 		this.clearError();
+	},
+	watch: {
+		$route: {
+			async handler() {
+				await this.getPrefectures();
+			},
+			immediate: true
+		}
 	}
 }
 </script>

@@ -11,3 +11,5 @@ Route::get('/refresh-token', function(Request $request) { //トークンリフ�
 	$request->session()->regenerateToken();
 	return response()->json();
 });
+Route::get('/category', 'CategoryController'); //カテゴリー取得API
+Route::get('/prefecture', 'PrefectureController'); //都道府県取得API

@@ -16,8 +16,19 @@ class RegisterApiTest extends TestCase
 	 */
 	public function should_新しいユーザーを作成して返却する()
 	{
+//		$data = [
+//			'group'                 => 2,
+//			'name'                  => 'Haiki Share',
+//			'email'                 => 'haiki_share@email.com',
+//			'password'              => 'password',
+//			'password_confirmation' => 'password',
+//		];
 		$data = [
+			'group'                 => 2,
 			'name'                  => 'Haiki Share',
+			'branch'                => '渋谷店',
+			'prefecture_id'         => 1,
+			'address'               => '渋谷区宇田川町26-4',
 			'email'                 => 'haiki_share@email.com',
 			'password'              => 'password',
 			'password_confirmation' => 'password',

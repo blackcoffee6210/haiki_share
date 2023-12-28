@@ -144,10 +144,12 @@ return [
 	*/
 
 	'attributes' => [
-//    	'password_confirmation' => 'パスワード（確認）'
-		'name' => 'お名前',
-		'email' => 'Eメール',
-		'password' => 'パスワード',
+		'name'          => 'お名前',
+		'branch'        => '支店名',
+		'prefecture_id' => '都道府県',
+		'address'       => '住所',
+		'email'         => 'Eメール',
+		'password'      => 'パスワード',
 
 	],
 
