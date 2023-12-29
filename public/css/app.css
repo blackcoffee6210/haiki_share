@@ -611,6 +611,16 @@ body {
   cursor: pointer;
 }
 
+.c-loading {
+  position: relative;
+}
+
+.c-loading__container {
+  position: absolute;
+  width: 100%;
+  top: 20vh;
+}
+
 .c-message {
   color: #fff;
   border: #f96204;
@@ -1093,6 +1103,158 @@ body {
   }
 }
 
+.p-register-product {
+  width: 640px;
+  margin: 0 auto;
+}
+
+@media screen and (max-width: 450px) {
+  .p-register-product {
+    width: 100%;
+  }
+}
+
+.p-register-product__title {
+  background: #f8fafc;
+  padding-bottom: 5px;
+}
+
+.p-register-product__background {
+  background: #fff;
+}
+
+.p-register-product__form {
+  width: 100%;
+  position: relative;
+  padding: 20px;
+}
+
+@media screen and (max-width: 450px) {
+  .p-register-product__form {
+    padding: 10px;
+  }
+}
+
+.p-register-product__label-img {
+  display: block;
+  width: 100%;
+  height: 400px;
+  background: lightgray;
+}
+
+.p-register-product__label-img:hover {
+  cursor: pointer;
+}
+
+@media screen and (max-width: 450px) {
+  .p-register-product__label-img {
+    height: 200px;
+  }
+}
+
+.p-register-product__img {
+  position: absolute;
+  display: none;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+
+.p-register-product__img:hover {
+  cursor: pointer;
+}
+
+.p-register-product__img-text {
+  font-size: 2.4rem;
+  color: #999;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+}
+
+@media screen and (max-width: 450px) {
+  .p-register-product__img-text {
+    font-size: 1.4rem;
+  }
+}
+
+.p-register-product__output {
+  width: 100%;
+  height: 100%;
+}
+
+.p-register-product__output-img {
+  display: block;
+  vertical-align: middle;
+  border-style: none;
+  width: 100%;
+  height: 100%;
+}
+
+.p-register-product__input {
+  width: 100%;
+  margin-top: 30px;
+}
+
+.p-register-product__input--yen {
+  border-radius: 3px 0 0 3px;
+}
+
+@media screen and (max-width: 450px) {
+  .p-register-product__input {
+    margin-top: 20px;
+  }
+}
+
+.p-register-product__textarea {
+  width: 100%;
+  height: 400px;
+  margin-top: 30px;
+}
+
+@media screen and (max-width: 450px) {
+  .p-register-product__textarea {
+    margin-top: 20px;
+  }
+}
+
+.p-register-product__yen {
+  margin-top: 30px;
+  vertical-align: bottom;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-left: 0;
+  border-radius: 0 3px 3px 0;
+  background: #fff;
+  padding: 5px 10px;
+}
+
+@media screen and (max-width: 450px) {
+  .p-register-product__yen {
+    margin-top: 20px;
+  }
+}
+
+.p-register-product__btn-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.p-register-product__btn {
+  margin: 30px 0 0 auto;
+}
+
+.p-register-product__btn--delete {
+  background: #bbb;
+  margin: 30px 10px 0 0;
+}
+
+.p-register-product__btn--update {
+  margin: 30px 0 0 0;
+}
+
 .p-tokutei {
   width: 70%;
   margin: 0 auto;
@@ -1170,11 +1332,147 @@ body {
   color: #444;
 }
 
-.u-mt20 {
-  margin-top: 20px;
+.u-b-radius {
+  border-radius: 3px 0 0 3px;
+}
+
+.u-d-flex {
+  display: flex;
+}
+
+.u-space-between {
+  justify-content: space-between;
+}
+
+.u-align-center {
+  align-items: center;
+}
+
+.u-d-block {
+  display: block;
+}
+
+.u-text-center {
+  text-align: center;
+}
+
+.u-d-none {
+  display: none;
+}
+
+.u-font-12 {
+  font-size: 12px;
+}
+
+.u-font-24 {
+  font-size: 24px;
+}
+
+.u-font-bold {
+  font-weight: bold;
+}
+
+.u-h153 {
+  height: 153px;
+}
+
+.u-h20 {
+  height: 20px;
+}
+
+.u-h30 {
+  height: 30px;
+}
+
+.u-mr5 {
+  margin-right: 5px;
+}
+
+.u-mr10 {
+  margin-right: 10px;
+}
+
+.u-mr20 {
+  margin-right: 20px;
+}
+
+.u-ml15 {
+  margin-left: 15px;
 }
 
 .u-mb5 {
   margin-bottom: 5px;
+}
+
+.u-mb10 {
+  margin-bottom: 10px;
+}
+
+.u-mb20 {
+  margin-bottom: 20px;
+}
+
+.u-mb30 {
+  margin-bottom: 30px;
+}
+
+.u-mt0 {
+  margin-top: 0;
+}
+
+.u-mt24 {
+  margin-top: 24px;
+}
+
+.u-mt30 {
+  margin-top: 30px;
+}
+
+.u-my24 {
+  margin: 24px 0;
+}
+
+.u-m0 {
+  margin: 0;
+}
+
+.u-p5 {
+  padding: 5px;
+}
+
+.u-border-box {
+  box-sizing: border-box;
+}
+
+.u-py24 {
+  padding: 24px 0;
+}
+
+.u-p-relative {
+  position: relative;
+}
+
+.u-w120 {
+  width: 120px;
+}
+
+.u-w30 {
+  width: 30%;
+}
+
+.u-w40 {
+  width: 40%;
+}
+
+.u-w50 {
+  width: 50%;
+}
+
+.u-w60 {
+  width: 60%;
+}
+
+.u-w70 {
+  width: 70%;
 }
 

@@ -11,6 +11,7 @@ import Policy    from "./components/footer/Policy";
 import Tokutei   from "./components/footer/Tokutei";
 import NotFound  from "./components/errors/NotFound";
 import System    from "./components/errors/System";
+import RegisterProduct from "./components/RegisterProduct";
 
 
 //VueRouterプラグインを利用する
@@ -43,6 +44,12 @@ const routes = [
     path: '/products',
     name: 'index',
     component: Index
+  },
+  {
+    //商品登録
+    path: '/products/register',
+    name: 'product.register',
+    component: RegisterProduct
   },
   {
     //利用規約

@@ -22,8 +22,14 @@
 			
 				<!-- ログイン時のメニュー -->
 				<nav v-if="isLogin" class="p-header__nav" :class="{ 'v-slide': active }">
-					<router-link :to="{ name: 'product.create' }" class="p-header__link" @click="toggleNav">出品する</router-link>
-					<router-link :to="{ name: 'user.mypage' }" class="p-header__link" @click="toggleNav">マイページ</router-link>
+					<router-link :to="{ name: 'product.register' }"
+											 class="p-header__link"
+											 @click="toggleNav">出品する
+					</router-link>
+					<router-link :to="{ name: 'user.mypage' }"
+											 class="p-header__link"
+											 @click="toggleNav">マイページ
+					</router-link>
 					<button class="p-header__link" @click="logout">ログアウト</button>
 				</nav>
 				
