@@ -9,7 +9,8 @@ export function getCookieValue(searchKey) {
   }
 
   let val = '';
-
+  // document.cookie によってクッキーは以下の形式で参照できる
+  //「name=12345;token=67890;key=abc」
   document.cookie.split(';').forEach(cookie => {
     const [key, value] = cookie.split('=');
     if(key === searchKey) {

@@ -9,8 +9,9 @@ const state = {
   //これを参照して後続の処理を行うかどうか判別する
   //値にはtrueまたはfalseが入る
   apiStatus: null,
-  //エラーメッセージを入れるステート
+  //ログインのエラーメッセージを入れるステート
   loginErrorMessages: null,
+  //ユーザー登録のエラーメッセージを入れるステート
   registerErrorMessages: null,
 }
 

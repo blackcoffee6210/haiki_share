@@ -16,7 +16,7 @@ window.axios.interceptors.request.use(config => {
 //axiosのresponse
 window.axios.interceptors.response.use(
   response => response, //成功時の処理
-  error => error.response || error //失敗時の処理
+  error   => error.response || error //失敗時の処理
 );
 
 

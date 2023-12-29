@@ -25,7 +25,7 @@ class LogoutApiTest extends TestCase
 	public function should_認証済みのユーザーをログアウトさせる()
 	{
 		$response = $this->actingAs($this->user)
-										 ->json('POST', route('logout'));
+						 ->json('POST', route('logout'));
 
 		$response->assertStatus(200);
 		$this->assertGuest();

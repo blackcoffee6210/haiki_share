@@ -6,10 +6,11 @@ import store     from './store';
 import Register  from "./components/auth/Register";
 import Login     from "./components/auth/Login";
 import Index     from "./components/Index";
-import NotFound  from "./components/errors/NotFound";
 import Agreement from "./components/footer/Agreement";
 import Policy    from "./components/footer/Policy";
 import Tokutei   from "./components/footer/Tokutei";
+import NotFound  from "./components/errors/NotFound";
+import System    from "./components/errors/System";
 
 
 //VueRouterプラグインを利用する
@@ -18,12 +19,6 @@ Vue.use(VueRouter);
 
 //パスとコンポーネントのマッピング
 const routes = [
-  {
-    //404画面
-    path: '*',
-    name: 'notFound',
-    component: NotFound
-  },
   {
     //会員登録
     path: '/register',
@@ -34,7 +29,14 @@ const routes = [
     //ログイン
     path: '/login',
     name: 'login',
-    component: Login
+    component: Login,
+    beforeEnter(to, from, next) {
+      if(store.getters['auth/check']) {
+        next({ name: 'index' });
+      } else {
+        next();
+      }
+    }
   },
   {
     //インデックス(商品一覧)画面
@@ -59,6 +61,18 @@ const routes = [
     path: '/tokutei',
     name: 'tokutei',
     component: Tokutei
+  },
+  {
+    //404画面
+    path: '*',
+    name: 'notFound',
+    component: NotFound
+  },
+  {
+    //500エラー
+    path: '/500',
+    name: 'systemError',
+    component: System
   }
 ];
 

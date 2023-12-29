@@ -76,7 +76,7 @@ export default {
 				this.$store.commit('message/setContent', {
 					content: 'ログアウトしました'
 				});
-				//メニューを切り替える
+				//メニューを切り替える(スマホのハンバーガーメニューを閉じる)
 				this.toggleNav();
 				//商品一覧画面に移動する
 				this.$router.push({ name: 'index' }).catch(() => {});

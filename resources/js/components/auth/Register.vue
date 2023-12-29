@@ -153,7 +153,7 @@ export default {
 			apiStatus     : state => state.auth.apiStatus,
 			registerErrors: state => state.auth.registerErrorMessages
 		}),
-		//名前のplaceholderを利用者とお店で切り替える
+		//名前インプットエリアのplaceholderを利用者とお店で切り替える
 		name() {
 			if(this.registerForm.group === 1) {
 				return 'ハイキ君';

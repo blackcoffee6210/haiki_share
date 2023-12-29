@@ -33,7 +33,7 @@ export default {
 			async handler(val) {
 				if (val === INTERNAL_SERVER_ERROR) {
 					//500エラーページに遷移する
-					this.$router.push('/500');
+					this.$router.push({ name: 'systemError' });
 				}
 				// 認証切れだった場合はログインページに移動する
 				else if (val === UNAUTHORIZED) {

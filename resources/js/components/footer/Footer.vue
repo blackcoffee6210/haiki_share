@@ -44,6 +44,7 @@ export default {
 	methods: {
 		//ログアウト
 		async logout() {
+			//dispatchメソッドでauthストアのlogoutアクションを呼び出す
 			await this.$store.dispatch('auth/logout');
 			//通信成功なら下記の処理を実行
 			if(this.apiStatus) {

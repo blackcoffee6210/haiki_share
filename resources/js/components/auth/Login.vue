@@ -82,7 +82,6 @@ export default {
 	name: "Login",
 	data() {
 		return {
-			
 			loginForm: {
 				group: 1,
 				email: '',
@@ -96,6 +95,7 @@ export default {
 			//通信失敗の場合、つまりapiStatusがfalseの場合はインデックスへの移動を行わないように制御する
 			//trueまたはfalseが入る
 			apiStatus: state   => state.auth.apiStatus,
+			//loginErrorMessageを参照する
 			loginErrors: state => state.auth.loginErrorMessages
 		}),
 		// ↑ 簡略化した書き方 ↑
@@ -110,6 +110,7 @@ export default {
 		// ====================================================================
 	},
 	methods: {
+		//ログイン
 		async login() {
 			//authストアのloginアクションを呼び出す
 			await this.$store.dispatch('auth/login', this.loginForm);
@@ -126,6 +127,7 @@ export default {
 			}
 		},
 		//エラーメッセージをクリアするメソッド
+		//これがないと別のページに行って戻ってくると以前のエラーが表示されたままになる
 		clearError() {
 			this.$store.commit('auth/setLoginErrorMessages', null);
 		},
