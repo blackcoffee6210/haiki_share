@@ -150,7 +150,15 @@ return [
 		'address'       => '住所',
 		'email'         => 'Eメール',
 		'password'      => 'パスワード',
-
+		'image'         => '画像',
+		'category_id'   => 'カテゴリー',
+		'detail'        => '商品の内容',
+		'price'         => '料金',
+		'expire'        => '賞味期限',
 	],
-
+	'values' => [
+		'expire' => [
+			'today' => '本日'
+		]
+	]
 ];

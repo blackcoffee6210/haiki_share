@@ -27,12 +27,6 @@
     font-weight: bold;
     margin-right: $space_xl;
     color: $font-color;
-    &--main-color {
-      color: $main-color;
-      display: inline-block;
-      transform: rotate(-25deg);
-      margin-right: 2px;
-    }
     &:hover {
       color: $font-color;
     }
@@ -46,6 +40,13 @@
     font-weight: bold;
     @include mq() {
       font-size: $font-size_xs;
+    }
+  }
+  //改行
+  &__br {
+    display: none;
+    @include mq() {
+      display: initial;
     }
   }
   //ヘッダーの右側

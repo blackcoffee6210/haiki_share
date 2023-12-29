@@ -566,6 +566,17 @@ body {
   color: #333;
 }
 
+.c-select {
+  height: 36px;
+  display: block;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+  background: #fff;
+  outline: none;
+  padding: 5px 10px;
+  resize: none;
+}
+
 .c-go-top {
   display: block;
   width: 50px;
@@ -895,13 +906,6 @@ body {
   color: #333;
 }
 
-.p-header__logo--main-color {
-  color: #f96204;
-  display: inline-block;
-  transform: rotate(-25deg);
-  margin-right: 2px;
-}
-
 .p-header__logo:hover {
   color: #333;
 }
@@ -920,6 +924,16 @@ body {
 @media screen and (max-width: 450px) {
   .p-header__sub {
     font-size: 1rem;
+  }
+}
+
+.p-header__br {
+  display: none;
+}
+
+@media screen and (max-width: 450px) {
+  .p-header__br {
+    display: initial;
   }
 }
 

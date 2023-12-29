@@ -2155,18 +2155,25 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Loading__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Loading */ "./resources/js/components/Loading.vue");
-/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util */ "./resources/js/util.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _Loading__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Loading */ "./resources/js/components/Loading.vue");
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../util */ "./resources/js/util.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw new Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw new Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : String(i); }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "RegisterProduct",
   components: {
-    Loading: _Loading__WEBPACK_IMPORTED_MODULE_0__["default"]
+    Loading: _Loading__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   data: function data() {
     return {
@@ -2175,8 +2182,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         category_id: '',
         name: '',
         detail: '',
-        price: '',
-        expire: ''
+        expire: '',
+        price: ''
       },
       //カテゴリーを格納するプロパティ
       categories: {},
@@ -2188,6 +2195,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       loading: false
     };
   },
+  computed: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])({
+    //ユーザーID
+    userId: 'auth/userId'
+  })), {}, {
+    //明日の日付をYYYY-MM-DDの書式で返す
+    tomorrow: function tomorrow() {
+      var dt = new Date();
+      dt.setDate(dt.getDate() + 1);
+      return this.formatDate(dt);
+    }
+  }),
   methods: {
     //カテゴリー取得
     getCategories: function getCategories() {
@@ -2201,7 +2219,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               return axios.get('/api/category');
             case 2:
               response = _context.sent;
-              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
+              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_2__["OK"])) {
                 _context.next = 6;
                 break;
               }
@@ -2254,6 +2272,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.product.image = null;
       this.$el.querySelector('input[type="file"]').value = null;
     },
+    //日付をYYYY-MM-DDの書式で返すメソッド
+    formatDate: function formatDate(dt) {
+      var y = dt.getFullYear();
+      var m = ('00' + (dt.getMonth() + 1)).slice(-2);
+      var d = ('00' + dt.getDate()).slice(-2);
+      return y + '-' + m + '-' + d;
+    },
     //商品登録メソッド
     submit: function submit() {
       var _this3 = this;
@@ -2265,6 +2290,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               //ローティングを表示する
               _this3.loading = true;
               formData = new FormData();
+              formData.append('user_id', _this3.userId);
               formData.append('image', _this3.product.image);
               formData.append('category_id', _this3.product.category_id);
               formData.append('name', _this3.product.name);
@@ -2273,37 +2299,37 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               formData.append('expire', _this3.product.expire);
 
               //商品登録APIを呼び出す
-              _context2.next = 10;
+              _context2.next = 11;
               return axios.post('/api/products', formData);
-            case 10:
+            case 11:
               response = _context2.sent;
               //API通信が終わったらローディングを非表示にする
               _this3.loading = false;
 
               //responseステータスがUNPROCESSABLE_ENTITY(バリデーションエラー)なら後続の処理を行う
-              if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["UNPROCESSABLE_ENTITY"])) {
-                _context2.next = 15;
+              if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["UNPROCESSABLE_ENTITY"])) {
+                _context2.next = 16;
                 break;
               }
               //responseエラーメッセージをプロパティに格納する
               _this3.errors = response.data.errors;
               //後続の処理を抜ける
               return _context2.abrupt("return", false);
-            case 15:
+            case 16:
               //送信が完了したら入力値をクリアする
               _this3.reset();
 
               //responseステータスがCREATEDじゃなかったら(商品登録できなかったら)後続の処理を行う
-              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["CREATED"])) {
-                _context2.next = 19;
+              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_2__["CREATED"])) {
+                _context2.next = 20;
                 break;
               }
               //エラー情報を渡す
               _this3.$store.commit('error/setCode', response.status);
               //後続の処理を抜ける
               return _context2.abrupt("return", false);
-            case 19:
-              //上のif文を抜けたら(登録成功)、メッセージを登録する
+            case 20:
+              //上のif文を抜けたら登録成功なので、メッセージを登録する
               _this3.$store.commit('message/setContent', {
                 content: '商品を登録しました！'
               });
@@ -2312,7 +2338,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               _this3.$router.push({
                 name: 'index'
               });
-            case 21:
+            case 22:
             case "end":
               return _context2.stop();
           }
@@ -2320,6 +2346,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }))();
     }
   },
+  created: function created() {},
   watch: {
     $route: {
       handler: function handler() {
@@ -2865,9 +2892,7 @@ var render = function render() {
         name: "index"
       }
     }
-  }, [_vm._v("\n\t\t\t\tHaiki Share\n\t\t\t")]), _vm._v(" "), _c("div", {
-    staticClass: "p-header__sub"
-  }, [_vm._v("食品を無駄にしないフードシェアリングサービス")])], 1), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n\t\t\t\tHaiki Share\n\t\t\t\t")]), _vm._v(" "), _vm._m(0)], 1), _vm._v(" "), _c("div", {
     staticClass: "p-header__right"
   }, [_c("button", {
     staticClass: "p-header__hamburger",
@@ -2946,7 +2971,15 @@ var render = function render() {
     }
   }, [_vm._v("新規登録")])], 1)])])]);
 };
-var staticRenderFns = [];
+var staticRenderFns = [function () {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("div", {
+    staticClass: "p-header__sub"
+  }, [_vm._v("\n\t\t\t\t食品を無駄にしない"), _c("br", {
+    staticClass: "p-header__br"
+  }), _vm._v("フードシェアリングサービス\n\t\t\t")]);
+}];
 render._withStripped = true;
 
 
@@ -3119,7 +3152,7 @@ var render = function render() {
       value: _vm.product.category_id,
       expression: "product.category_id"
     }],
-    staticClass: "c-input p-register-product__input",
+    staticClass: "c-select p-register-product__input",
     on: {
       change: function change($event) {
         var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
@@ -3210,8 +3243,12 @@ var render = function render() {
     }],
     staticClass: "c-input p-register-product__input",
     attrs: {
-      type: "date",
-      id: "expire"
+      type: "text",
+      onfocusin: "this.type='date'",
+      onfocusout: "this.type='text'",
+      id: "expire_date",
+      min: _vm.tomorrow,
+      placeholder: "日付を選択してください"
     },
     domProps: {
       value: _vm.product.expire
@@ -48540,7 +48577,7 @@ function getCookieValue(searchKey) {
 //ステータスコードの定義
 //他のプログラムはこれをインポートして使うようにする
 var OK = 200; //OK
-var CREATED = 201;
+var CREATED = 201; //リソースの作成
 var NOT_FOUND = 404; //404エラー
 var UNAUTHORIZED = 419; //認証切れ
 var UNPROCESSABLE_ENTITY = 422; //laravelのバリデーションエラーは422

@@ -13,5 +13,7 @@ Route::get('/refresh-token', function(Request $request) { //トークンリフ�
 });
 Route::get('/user', function() { return Auth::user(); })->name('user'); //ログインユーザーを返す
 Route::post('/products', 'ProductController@store'); //商品登録
+
+
 Route::get('/category', 'CategoryController'); //カテゴリー取得API
 Route::get('/prefecture', 'PrefectureController'); //都道府県取得API

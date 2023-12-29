@@ -24,7 +24,7 @@ export function getCookieValue(searchKey) {
 //ステータスコードの定義
 //他のプログラムはこれをインポートして使うようにする
 export const OK                    = 200; //OK
-export const CREATED               = 201;
+export const CREATED               = 201; //リソースの作成
 export const NOT_FOUND             = 404; //404エラー
 export const UNAUTHORIZED          = 419; //認証切れ
 export const UNPROCESSABLE_ENTITY  = 422; //laravelのバリデーションエラーは422

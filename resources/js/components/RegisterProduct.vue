@@ -35,7 +35,7 @@
 					</div>
 					
 					<!-- カテゴリー -->
-					<select class="c-input p-register-product__input"
+					<select class="c-select p-register-product__input"
 									v-model="product.category_id">
 						<option value="" disabled>カテゴリーを選択してください</option>
 						<option v-for="category in categories"
@@ -61,9 +61,9 @@
 					
 					<!-- 商品詳細	-->
 					<textarea	class="c-input p-register-product__textarea"
-										 id="detail"
-										 v-model="product.detail"
-										 placeholder="商品の内容を入力してください"
+										id="detail"
+										v-model="product.detail"
+										placeholder="商品の内容を入力してください"
 					></textarea>
 					<!-- エラーメッセージ	-->
 					<div v-if="errors">
@@ -72,9 +72,14 @@
 					
 					<!-- 賞味期限 -->
 					<!-- todo: カエル本を参考に実装 -->
-					<input type="date"
+					<input type="text"
+								 onfocusin="this.type='date'"
+								 onfocusout="this.type='text'"
 								 class="c-input p-register-product__input"
-								 id="expire" v-model="product.expire">
+								 id="expire_date"
+								 :min="tomorrow"
+								 placeholder="日付を選択してください"
+								 v-model="product.expire">
 					<!-- エラーメッセージ	-->
 					<div v-if="errors">
 						<div v-for="msg in errors.expire" :key="msg" class="p-error">{{ msg }}</div>
@@ -103,6 +108,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import Loading from "./Loading";
 import { CREATED, OK, UNPROCESSABLE_ENTITY} from "../util";
 export default {
@@ -117,8 +123,8 @@ export default {
 				category_id: '',
 				name: '',
 				detail: '',
-				price: '',
 				expire: '',
+				price: ''
 			},
 			//カテゴリーを格納するプロパティ
 			categories: {},
@@ -129,6 +135,18 @@ export default {
 			//ローディングを表示するかどうかを判定するプロパティ
 			loading: false
 		}
+	},
+	computed: {
+		...mapGetters({
+			//ユーザーID
+			userId: 'auth/userId'
+		}),
+		//明日の日付をYYYY-MM-DDの書式で返す
+		tomorrow() {
+			let dt = new Date();
+			dt.setDate(dt.getDate() + 1);
+			return this.formatDate(dt);
+		},
 	},
 	methods: {
 		//カテゴリー取得
@@ -178,12 +196,21 @@ export default {
 			this.product.image = null;
 			this.$el.querySelector('input[type="file"]').value = null;
 		},
+		//日付をYYYY-MM-DDの書式で返すメソッド
+		formatDate(dt) {
+			let y = dt.getFullYear();
+			let m = ('00' + (dt.getMonth() + 1)).slice(-2);
+			let d = ('00' + dt.getDate()).slice(-2);
+			return (y + '-' + m + '-' + d);
+		},
+		
 		//商品登録メソッド
 		async submit() {
 			//ローティングを表示する
 			this.loading = true;
 			
 			const formData = new FormData;
+			formData.append('user_id', this.userId);
 			formData.append('image', this.product.image);
 			formData.append('category_id', this.product.category_id);
 			formData.append('name', this.product.name);
@@ -214,7 +241,7 @@ export default {
 				return false;
 			}
 			
-			//上のif文を抜けたら(登録成功)、メッセージを登録する
+			//上のif文を抜けたら登録成功なので、メッセージを登録する
 			this.$store.commit('message/setContent', {
 				content: '商品を登録しました！'
 			});
@@ -222,6 +249,9 @@ export default {
 			//トップページへ移動する
 			this.$router.push({ name: 'index' });
 		}
+	},
+	created() {
+	
 	},
 	watch: {
 		$route: {
