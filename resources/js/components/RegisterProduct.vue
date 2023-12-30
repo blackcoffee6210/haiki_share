@@ -228,7 +228,7 @@ export default {
 			//読み込まれたファイルはデータURL形式で受け取れる(上記onload参照)
 			reader.readAsDataURL(event.target.files[0]);
 			//データに入力値のファイルを代入
-			this.article.image = event.target.files[0];
+			this.product.image = event.target.files[0];
 		},
 		//入力欄の値とプレビュー表示をクリアするメソッド
 		reset() {
