@@ -6,5 +6,9 @@
   outline: none;
   padding: $space_s $space_m;
   resize: none;
+  &__err {
+    border: 1px solid $error-color;
+    background: $error-color-bg;
+  }
 }
 

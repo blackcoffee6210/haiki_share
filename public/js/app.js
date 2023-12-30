@@ -2035,7 +2035,8 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
   })), Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])({
     isLogin: 'auth/check',
     //trueまたはfalseが返ってくる(ログインしていたらtrue)
-    username: 'auth/username'
+    username: 'auth/username',
+    isShopUser: 'auth/isShopUser'
   })),
   methods: {
     //ハンバーガーメニューをtoggleで切り替える
@@ -2190,7 +2191,15 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       //データURLを格納するプロパティ
       preview: null,
       //エラーメッセージを格納するプロパティ
-      errors: null,
+      errors: {
+        image: null,
+        category_id: null,
+        name: null,
+        detail: null,
+        expire: null,
+        price: null
+      },
+      // errors: null,
       //ローディングを表示するかどうかを判定するプロパティ
       loading: false
     };
@@ -2203,6 +2212,12 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     tomorrow: function tomorrow() {
       var dt = new Date();
       dt.setDate(dt.getDate() + 1);
+      return this.formatDate(dt);
+    },
+    //賞味期限を登録できる最大の日付
+    maxDate: function maxDate() {
+      var dt = new Date();
+      dt.setDate(dt.getDate() + 30);
       return this.formatDate(dt);
     }
   }),
@@ -2490,6 +2505,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         name: '',
         branch: '',
         prefecture_id: '',
+        address: '',
         email: '',
         password: '',
         password_confirmation: ''
@@ -2920,6 +2936,12 @@ var render = function render() {
       "v-slide": _vm.active
     }
   }, [_c("router-link", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: _vm.isShopUser,
+      expression: "isShopUser"
+    }],
     staticClass: "p-header__link",
     attrs: {
       to: {
@@ -3121,7 +3143,10 @@ var render = function render() {
   }, [_c("div", {
     staticClass: "u-p-relative"
   }, [_c("label", {
-    staticClass: "p-register-product__label-img"
+    staticClass: "p-register-product__label-img",
+    "class": {
+      "p-register-product__label-img__err": _vm.errors.image
+    }
   }, [_c("input", {
     staticClass: "p-register-product__img",
     attrs: {
@@ -3145,7 +3170,12 @@ var render = function render() {
       key: msg,
       staticClass: "p-error"
     }, [_vm._v(_vm._s(msg))]);
-  }), 0) : _vm._e(), _vm._v(" "), _c("select", {
+  }), 0) : _vm._e(), _vm._v(" "), _c("label", {
+    staticClass: "c-label p-register-product__label",
+    attrs: {
+      "for": "category_id"
+    }
+  }, [_vm._v("カテゴリー\n\t\t\t\t")]), _vm._v(" "), _c("select", {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -3153,6 +3183,12 @@ var render = function render() {
       expression: "product.category_id"
     }],
     staticClass: "c-select p-register-product__input",
+    "class": {
+      "c-select__err": _vm.errors.category_id
+    },
+    attrs: {
+      id: "category_id"
+    },
     on: {
       change: function change($event) {
         var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
@@ -3181,7 +3217,12 @@ var render = function render() {
       key: msg,
       staticClass: "p-error"
     }, [_vm._v(_vm._s(msg))]);
-  }), 0) : _vm._e(), _vm._v(" "), _c("input", {
+  }), 0) : _vm._e(), _vm._v(" "), _c("label", {
+    staticClass: "c-label p-register-product__label",
+    attrs: {
+      "for": "name"
+    }
+  }, [_vm._v("商品名\n\t\t\t\t")]), _vm._v(" "), _c("input", {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -3189,6 +3230,9 @@ var render = function render() {
       expression: "product.name"
     }],
     staticClass: "c-input p-register-product__input",
+    "class": {
+      "c-input__err": _vm.errors.name
+    },
     attrs: {
       type: "text",
       id: "name",
@@ -3208,7 +3252,12 @@ var render = function render() {
       key: msg,
       staticClass: "p-error"
     }, [_vm._v(_vm._s(msg))]);
-  }), 0) : _vm._e(), _vm._v(" "), _c("textarea", {
+  }), 0) : _vm._e(), _vm._v(" "), _c("label", {
+    staticClass: "c-label p-register-product__label",
+    attrs: {
+      "for": "detail"
+    }
+  }, [_vm._v("商品の内容\n\t\t\t\t")]), _vm._v(" "), _c("textarea", {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -3216,6 +3265,9 @@ var render = function render() {
       expression: "product.detail"
     }],
     staticClass: "c-input p-register-product__textarea",
+    "class": {
+      "c-input__err": _vm.errors.detail
+    },
     attrs: {
       id: "detail",
       placeholder: "商品の内容を入力してください"
@@ -3234,7 +3286,12 @@ var render = function render() {
       key: msg,
       staticClass: "p-error"
     }, [_vm._v(_vm._s(msg))]);
-  }), 0) : _vm._e(), _vm._v(" "), _c("input", {
+  }), 0) : _vm._e(), _vm._v(" "), _c("label", {
+    staticClass: "c-label p-register-product__label",
+    attrs: {
+      "for": "expire_date"
+    }
+  }, [_vm._v("賞味期限\n\t\t\t\t")]), _vm._v(" "), _c("input", {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -3242,13 +3299,17 @@ var render = function render() {
       expression: "product.expire"
     }],
     staticClass: "c-input p-register-product__input",
+    "class": {
+      "c-input__err": _vm.errors.expire
+    },
     attrs: {
       type: "text",
       onfocusin: "this.type='date'",
       onfocusout: "this.type='text'",
       id: "expire_date",
       min: _vm.tomorrow,
-      placeholder: "日付を選択してください"
+      max: _vm.maxDate,
+      placeholder: "本日以降の日付を選択してください"
     },
     domProps: {
       value: _vm.product.expire
@@ -3264,7 +3325,12 @@ var render = function render() {
       key: msg,
       staticClass: "p-error"
     }, [_vm._v(_vm._s(msg))]);
-  }), 0) : _vm._e(), _vm._v(" "), _c("div", {
+  }), 0) : _vm._e(), _vm._v(" "), _c("label", {
+    staticClass: "c-label p-register-product__label",
+    attrs: {
+      "for": "price"
+    }
+  }, [_vm._v("金額\n\t\t\t\t")]), _vm._v(" "), _c("div", {
     staticClass: "u-d-flex"
   }, [_c("input", {
     directives: [{
@@ -3274,6 +3340,9 @@ var render = function render() {
       expression: "product.price"
     }],
     staticClass: "c-input p-register-product__input p-register-product__input--yen",
+    "class": {
+      "c-input__err": _vm.errors.price
+    },
     attrs: {
       type: "text",
       id: "price",
@@ -3289,8 +3358,11 @@ var render = function render() {
       }
     }
   }), _vm._v(" "), _c("div", {
-    staticClass: "p-register-product__yen"
-  }, [_vm._v("円")])]), _vm._v(" "), _vm.errors ? _c("div", _vm._l(_vm.errors.price, function (msg) {
+    staticClass: "p-register-product__yen",
+    "class": {
+      "p-register-product__yen__err": _vm.errors.price
+    }
+  }, [_vm._v("円\n\t\t\t\t\t")])]), _vm._v(" "), _vm.errors ? _c("div", _vm._l(_vm.errors.price, function (msg) {
     return _c("div", {
       key: msg,
       staticClass: "p-error"
@@ -3385,6 +3457,9 @@ var render = function render() {
       expression: "loginForm.email"
     }],
     staticClass: "c-input p-auth-form__input",
+    "class": {
+      "c-input__err": _vm.loginErrors ? _vm.loginErrors.email : ""
+    },
     attrs: {
       type: "text",
       id: "email",
@@ -3417,6 +3492,9 @@ var render = function render() {
       expression: "loginForm.password"
     }],
     staticClass: "c-input p-auth-form__input",
+    "class": {
+      "c-input__err": _vm.loginErrors ? _vm.loginErrors.password : ""
+    },
     attrs: {
       type: "password",
       id: "password",
@@ -3553,7 +3631,7 @@ var render = function render() {
       expression: "registerForm.group === 1"
     }],
     staticClass: "c-title p-auth-form__title"
-  }, [_vm._v("新規登録（利用者）")]), _vm._v(" "), _c("h2", {
+  }, [_vm._v("新規登録（利用者）\n\t\t")]), _vm._v(" "), _c("h2", {
     directives: [{
       name: "show",
       rawName: "v-show",
@@ -3561,7 +3639,7 @@ var render = function render() {
       expression: "registerForm.group === 2"
     }],
     staticClass: "c-title p-auth-form__title"
-  }, [_vm._v("新規登録（お店の方）")]), _vm._v(" "), _c("form", {
+  }, [_vm._v("新規登録（お店の方）\n\t\t")]), _vm._v(" "), _c("form", {
     staticClass: "p-auth-form__form",
     on: {
       submit: function submit($event) {
@@ -3604,6 +3682,9 @@ var render = function render() {
       expression: "registerForm.name"
     }],
     staticClass: "c-input p-auth-form__input",
+    "class": {
+      "c-input__err": _vm.registerErrors ? _vm.registerErrors.name : ""
+    },
     attrs: {
       type: "text",
       id: "name",
@@ -3629,8 +3710,7 @@ var render = function render() {
       rawName: "v-show",
       value: _vm.registerForm.group === 2,
       expression: "registerForm.group === 2"
-    }],
-    staticClass: "u-mt20 u-mb5"
+    }]
   }, [_c("label", {
     staticClass: "c-label p-auth-form__label",
     attrs: {
@@ -3644,6 +3724,9 @@ var render = function render() {
       expression: "registerForm.branch"
     }],
     staticClass: "c-input p-auth-form__input",
+    "class": {
+      "c-input__err": _vm.registerErrors ? _vm.registerErrors.branch : ""
+    },
     attrs: {
       type: "text",
       id: "branch",
@@ -3669,8 +3752,7 @@ var render = function render() {
       rawName: "v-show",
       value: _vm.registerForm.group === 2,
       expression: "registerForm.group === 2"
-    }],
-    staticClass: "u-mt20 u-mb5"
+    }]
   }, [_c("label", {
     staticClass: "c-label p-auth-form__label",
     attrs: {
@@ -3683,7 +3765,10 @@ var render = function render() {
       value: _vm.registerForm.prefecture_id,
       expression: "registerForm.prefecture_id"
     }],
-    staticClass: "c-input p-auth-form__input",
+    staticClass: "c-select p-auth-form__input",
+    "class": {
+      "c-select__err": _vm.registerErrors ? _vm.registerErrors.prefecture_id : ""
+    },
     attrs: {
       id: "prefecture"
     },
@@ -3721,14 +3806,13 @@ var render = function render() {
       rawName: "v-show",
       value: _vm.registerForm.group === 2,
       expression: "registerForm.group === 2"
-    }],
-    staticClass: "u-mt20 u-mb5"
+    }]
   }, [_c("label", {
     staticClass: "c-label p-auth-form__label",
     attrs: {
       "for": "address"
     }
-  }, [_vm._v("住所")]), _vm._v(" "), _c("input", {
+  }, [_vm._v("住所\n\t\t\t\t")]), _vm._v(" "), _c("input", {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -3736,6 +3820,9 @@ var render = function render() {
       expression: "registerForm.address"
     }],
     staticClass: "c-input p-auth-form__input",
+    "class": {
+      "c-input__err": _vm.registerErrors ? _vm.registerErrors.address : ""
+    },
     attrs: {
       type: "text",
       id: "address",
@@ -3768,6 +3855,9 @@ var render = function render() {
       expression: "registerForm.email"
     }],
     staticClass: "c-input p-auth-form__input",
+    "class": {
+      "c-input__err": _vm.registerErrors ? _vm.registerErrors.email : ""
+    },
     attrs: {
       type: "text",
       id: "email",
@@ -3792,7 +3882,7 @@ var render = function render() {
     attrs: {
       "for": "password"
     }
-  }, [_vm._v("パスワード(半角英数字)")]), _vm._v(" "), _c("input", {
+  }, [_vm._v("パスワード")]), _vm._v(" "), _c("input", {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -3800,6 +3890,9 @@ var render = function render() {
       expression: "registerForm.password"
     }],
     staticClass: "c-input p-auth-form__input",
+    "class": {
+      "c-input__err": _vm.registerErrors ? _vm.registerErrors.password : ""
+    },
     attrs: {
       type: "password",
       id: "password",
@@ -3832,6 +3925,9 @@ var render = function render() {
       expression: "registerForm.password_confirmation"
     }],
     staticClass: "c-input p-auth-form__input",
+    "class": {
+      "c-input__err": _vm.registerErrors ? _vm.registerErrors.password_confirmation : ""
+    },
     attrs: {
       type: "password",
       id: "password-confirmation",
@@ -48100,13 +48196,24 @@ var routes = [{
   //会員登録
   path: '/register',
   name: 'register',
-  component: _components_auth_Register__WEBPACK_IMPORTED_MODULE_3__["default"]
+  component: _components_auth_Register__WEBPACK_IMPORTED_MODULE_3__["default"],
+  beforeEnter: function beforeEnter(to, from, next) {
+    //ログイン済みでアクセスしたらトップページを表示する
+    if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/check']) {
+      next({
+        name: 'index'
+      });
+    } else {
+      next();
+    }
+  }
 }, {
   //ログイン
   path: '/login',
   name: 'login',
   component: _components_auth_Login__WEBPACK_IMPORTED_MODULE_4__["default"],
   beforeEnter: function beforeEnter(to, from, next) {
+    //ログイン済みでアクセスしたらトップページを表示する
     if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/check']) {
       next({
         name: 'index'
@@ -48124,7 +48231,17 @@ var routes = [{
   //商品登録
   path: '/products/register',
   name: 'product.register',
-  component: _components_RegisterProduct__WEBPACK_IMPORTED_MODULE_11__["default"]
+  component: _components_RegisterProduct__WEBPACK_IMPORTED_MODULE_11__["default"],
+  beforeEnter: function beforeEnter(to, from, next) {
+    //お店の人以外がアクセスしたらトップページを表示する
+    if (!_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/isShopUser']) {
+      next({
+        name: 'index'
+      });
+    } else {
+      next();
+    }
+  }
 }, {
   //利用規約
   path: '/agreement',
@@ -48197,9 +48314,21 @@ var state = {
   //値にはtrueまたはfalseが入る
   apiStatus: null,
   //ログインのエラーメッセージを入れるステート
-  loginErrorMessages: null,
+  // loginErrorMessages: null,
+  loginErrorMessages: {
+    email: null,
+    password: null
+  },
   //ユーザー登録のエラーメッセージを入れるステート
-  registerErrorMessages: null
+  registerErrorMessages: {
+    name: null,
+    branch: null,
+    prefecture_id: null,
+    address: null,
+    email: null,
+    password: null,
+    password_confirmation: null
+  }
 };
 
 //gettersはstateの内容から算出される値
@@ -48216,6 +48345,10 @@ var getters = {
   //ログインユーザーのIDを取得
   userId: function userId(state) {
     return state.user ? state.user.id : '';
+  },
+  //ログインユーザーがお店の人かどうか
+  isShopUser: function isShopUser(state) {
+    return state.user.group === 2;
   }
 };
 

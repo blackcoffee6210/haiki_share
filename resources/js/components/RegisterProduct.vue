@@ -15,9 +15,11 @@
 					
 					<!-- 商品画像	-->
 					<div class="u-p-relative">
-						<label class="p-register-product__label-img">
+						<label class="p-register-product__label-img"
+									 :class="{ 'p-register-product__label-img__err': errors.image }">
 							<input type="file"
 										 class="p-register-product__img"
+										 
 										 @change="onFileChange">
 							<output class="p-register-product__output" v-if="preview">
 								<img :src="preview"
@@ -35,7 +37,12 @@
 					</div>
 					
 					<!-- カテゴリー -->
+					<label for="category_id"
+								 class="c-label p-register-product__label">カテゴリー
+					</label>
 					<select class="c-select p-register-product__input"
+									:class="{ 'c-select__err': errors.category_id }"
+									id="category_id"
 									v-model="product.category_id">
 						<option value="" disabled>カテゴリーを選択してください</option>
 						<option v-for="category in categories"
@@ -48,9 +55,13 @@
 						<div v-for="msg in errors.category_id" :key="msg" class="p-error">{{ msg }}</div>
 					</div>
 					
-					<!-- 記事の名前	-->
+					<!-- 商品名	-->
+					<label for="name"
+								 class="c-label p-register-product__label">商品名
+					</label>
 					<input type="text"
 								 class="c-input p-register-product__input"
+								 :class="{ 'c-input__err': errors.name }"
 								 id="name"
 								 v-model="product.name"
 								 placeholder="商品名を入力してください">
@@ -59,8 +70,12 @@
 						<div v-for="msg in errors.name" :key="msg" class="p-error">{{ msg }}</div>
 					</div>
 					
-					<!-- 商品詳細	-->
+					<!-- 商品の内容	-->
+					<label for="detail"
+								 class="c-label p-register-product__label">商品の内容
+					</label>
 					<textarea	class="c-input p-register-product__textarea"
+										:class="{ 'c-input__err': errors.detail }"
 										id="detail"
 										v-model="product.detail"
 										placeholder="商品の内容を入力してください"
@@ -72,13 +87,18 @@
 					
 					<!-- 賞味期限 -->
 					<!-- todo: カエル本を参考に実装 -->
+					<label for="expire_date"
+								 class="c-label p-register-product__label">賞味期限
+					</label>
 					<input type="text"
 								 onfocusin="this.type='date'"
 								 onfocusout="this.type='text'"
 								 class="c-input p-register-product__input"
+								 :class="{ 'c-input__err': errors.expire }"
 								 id="expire_date"
 								 :min="tomorrow"
-								 placeholder="日付を選択してください"
+								 :max="maxDate"
+								 placeholder="本日以降の日付を選択してください"
 								 v-model="product.expire">
 					<!-- エラーメッセージ	-->
 					<div v-if="errors">
@@ -86,13 +106,19 @@
 					</div>
 					
 					<!-- 金額	-->
+					<label for="price"
+								 class="c-label p-register-product__label">金額
+					</label>
 					<div class="u-d-flex">
 						<input type="text"
 									 class="c-input p-register-product__input p-register-product__input--yen"
+									 :class="{ 'c-input__err': errors.price }"
 									 id="price"
 									 v-model="product.price"
 									 placeholder="1000">
-						<div class="p-register-product__yen">円</div>
+						<div class="p-register-product__yen"
+								 :class="{'p-register-product__yen__err': errors.price }">円
+						</div>
 					</div>
 					<!-- エラーメッセージ	-->
 					<div v-if="errors">
@@ -131,7 +157,15 @@ export default {
 			//データURLを格納するプロパティ
 			preview: null,
 			//エラーメッセージを格納するプロパティ
-			errors: null,
+			errors: {
+				image: null,
+				category_id: null,
+				name: null,
+				detail: null,
+				expire: null,
+				price: null
+			},
+			// errors: null,
 			//ローディングを表示するかどうかを判定するプロパティ
 			loading: false
 		}
@@ -145,6 +179,12 @@ export default {
 		tomorrow() {
 			let dt = new Date();
 			dt.setDate(dt.getDate() + 1);
+			return this.formatDate(dt);
+		},
+		//賞味期限を登録できる最大の日付
+		maxDate() {
+			let dt = new Date();
+			dt.setDate(dt.getDate() + 30);
 			return this.formatDate(dt);
 		},
 	},

@@ -27,8 +27,14 @@
 				<nav v-if="isLogin" class="p-header__nav" :class="{ 'v-slide': active }">
 					<router-link :to="{ name: 'product.register' }"
 											 class="p-header__link"
+											 v-show="isShopUser"
 											 @click="toggleNav">出品する
 					</router-link>
+					<!--<router-link :to="{ name: 'product.register' }"-->
+					<!--						 class="p-header__link"-->
+					<!--						 v-show="user.group === 2"-->
+					<!--						 @click="toggleNav">出品する-->
+					<!--</router-link>-->
 					<router-link :to="{ name: 'user.mypage' }"
 											 class="p-header__link"
 											 @click="toggleNav">マイページ
@@ -69,6 +75,7 @@ export default {
 		...mapGetters({
 			isLogin: 'auth/check', //trueまたはfalseが返ってくる(ログインしていたらtrue)
 			username: 'auth/username',
+			isShopUser: 'auth/isShopUser'
 		}),
 	},
 	methods: {

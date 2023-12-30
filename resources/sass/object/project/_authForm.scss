@@ -39,9 +39,9 @@
   }
   &__label {
     margin: $space_xl 0 $space_s 0;
-    &:first-child {
-      margin-top: 0;
-    }
+    //&:first-child {
+    //  margin-top: 0;
+    //}
   }
   &__input {
     width: 100%;

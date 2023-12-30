@@ -16,6 +16,7 @@
 			<h2 class="c-title p-auth-form__title" v-show="loginForm.group === 2">ログイン（お店の方）</h2>
 			<!-- preventをつけてデフォルトのフォーム送信の挙動をキャンセルする -->
 			<form class="p-auth-form__form" @submit.prevent="login">
+				
 				<!-- Email	-->
 				<label for="email"
 							 class="c-label p-auth-form__label">Eメール
@@ -23,6 +24,7 @@
 				<input type="text"
 							 v-model="loginForm.email"
 							 class="c-input p-auth-form__input"
+							 :class="{'c-input__err': (loginErrors) ? loginErrors.email : ''}"
 							 id="email"
 							 placeholder="mail@haiki_share.com">
 				<!-- Emailエラーメッセージ	-->
@@ -40,6 +42,7 @@
 				<input type="password"
 							 v-model="loginForm.password"
 							 class="c-input p-auth-form__input"
+							 :class="{ 'c-input__err': (loginErrors) ? loginErrors.password : ''}"
 							 id="password"
 							 placeholder="*********">
 				<!-- パスワード エラーメッセージ	-->

@@ -12,8 +12,12 @@
 						@click="registerForm.group = 2">お店の方
 				</li>
 			</ul>
-			<h2 class="c-title p-auth-form__title" v-show="registerForm.group === 1">新規登録（利用者）</h2>
-			<h2 class="c-title p-auth-form__title" v-show="registerForm.group === 2">新規登録（お店の方）</h2>
+			<h2 class="c-title p-auth-form__title"
+					v-show="registerForm.group === 1">新規登録（利用者）
+			</h2>
+			<h2 class="c-title p-auth-form__title"
+					v-show="registerForm.group === 2">新規登録（お店の方）
+			</h2>
 			<form class="p-auth-form__form" @submit.prevent="register">
 				
 				<!-- csrf -->
@@ -27,6 +31,7 @@
 				<input type="text"
 							 id="name"
 							 class="c-input p-auth-form__input"
+							 :class="{ 'c-input__err': (registerErrors) ? registerErrors.name : ''}"
 							 v-model="registerForm.name"
 							 :placeholder="name">
 				<!-- エラーメッセージ	-->
@@ -35,11 +40,12 @@
 				</div>
 				
 				<!-- 支店 -->
-				<div v-show="registerForm.group === 2" class="u-mt20 u-mb5">
+				<div v-show="registerForm.group === 2">
 					<label for="branch" class="c-label p-auth-form__label">支店名</label>
 					<input type="text"
 								 id="branch"
 								 class="c-input p-auth-form__input"
+								 :class="{ 'c-input__err': (registerErrors) ? registerErrors.branch : ''}"
 								 v-model="registerForm.branch"
 								 placeholder="渋谷109前店">
 					<!-- エラーメッセージ	-->
@@ -49,11 +55,13 @@
 				</div>
 				
 				<!-- 都道府県 -->
-				<div v-show="registerForm.group === 2" class="u-mt20 u-mb5">
+				<div v-show="registerForm.group === 2">
 					<label for="prefecture" class="c-label p-auth-form__label">都道府県</label>
-					<select id="prefecture" class="c-input p-auth-form__input" v-model="registerForm.prefecture_id">
+					<select id="prefecture"
+									class="c-select p-auth-form__input"
+									:class="{ 'c-select__err': (registerErrors) ? registerErrors.prefecture_id : ''}"
+									v-model="registerForm.prefecture_id">
 						<option value="" disabled>都道府県を選択してください</option>
-						
 						<option v-for="prefecture in prefectures" :value="prefecture.id" :key="prefecture.id">
 							{{ prefecture.name }}
 						</option>
@@ -65,11 +73,14 @@
 				</div>
 				
 				<!-- 住所 -->
-				<div v-show="registerForm.group === 2" class="u-mt20 u-mb5">
-					<label for="address" class="c-label p-auth-form__label">住所</label>
+				<div v-show="registerForm.group === 2">
+					<label for="address"
+								 class="c-label p-auth-form__label">住所
+					</label>
 					<input type="text"
 								 id="address"
 								 class="c-input p-auth-form__input"
+								 :class="{ 'c-input__err': (registerErrors) ? registerErrors.address : ''}"
 								 v-model="registerForm.address"
 								 placeholder="渋谷区宇田川町26-4">
 					<!-- エラーメッセージ	-->
@@ -83,6 +94,7 @@
 				<input type="text"
 							 id="email"
 							 class="c-input p-auth-form__input"
+							 :class="{ 'c-input__err': (registerErrors) ? registerErrors.email : ''}"
 							 v-model="registerForm.email"
 							 placeholder="mail@haiki_share.com">
 				<!-- エラーメッセージ	-->
@@ -91,10 +103,11 @@
 				</div>
 				
 				<!-- password-->
-				<label for="password" class="c-label p-auth-form__label">パスワード(半角英数字)</label>
+				<label for="password" class="c-label p-auth-form__label">パスワード</label>
 				<input type="password"
 							 id="password"
 							 class="c-input p-auth-form__input"
+							 :class="{ 'c-input__err': (registerErrors) ? registerErrors.password : ''}"
 							 v-model="registerForm.password"
 							 placeholder="8文字以上の半角英数字">
 				<!-- エラーメッセージ	-->
@@ -109,6 +122,7 @@
 				<input type="password"
 							 id="password-confirmation"
 							 class="c-input p-auth-form__input"
+							 :class="{ 'c-input__err': (registerErrors) ? registerErrors.password_confirmation : ''}"
 							 v-model="registerForm.password_confirmation"
 							 placeholder="8文字以上の半角英数字">
 				<!-- エラーメッセージ	-->
@@ -140,6 +154,7 @@ export default {
 				name: '',
 				branch: '',
 				prefecture_id: '',
+				address: '',
 				email: '',
 				password: '',
 				password_confirmation: ''
@@ -160,7 +175,7 @@ export default {
 			}else if(this.registerForm.group === 2) {
 				return 'ファミリーストア';
 			}
-		}
+		},
 	},
 	methods: {
 		//都道府県取得

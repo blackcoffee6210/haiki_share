@@ -24,7 +24,15 @@ const routes = [
     //会員登録
     path: '/register',
     name: 'register',
-    component: Register
+    component: Register,
+    beforeEnter(to, from, next) {
+      //ログイン済みでアクセスしたらトップページを表示する
+      if(store.getters['auth/check']) {
+        next({ name: 'index' });
+      } else {
+        next();
+      }
+    }
   },
   {
     //ログイン
@@ -32,6 +40,7 @@ const routes = [
     name: 'login',
     component: Login,
     beforeEnter(to, from, next) {
+      //ログイン済みでアクセスしたらトップページを表示する
       if(store.getters['auth/check']) {
         next({ name: 'index' });
       } else {
@@ -49,7 +58,15 @@ const routes = [
     //商品登録
     path: '/products/register',
     name: 'product.register',
-    component: RegisterProduct
+    component: RegisterProduct,
+    beforeEnter(to, from, next) {
+      //お店の人以外がアクセスしたらトップページを表示する
+      if(!store.getters['auth/isShopUser']) {
+        next({ name: 'index' });
+      } else {
+        next();
+      }
+    }
   },
   {
     //利用規約

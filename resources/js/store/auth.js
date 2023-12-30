@@ -10,9 +10,21 @@ const state = {
   //値にはtrueまたはfalseが入る
   apiStatus: null,
   //ログインのエラーメッセージを入れるステート
-  loginErrorMessages: null,
+  // loginErrorMessages: null,
+  loginErrorMessages: {
+    email: null,
+    password: null
+  },
   //ユーザー登録のエラーメッセージを入れるステート
-  registerErrorMessages: null,
+  registerErrorMessages: {
+    name: null,
+    branch: null,
+    prefecture_id: null,
+    address: null,
+    email: null,
+    password: null,
+    password_confirmation: null
+  }
 }
 
 //gettersはstateの内容から算出される値
@@ -23,7 +35,9 @@ const getters = {
   //仮にuserがnullの場合に呼ばれてもエラーが発生しないように空文字を返すようにしている
   username: state => state.user ? state.user.name : '',
   //ログインユーザーのIDを取得
-  userId: state => state.user ? state.user.id : ''
+  userId: state => state.user ? state.user.id : '',
+  //ログインユーザーがお店の人かどうか
+  isShopUser: state => state.user.group === 2
 }
 
 //mutationsはstateを更新するためのメソッド
