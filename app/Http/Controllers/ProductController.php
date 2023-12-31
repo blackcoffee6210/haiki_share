@@ -9,6 +9,20 @@ use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
+	public function __construct()
+	{
+		//認証
+		//認証なしでアクセスしたいAPIにはexceptに書く
+		$this->middleware('auth')->except(['index']);
+	}
+
+	//商品一覧取得
+	public function index()
+	{
+		$products = Product::with(['user', 'category'])->orderByDesc('created_at')->paginate();
+		return $products;
+	}
+
 	//商品登録
 	public function store(StoreProduct $request)
 	{

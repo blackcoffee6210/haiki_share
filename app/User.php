@@ -39,6 +39,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+	//$perPageは、paginate()のデフォルト件数を変更するプロパティ
+	protected $perPage = 12;
+
     //リレーション
 	public function products() {
 		return $this->hasMany('App\Product');

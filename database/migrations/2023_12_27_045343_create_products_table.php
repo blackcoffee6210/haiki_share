@@ -16,17 +16,18 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
-	          $table->unsignedBigInteger('category_id');
+            $table->unsignedBigInteger('category_id');
             $table->string('name');
             $table->string('image')->nullable();
+            $table->string('detail');
             $table->integer('price');
-            $table->dateTime('expire');
+            $table->date('expire');
             $table->softDeletes();
             $table->timestamps();
 
             //外部キー
-	          $table->foreign('user_id')->references('id')->on('users');
-	          $table->foreign('category_id')->references('id')->on('categories');
+            $table->foreign('user_id')->references('id')->on('users');
+	        $table->foreign('category_id')->references('id')->on('categories');
 
         });
     }

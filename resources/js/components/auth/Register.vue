@@ -180,7 +180,7 @@ export default {
 	methods: {
 		//都道府県取得
 		async getPrefectures() {
-			const response = await axios.get('/api/prefecture');
+			const response = await axios.get('/api/prefectures');
 			//responseステータスがOKじゃなかったら
 			if(response.status !== OK) {
 				this.$store.commit('error/setCode', response.status);

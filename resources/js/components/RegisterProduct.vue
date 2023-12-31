@@ -191,7 +191,7 @@ export default {
 	methods: {
 		//カテゴリー取得
 		async getCategories() {
-			const response = await axios.get('/api/category');
+			const response = await axios.get('/api/categories');
 			//responseステータスがOKじゃなかったら
 			if(response.status !== OK) {
 				this.$store.commit('error/setCode', response.status);

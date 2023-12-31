@@ -18,7 +18,7 @@ $factory->define(Product::class, function (Faker $faker) {
 	return [
 		'user_id'     => function() { return factory(User::class); },
 		'image'       => $read_tmp_path,
-		'category_id' => mt_rand(1, 12),
+		'category_id' => mt_rand(1, 11),
 		'name'        => $faker->text('10'),
 		'detail'      => $faker->text('30'),
 		'expire'      => date('Y-m-d', strtotime('+'. mt_rand(1, 30). 'day')),

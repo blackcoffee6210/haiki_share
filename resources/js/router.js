@@ -52,7 +52,11 @@ const routes = [
     //インデックス(商品一覧)画面
     path: '/products',
     name: 'index',
-    component: Index
+    component: Index,
+    props: route => {
+      const page = route.query.page;
+      return { page: /^[1-9][0-9]*$/.test(page) ? page * 1 : 1 }
+    }
   },
   {
     //商品登録

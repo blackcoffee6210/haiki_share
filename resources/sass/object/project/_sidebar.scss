@@ -1,0 +1,118 @@
+.p-sidebar {
+  border-radius: 3px;
+  background: $white;
+  position: relative;
+  margin-top: 32px;
+  @include mq() {
+    margin-top: $space_xl;
+    padding-top: $space_s;
+    padding-bottom: $space_s;
+  }
+  &--mypage {
+
+  }
+  &__link {
+    background: #fff;
+    text-align: left;
+    width: 100%;
+    display: block;
+    font-size: $font-size_l;
+    font-weight: bold;
+    color: $font-color;
+    padding: $space_l;
+    padding-left: $space_3xl;
+    border-left: 3px solid transparent;
+    &:hover {
+      color: $font-color;
+      background: rgba(0,0,0,.05);
+      border-left: 3px solid $main-color;
+      transition: .3s;
+    }
+    @include mq() {
+      font-size: $font-size_m;
+      text-align: center;
+      padding: 10px 20px;
+    }
+    @include mq('tab') {
+      font-size: $font-size_default;
+      padding-left: $space_xl;
+    }
+  }
+}
+
+.p-sidebar-index {
+  width: 100%;
+  @include mq() {
+    padding-left: $space_m;
+    padding-right: $space_m;
+  }
+  &__title {
+    font-size: $font-size_l;
+    text-align: left;
+    margin-top: 3px;
+    margin-bottom: $space_xl;
+    @include mq() {
+      margin-top: $space_m;
+      margin-bottom: $space_m;
+    }
+    @include mq('tab') {
+      margin-top: initial;
+      margin-bottom: initial;
+    }
+  }
+  &__card {
+    height: 70px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: $space_xl;
+    @include mq() {
+      margin-bottom: $space_m;
+    }
+  }
+  &__img {
+    display: block;
+    width: 40%;
+    height: 100%;
+  }
+  &__right {
+    width: 60%;
+    height: 100%;
+    padding: $space_s;
+  }
+  &__card-title {
+    font-size: $font-size_s;
+    font-weight: bold;
+    word-wrap: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 1; //1行に丸める
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  &__name {
+    font-size: $font-size_s;
+    word-wrap: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 1; //1行に丸める
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  &__icon {
+    width: 25px;
+    height: 25px;
+    margin-right: $space_s;
+  }
+  &__price {
+    font-size: $font-size_s;
+  }
+  &__search {
+    width: 100%;
+    &::placeholder {
+      color: $sub-color;
+    }
+    @include mq() {
+      //margin-right: $space_m;
+      //margin-left: $space_m;
+    }
+  }
+}

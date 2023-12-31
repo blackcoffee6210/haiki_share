@@ -35,6 +35,7 @@
 @import "object/component/link";
 @import "object/component/loading";
 @import "object/component/message";
+@import "object/component/pagination";
 @import "object/component/select";
 @import "object/component/title";
 
@@ -53,12 +54,12 @@
 //@import "object/project/editProfile";
 @import "object/project/footer";
 @import "object/project/header";
-//@import "object/project/index";
+@import "object/project/index";
 //@import "object/project/list";
 //@import "object/project/mypage";
-//@import "object/project/pagination";
 @import "object/project/policy";
 @import "object/project/registerProduct";
+@import "object/project/sidebar";
 //@import "object/project/postReview";
 //@import "object/project/reviewDetail";
 //@import "object/project/reviewed";
