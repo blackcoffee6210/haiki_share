@@ -2251,8 +2251,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               //response.dataだとレスポンスのJSONの取得になる
               //productはresponse.data.dataの中になるので、下記のような書き方になる
               _this2.products = response.data.data; //商品情報
-              _this2.currentPage = response.data.currentPage; //現在のページ
-              _this2.lastPage = response.data.lastPage; //最後のページ
+              _this2.currentPage = response.data.current_page; //現在のページ
+              _this2.lastPage = response.data.last_page; //最後のページ
               _this2.total = response.data.total; //商品の数
               console.log(response.data);
             case 13:
@@ -3566,16 +3566,16 @@ var render = function render() {
   var _vm = this,
     _c = _vm._self._c;
   return _c("div", {
-    staticClass: "p-pagination"
+    staticClass: "c-pagination"
   }, [!_vm.isFirstPage ? _c("router-link", {
-    staticClass: "p-pagination__active u-ml15",
+    staticClass: "c-pagination__active u-ml15",
     attrs: {
-      to: "/articles?page=".concat(_vm.currentPage - 1)
+      to: "/products?page=".concat(_vm.currentPage - 1)
     }
   }, [_vm._v("\n\t\t« prev\n\t")]) : _vm._e(), _vm._v(" "), !_vm.isLastPage ? _c("router-link", {
-    staticClass: "p-pagination__active",
+    staticClass: "c-pagination__active",
     attrs: {
-      to: "/articles?page=".concat(_vm.currentPage + 1)
+      to: "/products?page=".concat(_vm.currentPage + 1)
     }
   }, [_vm._v("\n\t\tnext »\n\t")]) : _vm._e()], 1);
 };

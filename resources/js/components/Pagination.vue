@@ -1,15 +1,15 @@
 <template>
-	<div class="p-pagination">
+	<div class="c-pagination">
 		<!-- 「prev」ボタンは1ページ目以外の場合に表示する -->
 		<router-link v-if="!isFirstPage"
-								 :to="`/articles?page=${ currentPage - 1 }`"
-								 class="p-pagination__active u-ml15">
+								 :to="`/products?page=${ currentPage - 1 }`"
+								 class="c-pagination__active u-ml15">
 			&laquo; prev
 		</router-link>
 		<!-- 「next」ボタンは最後のページ以外の場合に表示する	-->
 		<router-link v-if="!isLastPage"
-								 :to="`/articles?page=${ currentPage + 1 }`"
-								 class="p-pagination__active">
+								 :to="`/products?page=${ currentPage + 1 }`"
+								 class="c-pagination__active">
 			next &raquo;
 		</router-link>
 	</div>

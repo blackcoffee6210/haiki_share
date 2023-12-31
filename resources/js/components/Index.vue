@@ -217,8 +217,8 @@ export default {
 			//response.dataだとレスポンスのJSONの取得になる
 			//productはresponse.data.dataの中になるので、下記のような書き方になる
 			this.products    = response.data.data;        //商品情報
-			this.currentPage = response.data.currentPage; //現在のページ
-			this.lastPage    = response.data.lastPage;    //最後のページ
+			this.currentPage = response.data.current_page; //現在のページ
+			this.lastPage    = response.data.last_page;    //最後のページ
 			this.total       = response.data.total;       //商品の数
 			console.log(response.data);
 		}
