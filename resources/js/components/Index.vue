@@ -190,7 +190,6 @@ export default {
 		//カテゴリー取得メソッド
 		async getCategories() {
 			//API接続
-			console.log('categoryを取得します');
 			const response = await axios.get('/api/categories');
 			//responseステータスがOKじゃなかったらエラーコードをセット
 			if(response.status !== OK) {
@@ -220,7 +219,6 @@ export default {
 			this.currentPage = response.data.current_page; //現在のページ
 			this.lastPage    = response.data.last_page;    //最後のページ
 			this.total       = response.data.total;       //商品の数
-			console.log(response.data);
 		}
 	},
 	watch: {

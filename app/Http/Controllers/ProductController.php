@@ -25,6 +25,15 @@ class ProductController extends Controller
 		return $products;
 	}
 
+	//商品詳細
+	public function show(string $id)
+	{
+		$product = Product::with(['user', 'category', 'likes', 'histories'])
+						  ->find($id);
+		//商品が見つからなかったら404を返す
+		return $product ?? abort(404);
+	}
+
 	//商品登録
 	public function store(StoreProduct $request)
 	{

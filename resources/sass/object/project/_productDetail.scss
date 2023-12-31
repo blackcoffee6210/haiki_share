@@ -1,0 +1,146 @@
+.p-product-detail {
+  width: 680px;
+  margin: 0 auto;
+  @include mq() {
+    width: 100%;
+    padding-left: $space_m;
+    padding-right: $space_m;
+  }
+  @include mq('tab') {
+
+  }
+  &__img {
+    height: 400px;
+    width: 100%;
+    display: block;
+    margin: 0 auto $space_2xl auto;
+    @include mq() {
+      height: 200px;
+      margin-bottom: $space_m;
+    }
+  }
+  &__product-name {
+    font-size: $font-size_xl;
+    margin-bottom: $space_xl;
+    @include mq() {
+      font-size: $font-size_l;
+      font-weight: bold;
+      margin-bottom: $space_m;
+    }
+  }
+  &__flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $space_xl;
+    @include mq() {
+      display: block;
+    }
+  }
+  &__user-info {
+    display: flex;
+    align-items: center;
+    @include mq() {
+      width: 100%;
+      margin-bottom: $space_m;
+    }
+  }
+  &__icon {
+    margin-right: $space_m;
+    @include mq() {
+      width: 30px;
+      height: 30px;
+      border-radius: 30px;
+    }
+  }
+  &__shop-name {
+    @include mq() {
+      display: inline-block;
+      width: 250px;
+    }
+  }
+  &__branch {
+    @include mq() {
+      display: inline-block;
+      width: 250px;
+    }
+  }
+  &__date {
+    @include mq() {
+      display: inline-block;
+      font-size: $font-size_m;
+      text-align: right;
+    }
+  }
+  &__btn-container {
+    display: flex;
+    align-items: center;
+    @include mq() {
+      width: 100%;
+    }
+  }
+  &__btn {
+    &--edit {
+      margin-right: $space_m;
+    }
+    &--like {
+      background: $white;
+      border-radius: 20px;
+      border: 1px solid $gray-color;
+      margin-right: $space_m;
+      padding: $space_s $space_m;
+      text-align: center;
+      @include mq() {
+        font-size: $font-size_m;
+        padding-top: 8px;
+        padding-bottom: 8px;
+        width: 50%;
+      }
+    }
+    &--price {
+      @include mq() {
+        width: 50%;
+      }
+    }
+  }
+  &__summary {
+    border-bottom: 1px solid $gray-color;
+    padding-bottom: $space_xl;
+    margin: $space_xl 0;
+    @include mq() {
+      font-size: $font-size_m;
+    }
+  }
+  &__before-buy {
+    text-align: center;
+    margin-bottom: $space_xl;
+    @include mq() {
+      font-size: $font-size_s;
+    }
+  }
+  &__detail {
+    line-height: 2;
+    letter-spacing: .05em;
+    background: $white;
+    padding: $space_l;
+  }
+  &__twitter-container {
+    text-align: right;
+    margin: $space_l 0;
+  }
+  &__go-top {
+    display: block;
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+    text-align: center;
+    background: #ddd;
+    position: fixed;
+    bottom: 60px;
+    right: 60px;
+    @include mq() {
+      bottom: 20px;
+      right: 20px;
+    }
+  }
+}

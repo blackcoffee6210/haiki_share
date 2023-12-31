@@ -13,6 +13,7 @@ import NotFound  from "./components/errors/NotFound";
 import System    from "./components/errors/System";
 import RegisterProduct from "./components/RegisterProduct";
 import MyPage from "./components/MyPage";
+import ProductDetail from "./components/ProductDetail";
 
 
 //VueRouterプラグインを利用する
@@ -58,6 +59,13 @@ const routes = [
       const page = route.query.page;
       return { page: /^[1-9][0-9]*$/.test(page) ? page * 1 : 1 }
     }
+  },
+  {
+    //商品詳細
+    path: '/products/:id',
+    name: 'product.detail',
+    component: ProductDetail,
+    props: true //ProductDetail.vueに:idの値がpropsとして渡される
   },
   {
     //商品登録

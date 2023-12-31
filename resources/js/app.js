@@ -1,11 +1,33 @@
 import './bootstrap';
-import Vue from 'vue';
 
-import store      from './store'; //グローバルコンポーネント
-import router     from './router'; //ルーティングの定義をインポートする
-import App        from './App.vue'; //ルートコンポーネントをインポートする
-import moment     from 'moment';
+import Vue              from 'vue';
+import store            from './store'; //グローバルコンポーネント
+import router           from './router'; //ルーティングの定義をインポートする
+import App              from './App.vue'; //ルートコンポーネントをインポートする
+import moment           from 'moment';
+import VueScrollTo      from 'vue-scrollto'; //スクロール
+import VueSocialSharing from 'vue-social-sharing'; //twitterシェア
+import StarRating       from 'vue-star-rating'; //レビューの星
+import ReadMore         from 'vue-read-more'; //「もっと見る」表示
 
+//======================
+//FontAwesome
+//======================
+import { library }         from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { fas }             from '@fortawesome/free-solid-svg-icons';
+import { fab }             from '@fortawesome/free-brands-svg-icons';
+import { far }             from '@fortawesome/free-regular-svg-icons';
+// FontAwesome Setup
+// library.add(faHeart, faBookmark, faComment);
+library.add(fas, fab, far);
+Vue.component('font-awesome-icon', FontAwesomeIcon);
+Vue.config.productionTip = false;
+
+Vue.use(VueScrollTo); //scroll
+Vue.use(VueSocialSharing); //twitterシェア
+Vue.use(StarRating); //レビューの星
+Vue.use(ReadMore); //もっと見る
 
 //==============================================
 // フィルター
