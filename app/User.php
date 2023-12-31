@@ -18,7 +18,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'group', 'name', 'branch', 'prefecture_id', 'address', 'email', 'password', 'image', 'introduce', 'deleted_at'
+        'group', 'name', 'branch', 'prefecture_id', 'address',
+	    'email', 'password', 'image', 'introduce', 'deleted_at'
     ];
 
     /**
@@ -39,11 +40,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-	//$perPageは、paginate()のデフォルト件数を変更するプロパティ
-	protected $perPage = 12;
-
+	//===============================================
     //リレーション
+	//===============================================
 	public function products() {
 		return $this->hasMany('App\Product');
+	}
+	public function prefecture()
+	{
+		return $this->belongsTo('App\Prefecture');
 	}
 }

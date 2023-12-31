@@ -23,12 +23,22 @@ use Faker\Generator as Faker;
 
 $factory->define(User::class, function (Faker $faker) {
 
+	//グループの数値をランダムで変数に入れる
+//	$group = mt_rand(1, 2);
+	$group = 2;
+
+	//お店の名前を配列に入れる
+	$array = array('Family Store', 'Seven Mart', 'mini step', 'Coco Mart',
+						'LOWSON', 'SEVEN TWELVE');
+	//お店の名前のキーをランダムで取得する
+	$key = array_rand($array, 1);
+
     return [
-    	'group'             => 2,
-        'name'              => $faker->name,
-	    'branch'            => $faker->text(10),
-	    'prefecture_id'     => mt_rand(1, 47),
-	    'address'           => $faker->text(20),
+    	'group'             => $group,
+        'name'              => ($group === 2) ? $array[$key] : $faker->name,
+	    'branch'            => ($group === 2) ? $faker->city : null,
+	    'prefecture_id'     => ($group === 2) ? mt_rand(1, 47) : null,
+	    'address'           => ($group === 2) ? $faker->streetAddress : null,
         'email'             => $faker->unique()->safeEmail,
         'email_verified_at' => now(),
         'password'          => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password

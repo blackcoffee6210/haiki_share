@@ -6,6 +6,21 @@ import router     from './router'; //ルーティングの定義をインポー�
 import App        from './App.vue'; //ルートコンポーネントをインポートする
 import moment     from 'moment';
 
+
+//==============================================
+// フィルター
+//==============================================
+//金額にカンマ(,)と¥マークをつける
+Vue.filter('numberFormat', function (price) {
+  return price.toLocaleString('ja-JP', { style: 'currency', currency: 'JPY'});
+});
+//日付を「⚪︎日前」の書式で返す
+Vue.filter('moment', function(date) {
+  moment.locale('ja');
+  return moment(date).fromNow();
+})
+
+
 //アプリ起動時、Vueインスタンス生成前にauth/currentUserアクションを呼び出す
 //画面をリロードしてもログイン状態を保持するための処理
 const createApp = async () => {

@@ -50,16 +50,18 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
+    	//groupが1であれば「利用者」なので、以下のバリデーションを実行
         if($data['group'] == 1) {
 	        return Validator::make($data, [
-	            'group'    => ['required', 'integer'],
-		        'name'     => ['required', 'string', 'max:255'],
-		        'email'    => ['required', 'string', 'email', 'max:255',
-			                    Rule::unique('users', 'email')->whereNull('deleted_at')],
-				'password' => ['required', 'string', 'min:8', 'confirmed'],
+	            'group'                 => ['required', 'integer'],
+		        'name'                  => ['required', 'string', 'max:255'],
+		        'email'                 => ['required', 'string', 'email', 'max:255',
+			                                Rule::unique('users', 'email')->whereNull('deleted_at')],
+				'password'              => ['required', 'string', 'min:8', 'confirmed'],
 		        'password_confirmation' => ['required', 'string', 'min:8'],
 	        ]);
         }
+        //groupが2であれば「コンビニの人」なので、以下のバリデーションを実行
         else if($data['group'] == 2) {
 	        return Validator::make($data, [
 		        'group'                 => ['required', 'integer'],
@@ -68,7 +70,7 @@ class RegisterController extends Controller
 		        'address'               => ['required', 'string', 'max:255'],
 		        'prefecture_id'         => ['required', 'integer'],
 		        'email'                 => ['required', 'string', 'email', 'max:255',
-			                           Rule::unique('users', 'email')->whereNull('deleted_at')],
+			                                Rule::unique('users', 'email')->whereNull('deleted_at')],
 		        'password'              => ['required', 'string', 'min:8', 'confirmed'],
 		        'password_confirmation' => ['required', 'string', 'min:8']
 	        ]);

@@ -24,12 +24,12 @@ class StoreProduct extends FormRequest
     public function rules()
     {
         return [
-            'image'       => 'required|file|mimes:jpg,jpeg,png',
 	        'category_id' => 'required|integer',
+            'image'       => 'required|file|mimes:jpg,jpeg,png',
 	        'name'        => 'required|string|max:255',
 	        'detail'      => 'required|string|max:255',
-	        'expire'      => 'required|date|after:today',
-	        'price'       => 'required|integer|between:50,10000'
+	        'price'       => 'required|integer|between:50,10000',
+	        'expire'      => 'required|date|after:today'
         ];
     }
 

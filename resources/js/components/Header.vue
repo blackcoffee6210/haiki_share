@@ -30,12 +30,7 @@
 											 v-show="isShopUser"
 											 @click="toggleNav">出品する
 					</router-link>
-					<!--<router-link :to="{ name: 'product.register' }"-->
-					<!--						 class="p-header__link"-->
-					<!--						 v-show="user.group === 2"-->
-					<!--						 @click="toggleNav">出品する-->
-					<!--</router-link>-->
-					<router-link :to="{ name: 'user.mypage' }"
+					<router-link :to="{ name: 'user.mypage', params: { id: user.id.toString()} }"
 											 class="p-header__link"
 											 @click="toggleNav">マイページ
 					</router-link>

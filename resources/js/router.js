@@ -12,6 +12,7 @@ import Tokutei   from "./components/footer/Tokutei";
 import NotFound  from "./components/errors/NotFound";
 import System    from "./components/errors/System";
 import RegisterProduct from "./components/RegisterProduct";
+import MyPage from "./components/MyPage";
 
 
 //VueRouterプラグインを利用する
@@ -69,6 +70,21 @@ const routes = [
         next({ name: 'index' });
       } else {
         next();
+      }
+    }
+  },
+  {
+    //マイページ
+    path: '/users/:id/my-page',
+    name: 'user.mypage',
+    component: MyPage,
+    beforeEnter(to, from, next) {
+      //ログイン状態でページにアクセスがあったらマイページに移動させる
+      if(store.getters['auth/check']) {
+        next();
+      //ログインしていなければログイン画面に移動させる
+      }else {
+        next({name: 'login'});
       }
     }
   },

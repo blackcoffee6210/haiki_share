@@ -19,7 +19,9 @@ class ProductController extends Controller
 	//商品一覧取得
 	public function index()
 	{
-		$products = Product::with(['user', 'category'])->orderByDesc('created_at')->paginate();
+		$products = Product::with(['user', 'category'])
+					->orderByDesc('created_at')
+					->paginate();
 		return $products;
 	}
 
@@ -37,15 +39,15 @@ class ProductController extends Controller
 			//名前を変更して保存。保存先のパスを返す
 			$image_path = $request->file('image')->storeAs('public/images', $file_name);
 			//HTML出力用の整形とパスの修正
-			$image_path = str_replace('public/images/', '/storage/images', $image_path);
+			$image_path = str_replace('public/images/', '/storage/images/', $image_path);
 		}else {
 			$image_path = '';
 		}
 
 		//DBに保存する
 		$product->user_id      = $request->user_id;
-		$product->image        = $image_path;
 		$product->category_id  = $request->category_id;
+		$product->image        = $image_path;
 		$product->name         = $request->name;
 		$product->detail       = $request->detail;
 		$product->price        = $request->price;

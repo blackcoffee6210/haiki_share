@@ -47,11 +47,11 @@
 				
 				<div class="p-index__product-container">
 					<!-- Productコンポーネント -->
-					<!--<Product v-show="!loading"-->
-					<!--				 v-for="product in filteredProducts"-->
-					<!--				 v-if="sortCategory !== 0 || sortCategory !== product.category_id"-->
-					<!--				 :key="product.id"-->
-					<!--				 :product="product" />-->
+					<Product v-show="!loading"
+									 v-for="product in filteredProducts"
+									 v-if="sortCategory !== 0 || sortCategory !== product.category_id"
+									 :key="product.id"
+									 :product="product" />
 				</div>
 			</div>
 			
@@ -91,11 +91,11 @@
 				<!--	</div>-->
 				<!--</div>-->
 				
-				<!--&lt;!&ndash; 検索ボックス &ndash;&gt;-->
-				<!--<input type="text"-->
-				<!--			 placeholder="SEARCH"-->
-				<!--			 v-model="keyword"-->
-				<!--			 class="c-input p-sidebar-index__search">-->
+				<!-- 検索ボックス -->
+				<input type="text"
+							 placeholder="SEARCH"
+							 v-model="keyword"
+							 class="c-input p-sidebar-index__search">
 			</div>
 		</aside>
 	
@@ -104,7 +104,7 @@
 
 <script>
 import Loading    from "./Loading";
-// import Product    from "./Product";
+import Product    from "./Product";
 import Pagination from "./Pagination";
 import { OK }     from "../util";
 export default {
@@ -120,7 +120,7 @@ export default {
 	components: {
 		Loading,
 		Pagination,
-		// Product
+		Product
 	},
 	data() {
 		return {
@@ -128,12 +128,11 @@ export default {
 			keyword: '', 					//リアルタイム検索をするための検索ボックス
 			sortPrice: 1,					//金額「並び替え」の選択値
 			sortCategory: 0, 			//「カテゴリー」絞り込みの初期値
+			categories: {},       //カテゴリー
 			products: [], 				//商品リスト
 			currentPage: 0,			  //現在のページ
 			lastPage: 0, 					//最後のページ
-			total: 0, 						//記事の合計数
-			categories: [],       //カテゴリー
-			preview: '',          //セレクトしたカテゴリーを格納するプロパティ
+			total: 0, 						//商品の合計数
 			recommendProducts: {} //おすすめ商品
 		}
 	},
@@ -149,9 +148,10 @@ export default {
 				let isShow = true;
 				
 				//i番目の商品が表示可能かどうかを判定する
-				if(this.sortCategory !== 0 && this.sortCategory !== this.products[i].category_id) {
-					//カテゴリーのセレクトボックスが選択されている
-					// かつカテゴリーのセレクトボックスと商品カテゴリーが一致しないものは非表示にする
+				if(this.sortCategory !== 0 &&
+					 this.sortCategory !== this.products[i].category_id) {
+					//カテゴリーのセレクトボックスが選択されている(0じゃない) かつ
+					//カテゴリーのセレクトボックスと商品カテゴリーIDが一致しないものは非表示にする
 					isShow = false;
 				}
 				//リアルタイム検索をするための処理
@@ -199,15 +199,39 @@ export default {
 			}
 			//プロパティにresponseデータを代入
 			this.categories = response.data;
-			console.log(this.categories);
+		},
+		//商品取得メソッド
+		async getProducts() {
+			//ローディングを表示する
+			this.loading = true;
+			//API接続
+			const response = await axios.get(`/api/products?page=${this.page}`);
+			//API通信が終わったらローディングを非表示にする
+			this.loading = false;
+			
+			//responseステータスがOKじゃなかったらエラーコードをセットする
+			if(response.status !== OK) {
+				this.$store.commit('error/setCode', response.status);
+				return false;
+			}
+			//response.dataだとレスポンスのJSONの取得になる
+			//productはresponse.data.dataの中になるので、下記のような書き方になる
+			this.products    = response.data.data;        //商品情報
+			this.currentPage = response.data.currentPage; //現在のページ
+			this.lastPage    = response.data.lastPage;    //最後のページ
+			this.total       = response.data.total;       //商品の数
+			console.log(response.data);
 		}
 	},
 	watch: {
-		async handler() {
-			await this.getCategories();
-		},
-		//immediateをtrueにすると、コンポーネントが生成されたタイミングでも実行する
-		immediate: true
+		$route: {
+			async handler() {
+				await this.getCategories();
+				await this.getProducts();
+			},
+			//immediateをtrueにすると、コンポーネントが生成されたタイミングでも実行する
+			immediate: true
+		}
 	}
 }
 </script>

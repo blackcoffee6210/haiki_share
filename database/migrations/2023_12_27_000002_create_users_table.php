@@ -18,7 +18,7 @@ class CreateUsersTable extends Migration
             $table->integer('group');
             $table->string('name');
             $table->string('branch')->nullable();
-            $table->unsignedBigInteger('prefecture_id');
+            $table->unsignedBigInteger('prefecture_id')->nullable();
             $table->string('address')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
