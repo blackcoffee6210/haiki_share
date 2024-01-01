@@ -14,8 +14,14 @@
 						 alt=""
 						 class="p-product-detail__img">
 				
-				<!-- タイトル	-->
-				<h2 class="p-product-detail__product-name">{{ product.name }}</h2>
+				<!-- 商品名と金額のコンテナ	-->
+				<div class="p-product-detail__name-container">
+					<h2 class="p-product-detail__product-name">{{ product.name }}</h2>
+					<div class="p-product-detail__price">
+						{{ product.price | numberFormat }}
+					</div>
+				</div>
+				
 				
 				<div class="p-product-detail__flex">
 					<!-- ユーザー情報のコンテナ(左側) -->
@@ -46,7 +52,7 @@
 					<div class="p-product-detail__btn-container">
 						<!-- 商品編集ボタン(自分の商品のときだけ) -->
 						<router-link class="c-btn p-product-detail__btn--edit"
-												 v-if="myProduct"
+												 v-if="isMyProduct"
 												 :to="{ name: 'product.edit', params: {id: id.toString() } }">編集する
 						</router-link>
 						<!-- お気に入りボタン	-->
@@ -70,9 +76,10 @@
 						<!-- todo: 今の状態だと購入しててもボタンを押さないと「購入済みです」とでないので、購入していたら押せないようにリファクタ -->
 						<!-- todo: 購入後にコンビニユーザーにレビューを投稿できるようにする -->
 						<button class="c-btn p-product-detail__btn--price"
-										@click="purchase">
+										@click="purchase"
+						>
 							<span v-if="product.purchased_by_user">購入済み</span>
-							<span v-else>{{ product.price | numberFormat }}</span>
+							<span v-else>購入</span>
 						</button>
 					
 					</div>
@@ -84,7 +91,7 @@
 				</div>
 				
 				<!-- twitterシェアボタン -->
-				<div class="p-product-detail__twitter-container" v-if="product.purchased_by_user">
+				<div class="p-product-detail__twitter-container">
 					<social-sharing url="http://127.0.0.1:8001/products/48"
 													title="vue-social-sharingのテスト"
 													quote="Vue is a progressive framework for building user interfaces."
@@ -143,10 +150,11 @@ export default {
 	computed: {
 		...mapGetters({
 			isLogin: 'auth/check', //true または false が返ってくる
-			userId: 'auth/userId'  //ユーザーIDを取得
+			userId: 'auth/userId', //ユーザーIDを取得
+			isShopUser: 'auth/isShopUser' //コンビニユーザーならtrueが入る
 		}),
 		//自分の商品かどうかを真偽値で返す
-		myProduct() {
+		isMyProduct() {
 			//商品idとログインidが同じ、かつ購入されていなければtrueを返す
 			if(this.product.user_id === this.userId && !this.product.is_purchased) {
 				return true;
@@ -210,6 +218,7 @@ export default {
 			//ログインユーザーが「いいね」をしたのでtrueをセット
 			this.product.liked_by_user = true;
 			this.isLike = true;
+			console.log('いいねしました');
 		},
 		//お気に入り解除
 		async unlike() {
@@ -225,6 +234,7 @@ export default {
 			//ログインユーザーが「いいね解除」したのでfalseをセット
 			this.product.liked_by_user = false;
 			this.isLike = false;
+			console.log('いいねを解除しました');
 		},
 		//商品購入処理
 		async purchase() {
@@ -241,6 +251,11 @@ export default {
 			//一度購入した商品は購入できないようにする
 			if(this.product.purchased_by_user) {
 				alert('この商品はすでに購入済みです');
+				return false;
+			}
+			//コンビニユーザーは商品を購入できないようにする
+			if(this.isShopUser) {
+				alert('コンビニユーザーは商品を購入できません');
 				return false;
 			}
 			//アレートで「購入しますか?」と表示し、「はい」を押すと以下の処理を実行

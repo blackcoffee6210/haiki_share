@@ -4,8 +4,8 @@ import Vue              from 'vue';
 import store            from './store'; //グローバルコンポーネント
 import router           from './router'; //ルーティングの定義をインポートする
 import App              from './App.vue'; //ルートコンポーネントをインポートする
-import moment           from 'moment';
-import VueScrollTo      from 'vue-scrollto'; //スクロール
+import moment           from 'moment'; //時刻操作や表現をしたいとき使う
+import VueScrollTo      from 'vue-scrollto';  //スクロール
 import VueSocialSharing from 'vue-social-sharing'; //twitterシェア
 import StarRating       from 'vue-star-rating'; //レビューの星
 import ReadMore         from 'vue-read-more'; //「もっと見る」表示
@@ -38,10 +38,21 @@ Vue.filter('numberFormat', function (price) {
 });
 //日付を「⚪︎日前」の書式で返す
 Vue.filter('moment', function(date) {
-  moment.locale('ja');
+  moment.locale('ja'); //日本語化する
   return moment(date).fromNow();
 })
-
+//日付を「年月日」の書式で返す
+Vue.filter('momentDate', function (date) {
+  moment.locale('ja'); //日本語化する
+  return moment(date).format('YYYY-MM-DD');
+})
+//日付を「残り⚪︎日」の書式で返す
+Vue.filter('momentExpire', function(date) {
+  moment.locale('ja');
+  var expire = moment(date);
+  var today  = moment().format('YYYY-MM-DD');
+  return expire.diff(today, 'days');
+})
 
 //アプリ起動時、Vueインスタンス生成前にauth/currentUserアクションを呼び出す
 //画面をリロードしてもログイン状態を保持するための処理

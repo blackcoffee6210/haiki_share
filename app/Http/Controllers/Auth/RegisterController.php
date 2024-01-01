@@ -55,7 +55,7 @@ class RegisterController extends Controller
 	        return Validator::make($data, [
 	            'group'                 => ['required', 'integer'],
 		        'name'                  => ['required', 'string', 'max:255'],
-		        'email'                 => ['required', 'string', 'email', 'max:255',
+		        'email'                 => ['required', 'string', 'email:filter', 'max:255',
 			                                Rule::unique('users', 'email')->whereNull('deleted_at')],
 				'password'              => ['required', 'string', 'min:8', 'confirmed'],
 		        'password_confirmation' => ['required', 'string', 'min:8'],
@@ -69,7 +69,7 @@ class RegisterController extends Controller
 		        'branch'                => ['required', 'string', 'max:255'],
 		        'address'               => ['required', 'string', 'max:255'],
 		        'prefecture_id'         => ['required', 'integer'],
-		        'email'                 => ['required', 'string', 'email', 'max:255',
+		        'email'                 => ['required',  'string', 'email:filter', 'max:255',
 			                                Rule::unique('users', 'email')->whereNull('deleted_at')],
 		        'password'              => ['required', 'string', 'min:8', 'confirmed'],
 		        'password_confirmation' => ['required', 'string', 'min:8']

@@ -19,14 +19,22 @@
       margin-bottom: $space_m;
     }
   }
+  &__name-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $space_xl;
+  }
   &__product-name {
     font-size: $font-size_xl;
-    margin-bottom: $space_xl;
+    font-weight: bold;
     @include mq() {
       font-size: $font-size_l;
-      font-weight: bold;
-      margin-bottom: $space_m;
     }
+  }
+  &__price {
+    font-size: $font-size_xl;
+    font-weight: bold;
   }
   &__flex {
     display: flex;
@@ -54,6 +62,7 @@
     }
   }
   &__shop-name {
+    margin-right: $space_m;
     @include mq() {
       display: inline-block;
       width: 250px;

@@ -23,8 +23,9 @@ class Product extends Model
 	//アクセサとは、DBから取得したデータを自動的に加工することができる機能
 	//ユーザー定義のアクセサをJSONに含めるには、明示的に$appendプロパティに登録する
 	protected $appends = [
-		'user_image', 'user_name', 'category_name', 'likes_count',
-		'liked_by_user', 'purchased_by_user', 'is_purchased',
+		'user_image', 'user_name', 'branch', 'category_name',
+		'likes_count', 'liked_by_user', 'purchased_by_user', 'is_purchased',
+		'group',
 	];
 
 	//$visibleはJSONに含める属性を定義する
@@ -32,8 +33,9 @@ class Product extends Model
 	protected $visible = [
 		'id', 'user_id', 'category_id', 'image', 'name', 'detail', 'price', 'expire',
 		'deleted_at', 'created_at', 'updated_at',
-		'user_image', 'user_name', 'category_name', 'likes_count',
-		'liked_by_user', 'purchased_by_user', 'is_purchased',
+		'user_image', 'user_name', 'branch', 'category_name',
+		'likes_count', 'liked_by_user', 'purchased_by_user', 'is_purchased',
+		'group'
 	];
 
 	//=====================================================
@@ -47,6 +49,24 @@ class Product extends Model
 	public function getUserNameAttribute()
 	{
 		return $this->user->name;
+	}
+	/**
+	 * アクセサ - user_name
+	 * @return string
+	 */
+	//支店名を取得する
+	public function getBranchAttribute()
+	{
+		return $this->user->branch;
+	}
+	/**
+	 * アクセサ - group
+	 * @return int
+	 */
+	//グループを取得する
+	public function getGroupAttribute()
+	{
+		return $this->user->group;
 	}
 	/**
 	 * アクセサ - user_image

@@ -16,10 +16,23 @@
 			<!-- 料金	-->
 			<div class="p-product__price">{{ product.price | numberFormat }}</div>
 			<!-- 賞味期限 -->
-			<div class="p-product__expire">{{ product.expire }}</div>
+			<div class="p-product__expire">
+				<div>賞味期限</div>
+				<div>
+					残り
+					<span class="p-product__expire__date">
+						{{ product.expire | momentExpire }}
+					</span>
+					 日
+				</div>
+				
+			</div>
+			<!--<div class="p-product__expire">-->
+			<!--	{{ product.expire | momentExpire }}-->
+			<!--</div>-->
 			<!-- ユーザーの情報	-->
 			<div class="p-product__user-info">
-				<!-- 投稿したユーザーの画像	-->
+				<!-- 出品したユーザーの画像	-->
 				<img class="c-icon p-product__icon"
 						 v-if="product.user_image"
 						 :src="product.user_image"
@@ -29,10 +42,10 @@
 						 :src="'images/no-image.png'"
 						 alt="">
 				<div class="p-product__user-info--right">
-					<!-- 投稿したユーザー名 -->
+					<!-- 出品したユーザー名 -->
 					<div class="p-product__usr-name">{{ product.user_name }}</div>
 					<div class="c-flex u-space-between">
-						<!-- 投稿日	-->
+						<!-- 出品日	-->
 						<div class="p-product__date">{{ product.created_at | moment }}</div>
 						<!-- カテゴリー名	-->
 						<div class="p-product__category">{{ product.category_name }}</div>

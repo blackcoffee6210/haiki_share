@@ -16832,10 +16832,12 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
   computed: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])({
     isLogin: 'auth/check',
     //true または false が返ってくる
-    userId: 'auth/userId' //ユーザーIDを取得
+    userId: 'auth/userId',
+    //ユーザーIDを取得
+    isShopUser: 'auth/isShopUser' //コンビニユーザーならtrueが入る
   })), {}, {
     //自分の商品かどうかを真偽値で返す
-    myProduct: function myProduct() {
+    isMyProduct: function isMyProduct() {
       //商品idとログインidが同じ、かつ購入されていなければtrueを返す
       if (this.product.user_id === this.userId && !this.product.is_purchased) {
         return true;
@@ -16942,7 +16944,8 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               //ログインユーザーが「いいね」をしたのでtrueをセット
               _this3.product.liked_by_user = true;
               _this3.isLike = true;
-            case 9:
+              console.log('いいねしました');
+            case 10:
             case "end":
               return _context3.stop();
           }
@@ -16973,7 +16976,8 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               //ログインユーザーが「いいね解除」したのでfalseをセット
               _this4.product.liked_by_user = false;
               _this4.isLike = false;
-            case 9:
+              console.log('いいねを解除しました');
+            case 10:
             case "end":
               return _context4.stop();
           }
@@ -17009,29 +17013,36 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               alert('この商品はすでに購入済みです');
               return _context5.abrupt("return", false);
             case 9:
+              if (!_this5.isShopUser) {
+                _context5.next = 12;
+                break;
+              }
+              alert('コンビニユーザーは商品を購入できません');
+              return _context5.abrupt("return", false);
+            case 12:
               if (!confirm('購入しますか？')) {
-                _context5.next = 22;
+                _context5.next = 25;
                 break;
               }
               //ローディングを表示する
               _this5.loading = true;
               //商品購入APIに接続
-              _context5.next = 13;
+              _context5.next = 16;
               return axios.post("/api/products/".concat(_this5.id, "/purchase"), _this5.product);
-            case 13:
+            case 16:
               response = _context5.sent;
               //API通信が終わったらローディングを非表示にする
               _this5.loading = false;
 
               //responseステータスがOKじゃなかったらエラーコードをセットする
               if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_0__["OK"])) {
-                _context5.next = 18;
+                _context5.next = 21;
                 break;
               }
               _this5.$store.commit('error/setCode', response.status);
               //後続の処理を抜ける
               return _context5.abrupt("return", false);
-            case 18:
+            case 21:
               //ログインユーザーが商品を購入したのでtrueをセット(購入済み)にする
               _this5.product.purchased_by_user = true;
 
@@ -17052,7 +17063,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
                   id: _this5.id
                 }
               })["catch"](function () {});
-            case 22:
+            case 25:
             case "end":
               return _context5.stop();
           }
@@ -18308,7 +18319,9 @@ var render = function render() {
     staticClass: "p-product__price"
   }, [_vm._v(_vm._s(_vm._f("numberFormat")(_vm.product.price)))]), _vm._v(" "), _c("div", {
     staticClass: "p-product__expire"
-  }, [_vm._v(_vm._s(_vm.product.expire))]), _vm._v(" "), _c("div", {
+  }, [_c("div", [_vm._v("賞味期限")]), _vm._v(" "), _c("div", [_vm._v("\n\t\t\t\t残り\n\t\t\t\t"), _c("span", {
+    staticClass: "p-product__expire__date"
+  }, [_vm._v("\n\t\t\t\t\t" + _vm._s(_vm._f("momentExpire")(_vm.product.expire)) + "\n\t\t\t\t")]), _vm._v("\n\t\t\t\t 日\n\t\t\t")])]), _vm._v(" "), _c("div", {
     staticClass: "p-product__user-info"
   }, [_vm.product.user_image ? _c("img", {
     staticClass: "c-icon p-product__icon",
@@ -18378,9 +18391,13 @@ var render = function render() {
       src: _vm.product.image,
       alt: ""
     }
-  }), _vm._v(" "), _c("h2", {
+  }), _vm._v(" "), _c("div", {
+    staticClass: "p-product-detail__name-container"
+  }, [_c("h2", {
     staticClass: "p-product-detail__product-name"
   }, [_vm._v(_vm._s(_vm.product.name))]), _vm._v(" "), _c("div", {
+    staticClass: "p-product-detail__price"
+  }, [_vm._v("\n\t\t\t\t\t" + _vm._s(_vm._f("numberFormat")(_vm.product.price)) + "\n\t\t\t\t")])]), _vm._v(" "), _c("div", {
     staticClass: "p-product-detail__flex"
   }, [_c("div", {
     staticClass: "p-product-detail__user-info"
@@ -18400,7 +18417,7 @@ var render = function render() {
     staticClass: "p-product-detail__date"
   }, [_vm._v("\n\t\t\t\t\t\t\t" + _vm._s(_vm._f("moment")(_vm.product.created_at)) + "\n\t\t\t\t\t\t")])])]), _vm._v(" "), _c("div", {
     staticClass: "p-product-detail__btn-container"
-  }, [_vm.myProduct ? _c("router-link", {
+  }, [_vm.isMyProduct ? _c("router-link", {
     staticClass: "c-btn p-product-detail__btn--edit",
     attrs: {
       to: {
@@ -18434,9 +18451,9 @@ var render = function render() {
     on: {
       click: _vm.purchase
     }
-  }, [_vm.product.purchased_by_user ? _c("span", [_vm._v("購入済み")]) : _c("span", [_vm._v(_vm._s(_vm._f("numberFormat")(_vm.product.price)))])])], 1)]), _vm._v(" "), _c("div", {
+  }, [_vm.product.purchased_by_user ? _c("span", [_vm._v("購入済み")]) : _c("span", [_vm._v("購入")])])], 1)]), _vm._v(" "), _c("div", {
     staticClass: "p-product-detail__detail"
-  }, [_vm._v("\n\t\t\t\t" + _vm._s(_vm.product.detail) + "\n\t\t\t")]), _vm._v(" "), _vm.product.purchased_by_user ? _c("div", {
+  }, [_vm._v("\n\t\t\t\t" + _vm._s(_vm.product.detail) + "\n\t\t\t")]), _vm._v(" "), _c("div", {
     staticClass: "p-product-detail__twitter-container"
   }, [_c("social-sharing", {
     staticClass: "c-btn--twitter",
@@ -18462,7 +18479,7 @@ var render = function render() {
       },
       staticRenderFns: []
     }
-  })], 1) : _vm._e(), _vm._v(" "), _c("transition", {
+  })], 1), _vm._v(" "), _c("transition", {
     attrs: {
       name: "top"
     }
@@ -65247,7 +65264,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
  //グローバルコンポーネント
  //ルーティングの定義をインポートする
  //ルートコンポーネントをインポートする
-
+ //時刻操作や表現をしたいとき使う
  //スクロール
  //twitterシェア
  //レビューの星
@@ -65283,8 +65300,20 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.filter('numberFormat', function (pric
 });
 //日付を「⚪︎日前」の書式で返す
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.filter('moment', function (date) {
-  moment__WEBPACK_IMPORTED_MODULE_5___default.a.locale('ja');
+  moment__WEBPACK_IMPORTED_MODULE_5___default.a.locale('ja'); //日本語化する
   return moment__WEBPACK_IMPORTED_MODULE_5___default()(date).fromNow();
+});
+//日付を「年月日」の書式で返す
+vue__WEBPACK_IMPORTED_MODULE_1___default.a.filter('momentDate', function (date) {
+  moment__WEBPACK_IMPORTED_MODULE_5___default.a.locale('ja'); //日本語化する
+  return moment__WEBPACK_IMPORTED_MODULE_5___default()(date).format('YYYY-MM-DD');
+});
+//日付を「残り⚪︎日」の書式で返す
+vue__WEBPACK_IMPORTED_MODULE_1___default.a.filter('momentExpire', function (date) {
+  moment__WEBPACK_IMPORTED_MODULE_5___default.a.locale('ja');
+  var expire = moment__WEBPACK_IMPORTED_MODULE_5___default()(date);
+  var today = moment__WEBPACK_IMPORTED_MODULE_5___default()().format('YYYY-MM-DD');
+  return expire.diff(today, 'days');
 });
 
 //アプリ起動時、Vueインスタンス生成前にauth/currentUserアクションを呼び出す

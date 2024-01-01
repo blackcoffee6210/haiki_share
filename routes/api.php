@@ -15,7 +15,7 @@ Route::get('/user', function() { return Auth::user(); })->name('user'); //ログ
 Route::get('/products', 'ProductController@index'); //商品一覧取得
 Route::get('/products/{id}', 'ProductController@show'); //商品詳細
 Route::post('/products', 'ProductController@store'); //商品登録
-Route::post('/products/{id}/purchase', 'ProductsController@purchase'); //商品購入
+Route::post('/products/{id}/purchase', 'ProductController@purchase'); //商品購入
 
 Route::post('/products/{id}/like', 'ProductController@like'); //お気に入り登録
 Route::delete('/products/{id}/like', 'ProductController@unlike'); //お気に入り解除

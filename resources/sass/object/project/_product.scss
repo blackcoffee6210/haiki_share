@@ -31,15 +31,21 @@
   }
   &__price {
     font-weight: bold;
-    margin-right: $space_m;
     @include mq() {
       font-size: $font-size_s;
       width: 100%;
       margin: 0;
     }
   }
-  &__price {
-
+  &__expire {
+    margin-bottom: $space_s;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    &__date {
+      font-weight: bold;
+      font-size: 20px;
+    }
   }
   &__user-info {
     width: 100%;

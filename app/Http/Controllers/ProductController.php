@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProduct;
+use App\Mail\PurchasedBuyerNotification;
+use App\Mail\PurchasedSellerNotification;
 use App\Product;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class ProductController extends Controller
 {
@@ -13,7 +17,7 @@ class ProductController extends Controller
 	{
 		//認証
 		//認証なしでアクセスしたいAPIにはexceptに書く
-		$this->middleware('auth')->except(['index']);
+		$this->middleware('auth')->except(['index', 'show']);
 	}
 
 	//商品一覧取得
@@ -61,10 +65,88 @@ class ProductController extends Controller
 		$product->detail       = $request->detail;
 		$product->price        = $request->price;
 		$product->expire       = $request->expire;
-
 		$product->save();
 
 		//新規作成なので、responseは201(CREATED)を返す
 		return response($product, 201);
 	}
+
+	//お気に入り登録
+	public function like(string $id)
+	{
+		$product = Product::where('id', $id)->with('likes')->first();
+
+		if(!$product) {
+			abort(404);
+		}
+		//何回実行しても1個しかいいねがつかないように、まず特定の商品およびログインユーザーに紐づくいいねを削除(detach) してから、新たに追加(attach)する
+		$product->likes()->detach(Auth::user()->id);
+		$product->likes()->attach(Auth::user()->id);
+		return ['product_id' => $id];
+	}
+
+	//お気に入り解除
+	public function unlike(string $id)
+	{
+		$product = Product::where('id', $id)->with('likes')->first();
+
+		if(!$product) {
+			abort(404);
+		}
+		$product->likes()->detach(Auth::user()->id);
+		return $product;
+	}
+
+	//商品購入
+	public function purchase(Request $request, string $id)
+	{
+		//購入する商品の情報をDBから取得
+		$product = Product::with('histories')->find($id);
+
+		//買い手のメールアドレス
+		$buyer_email = Auth::user()->email;
+		//売り手のメールアドレス
+		$seller_email = $product->email;
+
+		if(!$product) {
+			abort(404);
+		}
+
+		//historiesテーブルにデータを追加する
+		$product->histories()->attach(Auth::user()->id);
+		print_r('historiesテーブルにデータ追加!');
+
+		//メール送信機能実装
+		$params = [
+			'product_id'   => $request->id,
+			'user_name'    => Auth::user()->name,
+			'shop_name'    => $product->user_name,
+			'product_name' => $request->name,
+			'detail'       => $request->detail,
+			'price'        => $request->price,
+			'expire'       => $request->expire,
+			'purchased_at' => Carbon::now(),
+		];
+		//買い手にメールを送信
+		Mail::to($buyer_email)->send(new PurchasedBuyerNotification($params));
+		//売り手にメールを送信
+		Mail::to($seller_email)->send(new PurchasedSellerNotification($params));
+
+		return ['product_id' => $id];
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
