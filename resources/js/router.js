@@ -14,6 +14,8 @@ import System    from "./components/errors/System";
 import RegisterProduct from "./components/RegisterProduct";
 import MyPage from "./components/MyPage";
 import ProductDetail from "./components/ProductDetail";
+import PassResetEmail from "./components/auth/passwords/PassResetEmail";
+import PassResetForm from "./components/auth/passwords/PassResetForm";
 
 
 //VueRouterプラグインを利用する
@@ -42,7 +44,35 @@ const routes = [
     name: 'login',
     component: Login,
     beforeEnter(to, from, next) {
-      //ログイン済みでアクセスしたらトップページを表示する
+      //ログイン状態でアクセスしたらトップページを表示する
+      if(store.getters['auth/check']) {
+        next({ name: 'index' });
+      } else {
+        next();
+      }
+    }
+  },
+  {
+    //パスワードリセットメール送信
+    path: '/password/reset',
+    name: 'password.email',
+    component: PassResetEmail,
+    beforeEnter(to, from, next) {
+      //ログイン状態でアクセスしたらトップページを表示する
+      if(store.getters['auth/check']) {
+        next({ name: 'index' });
+      } else {
+        next();
+      }
+    }
+  },
+  {
+    //パスワードリセットリンク送信
+    path: '/password/reset/:token/:email',
+    name: 'password.reset',
+    component: PassResetForm,
+    beforeEnter(to, from, next) {
+      //ログイン状態でアクセスしたらトップページを表示する
       if(store.getters['auth/check']) {
         next({ name: 'index' });
       } else {

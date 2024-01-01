@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Auth;
 Route::post('/register', 'Auth\RegisterController@register')->name('register'); //ユーザー登録
 Route::post('/login',    'Auth\LoginController@login')->name('login'); //ログイン
 Route::post('/logout',   'Auth\LoginController@logout')->name('logout'); //ログアウト
+
+Route::post('/password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email'); //パスワードリセットメール送信
+Route::post('/password/reset', 'Auth\ResetPasswordController@reset')->name('password.reset'); //パスワードリセット処理
 Route::get('/refresh-token', function(Request $request) { //トークンリフレッシュ
 	$request->session()->regenerateToken();
 	return response()->json();

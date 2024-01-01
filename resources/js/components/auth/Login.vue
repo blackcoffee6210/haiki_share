@@ -69,7 +69,7 @@
 			</form>
 			
 			<!-- パスワードリマインダー	-->
-			<router-link :to="{ name: 'passResetEmail' }"
+			<router-link :to="{ name: 'password.email' }"
 									 class="c-link">パスワードをお忘れの方はこちら</router-link>
 			<hr class="p-auth-form__u-line">
 			<!-- 会員登録へ遷移	-->
