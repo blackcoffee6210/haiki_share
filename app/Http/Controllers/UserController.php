@@ -75,15 +75,18 @@ class UserController extends Controller
 	//出品した商品取得
 	public function posted(string $id)
 	{
-		return User::find($id)->products()
-					 ->orderByDesc('products.created_at')->get();
+		return User::find($id)->products()->orderByDesc('products.created_at')->get();
 	}
 
 	//購入した商品一覧(利用者)
 	public function purchased(string $id)
 	{
-		$products = User::find($id)->histories()
-						->orderByDesc('histories.created_at')->get();
-		return $products;
+		return User::find($id)->histories()->orderByDesc('histories.created_at')->get();
+	}
+
+	//いいねした商品一覧(利用者)
+	public function liked(string $id)
+	{
+		return User::find($id)->likes()->orderByDesc('likes.created_at')->get();
 	}
 }

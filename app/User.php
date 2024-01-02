@@ -52,27 +52,26 @@ class User extends Authenticatable
 		$this->notify(new PasswordResetNotification($token));
 	}
 
-	//===============================================
+	//====================================================
     //リレーション
-	//===============================================
-	public function products() {
-		return $this->hasMany('App\Product');
-	}
-
+	//====================================================
+	//都道府県テーブル
 	public function prefecture()
 	{
 		return $this->belongsTo('App\Prefecture');
 	}
-
+	//商品テーブル
+	public function products() {
+		return $this->hasMany('App\Product');
+	}
+	//お気に入りテーブル
 	public function likes()
 	{
-		return $this->belongsToMany('App\Product', 'likes')
-					->withTimestamps();
+		return $this->belongsToMany('App\Product', 'likes')->withTimestamps();
 	}
-
+	//購入履歴テーブル
 	public function histories()
 	{
-		return $this->belongsToMany('App\Product', 'histories')
-					->withTimestamps();
+		return $this->belongsToMany('App\Product', 'histories')->withTimestamps();
 	}
 }

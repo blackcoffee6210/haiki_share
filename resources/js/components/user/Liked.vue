@@ -2,44 +2,31 @@
 	<div class="l-main">
 		<main class="l-main__2column">
 			<div class="p-list">
-				<h2 class="c-title p-list__title">
-					<span v-show="isShopUser">購入された商品一覧</span>
-					<span v-show="!isShopUser">購入した商品一覧</span>
-				</h2>
+				<h2 class="c-title p-list__title">お気に入り一覧</h2>
 				
 				<!-- ローディング -->
 				<Loading v-show="loading" />
 				
 				<!-- 商品がなければ表示する -->
 				<div v-if="!products.length"
-						 class="p-list__no-product">
-					<span v-show="isShopUser">購入された商品はありません</span>
-					<span v-show="!isShopUser">購入した商品はありません</span>
+						 class="p-list__no-product">お気に入りした商品はありません
 				</div>
 				
-				<div class="p-list__card-container">
-				
-			<!--		&lt;!&ndash; Productコンポーネント &ndash;&gt;-->
-			<!--		<Product v-show="!loading"-->
-			<!--						 v-for="product in products"-->
-			<!--						 :key="product.id"-->
-			<!--						 :product="product" />-->
-			<!--	</div>-->
-			<!--</div>-->
-					
+				<div class="p-list__card-container" v-show="!loading">
 					<!-- カード -->
 					<div class="c-card p-list__card"
 							 v-for="product in products"
-							 :key="product.id">
+							 :key="product.id"
+							 v-if="isLike">
 						<!-- 詳細画面のリンク -->
 						<router-link class="c-card__link"
 												 :to="{ name: 'product.detail',
-												 				params: { id: product.id.toString() }}" />
+												 			  params: { id: product.id.toString() }}" />
 						<!-- SOLDバッジ -->
 						<div class="c-badge" v-show="product.is_purchased">
 							<div class="c-badge__sold">SOLD</div>
 						</div>
-						<!-- 商品の画像	-->
+						<!-- 商品の画像 -->
 						<img class="p-list__img"
 								 :src="product.image"
 								 alt="">
@@ -79,9 +66,9 @@
 							</div>
 							<!-- ボタン	-->
 							<div class="p-list__btn-container">
-								<router-link class="c-btn p-list__btn p-list__btn--detail"
-														 :to="{ name: 'product.detail', params: { id: product.id.toString() }}">詳細を見る
-								</router-link>
+								<button class="c-btn p-list__btn p-list__btn--like"
+												@click="unlike(product)">お気に入り解除
+								</button>
 							</div>
 						</div>
 					</div>
@@ -95,14 +82,13 @@
 </template>
 
 <script>
-import Loading from "../Loading";
-import Product from "../product/Product";
-import Sidebar from "../Sidebar";
-import { OK }  from "../../util";
-import { mapGetters } from 'vuex';
+import Loading        from "../Loading";
+import Sidebar        from "../Sidebar";
+import { OK }         from "../../util";
+import { mapGetters } from "vuex";
 
 export default {
-	name: "Purchased",
+	name: "Liked",
 	props: {
 		id: {
 			type: String,
@@ -111,13 +97,14 @@ export default {
 	},
 	components: {
 		Loading,
-		Product,
 		Sidebar
 	},
 	data() {
 		return {
 			loading: false,
-			products: {}
+			products: {},
+			product: {},
+			isLike: true
 		}
 	},
 	computed: {
@@ -126,24 +113,53 @@ export default {
 		})
 	},
 	methods: {
-		//購入された商品一覧
+		//いいねした商品一覧
 		async getProducts() {
-			console.log('商品を取得します');
 			//ローディングを表示する
 			this.loading = true;
 			//API通信
-			const response = await axios.get(`/api/users/${this.id}/purchased`);
+			const response = await axios.get(`/api/users/${this.id}/liked`);
 			//API通信が終わったらローディングを非表示にする
 			this.loading = false;
 			
-			//responseステータスがOKじゃなかったらエラーコードをセット
+			//responseステータスがOKじゃなかったら後続の処理を行う
 			if(response.status !== OK) {
 				this.$store.commit('error/setCode', response.status);
 				return false;
 			}
 			//プロパティにデータをセット
 			this.products = response.data;
-			console.log('productの中身：' + this.products);
+		},
+		//お気に入りを削除する
+		async unlike(product) {
+			//引数をプロパティにセット
+			this.product = product;
+			
+			if(confirm('お気に入りを解除しますか?')) {
+				//API通信
+				const response = await axios.delete(`/api/products/${this.product.id}/unlike`);
+				
+				//responseステータスがOKじゃなかったらエラーコードをセット
+				if (response.status !== OK) {
+					this.$store.commit('error/setCode', response.status);
+					return false;
+				}
+				
+				//いいねの数を1個減らす
+				this.product.likes_count -= 1;
+				//いいね解除したので、ユーザーのいいねをtrueからfalseにする
+				this.product.liked_by_user = false;
+				//一覧表示に表示しない
+				this.isLike = false;
+				
+				//メッセージ登録
+				this.$store.commit('message/setContent', {
+					content: 'お気に入りを解除しました',
+				});
+				
+				//マイページに遷移する
+				this.$router.push({name: 'user.mypage', params: {id: this.id}});
+			}
 		}
 	},
 	watch: {

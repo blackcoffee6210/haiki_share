@@ -18,12 +18,10 @@ import RegisterProduct from "./components/product/RegisterProduct";
 import EditProduct     from "./components/product/EditProduct";
 import EditPassword    from "./components/user/EditPassword";
 import EditProfile     from "./components/user/EditProfile";
+import Liked           from "./components/user/Liked";
 import MyPage          from "./components/user/MyPage";
 import Posted          from "./components/user/Posted";
 import Purchased       from "./components/user/Purchased";
-
-
-
 
 //VueRouterプラグインを利用する
 //これによって<router-view>コンポーネントなどを使うことができる
@@ -199,10 +197,25 @@ const routes = [
     }
   },
   {
-    //購入された商品一覧
+    //購入した商品一覧
     path: '/users/:id/purchased',
     name: 'user.purchased',
     component: Purchased,
+    props: true,
+    beforeEnter(to, from, next) {
+      //todo: ユーザーによって処理を分ける
+      if(store.getters['auth/check']) {
+        next();
+      }else {
+        next({name: 'login'});
+      }
+    }
+  },
+  {
+    //いいねした商品一覧
+    path: '/user/:id/liked',
+    name: 'user.liked',
+    component: Liked,
     props: true,
     beforeEnter(to, from, next) {
       //todo: ユーザーによって処理を分ける
