@@ -23,7 +23,7 @@ class Product extends Model
 	//アクセサとは、DBから取得したデータを自動的に加工することができる機能
 	//ユーザー定義のアクセサをJSONに含めるには、明示的に$appendプロパティに登録する
 	protected $appends = [
-		'user_image', 'user_name', 'branch', 'category_name',
+		'user_image', 'user_name', 'email', 'branch', 'category_name',
 		'likes_count', 'liked_by_user', 'purchased_by_user', 'is_purchased',
 		'group',
 	];
@@ -33,7 +33,7 @@ class Product extends Model
 	protected $visible = [
 		'id', 'user_id', 'category_id', 'image', 'name', 'detail', 'price', 'expire',
 		'deleted_at', 'created_at', 'updated_at',
-		'user_image', 'user_name', 'branch', 'category_name',
+		'user_image', 'user_name', 'email', 'branch', 'category_name',
 		'likes_count', 'liked_by_user', 'purchased_by_user', 'is_purchased',
 		'group'
 	];
@@ -49,6 +49,15 @@ class Product extends Model
 	public function getUserNameAttribute()
 	{
 		return $this->user->name;
+	}
+	/**
+	 * アクセサ - email
+	 * @return string
+	 */
+	//ユーザーのEmailを取得する
+	public function getEmailAttribute()
+	{
+		return $this->user->email;
 	}
 	/**
 	 * アクセサ - user_name

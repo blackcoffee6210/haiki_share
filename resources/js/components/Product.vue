@@ -4,6 +4,11 @@
 		<router-link class="c-card__link"
 								 :to="{ name: 'product.detail', params: { id: product.id.toString() }}"/>
 		
+		<!-- SOLDバッジ -->
+		<div class="c-badge" v-show="product.is_purchased">
+			<div class="c-badge__sold">SOLD</div>
+		</div>
+		
 		<!-- 商品の画像	-->
 		<img :src="product.image"
 				 alt=""
@@ -11,10 +16,13 @@
 		
 		<!-- カードボディ -->
 		<div class="p-product__card-body">
-			<!-- 商品の名前	-->
-			<div class="p-product__name">{{ product.name }}</div>
-			<!-- 料金	-->
-			<div class="p-product__price">{{ product.price | numberFormat }}</div>
+			<div class="p-product__container">
+				<!-- 商品の名前	-->
+				<div class="p-product__name">{{ product.name }}</div>
+				<!-- 料金	-->
+				<div class="p-product__price">{{ product.price | numberFormat }}</div>
+			</div>
+			
 			<!-- 賞味期限 -->
 			<div class="p-product__expire">
 				<div>賞味期限</div>
@@ -25,11 +33,8 @@
 					</span>
 					 日
 				</div>
-				
 			</div>
-			<!--<div class="p-product__expire">-->
-			<!--	{{ product.expire | momentExpire }}-->
-			<!--</div>-->
+
 			<!-- ユーザーの情報	-->
 			<div class="p-product__user-info">
 				<!-- 出品したユーザーの画像	-->

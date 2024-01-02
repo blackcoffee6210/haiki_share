@@ -108,7 +108,8 @@ class ProductController extends Controller
 		//売り手のメールアドレス
 		$seller_email = $product->email;
 
-		if(!$product) {
+		//変数が一つでも空だったら
+		if(!$product || !$buyer_email || !$seller_email) {
 			abort(404);
 		}
 
@@ -133,6 +134,12 @@ class ProductController extends Controller
 		Mail::to($seller_email)->send(new PurchasedSellerNotification($params));
 
 		return ['product_id' => $id];
+	}
+
+	//購入キャンセル
+	public function cancel(Request $request, string $id)
+	{
+		//todo: メールを送る
 	}
 }
 

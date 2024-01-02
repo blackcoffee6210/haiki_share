@@ -3,19 +3,21 @@ import VueRouter from 'vue-router';
 import store     from './store';
 
 //コンポーネントをインポートする
-import Register  from "./components/auth/Register";
-import Login     from "./components/auth/Login";
-import Index     from "./components/Index";
-import Agreement from "./components/footer/Agreement";
-import Policy    from "./components/footer/Policy";
-import Tokutei   from "./components/footer/Tokutei";
-import NotFound  from "./components/errors/NotFound";
-import System    from "./components/errors/System";
+import PassResetEmail  from "./components/auth/passwords/PassResetEmail";
+import PassResetForm   from "./components/auth/passwords/PassResetForm";
+import Register        from "./components/auth/Register";
+import Login           from "./components/auth/Login";
+import NotFound        from "./components/errors/NotFound";
+import System          from "./components/errors/System";
+import Agreement       from "./components/footer/Agreement";
+import Policy          from "./components/footer/Policy";
+import Tokutei         from "./components/footer/Tokutei";
+import EditProfile     from "./components/EditProfile";
+import Index           from "./components/Index";
+import MyPage          from "./components/MyPage";
+import ProductDetail   from "./components/ProductDetail";
 import RegisterProduct from "./components/RegisterProduct";
-import MyPage from "./components/MyPage";
-import ProductDetail from "./components/ProductDetail";
-import PassResetEmail from "./components/auth/passwords/PassResetEmail";
-import PassResetForm from "./components/auth/passwords/PassResetForm";
+
 
 
 //VueRouterプラグインを利用する
@@ -116,12 +118,29 @@ const routes = [
     path: '/users/:id/my-page',
     name: 'user.mypage',
     component: MyPage,
+    props: true,
     beforeEnter(to, from, next) {
       //ログイン状態でページにアクセスがあったらマイページに移動させる
       if(store.getters['auth/check']) {
         next();
       //ログインしていなければログイン画面に移動させる
       }else {
+        next({name: 'login'});
+      }
+    }
+  },
+  {
+    //プロフィール編集
+    path: '/users/:id/edit-profile',
+    name: 'user.editProfile',
+    component: EditProfile,
+    props: true,
+    beforeEnter(to, from ,next) {
+      //ログイン状態でページにアクセスがあった場合(true)、そのまま移動させる
+      if(store.getters['auth/check']) {
+        next();
+        //ログインしていなければログイン画面に移動させる
+      } else {
         next({name: 'login'});
       }
     }

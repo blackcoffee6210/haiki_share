@@ -1,13 +1,17 @@
 
 <template>
 	<main class="l-main">
-		
 		<div class="p-product-detail">
 			
 			<!-- ローディング -->
 			<Loading v-show="loading" />
 			
 			<div v-show="!loading">
+				
+				<!-- SOLDバッジ -->
+				<div class="c-badge" v-show="product.is_purchased">
+					<div class="c-badge__sold">SOLD</div>
+				</div>
 				
 				<!-- 商品の画像	-->
 				<img :src="product.image"
@@ -50,17 +54,19 @@
 					</div>
 					<!-- ボタンコンテナ(右側)	-->
 					<div class="p-product-detail__btn-container">
-						<!-- 商品編集ボタン(自分の商品のときだけ) -->
+						<!-- 商品編集ボタン(自分の商品のときだけ & 購入されていない) -->
 						<router-link class="c-btn p-product-detail__btn--edit"
-												 v-if="isMyProduct"
+												 v-if="isMyProduct && !isPurchased"
 												 :to="{ name: 'product.edit', params: {id: id.toString() } }">編集する
 						</router-link>
+						
 						<!-- お気に入りボタン	-->
 						<button class="p-product-detail__btn--like"
 										:style="{
 											'border-color': [isLike ? '#ff3c53' : 'lightgray'],
 											'background'  : [isLike ? '#ffd5da' : 'white']
 										}"
+										:disabled="isPurchased || isMyProduct"
 										@click="onLikeClick">
 							<span v-if="isLike">お気に入り済み</span>
 							<span v-else>気になる！</span>
@@ -72,14 +78,23 @@
 																 color="#ccc" />
 							{{ product.likes_count }}
 						</button>
+						
 						<!-- 商品購入ボタン	-->
-						<!-- todo: 今の状態だと購入しててもボタンを押さないと「購入済みです」とでないので、購入していたら押せないようにリファクタ -->
 						<!-- todo: 購入後にコンビニユーザーにレビューを投稿できるようにする -->
 						<button class="c-btn p-product-detail__btn--price"
 										@click="purchase"
-						>
-							<span v-if="product.purchased_by_user">購入済み</span>
+										v-if="!product.purchased_by_user"
+										:disabled="isPurchased || isMyProduct || isShopUser">
+							<span v-if="isPurchased">購入済み</span>
 							<span v-else>購入</span>
+						</button>
+						
+						<!-- 購入キャンセルボタン	-->
+						<!--todo: 購入から3日以内または賞味期限1日前まではキャンセル可能-->
+						<button v-else
+										@click="cancel"
+										class="c-btn p-product-detail__btn--cancel">
+							購入キャンセル
 						</button>
 					
 					</div>
@@ -155,8 +170,14 @@ export default {
 		}),
 		//自分の商品かどうかを真偽値で返す
 		isMyProduct() {
-			//商品idとログインidが同じ、かつ購入されていなければtrueを返す
-			if(this.product.user_id === this.userId && !this.product.is_purchased) {
+			//商品idとログインidが同じであればtrueを返す
+			if(this.product.user_id === this.userId) {
+				return true;
+			}
+		},
+		//商品が購入されているかどうかを返す
+		isPurchased() {
+			if(this.product.purchased_by_user || this.product.is_purchased) {
 				return true;
 			}
 		}
@@ -185,16 +206,16 @@ export default {
 				alert('いいね機能を使うにはログインしてください');
 				return false;
 			}
-			//自分の商品には「お気に入り」できないようにする
-			if(this.product.user_id === this.userId) {
-				alert('自分の商品には「お気に入り」できません');
-				return false;
-			}
-			//購入された商品には「いいね」できないようにする
-			if(this.product.purchased_by_user) {
-				alert('購入した商品には「お気に入り」できません');
-				return false;
-			}
+			// //自分の商品には「お気に入り」できないようにする
+			// if(this.isMyProduct) {
+			// 	alert('自分の商品には「お気に入り」できません');
+			// 	return false;
+			// }
+			// //購入された商品には「いいね」できないようにする
+			// if(this.product.purchased_by_user) {
+			// 	alert('購入した商品には「お気に入り」できません');
+			// 	return false;
+			// }
 			//いいねを押していたらいいねを外す
 			if(this.product.liked_by_user) {
 				this.unlike();
@@ -243,21 +264,26 @@ export default {
 				alert('商品を購入するにはログインしてください');
 				return false;
 			}
-			//自分の商品は購入できないようにする
-			if(this.product.user_id === this.userId) {
-				alert('自分の商品は購入できません');
-				return false;
-			}
-			//一度購入した商品は購入できないようにする
-			if(this.product.purchased_by_user) {
-				alert('この商品はすでに購入済みです');
-				return false;
-			}
-			//コンビニユーザーは商品を購入できないようにする
-			if(this.isShopUser) {
-				alert('コンビニユーザーは商品を購入できません');
-				return false;
-			}
+			// //自分の商品は購入できないようにする
+			// if(this.isMyProduct) {
+			// 	alert('自分の商品は購入できません');
+			// 	return false;
+			// }
+			// //自分が購入した商品は購入できないようにする
+			// if(this.product.purchased_by_user) {
+			// 	alert('この商品はすでに購入済みです');
+			// 	return false;
+			// }
+			// //購入されている商品は購入できないようにする
+			// if(this.isPurchased) {
+			// 	alert('この商品はすでに購入されています');
+			// 	return false;
+			// }
+			// //コンビニユーザーは商品を購入できないようにする
+			// if(this.isShopUser) {
+			// 	alert('コンビニユーザーは商品を購入できません');
+			// 	return false;
+			// }
 			//アレートで「購入しますか?」と表示し、「はい」を押すと以下の処理を実行
 			if(confirm('購入しますか？')) {
 				//ローディングを表示する
@@ -290,6 +316,12 @@ export default {
 				});
 				//自画面(商品詳細)に遷移する
 				this.$router.push({name: 'product.detail', params: {id: this.id}}).catch(() => {} );
+			}
+		},
+		//購入キャンセル
+		cancel() {
+			if(confirm('購入をキャンセルしますか？')) {
+				console.log('購入キャンセルしました');
 			}
 		},
 		//「TOPにもどる」ボタンを押したときの処理

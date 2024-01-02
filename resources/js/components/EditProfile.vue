@@ -1,0 +1,302 @@
+<template>
+	<div class="l-main">
+		<!-- プロフィール編集	-->
+		<main class="l-main__2column">
+			<div class="p-edit-profile">
+				<h2 class="c-title p-edit-profile__title">プロフィール編集</h2>
+				
+				<div class="p-edit-profile__background">
+					<!-- ローディング -->
+					<Loading v-show="loading" />
+					
+					<form class="p-edit-profile__form"
+								v-show="!loading"
+								@submit.prevent="update">
+						
+						<!-- ユーザー画像	-->
+						<div class="u-p-relative">
+							<label class="p-edit-profile__label-img">
+								<input type="file"
+											 class="p-edit-profile__img u-d-none"
+											 @change="onFileChange">
+								<output class="p-edit-profile__output"
+												v-if="preview">
+									<img :src="preview"
+											 class="p-edit-profile__output-img"
+											 alt="">
+								</output>
+								<img :src="user.image"
+										 v-if="!preview"
+										 alt=""
+										 class="p-edit-profile__img">
+							</label>
+							<div class="p-edit-profile__img-text"
+									 v-if="!preview">プロフィール画像を設定する
+							</div>
+						</div>
+						<!-- エラーメッセージ	-->
+						<div v-if="errors">
+							<div v-for="msg in errors.image"
+									 :key="msg"
+									 class="p-error">{{ msg }}
+							</div>
+						</div>
+						
+						<!-- 名前	-->
+						<label for="name"
+									 class="c-label p-edit-profile__label">
+							<span v-show="user.group === 1">お名前</span>
+							<span v-show="user.group === 2">コンビニ名</span>
+						</label>
+						<input type="text"
+									 id="name"
+									 class="c-input p-edit-profile__input"
+									 v-model="user.name"
+									 :placeholder="name">
+						<!-- エラーメッセージ	-->
+						<div v-if="errors">
+							<div v-for="msg in errors.name"
+									 :key="msg"
+									 class="p-error">{{ msg }}
+							</div>
+						</div>
+						
+						<!-- 支店名	-->
+						<div v-if="isShopUser">
+							<label for="branch"
+										 class="c-label p-edit-profile__label">支店名</label>
+							<input v-model="user.branch"
+										 type="text"
+										 id="branch"
+										 class="c-input p-edit-profile__input"
+										 placeholder="渋谷支店">
+							<!-- エラーメッセージ	-->
+							<div v-if="errors">
+								<div v-for="msg in errors.branch"
+										 :key="msg"
+										 class="p-error">{{ msg }}
+								</div>
+							</div>
+						</div>
+						
+						<!-- 住所	-->
+						<div v-if="isShopUser">
+							<label for="address"
+										 class="c-label p-edit-profile__label">住所</label>
+							<input v-model="user.address"
+										 type="text"
+										 id="address"
+										 class="c-input p-edit-profile__input"
+										 placeholder="渋谷１丁目">
+							<!-- エラーメッセージ	-->
+							<div v-if="errors">
+								<div v-for="msg in errors.address"
+										 :key="msg"
+										 class="p-error">{{ msg }}
+								</div>
+							</div>
+						</div>
+						
+						<!-- メール	-->
+						<label for="email"
+									 class="c-label p-edit-profile__label">Eメール</label>
+						<input v-model="user.email"
+									 type="text"
+									 id="email"
+									 class="c-input p-edit-profile__input"
+									 placeholder="mail@haiki_share.com">
+						<!-- エラーメッセージ	-->
+						<div v-if="errors">
+							<div v-for="msg in errors.email"
+									 :key="msg"
+									 class="p-error">{{ msg }}
+							</div>
+						</div>
+						
+						<!-- 自己紹介文	-->
+						<label for="introduce"
+									 class="c-label p-edit-profile__label">自己紹介文</label>
+						<input v-model="user.introduce"
+									 type="text"
+									 id="introduce"
+									 class="c-input p-edit-profile__input"
+									 placeholder="こんにちは。よろしくお願いします。">
+						<!-- エラーメッセージ	-->
+						<div v-if="errors">
+							<div v-for="msg in errors.introduce"
+									 :key="msg"
+									 class="p-error">{{ msg }}
+							</div>
+						</div>
+						
+						<!-- ボタン -->
+						<div class="p-edit-profile__btn-container">
+							<a @click="$router.back()"
+								 class="c-btn c-btn--white p-edit-profile__btn--back">もどる
+							</a>
+							<button class="c-btn" type="submit">更新する</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</main>
+		
+		<!-- サイドバー	-->
+		<Sidebar :id="id" />
+	</div>
+</template>
+
+<script>
+import Loading from "./Loading";
+import Sidebar from "./Sidebar";
+import { OK, UNPROCESSABLE_ENTITY } from "../util";
+import { mapGetters, mapState } from "vuex";
+
+export default {
+	name: "EditProfile",
+	props: {
+		id: {
+			type: String,
+			required: true
+		}
+	},
+	components: {
+		Loading,
+		Sidebar
+	},
+	data() {
+		return {
+			user: { // ユーザーの都道府県が変わることは考えにくいので編集項目に入れない
+				image: '',
+				group: '',
+				name: '',
+				branch: '',
+				address: '',
+				email: '',
+				introduce: ''
+			},
+			loading: false, //ローディング
+			preview: null,  //画像プレビュー
+			errors: null,   //エラーメッセージ
+		}
+	},
+	computed: {
+		...mapState({
+			apiStatus: state => state.auth.apiStatus,
+		}),
+		...mapGetters({
+			isShopUser: 'auth/isShopUser',
+		}),
+		//名前インプットエリアのplaceholderを利用者とお店で切り替える
+		name() {
+			if(this.user.group === 1) {
+				return 'ハイキ君';
+			}else if(this.user.group === 2) {
+				return 'ファミリーストア';
+			}
+		},
+	},
+	methods: {
+		//ユーザー情報取得
+		async getUser() {
+			const response = await axios.get(`/api/users/${this.id}`);
+			
+			//responseステータスがOKじゃなかったらエラーコードをセットする
+			if(response.status !== OK) {
+				this.$store.commit('error/setCode', response.status);
+				return false;
+			}
+			//responseデータをuserプロパティに代入
+			this.user = response.data;
+			console.log(this.user);
+		},
+		//フォームでファイルが選択されたら実行される
+		onFileChange(event) {
+			//何も選択されていなかったら処理中断
+			if(event.target.files.length === 0) {
+				this.reset();
+				return false;
+			}
+			//ファイルが画像ではなかったら処理中断
+			if(!event.target.files[0].type.match('image.*')) {
+				this.reset();
+				return false;
+			}
+			//FileReaderクラスのインスタンスを取得
+			const reader = new FileReader;
+			
+			//ファイルを読み込み終わったタイミングで実行する処理
+			reader.onload = e => {
+				//previewに読み込み結果（データURL）を代入する
+				//previewに値が入ると<output>につけたv-ifがtrueと判定される
+				//また<output>内部の<img>のsrc属性はpreviewの値を参照しているので
+				//結果として画像が表示される
+				this.preview = e.target.result;
+			}
+			//ファイルを読み込む
+			//読み込まれたファイルはデータURL形式で受け取れる(上記onload参照)
+			reader.readAsDataURL(event.target.files[0]);
+			//データに入力値のファイルを代入
+			this.user.image = event.target.files[0];
+		},
+		//入力欄の値とプレビュー表示をクリアするメソッド
+		reset() {
+			this.preview = '';
+			this.user.image = null;
+			this.$el.querySelector('input[type="file"]').value = null;
+		},
+		//プロフィール更新処理
+		async update() {
+			//ローディングを表示する
+			this.loading = true;
+			
+			const formData = new FormData;
+			formData.append('image',     this.user.image);
+			formData.append('name',      this.user.name);
+			formData.append('branch',    this.user.branch);
+			formData.append('address',   this.user.address);
+			formData.append('email',     this.user.email);
+			formData.append('introduce', this.user.introduce);
+			
+			const response = await axios.post(`/api/users/${this.id}/updateProfile`, formData);
+			
+			//API通信が終わったらローディングを非表示にする
+			this.loading = false;
+			
+			//responseステータスがUNPROCESSABLE_ENTITY(バリデーションエラー)ならエラーメッセージをセット
+			if(response.status === UNPROCESSABLE_ENTITY) {
+				//レスポンスのエラーメッセージを格納する
+				this.errors = response.data.errors;
+				return false;
+			}
+			
+			//送信が完了したら入力値をクリアする
+			this.reset();
+			
+			//responseステータスがOKじゃなかったらエラーコードをセット
+			if(response.status !== OK) {
+				this.$store.commit('error/setCode', response.status);
+				return false;
+			}
+			
+			//メッセージ登録
+			this.$store.commit('message/setContent', {
+				content: 'プロフィールを更新しました！',
+			})
+			
+			//マイページに移動する
+			this.$router.push({name: 'user.mypage', params: { id: this.id }});
+		}
+	},
+	watch: {
+		//$routeを監視してページが変わったときにgetArticleが実行されるようにする
+		$route: {
+			async handler() {
+				await this.getUser();
+			},
+			//immediateをtrueにすると、コンポーネントが生成されたタイミングでも実行する
+			immediate: true
+		}
+	}
+}
+</script>

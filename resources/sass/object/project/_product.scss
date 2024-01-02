@@ -1,5 +1,6 @@
 .p-product {
   width: 100%;
+  position: relative;
   &__img {
     display: block;
     height: 120px;
@@ -13,6 +14,11 @@
     @include mq() {
       padding: $space_s;
     }
+  }
+  &__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
   &__name {
     font-weight: bold;
