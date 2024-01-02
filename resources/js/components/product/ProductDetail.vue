@@ -59,11 +59,12 @@
 					<div class="p-product-detail__btn-container">
 						<!-- 商品編集ボタン(自分の商品のときだけ & 購入されていない) -->
 						<router-link class="c-btn p-product-detail__btn--edit"
-												 v-if="isMyProduct"
+												 v-if="isMyProduct && !product.is_purchased"
 												 :to="{ name: 'product.edit', params: {id: id.toString() } }">編集する
 						</router-link>
 						
 						<!-- お気に入りボタン	-->
+						<!-- 自分の商品または購入されている商品は押せない -->
 						<button class="p-product-detail__btn--like"
 										:style="{
 											'border-color': [isLike ? '#ff3c53' : 'lightgray'],
@@ -83,16 +84,19 @@
 						</button>
 						
 						<!-- 商品購入ボタン	-->
+						<!-- 利用者ユーザーかつ自分の商品かつ自分が購入してないときに出す -->
+						<!-- 自分の商品または購入されている商品は押せない -->
 						<!-- todo: 購入後にコンビニユーザーにレビューを投稿できるようにする -->
 						<button class="c-btn p-product-detail__btn--purchase"
 										@click="purchase"
-										v-show="!isMyProduct"
+										v-show="!isShopUser && !isMyProduct && !product.purchased_by_user"
 										:disabled="isMyProduct || product.is_purchased">
 							<span v-if="product.is_purchased">購入済み</span>
 							<span v-else>購入</span>
 						</button>
 						
 						<!-- 購入キャンセルボタン	-->
+						<!-- 自分が購入した商品のときに表示 -->
 						<!--todo: 購入から3日以内または賞味期限1日前まではキャンセル可能-->
 						<button v-show="product.purchased_by_user"
 										@click="cancel"
@@ -162,14 +166,11 @@ export default {
 			loading: false       //ローディングを表示するかどうかを判定するプロパティ
 		}
 	},
-	mounted() {
-		window.addEventListener('scroll', this.scrollWindow);
-	},
 	computed: {
 		...mapGetters({
 			isLogin: 'auth/check', //true または false が返ってくる
 			userId: 'auth/userId', //ユーザーIDを取得
-			// isShopUser: 'auth/isShopUser' //コンビニユーザーならtrueが入る
+			isShopUser: 'auth/isShopUser' //コンビニユーザならtrueが入る
 		}),
 		//自分の商品かどうかを真偽値で返す
 		isMyProduct() {
@@ -177,7 +178,7 @@ export default {
 			if(this.product.user_id === this.userId) {
 				return true;
 			}
-		},
+		}
 	},
 	methods: {
 		//商品詳細情報取得
@@ -342,6 +343,9 @@ export default {
 			(top <= this.scroll) ? this.buttonActive = true
 													 : this.buttonActive = false;
 		},
+	},
+	mounted() {
+		window.addEventListener('scroll', this.scrollWindow);
 	},
 	watch: {
 		$route: {

@@ -33,7 +33,10 @@
 					</div>
 					<!-- エラーメッセージ	-->
 					<div v-if="errors">
-						<div v-for="msg in errors.image" :key="msg" class="p-error">{{ msg }}</div>
+						<div v-for="msg in errors.image"
+								 :key="msg"
+								 class="p-error">{{ msg }}
+						</div>
 					</div>
 					
 					<!-- カテゴリー -->
@@ -52,7 +55,10 @@
 					</select>
 					<!-- エラーメッセージ	-->
 					<div v-if="errors">
-						<div v-for="msg in errors.category_id" :key="msg" class="p-error">{{ msg }}</div>
+						<div v-for="msg in errors.category_id"
+								 :key="msg"
+								 class="p-error">{{ msg }}
+						</div>
 					</div>
 					
 					<!-- 商品名	-->
@@ -67,7 +73,10 @@
 								 placeholder="商品名を入力してください">
 					<!-- エラーメッセージ	-->
 					<div v-if="errors">
-						<div v-for="msg in errors.name" :key="msg" class="p-error">{{ msg }}</div>
+						<div v-for="msg in errors.name"
+								 :key="msg"
+								 class="p-error">{{ msg }}
+						</div>
 					</div>
 					
 					<!-- 商品の内容	-->
@@ -82,11 +91,13 @@
 					></textarea>
 					<!-- エラーメッセージ	-->
 					<div v-if="errors">
-						<div v-for="msg in errors.detail" :key="msg" class="p-error">{{ msg }}</div>
+						<div v-for="msg in errors.detail"
+								 :key="msg"
+								 class="p-error">{{ msg }}
+						</div>
 					</div>
 					
 					<!-- 賞味期限 -->
-					<!-- todo: カエル本を参考に実装 -->
 					<label for="expire_date"
 								 class="c-label p-register-product__label">賞味期限
 					</label>
@@ -102,7 +113,10 @@
 								 v-model="product.expire">
 					<!-- エラーメッセージ	-->
 					<div v-if="errors">
-						<div v-for="msg in errors.expire" :key="msg" class="p-error">{{ msg }}</div>
+						<div v-for="msg in errors.expire"
+								 :key="msg"
+								 class="p-error">{{ msg }}
+						</div>
 					</div>
 					
 					<!-- 金額	-->
@@ -122,11 +136,16 @@
 					</div>
 					<!-- エラーメッセージ	-->
 					<div v-if="errors">
-						<div v-for="msg in errors.price" :key="msg" class="p-error">{{ msg }}</div>
+						<div v-for="msg in errors.price"
+								 :key="msg"
+								 class="p-error">{{ msg }}
+						</div>
 					</div>
 					
 					<!-- ボタン	-->
-					<button class="c-btn p-register-product__btn" type="submit">出品する</button>
+					<button class="c-btn p-register-product__btn"
+									type="submit">出品する
+					</button>
 				</form>
 			</div>
 		</div>
@@ -250,13 +269,13 @@ export default {
 			this.loading = true;
 			
 			const formData = new FormData;
-			formData.append('user_id', this.userId);
-			formData.append('image', this.product.image);
+			formData.append('user_id',     this.userId);
+			formData.append('image',       this.product.image);
 			formData.append('category_id', this.product.category_id);
-			formData.append('name', this.product.name);
-			formData.append('detail', this.product.detail);
-			formData.append('price', this.product.price);
-			formData.append('expire', this.product.expire);
+			formData.append('name',        this.product.name);
+			formData.append('detail',      this.product.detail);
+			formData.append('price',       this.product.price);
+			formData.append('expire',      this.product.expire);
 			
 			//商品登録APIを呼び出す
 			const response = await axios.post('/api/products', formData);
@@ -289,9 +308,6 @@ export default {
 			//トップページへ移動する
 			this.$router.push({ name: 'index' });
 		}
-	},
-	created() {
-	
 	},
 	watch: {
 		$route: {

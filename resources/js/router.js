@@ -15,9 +15,11 @@ import Tokutei         from "./components/footer/Tokutei";
 import Index           from "./components/product/Index";
 import ProductDetail   from "./components/product/ProductDetail";
 import RegisterProduct from "./components/product/RegisterProduct";
+import EditProduct     from "./components/product/EditProduct";
 import EditProfile     from "./components/user/EditProfile";
 import MyPage          from "./components/user/MyPage";
 import Posted          from "./components/user/Posted";
+
 
 
 //VueRouterプラグインを利用する
@@ -105,11 +107,27 @@ const routes = [
     name: 'product.register',
     component: RegisterProduct,
     beforeEnter(to, from, next) {
-      //お店の人以外がアクセスしたらトップページを表示する
-      if(!store.getters['auth/isShopUser']) {
-        next({ name: 'index' });
-      } else {
+      //ログインユーザーかつお店の人がアクセスしたらトップページを表示する
+      if(store.getters['auth/check'] && store.getters['auth/isShopUser']) {
         next();
+      } else {
+        next({ name: 'index' });
+      }
+    }
+  },
+  {
+    //商品編集
+    path: '/products/:id/edit',
+    name: 'product.edit',
+    component: EditProduct,
+    props: true,
+    beforeEnter(to, from, next) {
+      //ログイン状態かつコンビニユーザーがページにアクセスした場合(true)、そのまま移動させる
+      if(store.getters['auth/check'] && store.getters['auth/isShopUser']) {
+        next();
+        //ログインしていなければログイン画面に移動させる
+      } else {
+        next({name: 'login'});
       }
     }
   },
@@ -152,10 +170,10 @@ const routes = [
     component: Posted,
     props: true,
     beforeEnter(to, from ,next) {
-      //ログイン状態でページにアクセスがあった場合(true)、そのまま移動させる
-      if(store.getters['auth/check']) {
+      //ログイン状態かつコンビニユーザーがページにアクセスした場合(true)、そのまま移動させる
+      if(store.getters['auth/check'] && store.getters['auth/isShopUser']) {
         next();
-        //ログインしていなければログイン画面に移動させる
+      //ログインしていなければログイン画面に移動させる
       } else {
         next({name: 'login'});
       }

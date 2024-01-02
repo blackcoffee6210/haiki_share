@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProduct;
+use App\Http\Requests\UpdateProduct;
 use App\Mail\PurchasedBuyerNotification;
 use App\Mail\PurchasedSellerNotification;
 use App\Product;
@@ -29,7 +30,7 @@ class ProductController extends Controller
 		return $products;
 	}
 
-	//商品詳細
+	//商品情報取得
 	public function show(string $id)
 	{
 		$product = Product::with(['user', 'category', 'likes', 'histories'])
@@ -69,6 +70,46 @@ class ProductController extends Controller
 
 		//新規作成なので、responseは201(CREATED)を返す
 		return response($product, 201);
+	}
+
+	//商品更新
+	public function update(UpdateProduct $request)
+	{
+		//商品情報取得
+		$product = Product::find($request->id);
+
+		//画像が送信されたらバリデーションを行う
+		if($request->file('image')) {
+			//画像のバリデーション
+			$request->validate([
+				'image' => 'required|file|mimes:jpg,jpeg,png'
+			]);
+
+			//requestから画像名を取得する
+			$original_name = $request->file('image')->getClientOriginalName();
+			//保存する画像名を作成
+			$file_name = date('Ymd_His') . '_' . $original_name;
+			//名前を変更して保存。保存先のパスを返す
+			$image_path = $request->file('image')->storeAs('public/images', $file_name);
+			//HTML出力用の整形とパスの修正
+			$image_path = str_replace('public/images/', '/storage/images/', $image_path);
+		}
+		//画像が送信されなかったらDBの画像をパスに入れる
+		else {
+			$image_path = $product->image;
+		}
+
+		//DBに保存
+		$product->user_id      = $request->user_id;
+		$product->category_id  = $request->category_id;
+		$product->image        = $image_path;
+		$product->name         = $request->name;
+		$product->detail       = $request->detail;
+		$product->price        = $request->price;
+		$product->save();
+
+		//商品情報とstatusを返す
+		return response($product, 200);
 	}
 
 	//お気に入り登録

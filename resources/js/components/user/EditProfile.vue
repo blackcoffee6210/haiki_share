@@ -302,7 +302,7 @@ export default {
 		}
 	},
 	watch: {
-		//$routeを監視してページが変わったときにgetArticleが実行されるようにする
+		//$routeを監視してページが変わったときにgetUserが実行されるようにする
 		$route: {
 			async handler() {
 				await this.getUser();

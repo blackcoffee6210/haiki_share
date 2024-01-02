@@ -11,15 +11,17 @@ Route::post('/login',    'Auth\LoginController@login')->name('login'); //ログ�
 Route::post('/logout',   'Auth\LoginController@logout')->name('logout'); //ログアウト
 Route::post('/password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email'); //パスワードリセットメール送信
 Route::post('/password/reset', 'Auth\ResetPasswordController@reset')->name('password.reset'); //パスワードリセット処理
+Route::get('/user', function() { return Auth::user(); })->name('user'); //ログインユーザーを返す
 
 //====================================================
 // Product
 //====================================================
 Route::get('/products', 'ProductController@index'); //商品一覧取得
-Route::get('/products/{id}', 'ProductController@show'); //商品詳細
+Route::get('/products/{id}', 'ProductController@show'); //商品情報取得
 Route::post('/products', 'ProductController@store'); //商品登録
+Route::post('/products/{id}/update', 'ProductController@update'); //商品更新
 Route::post('/products/{id}/purchase', 'ProductController@purchase'); //商品購入
-Route::post('/products/{id}/cancel', 'ProductController@cancel'); //商品購入
+Route::post('/products/{id}/cancel', 'ProductController@cancel'); //商品キャンセル
 Route::post('/products/{id}/like', 'ProductController@like'); //お気に入り登録
 Route::delete('/products/{id}/like', 'ProductController@unlike'); //お気に入り解除
 
@@ -31,7 +33,7 @@ Route::post('/users/{id}/updateProfile', 'UserController@updateProfile'); //プ�
 Route::get('/users/{id}/posted', 'UserController@posted'); //出品した商品
 
 
-Route::get('/user', function() { return Auth::user(); })->name('user'); //ログインユーザーを返す
+
 Route::get('/refresh-token', function(Request $request) { //トークンリフレッシュ
 	$request->session()->regenerateToken();
 	return response()->json();

@@ -17226,6 +17226,317 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/product/EditProduct.vue?vue&type=script&lang=js":
+/*!*****************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/product/EditProduct.vue?vue&type=script&lang=js ***!
+  \*****************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _Loading__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Loading */ "./resources/js/components/Loading.vue");
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../util */ "./resources/js/util.js");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw new Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw new Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : String(i); }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "EditProduct",
+  props: {
+    id: String,
+    required: true
+  },
+  components: {
+    Loading: _Loading__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
+  data: function data() {
+    return {
+      product: {},
+      //商品情報
+      categories: {},
+      //カテゴリー
+      preview: null,
+      //画像プレビュー
+      errors: {
+        //エラーメッセージを格納するプロパティ
+        image: null,
+        category_id: null,
+        name: null,
+        detail: null,
+        price: null
+      },
+      loading: false //ローディングを表示するかどうかを判定するプロパティ
+    };
+  },
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])({
+    userId: 'auth/userId'
+  })),
+  methods: {
+    //カテゴリー取得
+    getCategories: function getCategories() {
+      var _this = this;
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+        var response;
+        return _regeneratorRuntime().wrap(function _callee$(_context) {
+          while (1) switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return axios.get('/api/categories');
+            case 2:
+              response = _context.sent;
+              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_2__["OK"])) {
+                _context.next = 6;
+                break;
+              }
+              _this.$store.commit('error/setCode', response.status);
+              return _context.abrupt("return", false);
+            case 6:
+              //プロパティに値をセットする
+              _this.categories = response.data;
+            case 7:
+            case "end":
+              return _context.stop();
+          }
+        }, _callee);
+      }))();
+    },
+    //商品情報取得
+    getProduct: function getProduct() {
+      var _this2 = this;
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+        var response;
+        return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+          while (1) switch (_context2.prev = _context2.next) {
+            case 0:
+              //ローティングを表示する
+              _this2.loading = true;
+              //API通信
+              _context2.next = 3;
+              return axios.get("/api/products/".concat(_this2.id));
+            case 3:
+              response = _context2.sent;
+              //API通信が終わったらローディングを非表示にする
+              _this2.loading = false;
+              //responseステータスがOKじゃなかったら後続の処理を行う
+              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_2__["OK"])) {
+                _context2.next = 8;
+                break;
+              }
+              _this2.$store.commit('error/setCode', response.status);
+              return _context2.abrupt("return", false);
+            case 8:
+              //プロパティに値をセットする
+              _this2.product = response.data;
+            case 9:
+            case "end":
+              return _context2.stop();
+          }
+        }, _callee2);
+      }))();
+    },
+    //フォームでファイルが選択されたら実行されるメソッド
+    onFileChange: function onFileChange(event) {
+      var _this3 = this;
+      //何も選択されていなかったら処理中断
+      if (event.target.files.length === 0) {
+        this.reset();
+        return false;
+      }
+      //ファイルが画像ではなかったら処理中断
+      if (!event.target.files[0].type.match('image.*')) {
+        this.reset();
+        return false;
+      }
+      //FileReaderクラスのインスタンスを取得
+      var reader = new FileReader();
+
+      //ファイルを読み込み終わったタイミングで実行する処理
+      reader.onload = function (e) {
+        //previewに読み込み結果（データURL）を代入する
+        //previewに値が入ると<output>につけたv-ifがtrueと判定される
+        //また<output>内部の<img>のsrc属性はpreviewの値を参照しているので
+        //結果として画像が表示される
+        _this3.preview = e.target.result;
+      };
+
+      //ファイルを読み込む
+      //読み込まれたファイルはデータURL形式で受け取れる(上記onload参照)
+      reader.readAsDataURL(event.target.files[0]);
+      //データに入力値のファイルを代入
+      this.product.image = event.target.files[0];
+    },
+    //入力欄の値とプレビュー表示をクリアするメソッド
+    reset: function reset() {
+      this.preview = '';
+      this.product.image = null;
+      this.$el.querySelector('input[type="file"]').value = null;
+    },
+    //画像更新処理
+    update: function update() {
+      var _this4 = this;
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+        var formData, response;
+        return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+          while (1) switch (_context3.prev = _context3.next) {
+            case 0:
+              if (!_this4.product.is_purchased) {
+                _context3.next = 3;
+                break;
+              }
+              alert('ユーザーに購入された商品は編集できません');
+              return _context3.abrupt("return", false);
+            case 3:
+              //ローティングを表示する
+              _this4.loading = true;
+              formData = new FormData();
+              formData.append('user_id', _this4.userId);
+              formData.append('image', _this4.product.image);
+              formData.append('category_id', _this4.product.category_id);
+              formData.append('name', _this4.product.name);
+              formData.append('detail', _this4.product.detail);
+              formData.append('price', _this4.product.price);
+
+              //API通信
+              _context3.next = 13;
+              return axios.post("/api/products/".concat(_this4.product.id, "/update"), formData);
+            case 13:
+              response = _context3.sent;
+              //API通信が終わったらローディングを非表示にする
+              _this4.loading = false;
+
+              //responseステータスがUNPROCESSABLE_ENTITY(バリデーションエラー)なら後続の処理を行う
+              if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_2__["UNPROCESSABLE_ENTITY"])) {
+                _context3.next = 18;
+                break;
+              }
+              //レスポンスのエラーメッセージを格納する
+              _this4.errors = response.data.errors;
+              return _context3.abrupt("return", false);
+            case 18:
+              //送信が完了したら入力値をクリアする
+              _this4.reset();
+
+              //responseステータスがOKじゃなかったらエラーコードをセット
+              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_2__["OK"])) {
+                _context3.next = 22;
+                break;
+              }
+              _this4.$store.commit('error/setCode', response.status);
+              return _context3.abrupt("return", false);
+            case 22:
+              //メッセージ登録
+              _this4.$store.commit('message/setContent', {
+                content: '商品が更新されました！'
+              });
+
+              //商品詳細ページへ移動する
+              _this4.$router.push({
+                name: 'product.detail',
+                params: {
+                  id: _this4.id.toString()
+                }
+              });
+            case 24:
+            case "end":
+              return _context3.stop();
+          }
+        }, _callee3);
+      }))();
+    },
+    //商品の削除
+    deleteProduct: function deleteProduct() {
+      var _this5 = this;
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+        var response;
+        return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+          while (1) switch (_context4.prev = _context4.next) {
+            case 0:
+              if (!_this5.product.is_purchased) {
+                _context4.next = 3;
+                break;
+              }
+              alert('ユーザーに購入された記事は削除できません');
+              return _context4.abrupt("return", false);
+            case 3:
+              if (!confirm('商品を削除しますか?')) {
+                _context4.next = 14;
+                break;
+              }
+              //ローティングを表示する
+              _this5.loading = true;
+              //API通信
+              _context4.next = 7;
+              return axios.post("/api/products/".concat(_this5.id));
+            case 7:
+              response = _context4.sent;
+              //API通信が終わったらローディングを非表示にする
+              _this5.loading = false;
+
+              //responseステータスがOKじゃなかったらエラーコードをセット
+              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_2__["OK"])) {
+                _context4.next = 12;
+                break;
+              }
+              _this5.$store.commit('error/setCode', response.status);
+              return _context4.abrupt("return", false);
+            case 12:
+              //メッセージ登録
+              _this5.$store.commit('message/setContent', {
+                content: '商品を削除しました'
+              });
+
+              //マイページに移動する
+              _this5.$router.push({
+                name: 'user.mypage',
+                params: {
+                  id: _this5.userId.toString()
+                }
+              });
+            case 14:
+            case "end":
+              return _context4.stop();
+          }
+        }, _callee4);
+      }))();
+    }
+  },
+  watch: {
+    $route: {
+      handler: function handler() {
+        var _this6 = this;
+        return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+          return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+            while (1) switch (_context5.prev = _context5.next) {
+              case 0:
+                _context5.next = 2;
+                return _this6.getCategories();
+              case 2:
+                _context5.next = 4;
+                return _this6.getProduct();
+              case 4:
+              case "end":
+                return _context5.stop();
+            }
+          }, _callee5);
+        }))();
+      },
+      immediate: true
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/product/Index.vue?vue&type=script&lang=js":
 /*!***********************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/product/Index.vue?vue&type=script&lang=js ***!
@@ -17507,14 +17818,12 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       loading: false //ローディングを表示するかどうかを判定するプロパティ
     };
   },
-  mounted: function mounted() {
-    window.addEventListener('scroll', this.scrollWindow);
-  },
   computed: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])({
     isLogin: 'auth/check',
     //true または false が返ってくる
-    userId: 'auth/userId' //ユーザーIDを取得
-    // isShopUser: 'auth/isShopUser' //コンビニユーザーならtrueが入る
+    userId: 'auth/userId',
+    //ユーザーIDを取得
+    isShopUser: 'auth/isShopUser' //コンビニユーザならtrueが入る
   })), {}, {
     //自分の商品かどうかを真偽値で返す
     isMyProduct: function isMyProduct() {
@@ -17758,6 +18067,9 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       top <= this.scroll ? this.buttonActive = true : this.buttonActive = false;
     }
   },
+  mounted: function mounted() {
+    window.addEventListener('scroll', this.scrollWindow);
+  },
   watch: {
     $route: {
       handler: function handler() {
@@ -17996,7 +18308,6 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       }))();
     }
   },
-  created: function created() {},
   watch: {
     $route: {
       handler: function handler() {
@@ -18233,7 +18544,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     }
   },
   watch: {
-    //$routeを監視してページが変わったときにgetArticleが実行されるようにする
+    //$routeを監視してページが変わったときにgetUserが実行されるようにする
     $route: {
       handler: function handler() {
         var _this4 = this;
@@ -18729,7 +19040,7 @@ var render = function render() {
         }
       }
     }
-  }, [_vm._v("\n\t\t\t購入した商品一覧\n\t\t")]) : _vm._e(), _vm._v(" "), _vm.isShopUser ? _c("router-link", {
+  }, [_vm._v("購入した商品一覧\n\t\t")]) : _vm._e(), _vm._v(" "), _vm.isShopUser ? _c("router-link", {
     staticClass: "p-sidebar__link",
     attrs: {
       to: {
@@ -18761,7 +19072,9 @@ var render = function render() {
     }
   }, [_vm._v("出品した商品一覧\n\t\t")]) : _vm._e(), _vm._v(" "), _vm.isShopUser ? _c("a", {
     staticClass: "p-sidebar__link"
-  }, [_vm._v("レビューされた商品一覧")]) : _vm._e(), _vm._v(" "), _c("button", {
+  }, [_vm._v("レビューされた商品一覧")]) : _vm._e(), _vm._v(" "), !_vm.isShopUser ? _c("a", {
+    staticClass: "p-sidebar__link"
+  }, [_vm._v("レビューした商品一覧")]) : _vm._e(), _vm._v(" "), _c("button", {
     staticClass: "p-sidebar__link",
     on: {
       click: _vm.logout
@@ -20086,6 +20399,269 @@ render._withStripped = true;
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/product/EditProduct.vue?vue&type=template&id=9a18946c":
+/*!***************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib/loaders/templateLoader.js??ref--6!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/product/EditProduct.vue?vue&type=template&id=9a18946c ***!
+  \***************************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function render() {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("main", {
+    staticClass: "l-main"
+  }, [_c("div", {
+    staticClass: "p-edit-product"
+  }, [_c("h2", {
+    staticClass: "c-title p-edit-product__title"
+  }, [_vm._v("商品の編集")]), _vm._v(" "), _c("div", {
+    staticClass: "p-edit-product__background"
+  }, [_c("Loading", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: _vm.loading,
+      expression: "loading"
+    }],
+    attrs: {
+      color: "#f96204"
+    }
+  }), _vm._v(" "), _c("form", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: !_vm.loading,
+      expression: "!loading"
+    }],
+    staticClass: "p-edit-product__form",
+    on: {
+      submit: function submit($event) {
+        $event.preventDefault();
+        return _vm.update.apply(null, arguments);
+      }
+    }
+  }, [_c("div", {
+    staticClass: "u-p-relative"
+  }, [_c("label", {
+    staticClass: "p-edit-product__label-img",
+    "class": {
+      "p-edit-product__label-img__err": _vm.errors.image
+    }
+  }, [_c("input", {
+    staticClass: "p-edit-product__img",
+    attrs: {
+      type: "file"
+    },
+    on: {
+      change: _vm.onFileChange
+    }
+  }), _vm._v(" "), _vm.preview ? _c("output", {
+    staticClass: "p-edit-product__output"
+  }, [_c("img", {
+    staticClass: "p-edit-product__output-img",
+    attrs: {
+      src: _vm.preview,
+      alt: ""
+    }
+  })]) : _vm._e(), _vm._v(" "), !_vm.preview ? _c("img", {
+    staticClass: "p-edit-product__img",
+    attrs: {
+      src: _vm.product.image,
+      alt: ""
+    }
+  }) : _vm._e()]), _vm._v(" "), !_vm.preview ? _c("div", {
+    staticClass: "p-edit-product__img-text"
+  }, [_vm._v("\n\t\t\t\t\t\t商品画像を設定する\n\t\t\t\t\t")]) : _vm._e()]), _vm._v(" "), _vm.errors ? _c("div", _vm._l(_vm.errors.image, function (msg) {
+    return _c("div", {
+      key: msg,
+      staticClass: "p-error"
+    }, [_vm._v(_vm._s(msg) + "\n\t\t\t\t\t")]);
+  }), 0) : _vm._e(), _vm._v(" "), _c("label", {
+    staticClass: "c-label p-edit-product__label",
+    attrs: {
+      "for": "category_id"
+    }
+  }, [_vm._v("カテゴリー\n\t\t\t\t")]), _vm._v(" "), _c("select", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.product.category_id,
+      expression: "product.category_id"
+    }],
+    staticClass: "c-input p-edit-product__input",
+    "class": {
+      "c-select__err": _vm.errors.category_id
+    },
+    attrs: {
+      id: "category_id"
+    },
+    on: {
+      change: function change($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
+          return o.selected;
+        }).map(function (o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val;
+        });
+        _vm.$set(_vm.product, "category_id", $event.target.multiple ? $$selectedVal : $$selectedVal[0]);
+      }
+    }
+  }, [_c("option", {
+    attrs: {
+      value: "",
+      disabled: ""
+    }
+  }, [_vm._v("カテゴリーを選択してください")]), _vm._v(" "), _vm._l(_vm.categories, function (category) {
+    return _c("option", {
+      key: category.id,
+      domProps: {
+        value: category.id
+      }
+    }, [_vm._v(_vm._s(category.name))]);
+  })], 2), _vm._v(" "), _vm.errors ? _c("div", _vm._l(_vm.errors.category_id, function (msg) {
+    return _c("div", {
+      key: msg,
+      staticClass: "p-error"
+    }, [_vm._v(_vm._s(msg) + "\n\t\t\t\t\t")]);
+  }), 0) : _vm._e(), _vm._v(" "), _c("label", {
+    staticClass: "c-label p-edit-product__label",
+    attrs: {
+      "for": "name"
+    }
+  }, [_vm._v("商品名\n\t\t\t\t")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.product.name,
+      expression: "product.name"
+    }],
+    staticClass: "c-input p-edit-product__input",
+    "class": {
+      "c-select__err": _vm.errors.name
+    },
+    attrs: {
+      type: "text",
+      id: "name",
+      placeholder: "商品の名前を入力してください"
+    },
+    domProps: {
+      value: _vm.product.name
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.product, "name", $event.target.value);
+      }
+    }
+  }), _vm._v(" "), _vm.errors ? _c("div", _vm._l(_vm.errors.name, function (msg) {
+    return _c("div", {
+      key: msg,
+      staticClass: "p-error"
+    }, [_vm._v(_vm._s(msg) + "\n\t\t\t\t\t")]);
+  }), 0) : _vm._e(), _vm._v(" "), _c("label", {
+    staticClass: "c-label p-edit-product__label",
+    attrs: {
+      "for": "detail"
+    }
+  }, [_vm._v("商品の内容\n\t\t\t\t")]), _vm._v(" "), _c("textarea", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.product.detail,
+      expression: "product.detail"
+    }],
+    staticClass: "c-input p-edit-product__textarea",
+    "class": {
+      "c-input__err": _vm.errors.detail
+    },
+    attrs: {
+      id: "detail",
+      placeholder: "商品の内容を入力してください"
+    },
+    domProps: {
+      value: _vm.product.detail
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.product, "detail", $event.target.value);
+      }
+    }
+  }), _vm._v(" "), _vm.errors ? _c("div", _vm._l(_vm.errors.detail, function (msg) {
+    return _c("div", {
+      key: msg,
+      staticClass: "p-error"
+    }, [_vm._v(_vm._s(msg) + "\n\t\t\t\t\t")]);
+  }), 0) : _vm._e(), _vm._v(" "), _c("label", {
+    staticClass: "c-label p-edit-product__label",
+    attrs: {
+      "for": "price"
+    }
+  }, [_vm._v("金額\n\t\t\t\t")]), _vm._v(" "), _c("div", {
+    staticClass: "u-d-flex"
+  }, [_c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.product.price,
+      expression: "product.price"
+    }],
+    staticClass: "c-input p-edit-product__input p-edit-product__input--yen",
+    "class": {
+      "c-select__err": _vm.errors.price
+    },
+    attrs: {
+      type: "text",
+      id: "price",
+      placeholder: "1000"
+    },
+    domProps: {
+      value: _vm.product.price
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.product, "price", $event.target.value);
+      }
+    }
+  }), _vm._v(" "), _c("div", {
+    staticClass: "p-edit-product__yen",
+    "class": {
+      "c-select__err": _vm.errors.price
+    }
+  }, [_vm._v("円")])]), _vm._v(" "), _vm.errors ? _c("div", _vm._l(_vm.errors.price, function (msg) {
+    return _c("div", {
+      key: msg,
+      staticClass: "p-error"
+    }, [_vm._v(_vm._s(msg) + "\n\t\t\t\t\t")]);
+  }), 0) : _vm._e(), _vm._v(" "), _c("div", {
+    staticClass: "p-edit-product__btn-container"
+  }, [_c("button", {
+    staticClass: "c-btn p-edit-product__btn p-edit-product__btn--delete",
+    attrs: {
+      type: "button"
+    },
+    on: {
+      click: _vm.deleteProduct
+    }
+  }, [_vm._v("削除する\n\t\t\t\t\t")]), _vm._v(" "), _c("button", {
+    staticClass: "c-btn p-edit-product__btn p-edit-product__btn--update",
+    attrs: {
+      type: "submit"
+    }
+  }, [_vm._v("更新する\n\t\t\t\t\t")])])])], 1)])]);
+};
+var staticRenderFns = [];
+render._withStripped = true;
+
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/product/Index.vue?vue&type=template&id=f0184352":
 /*!*********************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib/loaders/templateLoader.js??ref--6!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/product/Index.vue?vue&type=template&id=f0184352 ***!
@@ -20432,7 +21008,7 @@ var render = function render() {
     staticClass: "p-product-detail__date"
   }, [_vm._v("\n\t\t\t\t\t\t\t" + _vm._s(_vm._f("moment")(_vm.product.created_at)) + "\n\t\t\t\t\t\t")])])]), _vm._v(" "), _c("div", {
     staticClass: "p-product-detail__btn-container"
-  }, [_vm.isMyProduct ? _c("router-link", {
+  }, [_vm.isMyProduct && !_vm.product.is_purchased ? _c("router-link", {
     staticClass: "c-btn p-product-detail__btn--edit",
     attrs: {
       to: {
@@ -20468,8 +21044,8 @@ var render = function render() {
     directives: [{
       name: "show",
       rawName: "v-show",
-      value: !_vm.isMyProduct,
-      expression: "!isMyProduct"
+      value: !_vm.isShopUser && !_vm.isMyProduct && !_vm.product.purchased_by_user,
+      expression: "!isShopUser && !isMyProduct && !product.purchased_by_user"
     }],
     staticClass: "c-btn p-product-detail__btn--purchase",
     attrs: {
@@ -20615,7 +21191,7 @@ var render = function render() {
     return _c("div", {
       key: msg,
       staticClass: "p-error"
-    }, [_vm._v(_vm._s(msg))]);
+    }, [_vm._v(_vm._s(msg) + "\n\t\t\t\t\t")]);
   }), 0) : _vm._e(), _vm._v(" "), _c("label", {
     staticClass: "c-label p-register-product__label",
     attrs: {
@@ -20662,7 +21238,7 @@ var render = function render() {
     return _c("div", {
       key: msg,
       staticClass: "p-error"
-    }, [_vm._v(_vm._s(msg))]);
+    }, [_vm._v(_vm._s(msg) + "\n\t\t\t\t\t")]);
   }), 0) : _vm._e(), _vm._v(" "), _c("label", {
     staticClass: "c-label p-register-product__label",
     attrs: {
@@ -20697,7 +21273,7 @@ var render = function render() {
     return _c("div", {
       key: msg,
       staticClass: "p-error"
-    }, [_vm._v(_vm._s(msg))]);
+    }, [_vm._v(_vm._s(msg) + "\n\t\t\t\t\t")]);
   }), 0) : _vm._e(), _vm._v(" "), _c("label", {
     staticClass: "c-label p-register-product__label",
     attrs: {
@@ -20731,7 +21307,7 @@ var render = function render() {
     return _c("div", {
       key: msg,
       staticClass: "p-error"
-    }, [_vm._v(_vm._s(msg))]);
+    }, [_vm._v(_vm._s(msg) + "\n\t\t\t\t\t")]);
   }), 0) : _vm._e(), _vm._v(" "), _c("label", {
     staticClass: "c-label p-register-product__label",
     attrs: {
@@ -20770,7 +21346,7 @@ var render = function render() {
     return _c("div", {
       key: msg,
       staticClass: "p-error"
-    }, [_vm._v(_vm._s(msg))]);
+    }, [_vm._v(_vm._s(msg) + "\n\t\t\t\t\t")]);
   }), 0) : _vm._e(), _vm._v(" "), _c("label", {
     staticClass: "c-label p-register-product__label",
     attrs: {
@@ -20812,13 +21388,13 @@ var render = function render() {
     return _c("div", {
       key: msg,
       staticClass: "p-error"
-    }, [_vm._v(_vm._s(msg))]);
+    }, [_vm._v(_vm._s(msg) + "\n\t\t\t\t\t")]);
   }), 0) : _vm._e(), _vm._v(" "), _c("button", {
     staticClass: "c-btn p-register-product__btn",
     attrs: {
       type: "submit"
     }
-  }, [_vm._v("出品する")])])], 1)])]);
+  }, [_vm._v("出品する\n\t\t\t\t")])])], 1)])]);
 };
 var staticRenderFns = [];
 render._withStripped = true;
@@ -68260,6 +68836,75 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/product/EditProduct.vue":
+/*!*********************************************************!*\
+  !*** ./resources/js/components/product/EditProduct.vue ***!
+  \*********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _EditProduct_vue_vue_type_template_id_9a18946c__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./EditProduct.vue?vue&type=template&id=9a18946c */ "./resources/js/components/product/EditProduct.vue?vue&type=template&id=9a18946c");
+/* harmony import */ var _EditProduct_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EditProduct.vue?vue&type=script&lang=js */ "./resources/js/components/product/EditProduct.vue?vue&type=script&lang=js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _EditProduct_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"],
+  _EditProduct_vue_vue_type_template_id_9a18946c__WEBPACK_IMPORTED_MODULE_0__["render"],
+  _EditProduct_vue_vue_type_template_id_9a18946c__WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/product/EditProduct.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/product/EditProduct.vue?vue&type=script&lang=js":
+/*!*********************************************************************************!*\
+  !*** ./resources/js/components/product/EditProduct.vue?vue&type=script&lang=js ***!
+  \*********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EditProduct_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./EditProduct.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/product/EditProduct.vue?vue&type=script&lang=js");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EditProduct_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/product/EditProduct.vue?vue&type=template&id=9a18946c":
+/*!***************************************************************************************!*\
+  !*** ./resources/js/components/product/EditProduct.vue?vue&type=template&id=9a18946c ***!
+  \***************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_EditProduct_vue_vue_type_template_id_9a18946c__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??ref--6!../../../../node_modules/vue-loader/lib??vue-loader-options!./EditProduct.vue?vue&type=template&id=9a18946c */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/product/EditProduct.vue?vue&type=template&id=9a18946c");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_EditProduct_vue_vue_type_template_id_9a18946c__WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_EditProduct_vue_vue_type_template_id_9a18946c__WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/components/product/Index.vue":
 /*!***************************************************!*\
   !*** ./resources/js/components/product/Index.vue ***!
@@ -68786,14 +69431,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_product_Index__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/product/Index */ "./resources/js/components/product/Index.vue");
 /* harmony import */ var _components_product_ProductDetail__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/product/ProductDetail */ "./resources/js/components/product/ProductDetail.vue");
 /* harmony import */ var _components_product_RegisterProduct__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components/product/RegisterProduct */ "./resources/js/components/product/RegisterProduct.vue");
-/* harmony import */ var _components_user_EditProfile__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./components/user/EditProfile */ "./resources/js/components/user/EditProfile.vue");
-/* harmony import */ var _components_user_MyPage__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/user/MyPage */ "./resources/js/components/user/MyPage.vue");
-/* harmony import */ var _components_user_Posted__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./components/user/Posted */ "./resources/js/components/user/Posted.vue");
+/* harmony import */ var _components_product_EditProduct__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./components/product/EditProduct */ "./resources/js/components/product/EditProduct.vue");
+/* harmony import */ var _components_user_EditProfile__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/user/EditProfile */ "./resources/js/components/user/EditProfile.vue");
+/* harmony import */ var _components_user_MyPage__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./components/user/MyPage */ "./resources/js/components/user/MyPage.vue");
+/* harmony import */ var _components_user_Posted__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./components/user/Posted */ "./resources/js/components/user/Posted.vue");
 
 
 
 
 //コンポーネントをインポートする
+
 
 
 
@@ -68898,20 +69545,37 @@ var routes = [{
   name: 'product.register',
   component: _components_product_RegisterProduct__WEBPACK_IMPORTED_MODULE_14__["default"],
   beforeEnter: function beforeEnter(to, from, next) {
-    //お店の人以外がアクセスしたらトップページを表示する
-    if (!_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/isShopUser']) {
+    //ログインユーザーかつお店の人がアクセスしたらトップページを表示する
+    if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/check'] && _store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/isShopUser']) {
+      next();
+    } else {
       next({
         name: 'index'
       });
-    } else {
+    }
+  }
+}, {
+  //商品編集
+  path: '/products/:id/edit',
+  name: 'product.edit',
+  component: _components_product_EditProduct__WEBPACK_IMPORTED_MODULE_15__["default"],
+  props: true,
+  beforeEnter: function beforeEnter(to, from, next) {
+    //ログイン状態かつコンビニユーザーがページにアクセスした場合(true)、そのまま移動させる
+    if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/check'] && _store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/isShopUser']) {
       next();
+      //ログインしていなければログイン画面に移動させる
+    } else {
+      next({
+        name: 'login'
+      });
     }
   }
 }, {
   //マイページ
   path: '/users/:id/my-page',
   name: 'user.mypage',
-  component: _components_user_MyPage__WEBPACK_IMPORTED_MODULE_16__["default"],
+  component: _components_user_MyPage__WEBPACK_IMPORTED_MODULE_17__["default"],
   props: true,
   beforeEnter: function beforeEnter(to, from, next) {
     //ログイン状態でページにアクセスがあったらマイページに移動させる
@@ -68928,7 +69592,7 @@ var routes = [{
   //プロフィール編集
   path: '/users/:id/edit-profile',
   name: 'user.editProfile',
-  component: _components_user_EditProfile__WEBPACK_IMPORTED_MODULE_15__["default"],
+  component: _components_user_EditProfile__WEBPACK_IMPORTED_MODULE_16__["default"],
   props: true,
   beforeEnter: function beforeEnter(to, from, next) {
     //ログイン状態でページにアクセスがあった場合(true)、そのまま移動させる
@@ -68945,11 +69609,11 @@ var routes = [{
   //出品した商品一覧
   path: '/users/:id/posted',
   name: 'user.posted',
-  component: _components_user_Posted__WEBPACK_IMPORTED_MODULE_17__["default"],
+  component: _components_user_Posted__WEBPACK_IMPORTED_MODULE_18__["default"],
   props: true,
   beforeEnter: function beforeEnter(to, from, next) {
-    //ログイン状態でページにアクセスがあった場合(true)、そのまま移動させる
-    if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/check']) {
+    //ログイン状態かつコンビニユーザーがページにアクセスした場合(true)、そのまま移動させる
+    if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/check'] && _store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/isShopUser']) {
       next();
       //ログインしていなければログイン画面に移動させる
     } else {
@@ -69061,9 +69725,11 @@ var getters = {
   //ログインユーザーのIDを取得
   userId: function userId(state) {
     return state.user ? state.user.id : '';
-  }
+  },
   //ログインユーザーがお店の人かどうか
-  // isShopUser: state => state.user ? state.user.group === 2 : ''
+  isShopUser: function isShopUser(state) {
+    return !!(state.user && state.user.group === 2);
+  }
 };
 
 //mutationsはstateを更新するためのメソッド

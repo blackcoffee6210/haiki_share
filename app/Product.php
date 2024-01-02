@@ -25,7 +25,7 @@ class Product extends Model
 	protected $appends = [
 		'user_image', 'user_name', 'email', 'branch', 'category_name',
 		'likes_count', 'liked_by_user', 'purchased_by_user', 'is_purchased',
-		'group',
+
 	];
 
 	//$visibleはJSONに含める属性を定義する
@@ -35,7 +35,7 @@ class Product extends Model
 		'deleted_at', 'created_at', 'updated_at',
 		'user_image', 'user_name', 'email', 'branch', 'category_name',
 		'likes_count', 'liked_by_user', 'purchased_by_user', 'is_purchased',
-		'group'
+
 	];
 
 	//=====================================================
@@ -68,15 +68,7 @@ class Product extends Model
 	{
 		return $this->user->branch;
 	}
-	/**
-	 * アクセサ - group
-	 * @return int
-	 */
-	//グループを取得する
-	public function getGroupAttribute()
-	{
-		return $this->user->group;
-	}
+
 	/**
 	 * アクセサ - user_image
 	 * @string

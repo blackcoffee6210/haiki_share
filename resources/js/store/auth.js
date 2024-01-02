@@ -37,7 +37,7 @@ const getters = {
   //ログインユーザーのIDを取得
   userId: state => state.user ? state.user.id : '',
   //ログインユーザーがお店の人かどうか
-  // isShopUser: state => state.user ? state.user.group === 2 : ''
+  isShopUser: state => !!(state.user && state.user.group === 2)
 }
 
 //mutationsはstateを更新するためのメソッド
