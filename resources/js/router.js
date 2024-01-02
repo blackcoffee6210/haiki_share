@@ -16,10 +16,12 @@ import Index           from "./components/product/Index";
 import ProductDetail   from "./components/product/ProductDetail";
 import RegisterProduct from "./components/product/RegisterProduct";
 import EditProduct     from "./components/product/EditProduct";
+import EditPassword    from "./components/user/EditPassword";
 import EditProfile     from "./components/user/EditProfile";
 import MyPage          from "./components/user/MyPage";
 import Posted          from "./components/user/Posted";
 import Purchased       from "./components/user/Purchased";
+
 
 
 
@@ -139,7 +141,7 @@ const routes = [
     component: MyPage,
     props: true,
     beforeEnter(to, from, next) {
-      //ログイン状態でページにアクセスがあったらマイページに移動させる
+      //ログイン状態でページにアクセスがあったらそのまま移動させる
       if(store.getters['auth/check']) {
         next();
       //ログインしていなければログイン画面に移動させる
@@ -165,6 +167,22 @@ const routes = [
     }
   },
   {
+    //パスワード編集
+    path: '/users/:id/edit-password',
+    name: 'user.editPassword',
+    component: EditPassword,
+    props: true,
+    beforeEnter(to, from, next) {
+      //ログイン状態でページにアクセスがあったらそのまま移動させる
+      if(store.getters['auth/check']) {
+        next();
+        //ログインしていなければログイン画面に移動させる
+      }else {
+        next({name: 'login'});
+      }
+    }
+  },
+  {
     //出品した商品一覧
     path: '/users/:id/posted',
     name: 'user.posted',
@@ -185,6 +203,7 @@ const routes = [
     path: '/users/:id/purchased',
     name: 'user.purchased',
     component: Purchased,
+    props: true,
     beforeEnter(to, from, next) {
       //todo: ユーザーによって処理を分ける
       if(store.getters['auth/check']) {

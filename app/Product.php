@@ -31,8 +31,8 @@ class Product extends Model
 	//$visibleはJSONに含める属性を定義する
 	//$hiddenはその逆(含めたくないものを登録する)
 	protected $visible = [
-		'id', 'user_id', 'category_id', 'image', 'name', 'detail', 'price', 'expire',
-		'deleted_at', 'created_at', 'updated_at',
+		'id', 'user_id', 'category_id', 'image', 'name', 'detail', 'price',
+		'expire', 'deleted_at', 'created_at', 'updated_at',
 		'user_image', 'user_name', 'email', 'branch', 'category_name',
 		'likes_count', 'liked_by_user', 'purchased_by_user', 'is_purchased',
 

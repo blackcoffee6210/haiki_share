@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdatePassword;
 use App\Http\Requests\UpdateUser;
+use App\Product;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -57,10 +60,40 @@ class UserController extends Controller
 		return response($user, 200);
 	}
 
+	//パスワード変更
+	public function updatePassword(UpdatePassword $request)
+	{
+		//ログインユーザーの情報を変数に入れる
+		$user = Auth::user();
+		//新しいパスワードをセットする
+		$user->password = bcrypt($request->get('new_password'));
+		$user->save();
+
+		return response($user, 200);
+	}
+
 	//出品した商品取得
 	public function posted(string $id)
 	{
 		return User::find($id)->products()
 					 ->orderByDesc('products.created_at')->get();
+	}
+
+	//購入された商品一覧
+	//todo: スキップしたからあとで実装!
+	public function purchased(string $id)
+	{
+//		$products = Product::where('user_id', $id)
+//						   ->orderByDesc('products.created_at')->get();
+//		dd($products->toArray());
+
+//		$products = Product::find($id)->histories()
+//						   ->orderByDesc('histories.created_at')->get();
+//		dd($products->toArray());
+
+//		$products = User::find($id)->histories()
+//						->orderByDesc('histories.created_at')->get();
+//		dd($products->toArray());
+//		return $products;
 	}
 }

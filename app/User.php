@@ -58,8 +58,21 @@ class User extends Authenticatable
 	public function products() {
 		return $this->hasMany('App\Product');
 	}
+
 	public function prefecture()
 	{
 		return $this->belongsTo('App\Prefecture');
+	}
+
+	public function likes()
+	{
+		return $this->belongsToMany('App\Product', 'likes')
+					->withTimestamps();
+	}
+
+	public function histories()
+	{
+		return $this->belongsToMany('App\Product', 'histories')
+					->withTimestamps();
 	}
 }

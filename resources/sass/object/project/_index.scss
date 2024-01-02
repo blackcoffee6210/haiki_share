@@ -82,6 +82,7 @@
     grid-template-columns: 33.3% 33.3% 33.3%;
     gap: $space_xl;
     padding-right: $space_xl;
+    position: relative;
     @include mq() {
       grid-template-columns: 50% 50%;
       padding-left: $space_m;

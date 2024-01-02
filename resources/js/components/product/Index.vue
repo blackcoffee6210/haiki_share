@@ -119,8 +119,8 @@ export default {
 	},
 	components: {
 		Loading,
-		Pagination,
-		Product
+		Product,
+		Pagination
 	},
 	data() {
 		return {
@@ -129,7 +129,7 @@ export default {
 			sortPrice: 1,					//金額「並び替え」の選択値
 			sortCategory: 0, 			//「カテゴリー」絞り込みの初期値
 			categories: {},       //カテゴリー
-			products: [], 				//商品リスト
+			products: {}, 				//商品リスト
 			currentPage: 0,			  //現在のページ
 			lastPage: 0, 					//最後のページ
 			total: 0, 						//商品の合計数

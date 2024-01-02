@@ -63,8 +63,8 @@
 								</div>
 							</div>
 							<!-- ボタン	-->
-							
 							<div class="p-list__btn-container">
+								<!-- 編集ボタン -->
 								<router-link class="c-btn p-list__btn p-list__btn--edit"
 														 v-show="!product.is_purchased"
 														 :to="{ name: 'product.edit', params: { id: product.id.toString() }}">編集する
@@ -77,7 +77,6 @@
 							</div>
 						</div>
 					</div>
-				
 				</div>
 			</div>
 		</main>

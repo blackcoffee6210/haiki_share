@@ -145,18 +145,21 @@ return [
 	*/
 
 	'attributes' => [
-		'name'                  => 'お名前',
-		'branch'                => '支店名',
-		'prefecture_id'         => '都道府県',
-		'address'               => '住所',
-		'email'                 => 'Eメール',
-		'password'              => 'パスワード',
-		'password_confirmation' => 'パスワード(確認)',
-		'image'                 => '画像',
-		'category_id'           => 'カテゴリー',
-		'detail'                => '商品の内容',
-		'price'                 => '料金',
-		'expire'                => '賞味期限',
+		'name'                      => 'お名前',
+		'branch'                    => '支店名',
+		'prefecture_id'             => '都道府県',
+		'address'                   => '住所',
+		'email'                     => 'Eメール',
+		'password'                  => 'パスワード',
+		'password_confirmation'     => 'パスワード(確認)',
+		'image'                     => '画像',
+		'category_id'               => 'カテゴリー',
+		'detail'                    => '商品の内容',
+		'price'                     => '料金',
+		'expire'                    => '賞味期限',
+		'current_password'          => '現在のパスワード',
+		'new_password'              => '新しいパスワード',
+		'new_password_confirmation' => '新しいパスワード(確認)',
 	],
 	'values' => [
 		'expire' => [

@@ -14,7 +14,6 @@
 		<img :src="product.image"
 				 alt=""
 				 class="p-product__img">
-		
 		<!-- カードボディ -->
 		<div class="p-product__card-body">
 			<div class="p-product__container">
