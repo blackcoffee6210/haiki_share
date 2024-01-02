@@ -15,7 +15,8 @@
 						
 						<!-- ユーザー画像	-->
 						<div class="u-p-relative">
-							<label class="p-edit-profile__label-img">
+							<label class="p-edit-profile__label-img"
+										 :class="{ 'p-edit-profile__label-img__err': errors.image }">
 								<input type="file"
 											 class="p-edit-profile__img u-d-none"
 											 @change="onFileChange">
@@ -51,6 +52,7 @@
 						<input type="text"
 									 id="name"
 									 class="c-input p-edit-profile__input"
+									 :class="{ 'c-input__err': errors.name }"
 									 v-model="user.name"
 									 :placeholder="name">
 						<!-- エラーメッセージ	-->
@@ -69,6 +71,7 @@
 										 type="text"
 										 id="branch"
 										 class="c-input p-edit-profile__input"
+										 :class="{ 'c-input__err': errors.branch }"
 										 placeholder="渋谷支店">
 							<!-- エラーメッセージ	-->
 							<div v-if="errors">
@@ -87,6 +90,7 @@
 										 type="text"
 										 id="address"
 										 class="c-input p-edit-profile__input"
+										 :class="{ 'c-input__err': errors.address }"
 										 placeholder="渋谷１丁目">
 							<!-- エラーメッセージ	-->
 							<div v-if="errors">
@@ -104,6 +108,7 @@
 									 type="text"
 									 id="email"
 									 class="c-input p-edit-profile__input"
+									 :class="{ 'c-input__err': errors.email }"
 									 placeholder="mail@haiki_share.com">
 						<!-- エラーメッセージ	-->
 						<div v-if="errors">
@@ -120,6 +125,7 @@
 									 type="text"
 									 id="introduce"
 									 class="c-input p-edit-profile__input"
+									 :class="{ 'c-input__err': errors.introduce }"
 									 placeholder="こんにちは。よろしくお願いします。">
 						<!-- エラーメッセージ	-->
 						<div v-if="errors">
@@ -147,9 +153,9 @@
 </template>
 
 <script>
-import Loading from "./Loading";
-import Sidebar from "./Sidebar";
-import { OK, UNPROCESSABLE_ENTITY } from "../util";
+import Loading from "../Loading";
+import Sidebar from "../Sidebar";
+import { OK, UNPROCESSABLE_ENTITY } from "../../util";
 import { mapGetters, mapState } from "vuex";
 
 export default {
@@ -177,7 +183,14 @@ export default {
 			},
 			loading: false, //ローディング
 			preview: null,  //画像プレビュー
-			errors: null,   //エラーメッセージ
+			errors: {       //エラーメッセージ
+				image: null,
+				name: null,
+				branch: null,
+				address: null,
+				email: null,
+				introduce: null
+			},
 		}
 	},
 	computed: {

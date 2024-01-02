@@ -12,6 +12,9 @@
 				<div class="c-badge" v-show="product.is_purchased">
 					<div class="c-badge__sold">SOLD</div>
 				</div>
+				<!--<div class="c-badge" v-show="product.is_purchased">-->
+				<!--	<div class="c-badge__sold">SOLD</div>-->
+				<!--</div>-->
 				
 				<!-- 商品の画像	-->
 				<img :src="product.image"
@@ -56,7 +59,7 @@
 					<div class="p-product-detail__btn-container">
 						<!-- 商品編集ボタン(自分の商品のときだけ & 購入されていない) -->
 						<router-link class="c-btn p-product-detail__btn--edit"
-												 v-if="isMyProduct && !isPurchased"
+												 v-if="isMyProduct"
 												 :to="{ name: 'product.edit', params: {id: id.toString() } }">編集する
 						</router-link>
 						
@@ -66,7 +69,7 @@
 											'border-color': [isLike ? '#ff3c53' : 'lightgray'],
 											'background'  : [isLike ? '#ffd5da' : 'white']
 										}"
-										:disabled="isPurchased || isMyProduct"
+										:disabled="isMyProduct || product.is_purchased"
 										@click="onLikeClick">
 							<span v-if="isLike">お気に入り済み</span>
 							<span v-else>気になる！</span>
@@ -81,17 +84,17 @@
 						
 						<!-- 商品購入ボタン	-->
 						<!-- todo: 購入後にコンビニユーザーにレビューを投稿できるようにする -->
-						<button class="c-btn p-product-detail__btn--price"
+						<button class="c-btn p-product-detail__btn--purchase"
 										@click="purchase"
-										v-if="!product.purchased_by_user"
-										:disabled="isPurchased || isMyProduct || isShopUser">
-							<span v-if="isPurchased">購入済み</span>
+										v-show="!isMyProduct"
+										:disabled="isMyProduct || product.is_purchased">
+							<span v-if="product.is_purchased">購入済み</span>
 							<span v-else>購入</span>
 						</button>
 						
 						<!-- 購入キャンセルボタン	-->
 						<!--todo: 購入から3日以内または賞味期限1日前まではキャンセル可能-->
-						<button v-else
+						<button v-show="product.purchased_by_user"
 										@click="cancel"
 										class="c-btn p-product-detail__btn--cancel">
 							購入キャンセル
@@ -131,9 +134,9 @@
 </template>
 
 <script>
-import { OK, CREATED, UNPROCESSABLE_ENTITY } from "../util";
+import { OK } from "../../util";
 import { mapGetters } from 'vuex';
-import Loading from "./Loading";
+import Loading from "../Loading";
 import StarRating from 'vue-star-rating';
 
 export default {
@@ -151,7 +154,7 @@ export default {
 	},
 	data() {
 		return {
-			product: null,       //商品情報
+			product: {},       //商品情報
 			isLike: false,       //「いいね」しているかどうか
 			errors: null,        //エラーメッセージを格納するプロパティ
 			buttonActive: false, //TOPボタンを表示する
@@ -166,7 +169,7 @@ export default {
 		...mapGetters({
 			isLogin: 'auth/check', //true または false が返ってくる
 			userId: 'auth/userId', //ユーザーIDを取得
-			isShopUser: 'auth/isShopUser' //コンビニユーザーならtrueが入る
+			// isShopUser: 'auth/isShopUser' //コンビニユーザーならtrueが入る
 		}),
 		//自分の商品かどうかを真偽値で返す
 		isMyProduct() {
@@ -175,12 +178,6 @@ export default {
 				return true;
 			}
 		},
-		//商品が購入されているかどうかを返す
-		isPurchased() {
-			if(this.product.purchased_by_user || this.product.is_purchased) {
-				return true;
-			}
-		}
 	},
 	methods: {
 		//商品詳細情報取得
@@ -203,8 +200,11 @@ export default {
 		async onLikeClick() {
 			//ログインしていなかったらアレートを出す
 			if(!this.isLogin) {
-				alert('いいね機能を使うにはログインしてください');
-				return false;
+				if(confirm('いいね機能を使うにはログインしてください')) {
+					//ログインページに遷移
+					this.$router.push({name: 'login'});
+					return false;
+				}
 			}
 			// //自分の商品には「お気に入り」できないようにする
 			// if(this.isMyProduct) {
@@ -261,7 +261,10 @@ export default {
 		async purchase() {
 			//ユーザーがログインしているかチェック
 			if(!this.isLogin) {
-				alert('商品を購入するにはログインしてください');
+				if(confirm('商品を購入するにはログインしてください')) {
+					//ログインページに遷移
+					this.$router.push({name: 'login'});
+				}
 				return false;
 			}
 			// //自分の商品は購入できないようにする

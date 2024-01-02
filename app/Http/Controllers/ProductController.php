@@ -23,7 +23,7 @@ class ProductController extends Controller
 	//商品一覧取得
 	public function index()
 	{
-		$products = Product::with(['user', 'category'])
+		$products = Product::with(['user', 'category', 'likes', 'histories'])
 					->orderByDesc('created_at')
 					->paginate();
 		return $products;

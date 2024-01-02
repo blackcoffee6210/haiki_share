@@ -126,7 +126,9 @@ export default {
 				})
 				
 				//トップページに移動する
-				this.$router.push({name: 'index'});
+				// this.$router.push({name: 'index'});
+				//元々アクセスしたかったページにリダイレクトする
+				this.$router.push(this.$router.go(-1));
 			}
 		},
 		//エラーメッセージをクリアするメソッド

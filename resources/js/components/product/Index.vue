@@ -103,10 +103,10 @@
 </template>
 
 <script>
-import Loading    from "./Loading";
+import Loading    from "../Loading";
 import Product    from "./Product";
-import Pagination from "./Pagination";
-import { OK }     from "../util";
+import Pagination from "../Pagination";
+import { OK }     from "../../util";
 export default {
 	name: "Index",
 	props: {

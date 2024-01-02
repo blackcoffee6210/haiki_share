@@ -315,8 +315,8 @@
 </template>
 
 <script>
-import Loading from "./Loading";
-import Sidebar from "./Sidebar";
+import Loading from "../Loading";
+import Sidebar from "../Sidebar";
 import { mapGetters } from 'vuex';
 export default {
 	name: "MyPage",

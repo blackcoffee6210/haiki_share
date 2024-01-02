@@ -56,4 +56,11 @@ class UserController extends Controller
 
 		return response($user, 200);
 	}
+
+	//出品した商品取得
+	public function posted(string $id)
+	{
+		return User::find($id)->products()
+					 ->orderByDesc('products.created_at')->get();
+	}
 }

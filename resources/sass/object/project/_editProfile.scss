@@ -33,6 +33,9 @@
       border-radius: 50%;
       background: $img-color-bg;
       position: relative;
+      &__err {
+        border: 1px solid $error-color;
+      }
       &:hover {
         cursor: pointer;
       }

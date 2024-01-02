@@ -12,12 +12,12 @@ import System          from "./components/errors/System";
 import Agreement       from "./components/footer/Agreement";
 import Policy          from "./components/footer/Policy";
 import Tokutei         from "./components/footer/Tokutei";
-import EditProfile     from "./components/EditProfile";
-import Index           from "./components/Index";
-import MyPage          from "./components/MyPage";
-import ProductDetail   from "./components/ProductDetail";
-import RegisterProduct from "./components/RegisterProduct";
-
+import Index           from "./components/product/Index";
+import ProductDetail   from "./components/product/ProductDetail";
+import RegisterProduct from "./components/product/RegisterProduct";
+import EditProfile     from "./components/user/EditProfile";
+import MyPage          from "./components/user/MyPage";
+import Posted          from "./components/user/Posted";
 
 
 //VueRouterプラグインを利用する
@@ -134,6 +134,22 @@ const routes = [
     path: '/users/:id/edit-profile',
     name: 'user.editProfile',
     component: EditProfile,
+    props: true,
+    beforeEnter(to, from ,next) {
+      //ログイン状態でページにアクセスがあった場合(true)、そのまま移動させる
+      if(store.getters['auth/check']) {
+        next();
+        //ログインしていなければログイン画面に移動させる
+      } else {
+        next({name: 'login'});
+      }
+    }
+  },
+  {
+    //出品した商品一覧
+    path: '/users/:id/posted',
+    name: 'user.posted',
+    component: Posted,
     props: true,
     beforeEnter(to, from ,next) {
       //ログイン状態でページにアクセスがあった場合(true)、そのまま移動させる

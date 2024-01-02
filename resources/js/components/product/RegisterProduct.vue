@@ -135,8 +135,8 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import Loading from "./Loading";
-import { CREATED, OK, UNPROCESSABLE_ENTITY} from "../util";
+import Loading from "../Loading";
+import { CREATED, OK, UNPROCESSABLE_ENTITY} from "../../util";
 export default {
 	name: "RegisterProduct",
 	components: {

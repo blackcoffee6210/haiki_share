@@ -2,7 +2,8 @@
 	<div class="c-card p-product">
 		<!-- 詳細画面のリンク -->
 		<router-link class="c-card__link"
-								 :to="{ name: 'product.detail', params: { id: product.id.toString() }}"/>
+								 :to="{ name: 'product.detail',
+								  			params: { id: product.id.toString() }}"/>
 		
 		<!-- SOLDバッジ -->
 		<div class="c-badge" v-show="product.is_purchased">

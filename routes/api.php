@@ -28,6 +28,7 @@ Route::delete('/products/{id}/like', 'ProductController@unlike'); //お気に入
 //====================================================
 Route::get('/users/{id}', 'UserController@index'); //ユーザー情報取得
 Route::post('/users/{id}/updateProfile', 'UserController@updateProfile'); //プロフィール更新
+Route::get('/users/{id}/posted', 'UserController@posted'); //出品した商品
 
 
 Route::get('/user', function() { return Auth::user(); })->name('user'); //ログインユーザーを返す
