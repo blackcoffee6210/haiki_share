@@ -100,17 +100,7 @@ export default {
 			apiStatus: state   => state.auth.apiStatus,
 			//loginErrorMessageを参照する
 			loginErrors: state => state.auth.loginErrorMessages
-		}),
-		// ↑ 簡略化した書き方 ↑
-		// ===================================================================
-		// apiStatus() {
-		// 	//通信失敗の場合、つまりapiStatusがfalseの場合はインデックスへの移動を行わないように制御する
-		// 	return this.$store.state.auth.apiStatus;
-		// },
-		// loginErrors() {
-		// 	return this.$store.state.auth.loginErrorMessages
-		// }
-		// ====================================================================
+		})
 	},
 	methods: {
 		//ログイン

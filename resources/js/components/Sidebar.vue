@@ -30,6 +30,11 @@
 									 v-if="isShopUser"
 									 :to="{ name: 'user.purchased', params: { id: id.toString() }}" >購入された商品一覧
 			</router-link>
+			<!-- キャンセルした商品一覧 -->
+			<router-link class="p-sidebar__link"
+									 v-if="!isShopUser"
+									 :to="{ name: 'user.canceled', params: { id: id.toString() }}" >キャンセルした商品一覧
+			</router-link>
 			<!-- いいねした商品一覧 -->
 			<router-link class="p-sidebar__link"
 									 v-if="!isShopUser"

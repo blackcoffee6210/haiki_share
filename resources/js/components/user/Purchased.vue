@@ -2,14 +2,19 @@
 	<div class="l-main">
 		<main class="l-main__2column">
 			<div class="p-list">
-				<h2 class="c-title p-list__title">購入された商品一覧</h2>
+				<h2 class="c-title p-list__title">
+					<span v-show="isShopUser">購入された商品一覧</span>
+					<span v-show="!isShopUser">購入した商品一覧</span>
+				</h2>
 				
 				<!-- ローディング -->
 				<Loading v-show="loading" />
 				
 				<!-- 商品がなければ表示する -->
 				<div v-if="!products.length"
-						 class="p-list__no-product">購入された商品はありません
+						 class="p-list__no-product">
+					<span v-show="isShopUser">購入された商品はありません</span>
+					<span v-show="!isShopUser">購入した商品はありません</span>
 				</div>
 				
 				<div class="p-list__card-container">
@@ -30,6 +35,10 @@
 						<router-link class="c-card__link"
 												 :to="{ name: 'product.detail',
 												 				params: { id: product.id.toString() }}" />
+						<!-- SOLDバッジ -->
+						<div class="c-badge" v-show="product.is_purchased">
+							<div class="c-badge__sold">SOLD</div>
+						</div>
 						<!-- 商品の画像	-->
 						<img class="p-list__img"
 								 :src="product.image"
@@ -91,6 +100,7 @@ import Loading from "../Loading";
 import Product from "../product/Product";
 import Sidebar from "../Sidebar";
 import { OK }  from "../../util";
+import { mapGetters } from 'vuex';
 
 export default {
 	name: "Purchased",
@@ -110,6 +120,11 @@ export default {
 			loading: false,
 			products: {}
 		}
+	},
+	computed: {
+		...mapGetters({
+			isShopUser: 'auth/isShopUser'
+		})
 	},
 	methods: {
 		//購入された商品一覧

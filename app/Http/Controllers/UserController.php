@@ -79,21 +79,11 @@ class UserController extends Controller
 					 ->orderByDesc('products.created_at')->get();
 	}
 
-	//購入された商品一覧
-	//todo: スキップしたからあとで実装!
+	//購入した商品一覧(利用者)
 	public function purchased(string $id)
 	{
-//		$products = Product::where('user_id', $id)
-//						   ->orderByDesc('products.created_at')->get();
-//		dd($products->toArray());
-
-//		$products = Product::find($id)->histories()
-//						   ->orderByDesc('histories.created_at')->get();
-//		dd($products->toArray());
-
-//		$products = User::find($id)->histories()
-//						->orderByDesc('histories.created_at')->get();
-//		dd($products->toArray());
-//		return $products;
+		$products = User::find($id)->histories()
+						->orderByDesc('histories.created_at')->get();
+		return $products;
 	}
 }
