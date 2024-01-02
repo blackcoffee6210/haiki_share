@@ -30,26 +30,31 @@
 									 v-if="isShopUser"
 									 :to="{ name: 'user.purchased', params: { id: id.toString() }}" >購入された商品一覧
 			</router-link>
-			<!-- お気に入り一覧 -->
+			<!-- いいねした商品一覧 -->
 			<router-link class="p-sidebar__link"
 									 v-if="!isShopUser"
-									 :to="{ name: 'user.liked', params: { id: id.toString() }}" >お気に入り一覧
+									 :to="{ name: 'user.liked', params: { id: id.toString() }}" >いいねした商品一覧
+			</router-link>
+			<!-- いいねされた商品一覧 -->
+			<router-link class="p-sidebar__link"
+									 v-if="isShopUser"
+									 :to="{ name: 'user.liked', params: { id: id.toString() }}" >いいねされた商品一覧
 			</router-link>
 			<!-- 出品した商品一覧 -->
 			<router-link class="p-sidebar__link"
 									 v-if="isShopUser"
 									 :to="{ name: 'user.posted', params: { id: id.toString() }}" >出品した商品一覧
 			</router-link>
-			<!--	レビューされた商品一覧 -->
-			<a class="p-sidebar__link" v-if="isShopUser">レビューされた商品一覧</a>
-			<!--<router-link class="p-sidebar__link"-->
-			<!--						 v-if="isShopUser"-->
-			<!--						 :to="{ name: 'user.reviewed', params: { id: id.toString() }}" >-->
-			<!--</router-link>-->
 			<!--	レビューした商品一覧 -->
-			<a class="p-sidebar__link" v-if="!isShopUser">レビューした商品一覧</a>
+			<a class="p-sidebar__link" v-if="!isShopUser">レビューしたユーザー一覧</a>
 			<!--<router-link class="p-sidebar__link"-->
 			<!--						 v-if="!isShopUser"-->
+			<!--						 :to="{ name: 'user.reviewed', params: { id: id.toString() }}" >-->
+			<!--</router-link>-->
+			<!-- レビューされたユーザー一覧 -->
+			<a class="p-sidebar__link" v-if="isShopUser">レビューされたユーザー一覧</a>
+			<!--<router-link class="p-sidebar__link"-->
+			<!--						 v-if="isShopUser"-->
 			<!--						 :to="{ name: 'user.reviewed', params: { id: id.toString() }}" >-->
 			<!--</router-link>-->
 			<!-- ログアウト -->

@@ -84,13 +84,13 @@
 						</button>
 						
 						<!-- 商品購入ボタン	-->
-						<!-- 利用者ユーザーかつ自分の商品かつ自分が購入してないときに出す -->
-						<!-- 自分の商品または購入されている商品は押せない -->
+						<!-- 利用者ユーザー、かつ自分の商品じゃない、かつ自分が購入してないときに出す -->
+						<!-- コンビニユーザー、または自分の商品、または購入されている商品は押せない -->
 						<!-- todo: 購入後にコンビニユーザーにレビューを投稿できるようにする -->
 						<button class="c-btn p-product-detail__btn--purchase"
 										@click="purchase"
 										v-show="!isShopUser && !isMyProduct && !product.purchased_by_user"
-										:disabled="isMyProduct || product.is_purchased">
+										:disabled="isShopUser || isMyProduct || product.is_purchased">
 							<span v-if="product.is_purchased">購入済み</span>
 							<span v-else>購入</span>
 						</button>

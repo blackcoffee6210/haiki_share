@@ -19,6 +19,7 @@ import EditProduct     from "./components/product/EditProduct";
 import EditProfile     from "./components/user/EditProfile";
 import MyPage          from "./components/user/MyPage";
 import Posted          from "./components/user/Posted";
+import Purchased       from "./components/user/Purchased";
 
 
 
@@ -175,6 +176,20 @@ const routes = [
         next();
       //ログインしていなければログイン画面に移動させる
       } else {
+        next({name: 'login'});
+      }
+    }
+  },
+  {
+    //購入された商品一覧
+    path: '/users/:id/purchased',
+    name: 'user.purchased',
+    component: Purchased,
+    beforeEnter(to, from, next) {
+      //todo: ユーザーによって処理を分ける
+      if(store.getters['auth/check']) {
+        next();
+      }else {
         next({name: 'login'});
       }
     }

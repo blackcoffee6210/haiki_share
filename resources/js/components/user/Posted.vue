@@ -63,11 +63,16 @@
 								</div>
 							</div>
 							<!-- ボタン	-->
-							<!-- 詳細ボタンはなし(商品カードをクリックすると遷移するので) -->
+							
 							<div class="p-list__btn-container">
 								<router-link class="c-btn p-list__btn p-list__btn--edit"
 														 v-show="!product.is_purchased"
 														 :to="{ name: 'product.edit', params: { id: product.id.toString() }}">編集する
+								</router-link>
+								<!-- 購入していたら詳細ボタンを表示(CSS型崩れ防止) -->
+								<router-link class="c-btn p-list__btn p-list__btn--detail"
+														 v-show="product.is_purchased"
+														 :to="{ name: 'product.detail', params: { id: product.id.toString() }}">詳細を見る
 								</router-link>
 							</div>
 						</div>

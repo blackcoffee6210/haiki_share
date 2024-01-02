@@ -92,10 +92,10 @@
     font-size: $font-size_s;
     border: 1px solid $gray-color;
     border-radius: 20px;
-    padding: 0 $space_m;
+    padding: 0 $space_s;
     @include mq() {
       font-size: $font-size_xs;
-      padding: 2px 8px;
+      padding: 2px $space_s;
     }
   }
 }
