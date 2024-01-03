@@ -18717,6 +18717,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     return {
       loading: false,
       products: {},
+      product: {},
       isLike: true
     };
   },
@@ -18767,7 +18768,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         return _regeneratorRuntime().wrap(function _callee2$(_context2) {
           while (1) switch (_context2.prev = _context2.next) {
             case 0:
-              //引数をプロパティにセット
+              //引数の値をプロパティにセット
               _this2.product = product;
               if (!confirm('お気に入りを解除しますか?')) {
                 _context2.next = 13;
@@ -18797,14 +18798,15 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               });
 
               //マイページに遷移する
-              // this.$router.push({name: 'user.mypage', params: {id: this.id}});
-              //自画面に遷移する
               _this2.$router.push({
-                name: 'user.liked',
+                name: 'user.mypage',
                 params: {
                   id: _this2.id
                 }
-              })["catch"](function () {});
+              });
+
+              //自画面に遷移する
+              // this.$router.push({name: 'user.liked', params: {id: this.id}}).catch(() => {} );
             case 13:
             case "end":
               return _context2.stop();
@@ -19080,27 +19082,77 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       }))();
     },
     //購入キャンセル処理
-    cancel: function cancel() {
-      if (confirm('購入をキャンセルしますか？')) {
-        console.log('購入キャンセルしました');
-      }
+    cancel: function cancel(product) {
+      var _this2 = this;
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+        var response;
+        return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+          while (1) switch (_context2.prev = _context2.next) {
+            case 0:
+              //プロパティに値をセット
+              _this2.product = product;
+              if (!confirm('購入をキャンセルしますか？')) {
+                _context2.next = 14;
+                break;
+              }
+              //ローディングを表示する
+              _this2.loading = true;
+              //API通信
+              _context2.next = 5;
+              return axios.post("/api/products/".concat(_this2.product.id, "/cancel"));
+            case 5:
+              response = _context2.sent;
+              //API通信が終わったらローディングを非表示にする
+              _this2.loading = false;
+
+              //responseステータスがOKじゃなかったらエラーコードをセット
+              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_3__["OK"])) {
+                _context2.next = 10;
+                break;
+              }
+              _this2.$store.commit('error/setCode', response.status);
+              return _context2.abrupt("return", false);
+            case 10:
+              //購入キャンセルをしたのでpurchased_by_userにfalseをセット
+              _this2.product.purchased_by_user = false;
+              //canceled_by_userにtrueをセット
+              _this2.product.canceled_by_user = true;
+
+              //メッセージ登録
+              _this2.$store.commit('message/setContent', {
+                content: '購入をキャンセルしました'
+              });
+
+              //マイページに遷移する
+              _this2.$router.push({
+                name: 'user.mypage',
+                params: {
+                  id: _this2.id
+                }
+              });
+            case 14:
+            case "end":
+              return _context2.stop();
+          }
+        }, _callee2);
+      }))();
     }
   },
   watch: {
     $route: {
       handler: function handler() {
-        var _this2 = this;
-        return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-          return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-            while (1) switch (_context2.prev = _context2.next) {
+        var _this3 = this;
+        return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+          return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+            while (1) switch (_context3.prev = _context3.next) {
               case 0:
-                _context2.next = 2;
-                return _this2.getProducts();
+                _context3.next = 2;
+                return _this3.getProducts();
               case 2:
               case "end":
-                return _context2.stop();
+                return _context3.stop();
             }
-          }, _callee2);
+          }, _callee3);
         }))();
       },
       //immediateをtrueにすると、コンポーネントが生成されたタイミングでも実行する

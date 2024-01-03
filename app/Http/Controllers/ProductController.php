@@ -123,7 +123,8 @@ class ProductController extends Controller
 		//何回実行しても1個しかいいねがつかないように、まず特定の商品およびログインユーザーに紐づくいいねを削除(detach) してから、新たに追加(attach)する
 		$product->likes()->detach(Auth::user()->id);
 		$product->likes()->attach(Auth::user()->id);
-		return ['product_id' => $id];
+//		return ['product_id' => $id];
+		return response($product, 200);
 	}
 
 	//お気に入り解除
@@ -134,8 +135,10 @@ class ProductController extends Controller
 		if(!$product) {
 			abort(404);
 		}
+		//likesテーブルのいいねを削除する
 		$product->likes()->detach(Auth::user()->id);
-		return $product;
+//		return $product;
+		return response($product, 200);
 	}
 
 	//商品購入
@@ -174,13 +177,28 @@ class ProductController extends Controller
 		//売り手にメールを送信
 		Mail::to($seller_email)->send(new PurchasedSellerNotification($params));
 
-		return ['product_id' => $id];
+//		return ['product_id' => $id];
+		return response($product, 200);
 	}
 
 	//購入キャンセル
 	public function cancel(Request $request, string $id)
 	{
+		//テーブルから情報を取得する
+		$product = Product::with('histories')->find($id);
+
+		//$productsが空だったら以下の処理を行う
+		if(!$product) {
+			abort(404);
+		}
+		//historiesテーブルのデータを削除する
+		$product->histories()->detach(Auth::user()->id);
+		//cancelsテーブルにデータを追加する
+		$product->cancels()->attach(Auth::user()->id);
+
 		//todo: メールを送る
+
+		return response($product, 200);
 	}
 }
 

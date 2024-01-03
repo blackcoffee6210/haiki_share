@@ -150,9 +150,35 @@ export default {
 			console.log('productの中身：' + this.products);
 		},
 		//購入キャンセル処理
-		cancel() {
+		async cancel(product) {
+			//プロパティに値をセット
+			this.product = product;
+			
 			if(confirm('購入をキャンセルしますか？')) {
-				console.log('購入キャンセルしました');
+				//ローディングを表示する
+				this.loading = true;
+				//API通信
+				const response = await axios.post(`/api/products/${this.product.id}/cancel`);
+				//API通信が終わったらローディングを非表示にする
+				this.loading = false;
+				
+				//responseステータスがOKじゃなかったらエラーコードをセット
+				if (response.status !== OK) {
+					this.$store.commit('error/setCode', response.status);
+					return false;
+				}
+				//購入キャンセルをしたのでpurchased_by_userにfalseをセット
+				this.product.purchased_by_user = false;
+				//canceled_by_userにtrueをセット
+				this.product.canceled_by_user = true;
+				
+				//メッセージ登録
+				this.$store.commit('message/setContent', {
+					content: '購入をキャンセルしました',
+				});
+				
+				//マイページに遷移する
+				this.$router.push({name: 'user.mypage', params: {id: this.id}});
 			}
 		},
 	},

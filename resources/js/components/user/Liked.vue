@@ -103,6 +103,7 @@ export default {
 		return {
 			loading: false,
 			products: {},
+			product: {},
 			isLike: true
 		}
 	},
@@ -131,11 +132,12 @@ export default {
 		},
 		//お気に入りを削除する
 		async unlike(product) {
-			//引数をプロパティにセット
+			//引数の値をプロパティにセット
 			this.product = product;
 			
 			if(confirm('お気に入りを解除しますか?')) {
 				//API通信
+				// const response = await axios.delete(`/api/products/${this.product.id}/unlike`);
 				const response = await axios.delete(`/api/products/${this.product.id}/unlike`);
 				
 				//responseステータスがOKじゃなかったらエラーコードをセット
@@ -157,10 +159,10 @@ export default {
 				});
 				
 				//マイページに遷移する
-				// this.$router.push({name: 'user.mypage', params: {id: this.id}});
+				this.$router.push({name: 'user.mypage', params: {id: this.id}});
+				
 				//自画面に遷移する
-				this.$router.push({name: 'user.liked', params: {id: this.id}})
-										.catch(() => {} );
+				// this.$router.push({name: 'user.liked', params: {id: this.id}}).catch(() => {} );
 			}
 		}
 	},

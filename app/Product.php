@@ -25,7 +25,7 @@ class Product extends Model
 	protected $appends = [
 		'user_image', 'user_name', 'email', 'branch', 'category_name',
 		'likes_count', 'liked_by_user', 'purchased_by_user', 'is_purchased',
-
+		'canceled_by_user'
 	];
 
 	//$visibleはJSONに含める属性を定義する
@@ -35,7 +35,7 @@ class Product extends Model
 		'expire', 'deleted_at', 'created_at', 'updated_at',
 		'user_image', 'user_name', 'email', 'branch', 'category_name',
 		'likes_count', 'liked_by_user', 'purchased_by_user', 'is_purchased',
-
+		'canceled_by_user'
 	];
 
 	//=====================================================
@@ -142,31 +142,59 @@ class Product extends Model
 		//historiesテーブルにカウントがある(=購入されている)のでtrueを返す
 		return ($this->histories->count()) ? true : false;
 	}
+	/**
+	 * アクセサ - canceled_by_user
+	 * @return boolean
+	 */
+	//リクエストしたユーザーがキャンセルしたかどうかを取得するアクセサ
+	//trueまたはfalseを返す
+	public function getCanceledByUserAttribute()
+	{
+		//ユーザーがゲストの場合(ログインしていなければ)falseを返す
+		if(Auth::guest() ) {
+			return false;
+		}
+		//Laravelのコレクションメソッドcontainを使って、
+		//ログインユーザーのIDと合致する商品キャンセルが含まれるか調べる
+		return $this->cancels->contains(function($user) {
+			//一致したらtrueを返す
+			return $user->id === Auth::user()->id;
+		});
+	}
 
 
 	//======================================================
 	//リレーション
 	//======================================================
+	//ユーザーテーブル
 	public function user() {
 		return $this->belongsTo('App\User');
 	}
+	//カテゴリーテーブル
 	public function category() {
 		return $this->belongsTo('App\Category');
 	}
-	//likesテーブルを中間テーブルとしたproductsテーブルとusersテーブルの多対多の関係を表している
-	//今回はlikesテーブルに当たるモデルクラスは作成しない
-	//特に外部キーしか中身のない中間テーブルの場合はモデルクラスは作成する必要のない場合が多い
-	//laravelのリレーション機能を使えば、関連するモデルから間接的に中間テーブルを操作できる
+	//お気に入りテーブル
 	public function likes()
 	{
+		//likesテーブルを中間テーブルとしたproductsテーブルとusersテーブルの多対多の関係を表している
+		//今回はlikesテーブルに当たるモデルクラスは作成しない
+		//特に外部キーしか中身のない中間テーブルの場合はモデルクラスは作成する必要のない場合が多い
+		//laravelのリレーション機能を使えば、関連するモデルから間接的に中間テーブルを操作できる
 		return $this->belongsToMany('App\User', 'likes')
 					->withTimestamps();
 		//withTimestampsは、このリレーションメソッドを使ってlikesテーブルにデータを挿入したとき、
 		//created_atおよびupdated_atカラムを更新させるための指定の仕方
 	}
+	//購入履歴テーブル
 	public function histories()
 	{
 		return $this->belongsToMany('App\User', 'histories')
 					->withTimestamps();
+	}
+	//購入キャンセルテーブル
+	public function cancels()
+	{
+		return $this->belongsToMany('App\User', 'cancels')->withTimestamps();
 	}
 }

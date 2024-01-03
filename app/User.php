@@ -74,4 +74,9 @@ class User extends Authenticatable
 	{
 		return $this->belongsToMany('App\Product', 'histories')->withTimestamps();
 	}
+	//購入キャンセルテーブル
+	public function cancels()
+	{
+		return $this->belongsToMany('App\Product', 'cancels')->withTimestamps();
+	}
 }
