@@ -89,39 +89,24 @@
     }
   }
   &__btn {
+    margin-left: $space_m;
     &--edit {
       margin-right: $space_m;
     }
     &--like {
-      background: $white;
+      width: 150px;
       border-radius: 20px;
-      border: 1px solid $gray-color;
-      padding: $space_s $space_m;
-      text-align: center;
       @include mq() {
         font-size: $font-size_m;
         padding-top: 8px;
         padding-bottom: 8px;
         width: 50%;
       }
-      &:hover {
-        opacity: .8;
-        transition: .3s;
-      }
     }
     &--purchase {
       margin-left: $space_m;
       @include mq() {
         width: 50%;
-      }
-    }
-    &--cancel {
-      background: $white;
-      border: 1px solid $gray-color;
-      color: $font-color;
-      margin-left: $space_m;
-      &:hover {
-        color: $font-color;
       }
     }
   }

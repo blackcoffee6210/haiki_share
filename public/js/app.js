@@ -17953,7 +17953,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           while (1) switch (_context4.prev = _context4.next) {
             case 0:
               _context4.next = 2;
-              return axios["delete"]("/api/products/".concat(_this4.id, "/like"));
+              return axios["delete"]("/api/products/".concat(_this4.id, "/unlike"));
             case 2:
               response = _context4.sent;
               if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_0__["OK"])) {
@@ -18717,7 +18717,6 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     return {
       loading: false,
       products: {},
-      product: {},
       isLike: true
     };
   },
@@ -18798,12 +18797,14 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               });
 
               //マイページに遷移する
+              // this.$router.push({name: 'user.mypage', params: {id: this.id}});
+              //自画面に遷移する
               _this2.$router.push({
-                name: 'user.mypage',
+                name: 'user.liked',
                 params: {
                   id: _this2.id
                 }
-              });
+              })["catch"](function () {});
             case 13:
             case "end":
               return _context2.stop();
@@ -19077,6 +19078,12 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           }
         }, _callee);
       }))();
+    },
+    //購入キャンセル処理
+    cancel: function cancel() {
+      if (confirm('購入をキャンセルしますか？')) {
+        console.log('購入キャンセルしました');
+      }
     }
   },
   watch: {
@@ -21421,7 +21428,7 @@ var render = function render() {
       }
     }
   }, [_vm._v("編集する\n\t\t\t\t\t")]) : _vm._e(), _vm._v(" "), _c("button", {
-    staticClass: "p-product-detail__btn--like",
+    staticClass: "c-btn c-btn--white p-product-detail__btn--like",
     style: {
       "border-color": [_vm.isLike ? "#ff3c53" : "lightgray"],
       background: [_vm.isLike ? "#ffd5da" : "white"]
@@ -21463,7 +21470,7 @@ var render = function render() {
       value: _vm.product.purchased_by_user,
       expression: "product.purchased_by_user"
     }],
-    staticClass: "c-btn p-product-detail__btn--cancel",
+    staticClass: "c-btn c-btn--white p-product-detail__btn",
     on: {
       click: _vm.cancel
     }
@@ -23018,17 +23025,14 @@ var render = function render() {
       staticClass: "p-list__date"
     }, [_vm._v("\n\t\t\t\t\t\t\t\t\t" + _vm._s(_vm._f("moment")(product.created_at)) + "\n\t\t\t\t\t\t\t\t")])])]), _vm._v(" "), _c("div", {
       staticClass: "p-list__btn-container"
-    }, [_c("router-link", {
-      staticClass: "c-btn p-list__btn p-list__btn--detail",
-      attrs: {
-        to: {
-          name: "product.detail",
-          params: {
-            id: product.id.toString()
-          }
+    }, [_c("button", {
+      staticClass: "c-btn c-btn--white p-list__btn p-list__btn--cancel",
+      on: {
+        click: function click($event) {
+          return _vm.cancel(product);
         }
       }
-    }, [_vm._v("詳細を見る\n\t\t\t\t\t\t\t")])], 1)])], 1);
+    }, [_vm._v("購入キャンセル\n\t\t\t\t\t\t\t")])])])], 1);
   }), 0)], 1)]), _vm._v(" "), _c("Sidebar", {
     attrs: {
       id: _vm.id

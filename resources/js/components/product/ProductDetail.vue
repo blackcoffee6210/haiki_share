@@ -65,7 +65,7 @@
 						
 						<!-- お気に入りボタン	-->
 						<!-- 自分の商品または購入されている商品は押せない -->
-						<button class="p-product-detail__btn--like"
+						<button class="c-btn c-btn--white p-product-detail__btn--like"
 										:style="{
 											'border-color': [isLike ? '#ff3c53' : 'lightgray'],
 											'background'  : [isLike ? '#ffd5da' : 'white']
@@ -100,7 +100,7 @@
 						<!--todo: 購入から3日以内または賞味期限1日前まではキャンセル可能-->
 						<button v-show="product.purchased_by_user"
 										@click="cancel"
-										class="c-btn p-product-detail__btn--cancel">
+										class="c-btn c-btn--white p-product-detail__btn">
 							購入キャンセル
 						</button>
 					
@@ -244,7 +244,7 @@ export default {
 		},
 		//お気に入り解除
 		async unlike() {
-			const response = await axios.delete(`/api/products/${this.id}/like`);
+			const response = await axios.delete(`/api/products/${this.id}/unlike`);
 			
 			//responseステータスがOKじゃなかったらエラーコードをセット
 			if(response.status !== OK) {
@@ -268,26 +268,6 @@ export default {
 				}
 				return false;
 			}
-			// //自分の商品は購入できないようにする
-			// if(this.isMyProduct) {
-			// 	alert('自分の商品は購入できません');
-			// 	return false;
-			// }
-			// //自分が購入した商品は購入できないようにする
-			// if(this.product.purchased_by_user) {
-			// 	alert('この商品はすでに購入済みです');
-			// 	return false;
-			// }
-			// //購入されている商品は購入できないようにする
-			// if(this.isPurchased) {
-			// 	alert('この商品はすでに購入されています');
-			// 	return false;
-			// }
-			// //コンビニユーザーは商品を購入できないようにする
-			// if(this.isShopUser) {
-			// 	alert('コンビニユーザーは商品を購入できません');
-			// 	return false;
-			// }
 			//アレートで「購入しますか?」と表示し、「はい」を押すと以下の処理を実行
 			if(confirm('購入しますか？')) {
 				//ローディングを表示する

@@ -79,9 +79,13 @@
 							</div>
 							<!-- ボタン	-->
 							<div class="p-list__btn-container">
-								<router-link class="c-btn p-list__btn p-list__btn--detail"
-														 :to="{ name: 'product.detail', params: { id: product.id.toString() }}">詳細を見る
-								</router-link>
+								<!--<router-link class="c-btn p-list__btn p-list__btn&#45;&#45;detail"-->
+								<!--						 :to="{ name: 'product.detail', params: { id: product.id.toString() }}">詳細を見る-->
+								<!--</router-link>-->
+								<!-- 購入キャンセルボタン -->
+								<button class="c-btn c-btn--white p-list__btn p-list__btn--cancel"
+												@click="cancel(product)">購入キャンセル
+								</button>
 							</div>
 						</div>
 					</div>
@@ -144,7 +148,13 @@ export default {
 			//プロパティにデータをセット
 			this.products = response.data;
 			console.log('productの中身：' + this.products);
-		}
+		},
+		//購入キャンセル処理
+		cancel() {
+			if(confirm('購入をキャンセルしますか？')) {
+				console.log('購入キャンセルしました');
+			}
+		},
 	},
 	watch: {
 		$route: {

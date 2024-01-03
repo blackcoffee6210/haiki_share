@@ -103,7 +103,6 @@ export default {
 		return {
 			loading: false,
 			products: {},
-			product: {},
 			isLike: true
 		}
 	},
@@ -158,7 +157,10 @@ export default {
 				});
 				
 				//マイページに遷移する
-				this.$router.push({name: 'user.mypage', params: {id: this.id}});
+				// this.$router.push({name: 'user.mypage', params: {id: this.id}});
+				//自画面に遷移する
+				this.$router.push({name: 'user.liked', params: {id: this.id}})
+										.catch(() => {} );
 			}
 		}
 	},
