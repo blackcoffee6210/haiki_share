@@ -21,9 +21,9 @@ Route::get('/products/{id}',           'ProductController@show');     //商品�
 Route::post('/products',               'ProductController@store');    //商品登録
 Route::post('/products/{id}/update',   'ProductController@update');   //商品更新
 Route::post('/products/{id}/purchase', 'ProductController@purchase'); //商品購入
-Route::post('/products/{id}/cancel',   'ProductController@cancel');   //商品キャンセル
 Route::post('/products/{id}/like',     'ProductController@like');     //お気に入り登録
-Route::delete('/products/{id}/unlike',   'ProductController@unlike');   //お気に入り解除
+Route::delete('/products/{id}/unlike', 'ProductController@unlike');   //お気に入り解除
+Route::post('/products/{id}/cancel',   'ProductController@cancel');   //商品キャンセル
 
 //=================================================================
 // User

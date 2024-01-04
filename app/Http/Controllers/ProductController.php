@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProduct;
 use App\Http\Requests\UpdateProduct;
+use App\Mail\CanceledBuyerNotification;
+use App\Mail\CanceledSellerNotification;
 use App\Mail\PurchasedBuyerNotification;
 use App\Mail\PurchasedSellerNotification;
 use App\Product;
@@ -186,9 +188,13 @@ class ProductController extends Controller
 	{
 		//テーブルから情報を取得する
 		$product = Product::with('histories')->find($id);
+		//買い手のメールアドレス
+		$buyer_email = Auth::user()->email;
+		//売り手のメールアドレス
+		$seller_email = $product->email;
 
-		//$productsが空だったら以下の処理を行う
-		if(!$product) {
+		//変数が一つでも空だったら以下の処理を行う
+		if(!$product || !$buyer_email || !$seller_email) {
 			abort(404);
 		}
 		//historiesテーブルのデータを削除する
@@ -197,6 +203,21 @@ class ProductController extends Controller
 		$product->cancels()->attach(Auth::user()->id);
 
 		//todo: メールを送る
+		//メール送信機能実装
+		$params = [
+			'product_id'   => $request->id,
+			'user_name'    => Auth::user()->name,
+			'shop_name'    => $product->user_name,
+			'product_name' => $request->name,
+			'detail'       => $request->detail,
+			'price'        => $request->price,
+			'expire'       => $request->expire,
+			'canceled_at'  => Carbon::now()
+		];
+		//買い手にメールを送信
+		Mail::to($buyer_email)->send(new CanceledBuyerNotification($params));
+		//売り手にメールを送信
+		Mail::to($seller_email)->send(new CanceledSellerNotification($params));
 
 		return response($product, 200);
 	}

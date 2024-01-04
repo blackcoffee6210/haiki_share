@@ -1,12 +1,13 @@
 {{ $params['shop_name'] }}さん<br>
-商品が購入されました！<br>
+商品がキャンセルされました。<br>
 <br>
 ユーザー名: {{ $params['user_name'] }}<br>
+キャンセル日時: {{ $params['canceled_at'] }}<br>
 商品名: {{ $params['product_name'] }}<br>
 内容: {{ $params['detail'] }}<br>
 金額: {{ $params['price'] }}円<br>
-購入日時: {{ $params['purchased_at'] }}<br>
+賞味期限: {{ $params['expire'] }}<br>
 <br>
 <a href="http://127.0.0.1:8001/products/{{ $params['product_id'] }}">
-    購入された商品を表示する
+    キャンセルされた商品を表示する
 </a>

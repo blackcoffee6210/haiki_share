@@ -121,7 +121,8 @@ export default {
 	data() {
 		return {
 			loading: false,
-			products: {}
+			products: {},
+			product: {}
 		}
 	},
 	computed: {
@@ -132,7 +133,6 @@ export default {
 	methods: {
 		//購入された商品一覧
 		async getProducts() {
-			console.log('商品を取得します');
 			//ローディングを表示する
 			this.loading = true;
 			//API通信
@@ -158,7 +158,7 @@ export default {
 				//ローディングを表示する
 				this.loading = true;
 				//API通信
-				const response = await axios.post(`/api/products/${this.product.id}/cancel`);
+				const response = await axios.post(`/api/products/${this.product.id}/cancel`, this.product);
 				//API通信が終わったらローディングを非表示にする
 				this.loading = false;
 				

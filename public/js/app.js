@@ -19037,7 +19037,8 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
   data: function data() {
     return {
       loading: false,
-      products: {}
+      products: {},
+      product: {}
     };
   },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_4__["mapGetters"])({
@@ -19052,29 +19053,28 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         return _regeneratorRuntime().wrap(function _callee$(_context) {
           while (1) switch (_context.prev = _context.next) {
             case 0:
-              console.log('商品を取得します');
               //ローディングを表示する
               _this.loading = true;
               //API通信
-              _context.next = 4;
+              _context.next = 3;
               return axios.get("/api/users/".concat(_this.id, "/purchased"));
-            case 4:
+            case 3:
               response = _context.sent;
               //API通信が終わったらローディングを非表示にする
               _this.loading = false;
 
               //responseステータスがOKじゃなかったらエラーコードをセット
               if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_3__["OK"])) {
-                _context.next = 9;
+                _context.next = 8;
                 break;
               }
               _this.$store.commit('error/setCode', response.status);
               return _context.abrupt("return", false);
-            case 9:
+            case 8:
               //プロパティにデータをセット
               _this.products = response.data;
               console.log('productの中身：' + _this.products);
-            case 11:
+            case 10:
             case "end":
               return _context.stop();
           }
@@ -19099,7 +19099,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               _this2.loading = true;
               //API通信
               _context2.next = 5;
-              return axios.post("/api/products/".concat(_this2.product.id, "/cancel"));
+              return axios.post("/api/products/".concat(_this2.product.id, "/cancel"), _this2.product);
             case 5:
               response = _context2.sent;
               //API通信が終わったらローディングを非表示にする
