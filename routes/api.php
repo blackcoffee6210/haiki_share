@@ -34,9 +34,12 @@ Route::post('/users/{id}/updatePassword', 'UserController@updatePassword'); //�
 Route::get('/users/{id}/posted',          'UserController@posted');         //出品した商品一覧
 Route::get('/users/{id}/purchased',       'UserController@purchased');      //購入した商品一覧
 Route::get('/users/{id}/liked',           'UserController@liked');          //いいねした商品一覧
+Route::get('/users/{id}/canceled',        'UserController@canceled');       //キャンセルした商品一覧
 
 
-
+//=================================================================
+// Other
+//=================================================================
 Route::get('/refresh-token', function(Request $request) { //トークンリフレッシュ
 	$request->session()->regenerateToken();
 	return response()->json();

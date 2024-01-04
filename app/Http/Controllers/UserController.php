@@ -89,4 +89,10 @@ class UserController extends Controller
 	{
 		return User::find($id)->likes()->orderByDesc('likes.created_at')->get();
 	}
+
+	//キャンセルした商品一覧(利用者)
+	public function canceled(string $id)
+	{
+		return User::find($id)->cancels()->orderByDesc('cancels.created_at')->get();
+	}
 }

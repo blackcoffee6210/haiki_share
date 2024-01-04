@@ -12,6 +12,11 @@
 									 v-if="isShopUser"
 									 :to="{ name: 'product.register', params: { id: id.toString() }}" >出品する
 			</router-link>
+			<!-- 出品した商品一覧 -->
+			<router-link class="p-sidebar__link"
+									 v-if="isShopUser"
+									 :to="{ name: 'user.posted', params: { id: id.toString() }}" >出品した商品一覧
+			</router-link>
 			<!-- プロフィール編集	-->
 			<router-link class="p-sidebar__link"
 									 :to="{ name: 'user.editProfile', params: { id: id.toString() }}" >プロフィール編集
@@ -35,6 +40,11 @@
 									 v-if="!isShopUser"
 									 :to="{ name: 'user.canceled', params: { id: id.toString() }}" >キャンセルした商品一覧
 			</router-link>
+			<!-- キャンセルされた商品一覧 -->
+			<router-link class="p-sidebar__link"
+									 v-if="isShopUser"
+									 :to="{ name: 'user.canceled', params: { id: id.toString() }}" >キャンセルした商品一覧
+			</router-link>
 			<!-- いいねした商品一覧 -->
 			<router-link class="p-sidebar__link"
 									 v-if="!isShopUser"
@@ -44,11 +54,6 @@
 			<router-link class="p-sidebar__link"
 									 v-if="isShopUser"
 									 :to="{ name: 'user.liked', params: { id: id.toString() }}" >いいねされた商品一覧
-			</router-link>
-			<!-- 出品した商品一覧 -->
-			<router-link class="p-sidebar__link"
-									 v-if="isShopUser"
-									 :to="{ name: 'user.posted', params: { id: id.toString() }}" >出品した商品一覧
 			</router-link>
 			<!--	レビューした商品一覧 -->
 			<a class="p-sidebar__link" v-if="!isShopUser">レビューしたユーザー一覧</a>

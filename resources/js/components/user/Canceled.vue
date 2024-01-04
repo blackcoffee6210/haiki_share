@@ -3,8 +3,8 @@
 		<main class="l-main__2column">
 			<div class="p-list">
 				<h2 class="c-title p-list__title">
-					<span v-show="isShopUser">購入された商品一覧</span>
-					<span v-show="!isShopUser">購入した商品一覧</span>
+					<span v-show="isShopUser">キャンセルされた商品一覧</span>
+					<span v-show="!isShopUser">キャンセルした商品一覧</span>
 				</h2>
 				
 				<!-- ローディング -->
@@ -13,19 +13,19 @@
 				<!-- 商品がなければ表示する -->
 				<div v-if="!products.length"
 						 class="p-list__no-product">
-					<span v-show="isShopUser">購入された商品はありません</span>
-					<span v-show="!isShopUser">購入した商品はありません</span>
+					<span v-show="isShopUser">キャンセルされた商品はありません</span>
+					<span v-show="!isShopUser">キャンセルした商品はありません</span>
 				</div>
 				
 				<div class="p-list__card-container" v-show="!loading">
-				
-			<!--		&lt;!&ndash; Productコンポーネント &ndash;&gt;-->
-			<!--		<Product v-show="!loading"-->
-			<!--						 v-for="product in products"-->
-			<!--						 :key="product.id"-->
-			<!--						 :product="product" />-->
-			<!--	</div>-->
-			<!--</div>-->
+					
+					<!--		&lt;!&ndash; Productコンポーネント &ndash;&gt;-->
+					<!--		<Product v-show="!loading"-->
+					<!--						 v-for="product in products"-->
+					<!--						 :key="product.id"-->
+					<!--						 :product="product" />-->
+					<!--	</div>-->
+					<!--</div>-->
 					
 					<!-- カード -->
 					<div class="c-card p-list__card"
@@ -79,13 +79,10 @@
 							</div>
 							<!-- ボタン	-->
 							<div class="p-list__btn-container">
-								<!--<router-link class="c-btn p-list__btn p-list__btn&#45;&#45;detail"-->
-								<!--						 :to="{ name: 'product.detail', params: { id: product.id.toString() }}">詳細を見る-->
-								<!--</router-link>-->
-								<!-- 購入キャンセルボタン -->
-								<button class="c-btn c-btn--white p-list__btn p-list__btn--cancel"
-												@click="cancel(product)">購入キャンセル
-								</button>
+								<!-- 詳細を見るボタン -->
+								<router-link class="c-btn p-list__btn p-list__btn--detail"
+														 :to="{ name: 'product.detail', params: { id: product.id.toString() }}">詳細を見る
+								</router-link>
 							</div>
 						</div>
 					</div>
@@ -106,7 +103,7 @@ import { OK }  from "../../util";
 import { mapGetters } from 'vuex';
 
 export default {
-	name: "Purchased",
+	name: "Canceled",
 	props: {
 		id: {
 			type: String,
@@ -121,8 +118,7 @@ export default {
 	data() {
 		return {
 			loading: false,
-			products: {},
-			product: {}
+			products: {}
 		}
 	},
 	computed: {
@@ -131,56 +127,24 @@ export default {
 		})
 	},
 	methods: {
-		//購入された商品一覧
+		//キャンセルされた商品一覧取得
 		async getProducts() {
 			//ローディングを表示する
 			this.loading = true;
 			//API通信
-			const response = await axios.get(`/api/users/${this.id}/purchased`);
+			const response = await axios.get(`/api/users/${this.id}/canceled`);
 			//API通信が終わったらローディングを非表示にする
 			this.loading = false;
 			
 			//responseステータスがOKじゃなかったらエラーコードをセット
-			if(response.status !== OK) {
+			if (response.status !== OK) {
 				this.$store.commit('error/setCode', response.status);
 				return false;
 			}
 			//プロパティにデータをセット
 			this.products = response.data;
 			console.log('productの中身：' + this.products);
-		},
-		//購入キャンセル処理
-		async cancel(product) {
-			//プロパティに値をセット
-			this.product = product;
-			
-			if(confirm('購入をキャンセルしますか？')) {
-				//ローディングを表示する
-				this.loading = true;
-				//API通信
-				const response = await axios.post(`/api/products/${this.product.id}/cancel`, this.product);
-				//API通信が終わったらローディングを非表示にする
-				this.loading = false;
-				
-				//responseステータスがOKじゃなかったらエラーコードをセット
-				if (response.status !== OK) {
-					this.$store.commit('error/setCode', response.status);
-					return false;
-				}
-				//購入キャンセルをしたのでpurchased_by_userにfalseをセット
-				this.product.purchased_by_user = false;
-				//canceled_by_userにtrueをセット
-				this.product.canceled_by_user = true;
-				
-				//メッセージ登録
-				this.$store.commit('message/setContent', {
-					content: '購入をキャンセルしました',
-				});
-				
-				//マイページに遷移する
-				this.$router.push({name: 'user.mypage', params: {id: this.id}});
-			}
-		},
+		}
 	},
 	watch: {
 		$route: {

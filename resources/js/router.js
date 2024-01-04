@@ -12,16 +12,18 @@ import System          from "./components/errors/System";
 import Agreement       from "./components/footer/Agreement";
 import Policy          from "./components/footer/Policy";
 import Tokutei         from "./components/footer/Tokutei";
+import EditProduct     from "./components/product/EditProduct";
 import Index           from "./components/product/Index";
 import ProductDetail   from "./components/product/ProductDetail";
 import RegisterProduct from "./components/product/RegisterProduct";
-import EditProduct     from "./components/product/EditProduct";
+import Canceled        from "./components/user/Canceled";
 import EditPassword    from "./components/user/EditPassword";
 import EditProfile     from "./components/user/EditProfile";
 import Liked           from "./components/user/Liked";
 import MyPage          from "./components/user/MyPage";
 import Posted          from "./components/user/Posted";
 import Purchased       from "./components/user/Purchased";
+
 
 //VueRouterプラグインを利用する
 //これによって<router-view>コンポーネントなどを使うことができる
@@ -216,6 +218,21 @@ const routes = [
     path: '/user/:id/liked',
     name: 'user.liked',
     component: Liked,
+    props: true,
+    beforeEnter(to, from, next) {
+      //todo: ユーザーによって処理を分ける
+      if(store.getters['auth/check']) {
+        next();
+      }else {
+        next({name: 'login'});
+      }
+    }
+  },
+  {
+    //キャンセルされた商品一覧
+    path: '/user/:id/canceled',
+    name: 'user.canceled',
+    component: Canceled,
     props: true,
     beforeEnter(to, from, next) {
       //todo: ユーザーによって処理を分ける
