@@ -176,17 +176,17 @@ export default {
 	},
 	data() {
 		return {
-			product: {}, //商品情報
+			loading: false, //ローディングを表示するかどうかを判定するプロパティ
+			product: {},    //商品情報
 			categories: {}, //カテゴリー
-			preview: null, //画像プレビュー
-			errors: { //エラーメッセージを格納するプロパティ
+			preview: null,  //画像プレビュー
+			errors: {       //エラーメッセージを格納するプロパティ
 				image: null,
 				category_id: null,
 				name: null,
 				detail: null,
 				price: null
-			},
-			loading: false //ローディングを表示するかどうかを判定するプロパティ
+			}
 		}
 	},
 	computed: {
@@ -195,32 +195,29 @@ export default {
 		})
 	},
 	methods: {
-		//カテゴリー取得
-		async getCategories() {
+		async getCategories() { //カテゴリー取得
 			const response = await axios.get('/api/categories');
-			//responseステータスがOKじゃなかったらエラーコードをセット
-			if(response.status !== OK) {
+			
+			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
 				this.$store.commit('error/setCode', response.status);
 				return false;
 			}
-			//プロパティに値をセットする
-			this.categories = response.data;
+			
+			this.categories = response.data; //プロパティに値をセットする
 		},
-		//商品情報取得
-		async getProduct() {
-			//ローティングを表示する
-			this.loading = true;
-			//API通信
-			const response = await axios.get(`/api/products/${this.id}`);
-			//API通信が終わったらローディングを非表示にする
-			this.loading =false;
-			//responseステータスがOKじゃなかったら後続の処理を行う
-			if(response.status !== OK) {
+		async getProduct() { //商品情報取得
+			this.loading = true; //ローティングを表示する
+			
+			const response = await axios.get(`/api/products/${this.id}`); //API通信
+			
+			this.loading = false; //API通信が終わったらローディングを非表示にする
+			
+			if(response.status !== OK) { //responseステータスがOKじゃなかったら後続の処理を行う
 				this.$store.commit('error/setCode', response.status);
 				return false;
 			}
-			//プロパティに値をセットする
-			this.product = response.data;
+			
+			this.product = response.data; //プロパティに値をセットする
 		},
 		//フォームでファイルが選択されたら実行されるメソッド
 		onFileChange(event) {

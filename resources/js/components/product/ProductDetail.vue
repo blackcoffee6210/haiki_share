@@ -12,9 +12,6 @@
 				<div class="c-badge" v-show="product.is_purchased">
 					<div class="c-badge__sold">SOLD</div>
 				</div>
-				<!--<div class="c-badge" v-show="product.is_purchased">-->
-				<!--	<div class="c-badge__sold">SOLD</div>-->
-				<!--</div>-->
 				
 				<!-- 商品の画像	-->
 				<img :src="product.image"
@@ -59,7 +56,7 @@
 					<div class="p-product-detail__btn-container">
 						<!-- 商品編集ボタン(自分の商品のときだけ & 購入されていない) -->
 						<router-link class="c-btn p-product-detail__btn--edit"
-												 v-if="isMyProduct && !product.is_purchased"
+												 v-if="product.is_my_product && !product.is_purchased"
 												 :to="{ name: 'product.edit', params: {id: id.toString() } }">編集する
 						</router-link>
 						
@@ -70,7 +67,7 @@
 											'border-color': [isLike ? '#ff3c53' : 'lightgray'],
 											'background'  : [isLike ? '#ffd5da' : 'white']
 										}"
-										:disabled="isMyProduct || product.is_purchased"
+										:disabled="product.is_my_product || product.is_purchased"
 										@click="onLikeClick">
 							<span v-if="isLike">お気に入り済み</span>
 							<span v-else>気になる！</span>
@@ -89,8 +86,8 @@
 						<!-- todo: 購入後にコンビニユーザーにレビューを投稿できるようにする -->
 						<button class="c-btn p-product-detail__btn--purchase"
 										@click="purchase"
-										v-show="!isShopUser && !isMyProduct && !product.purchased_by_user"
-										:disabled="isShopUser || isMyProduct || product.is_purchased">
+										v-show="!isShopUser && !product.is_my_product && !product.purchased_by_user"
+										:disabled="isShopUser || product.is_my_product || product.is_purchased">
 							<span v-if="product.is_purchased">購入済み</span>
 							<span v-else>購入</span>
 						</button>
@@ -100,8 +97,7 @@
 						<!--todo: 購入から3日以内または賞味期限1日前まではキャンセル可能-->
 						<button v-show="product.purchased_by_user"
 										@click="cancel"
-										class="c-btn c-btn--white p-product-detail__btn">
-							購入キャンセル
+										class="c-btn c-btn--white p-product-detail__btn">購入キャンセル
 						</button>
 					
 					</div>
@@ -173,12 +169,12 @@ export default {
 			isShopUser: 'auth/isShopUser' //コンビニユーザならtrueが入る
 		}),
 		//自分の商品かどうかを真偽値で返す
-		isMyProduct() {
-			//商品idとログインidが同じであればtrueを返す
-			if(this.product.user_id === this.userId) {
-				return true;
-			}
-		}
+		// isMyProduct() {
+		// 	//商品idとログインidが同じであればtrueを返す
+		// 	if(this.product.user_id === this.userId) {
+		// 		return true;
+		// 	}
+		// }
 	},
 	methods: {
 		//商品詳細情報取得
@@ -207,16 +203,6 @@ export default {
 					return false;
 				}
 			}
-			// //自分の商品には「お気に入り」できないようにする
-			// if(this.isMyProduct) {
-			// 	alert('自分の商品には「お気に入り」できません');
-			// 	return false;
-			// }
-			// //購入された商品には「いいね」できないようにする
-			// if(this.product.purchased_by_user) {
-			// 	alert('購入した商品には「お気に入り」できません');
-			// 	return false;
-			// }
 			//いいねを押していたらいいねを外す
 			if(this.product.liked_by_user) {
 				this.unlike();
@@ -268,6 +254,12 @@ export default {
 				}
 				return false;
 			}
+			//商品をキャンセルしたユーザーは再度購入できない
+			if(this.product.canceled_by_user) {
+				alert('一度キャンセルした商品は購入できません');
+				return false;
+			}
+			
 			//アレートで「購入しますか?」と表示し、「はい」を押すと以下の処理を実行
 			if(confirm('購入しますか？')) {
 				//ローディングを表示する
@@ -303,9 +295,31 @@ export default {
 			}
 		},
 		//購入キャンセル
-		cancel() {
+		async cancel() {
 			if(confirm('購入をキャンセルしますか？')) {
-				console.log('購入キャンセルしました');
+				//ローディングを表示する
+				this.loading = true;
+				//API通信
+				const response = await axios.post(`/api/products/${this.product.id}/cancel`, this.product);
+				//API通信が終わったらローディングを非表示にする
+				this.loading = false;
+				//responseステータスがOKじゃなかったらエラーコードをセット
+				if (response.status !== OK) {
+					this.$store.commit('error/setCode', response.status);
+					return false;
+				}
+				//購入キャンセルをしたのでpurchased_by_userにfalseをセット
+				this.product.purchased_by_user = false;
+				//canceled_by_userにtrueをセット
+				this.product.canceled_by_user = true;
+				
+				//メッセージ登録
+				this.$store.commit('message/setContent', {
+					content: '購入をキャンセルしました',
+				});
+				
+				//インデックス画面に遷移する
+				this.$router.push({ name: 'index' });
 			}
 		},
 		//「TOPにもどる」ボタンを押したときの処理

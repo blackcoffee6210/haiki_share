@@ -23,6 +23,8 @@ import Liked           from "./components/user/Liked";
 import MyPage          from "./components/user/MyPage";
 import Posted          from "./components/user/Posted";
 import Purchased       from "./components/user/Purchased";
+import Reviewed        from "./components/user/Reviewed";
+import RegisterReview from "./components/review/RegisterReview";
 
 
 //VueRouterプラグインを利用する
@@ -32,31 +34,19 @@ Vue.use(VueRouter);
 //パスとコンポーネントのマッピング
 const routes = [
   {
-    //会員登録
-    path: '/register',
+    path: '/register', //会員登録
     name: 'register',
     component: Register,
-    beforeEnter(to, from, next) {
-      //ログイン済みでアクセスしたらトップページを表示する
-      if(store.getters['auth/check']) {
-        next({ name: 'index' });
-      } else {
-        next();
-      }
+    beforeEnter(to, from, next) { //ログイン状態でアクセスしたらトップページを表示する
+      store.getters['auth/check'] ? next({ name: 'index' }) : next();
     }
   },
   {
-    //ログイン
-    path: '/login',
+    path: '/login', //ログイン
     name: 'login',
     component: Login,
-    beforeEnter(to, from, next) {
-      //ログイン状態でアクセスしたらトップページを表示する
-      if(store.getters['auth/check']) {
-        next({ name: 'index' });
-      } else {
-        next();
-      }
+    beforeEnter(to, from, next) { //ログイン状態でアクセスしたらトップページを表示する
+      store.getters['auth/check'] ? next({ name: 'index' }) : next();
     }
   },
   {
@@ -64,13 +54,8 @@ const routes = [
     path: '/password/reset',
     name: 'password.email',
     component: PassResetEmail,
-    beforeEnter(to, from, next) {
-      //ログイン状態でアクセスしたらトップページを表示する
-      if(store.getters['auth/check']) {
-        next({ name: 'index' });
-      } else {
-        next();
-      }
+    beforeEnter(to, from, next) { //ログイン状態でアクセスしたらトップページを表示する
+      store.getters['auth/check'] ? next({ name: 'index' }) : next();
     }
   },
   {
@@ -78,13 +63,8 @@ const routes = [
     path: '/password/reset/:token/:email',
     name: 'password.reset',
     component: PassResetForm,
-    beforeEnter(to, from, next) {
-      //ログイン状態でアクセスしたらトップページを表示する
-      if(store.getters['auth/check']) {
-        next({ name: 'index' });
-      } else {
-        next();
-      }
+    beforeEnter(to, from, next) { //ログイン状態でアクセスしたらトップページを表示する
+      store.getters['auth/check'] ? next({ name: 'index' }) : next();
     }
   },
   {
@@ -109,10 +89,15 @@ const routes = [
     path: '/products/register',
     name: 'product.register',
     component: RegisterProduct,
+    // beforeEnter(to, from, next) { //ログインユーザーかつお店の人がアクセスしたら商品登録ページを表示
+    //   (store.getters['auth/check'] && store.getters['auth/isShopUser']) ? next() : next({ name: 'index' });
+    // }
     beforeEnter(to, from, next) {
+      // todo: 挙動がおかしいので要編集
       //ログインユーザーかつお店の人がアクセスしたらトップページを表示する
       if(store.getters['auth/check'] && store.getters['auth/isShopUser']) {
         next();
+        //利用者だったらインデックス画面に移動する
       } else {
         next({ name: 'index' });
       }
@@ -125,12 +110,28 @@ const routes = [
     component: EditProduct,
     props: true,
     beforeEnter(to, from, next) {
-      //ログイン状態かつコンビニユーザーがページにアクセスした場合(true)、そのまま移動させる
-      if(store.getters['auth/check'] && store.getters['auth/isShopUser']) {
+      //ログイン状態かつ利用者ユーザーがページにアクセスした場合(true)、そのまま移動させる
+      if(store.getters['auth/check'] && !store.getters['auth/isShopUser']) {
         next();
-        //ログインしていなければログイン画面に移動させる
+        //それ以外ならインデックス画面に移動する
       } else {
-        next({name: 'login'});
+        next({name: 'index'});
+      }
+    }
+  },
+  {
+    //レビュー投稿
+    path: '/reviews/:id/register',
+    name: 'review.register',
+    component: RegisterReview,
+    props: true,
+    beforeEnter(to, from, next) {
+      //ログイン状態かつ利用者ユーザーがページにアクセスした場合(true)、そのまま移動させる
+      if(store.getters['auth/check'] && !store.getters['auth/isShopUser']) {
+        next();
+        //それ以外ならインデックス画面に移動する
+      } else {
+        next({name: 'index'});
       }
     }
   },
@@ -233,6 +234,21 @@ const routes = [
     path: '/user/:id/canceled',
     name: 'user.canceled',
     component: Canceled,
+    props: true,
+    beforeEnter(to, from, next) {
+      //todo: ユーザーによって処理を分ける
+      if(store.getters['auth/check']) {
+        next();
+      }else {
+        next({name: 'login'});
+      }
+    }
+  },
+  {
+    //レビューしたユーザー一覧
+    path: '/user/:id/reviewed',
+    name: 'user.reviewed',
+    component: Reviewed,
     props: true,
     beforeEnter(to, from, next) {
       //todo: ユーザーによって処理を分ける

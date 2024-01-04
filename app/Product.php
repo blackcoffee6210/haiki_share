@@ -23,7 +23,7 @@ class Product extends Model
 	//アクセサとは、DBから取得したデータを自動的に加工することができる機能
 	//ユーザー定義のアクセサをJSONに含めるには、明示的に$appendプロパティに登録する
 	protected $appends = [
-		'user_image', 'user_name', 'email', 'branch', 'category_name',
+		'user_image', 'user_name', 'email', 'branch', 'category_name', 'is_my_product',
 		'likes_count', 'liked_by_user', 'purchased_by_user', 'is_purchased',
 		'canceled_by_user'
 	];
@@ -33,7 +33,7 @@ class Product extends Model
 	protected $visible = [
 		'id', 'user_id', 'category_id', 'image', 'name', 'detail', 'price',
 		'expire', 'deleted_at', 'created_at', 'updated_at',
-		'user_image', 'user_name', 'email', 'branch', 'category_name',
+		'user_image', 'user_name', 'email', 'branch', 'category_name', 'is_my_product',
 		'likes_count', 'liked_by_user', 'purchased_by_user', 'is_purchased',
 		'canceled_by_user'
 	];
@@ -86,6 +86,20 @@ class Product extends Model
 	public function getCategoryNameAttribute()
 	{
 		return $this->category->name;
+	}
+	/**
+	 * アクセサ - is_my_product
+	 * @return boolean
+	 */
+	//自分の商品かどうかを真偽値で返す
+	public function getIsMyProductAttribute()
+	{
+		//ユーザーがゲストの場合(ログインしていなければ)falseを返す
+		if(Auth::guest() ) {
+			return false;
+		}
+		//商品のユーザーidとログインidが同じであればtrueを返す
+		return ($this->user_id === Auth::user()->id) ? true : false;
 	}
 	/**
 	 * アクセサ - likes_count

@@ -15,8 +15,8 @@ class CreateCancelsTable extends Migration
     {
         Schema::create('cancels', function (Blueprint $table) {
             $table->bigIncrements('id');
-	        $table->unsignedBigInteger('user_id');
-	        $table->unsignedBigInteger('product_id');
+	        $table->unsignedBigInteger('user_id');    //ユーザーid
+	        $table->unsignedBigInteger('product_id'); //商品id
             $table->timestamps();
 
 	        //外部キー

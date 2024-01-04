@@ -24,30 +24,26 @@ library.add(fas, fab, far);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.config.productionTip = false;
 
-Vue.use(VueScrollTo); //scroll
+Vue.use(VueScrollTo);      //scroll
 Vue.use(VueSocialSharing); //twitterシェア
-Vue.use(StarRating); //レビューの星
-Vue.use(ReadMore); //もっと見る
+Vue.use(StarRating);       //レビューの星
+Vue.use(ReadMore);         //もっと見る
 
 //==============================================
 // フィルター
 //==============================================
-//金額にカンマ(,)と¥マークをつける
-Vue.filter('numberFormat', function (price) {
+Vue.filter('numberFormat', function (price) { //金額にカンマ(,)と¥マークをつける
   return price.toLocaleString('ja-JP', { style: 'currency', currency: 'JPY'});
 });
-//日付を「⚪︎日前」の書式で返す
-Vue.filter('moment', function(date) {
+Vue.filter('moment', function(date) { //日付を「⚪︎日前」の書式で返す
   moment.locale('ja'); //日本語化する
   return moment(date).fromNow();
 })
-//日付を「年月日」の書式で返す
-Vue.filter('momentDate', function (date) {
+Vue.filter('momentDate', function (date) { //日付を「年月日」の書式で返す
   moment.locale('ja'); //日本語化する
   return moment(date).format('YYYY-MM-DD');
 })
-//日付を「残り⚪︎日」の書式で返す
-Vue.filter('momentExpire', function(date) {
+Vue.filter('momentExpire', function(date) { //日付を「残り⚪︎日」の書式で返す
   moment.locale('ja');
   var expire = moment(date);
   var today  = moment().format('YYYY-MM-DD');
@@ -61,7 +57,7 @@ const createApp = async () => {
   //currentUserアクションの非同期処理が終わってからVueインスタンスを生成する
   new Vue({
     el: '#app',
-    store,
+    store, //ストアを読み込む
     router, //ルーティングの定義を読み込む
     components: { App }, //ルートコンポーネントの使用を宣言する
     template: '<App />' //ルートコンポーネントを描画する

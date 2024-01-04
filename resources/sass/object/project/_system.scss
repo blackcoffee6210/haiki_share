@@ -1,0 +1,7 @@
+.p-system {
+  text-align: center;
+  &__link {
+    color: $main-color;
+    display: inline-block;
+  }
+}

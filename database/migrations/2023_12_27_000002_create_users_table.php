@@ -15,17 +15,17 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('group');
-            $table->string('name');
-            $table->string('branch')->nullable();
-            $table->unsignedBigInteger('prefecture_id')->nullable();
-            $table->string('address')->nullable();
-            $table->string('email')->unique();
+            $table->integer('group');                                //ユーザーを判別(1なら利用者、2ならコンビニ側)
+            $table->string('name');                                  //名前
+            $table->string('branch')->nullable();                    //支店名
+            $table->unsignedBigInteger('prefecture_id')->nullable(); //都道府県id
+            $table->string('address')->nullable();                   //住所
+            $table->string('email')->unique();                       //Emailアドレス
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
-            $table->string('image')->nullable();
-            $table->string('introduce')->nullable();
+            $table->string('password');                              //パスワード
+            $table->rememberToken();                                        //リメンバートークン
+            $table->string('image')->nullable();                    //ユーザー画像
+            $table->string('introduce')->nullable();                //自己紹介文
             $table->softDeletes();
             $table->timestamps();
 

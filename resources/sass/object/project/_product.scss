@@ -57,6 +57,7 @@
     width: 100%;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     font-size: $font-size_m;
     @include mq() {
       font-size: $font-size_xs;

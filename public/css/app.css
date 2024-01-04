@@ -473,7 +473,7 @@ body {
 }
 
 .l-main {
-  width: 980px;
+  width: 1080px;
   margin: 0 auto;
   display: flex;
 }
@@ -2351,6 +2351,7 @@ body {
   width: 100%;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   font-size: 1.4rem;
 }
 
@@ -2930,6 +2931,15 @@ body {
 
 .p-sidebar-index__search::placeholder {
   color: #fdbf99;
+}
+
+.p-system {
+  text-align: center;
+}
+
+.p-system__link {
+  color: #f96204;
+  display: inline-block;
 }
 
 .p-tokutei {

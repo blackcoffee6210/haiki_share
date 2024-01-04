@@ -17261,6 +17261,8 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
   },
   data: function data() {
     return {
+      loading: false,
+      //ローディングを表示するかどうかを判定するプロパティ
       product: {},
       //商品情報
       categories: {},
@@ -17274,15 +17276,13 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         name: null,
         detail: null,
         price: null
-      },
-      loading: false //ローディングを表示するかどうかを判定するプロパティ
+      }
     };
   },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])({
     userId: 'auth/userId'
   })),
   methods: {
-    //カテゴリー取得
     getCategories: function getCategories() {
       var _this = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
@@ -17298,11 +17298,11 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
                 _context.next = 6;
                 break;
               }
+              //responseステータスがOKじゃなかったらエラーコードをセット
               _this.$store.commit('error/setCode', response.status);
               return _context.abrupt("return", false);
             case 6:
-              //プロパティに値をセットする
-              _this.categories = response.data;
+              _this.categories = response.data; //プロパティに値をセットする
             case 7:
             case "end":
               return _context.stop();
@@ -17310,7 +17310,6 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         }, _callee);
       }))();
     },
-    //商品情報取得
     getProduct: function getProduct() {
       var _this2 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
@@ -17318,25 +17317,24 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         return _regeneratorRuntime().wrap(function _callee2$(_context2) {
           while (1) switch (_context2.prev = _context2.next) {
             case 0:
-              //ローティングを表示する
-              _this2.loading = true;
-              //API通信
+              //商品情報取得
+              _this2.loading = true; //ローティングを表示する
               _context2.next = 3;
               return axios.get("/api/products/".concat(_this2.id));
             case 3:
               response = _context2.sent;
-              //API通信が終わったらローディングを非表示にする
-              _this2.loading = false;
-              //responseステータスがOKじゃなかったら後続の処理を行う
+              //API通信
+
+              _this2.loading = false; //API通信が終わったらローディングを非表示にする
               if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_2__["OK"])) {
                 _context2.next = 8;
                 break;
               }
+              //responseステータスがOKじゃなかったら後続の処理を行う
               _this2.$store.commit('error/setCode', response.status);
               return _context2.abrupt("return", false);
             case 8:
-              //プロパティに値をセットする
-              _this2.product = response.data;
+              _this2.product = response.data; //プロパティに値をセットする
             case 9:
             case "end":
               return _context2.stop();
@@ -17818,21 +17816,13 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       loading: false //ローディングを表示するかどうかを判定するプロパティ
     };
   },
-  computed: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])({
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])({
     isLogin: 'auth/check',
     //true または false が返ってくる
     userId: 'auth/userId',
     //ユーザーIDを取得
     isShopUser: 'auth/isShopUser' //コンビニユーザならtrueが入る
-  })), {}, {
-    //自分の商品かどうかを真偽値で返す
-    isMyProduct: function isMyProduct() {
-      //商品idとログインidが同じであればtrueを返す
-      if (this.product.user_id === this.userId) {
-        return true;
-      }
-    }
-  }),
+  })),
   methods: {
     //商品詳細情報取得
     getProduct: function getProduct() {
@@ -17887,16 +17877,6 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               });
               return _context2.abrupt("return", false);
             case 4:
-              // //自分の商品には「お気に入り」できないようにする
-              // if(this.isMyProduct) {
-              // 	alert('自分の商品には「お気に入り」できません');
-              // 	return false;
-              // }
-              // //購入された商品には「いいね」できないようにする
-              // if(this.product.purchased_by_user) {
-              // 	alert('購入した商品には「お気に入り」できません');
-              // 	return false;
-              // }
               //いいねを押していたらいいねを外す
               if (_this2.product.liked_by_user) {
                 _this2.unlike();
@@ -17996,29 +17976,36 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               }
               return _context5.abrupt("return", false);
             case 3:
+              if (!_this5.product.canceled_by_user) {
+                _context5.next = 6;
+                break;
+              }
+              alert('一度キャンセルした商品は購入できません');
+              return _context5.abrupt("return", false);
+            case 6:
               if (!confirm('購入しますか？')) {
-                _context5.next = 16;
+                _context5.next = 19;
                 break;
               }
               //ローディングを表示する
               _this5.loading = true;
               //商品購入APIに接続
-              _context5.next = 7;
+              _context5.next = 10;
               return axios.post("/api/products/".concat(_this5.id, "/purchase"), _this5.product);
-            case 7:
+            case 10:
               response = _context5.sent;
               //API通信が終わったらローディングを非表示にする
               _this5.loading = false;
 
               //responseステータスがOKじゃなかったらエラーコードをセットする
               if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_0__["OK"])) {
-                _context5.next = 12;
+                _context5.next = 15;
                 break;
               }
               _this5.$store.commit('error/setCode', response.status);
               //後続の処理を抜ける
               return _context5.abrupt("return", false);
-            case 12:
+            case 15:
               //ログインユーザーが商品を購入したのでtrueをセット(購入済み)にする
               _this5.product.purchased_by_user = true;
 
@@ -18039,7 +18026,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
                   id: _this5.id
                 }
               })["catch"](function () {});
-            case 16:
+            case 19:
             case "end":
               return _context5.stop();
           }
@@ -18048,9 +18035,53 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     },
     //購入キャンセル
     cancel: function cancel() {
-      if (confirm('購入をキャンセルしますか？')) {
-        console.log('購入キャンセルしました');
-      }
+      var _this6 = this;
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
+        var response;
+        return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+          while (1) switch (_context6.prev = _context6.next) {
+            case 0:
+              if (!confirm('購入をキャンセルしますか？')) {
+                _context6.next = 13;
+                break;
+              }
+              //ローディングを表示する
+              _this6.loading = true;
+              //API通信
+              _context6.next = 4;
+              return axios.post("/api/products/".concat(_this6.product.id, "/cancel"), _this6.product);
+            case 4:
+              response = _context6.sent;
+              //API通信が終わったらローディングを非表示にする
+              _this6.loading = false;
+              //responseステータスがOKじゃなかったらエラーコードをセット
+              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_0__["OK"])) {
+                _context6.next = 9;
+                break;
+              }
+              _this6.$store.commit('error/setCode', response.status);
+              return _context6.abrupt("return", false);
+            case 9:
+              //購入キャンセルをしたのでpurchased_by_userにfalseをセット
+              _this6.product.purchased_by_user = false;
+              //canceled_by_userにtrueをセット
+              _this6.product.canceled_by_user = true;
+
+              //メッセージ登録
+              _this6.$store.commit('message/setContent', {
+                content: '購入をキャンセルしました'
+              });
+
+              //インデックス画面に遷移する
+              _this6.$router.push({
+                name: 'index'
+              });
+            case 13:
+            case "end":
+              return _context6.stop();
+          }
+        }, _callee6);
+      }))();
     },
     //「TOPにもどる」ボタンを押したときの処理
     returnTop: function returnTop() {
@@ -18073,18 +18104,18 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
   watch: {
     $route: {
       handler: function handler() {
-        var _this6 = this;
-        return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
-          return _regeneratorRuntime().wrap(function _callee6$(_context6) {
-            while (1) switch (_context6.prev = _context6.next) {
+        var _this7 = this;
+        return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
+          return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+            while (1) switch (_context7.prev = _context7.next) {
               case 0:
-                _context6.next = 2;
-                return _this6.getProduct();
+                _context7.next = 2;
+                return _this7.getProduct();
               case 2:
               case "end":
-                return _context6.stop();
+                return _context7.stop();
             }
-          }, _callee6);
+          }, _callee7);
         }))();
       },
       immediate: true
@@ -18169,7 +18200,6 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     }
   }),
   methods: {
-    //カテゴリー取得
     getCategories: function getCategories() {
       var _this = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
@@ -18185,11 +18215,11 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
                 _context.next = 6;
                 break;
               }
+              //responseステータスがOKじゃなかったら
               _this.$store.commit('error/setCode', response.status);
               return _context.abrupt("return", false);
             case 6:
-              //プロパティに値をセットする
-              _this.categories = response.data;
+              _this.categories = response.data; //プロパティに値をセットする
             case 7:
             case "end":
               return _context.stop();
@@ -18319,6 +18349,142 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
                 _context3.next = 2;
                 return _this4.getCategories();
               case 2:
+              case "end":
+                return _context3.stop();
+            }
+          }, _callee3);
+        }))();
+      },
+      immediate: true
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/review/RegisterReview.vue?vue&type=script&lang=js":
+/*!*******************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/review/RegisterReview.vue?vue&type=script&lang=js ***!
+  \*******************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Loading__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Loading */ "./resources/js/components/Loading.vue");
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../util */ "./resources/js/util.js");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw new Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw new Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "RegisterReview",
+  components: {
+    Loading: _Loading__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  data: function data() {
+    return {
+      loading: false,
+      //ローディング
+      product: {},
+      //商品情報
+      categories: {},
+      //カテゴリー情報
+      errors: {
+        //エラーメッセージ
+        recommendation: null,
+        title: null,
+        comment: null
+      },
+      reviewForm: {
+        //レビューフォーム
+        product_id: this.id,
+        //商品id
+        recommendation: 0,
+        //ユーザー評価
+        title: '',
+        //レビュータイトル
+        comment: '' //レビューコメント
+      }
+    };
+  },
+  methods: {
+    getCategories: function getCategories() {
+      var _this = this;
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+        var response;
+        return _regeneratorRuntime().wrap(function _callee$(_context) {
+          while (1) switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return axios.get('/api/categories');
+            case 2:
+              response = _context.sent;
+              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
+                _context.next = 6;
+                break;
+              }
+              _this.$store.commit('error/setCode', response.status);
+              return _context.abrupt("return", false);
+            case 6:
+              //プロパティに値をセットする
+              _this.categories = response.data;
+            case 7:
+            case "end":
+              return _context.stop();
+          }
+        }, _callee);
+      }))();
+    },
+    getProduct: function getProduct() {
+      var _this2 = this;
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+        var response;
+        return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+          while (1) switch (_context2.prev = _context2.next) {
+            case 0:
+              //商品情報取得
+              _this2.loading = true; //ローティングを表示する
+              _context2.next = 3;
+              return axios.get("/api/products/".concat(_this2.id));
+            case 3:
+              response = _context2.sent;
+              //API通信
+
+              _this2.loading = false; //API通信が終わったらローディングを非表示にする
+              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
+                _context2.next = 8;
+                break;
+              }
+              //responseステータスがOKじゃなかったら後続の処理を行う
+              _this2.$store.commit('error/setCode', response.status);
+              return _context2.abrupt("return", false);
+            case 8:
+              _this2.product = response.data; //プロパティに値をセットする
+            case 9:
+            case "end":
+              return _context2.stop();
+          }
+        }, _callee2);
+      }))();
+    }
+  },
+  watch: {
+    $route: {
+      handler: function handler() {
+        var _this3 = this;
+        return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+          return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+            while (1) switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return _this3.getCategories();
+              case 2:
+                _context3.next = 4;
+                return _this3.getProduct();
+              case 4:
               case "end":
                 return _context3.stop();
             }
@@ -19276,6 +19442,21 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/user/Reviewed.vue?vue&type=script&lang=js":
+/*!***********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/user/Reviewed.vue?vue&type=script&lang=js ***!
+  \***********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "Reviewed"
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/App.vue?vue&type=template&id=f348271a":
 /*!************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib/loaders/templateLoader.js??ref--6!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/App.vue?vue&type=template&id=f348271a ***!
@@ -19598,6 +19779,26 @@ var render = function render() {
     staticClass: "p-sidebar__link",
     attrs: {
       to: {
+        name: "user.liked",
+        params: {
+          id: _vm.id.toString()
+        }
+      }
+    }
+  }, [_vm._v("いいねした商品一覧\n\t\t")]) : _vm._e(), _vm._v(" "), _vm.isShopUser ? _c("router-link", {
+    staticClass: "p-sidebar__link",
+    attrs: {
+      to: {
+        name: "user.liked",
+        params: {
+          id: _vm.id.toString()
+        }
+      }
+    }
+  }, [_vm._v("いいねされた商品一覧\n\t\t")]) : _vm._e(), _vm._v(" "), !_vm.isShopUser ? _c("router-link", {
+    staticClass: "p-sidebar__link",
+    attrs: {
+      to: {
         name: "user.purchased",
         params: {
           id: _vm.id.toString()
@@ -19634,31 +19835,11 @@ var render = function render() {
         }
       }
     }
-  }, [_vm._v("キャンセルした商品一覧\n\t\t")]) : _vm._e(), _vm._v(" "), !_vm.isShopUser ? _c("router-link", {
-    staticClass: "p-sidebar__link",
-    attrs: {
-      to: {
-        name: "user.liked",
-        params: {
-          id: _vm.id.toString()
-        }
-      }
-    }
-  }, [_vm._v("いいねした商品一覧\n\t\t")]) : _vm._e(), _vm._v(" "), _vm.isShopUser ? _c("router-link", {
-    staticClass: "p-sidebar__link",
-    attrs: {
-      to: {
-        name: "user.liked",
-        params: {
-          id: _vm.id.toString()
-        }
-      }
-    }
-  }, [_vm._v("いいねされた商品一覧\n\t\t")]) : _vm._e(), _vm._v(" "), !_vm.isShopUser ? _c("a", {
+  }, [_vm._v("キャンセルした商品一覧\n\t\t")]) : _vm._e(), _vm._v(" "), !_vm.isShopUser ? _c("a", {
     staticClass: "p-sidebar__link"
-  }, [_vm._v("レビューしたユーザー一覧")]) : _vm._e(), _vm._v(" "), _vm.isShopUser ? _c("a", {
+  }, [_vm._v("レビューしたユーザー一覧\n\t\t")]) : _vm._e(), _vm._v(" "), _vm.isShopUser ? _c("a", {
     staticClass: "p-sidebar__link"
-  }, [_vm._v("レビューされたユーザー一覧")]) : _vm._e(), _vm._v(" "), _c("button", {
+  }, [_vm._v("レビューされたユーザー一覧\n\t\t")]) : _vm._e(), _vm._v(" "), _c("button", {
     staticClass: "p-sidebar__link",
     on: {
       click: _vm.logout
@@ -20533,7 +20714,7 @@ var render = function render() {
         name: "index"
       }
     }
-  }, [_vm._v("TOPへもどる")])], 1);
+  }, [_vm._v("TOPへもどる\n\t")])], 1);
 };
 var staticRenderFns = [];
 render._withStripped = true;
@@ -20555,11 +20736,21 @@ __webpack_require__.r(__webpack_exports__);
 var render = function render() {
   var _vm = this,
     _c = _vm._self._c;
-  return _c("p", {
+  return _c("div", {
+    staticClass: "p-system"
+  }, [_c("p", {
+    staticClass: "p-system__text",
     staticStyle: {
       "text-align": "center"
     }
-  }, [_vm._v("システムエラーが発生しました。")]);
+  }, [_vm._v("システムエラーが発生しました。")]), _vm._v(" "), _c("router-link", {
+    staticClass: "c-link p-system__link",
+    attrs: {
+      to: {
+        name: "index"
+      }
+    }
+  }, [_vm._v("TOPへもどる\n\t")])], 1);
 };
 var staticRenderFns = [];
 render._withStripped = true;
@@ -21592,7 +21783,7 @@ var render = function render() {
     staticClass: "p-product-detail__date"
   }, [_vm._v("\n\t\t\t\t\t\t\t" + _vm._s(_vm._f("moment")(_vm.product.created_at)) + "\n\t\t\t\t\t\t")])])]), _vm._v(" "), _c("div", {
     staticClass: "p-product-detail__btn-container"
-  }, [_vm.isMyProduct && !_vm.product.is_purchased ? _c("router-link", {
+  }, [_vm.product.is_my_product && !_vm.product.is_purchased ? _c("router-link", {
     staticClass: "c-btn p-product-detail__btn--edit",
     attrs: {
       to: {
@@ -21609,7 +21800,7 @@ var render = function render() {
       background: [_vm.isLike ? "#ffd5da" : "white"]
     },
     attrs: {
-      disabled: _vm.isMyProduct || _vm.product.is_purchased
+      disabled: _vm.product.is_my_product || _vm.product.is_purchased
     },
     on: {
       click: _vm.onLikeClick
@@ -21628,12 +21819,12 @@ var render = function render() {
     directives: [{
       name: "show",
       rawName: "v-show",
-      value: !_vm.isShopUser && !_vm.isMyProduct && !_vm.product.purchased_by_user,
-      expression: "!isShopUser && !isMyProduct && !product.purchased_by_user"
+      value: !_vm.isShopUser && !_vm.product.is_my_product && !_vm.product.purchased_by_user,
+      expression: "!isShopUser && !product.is_my_product && !product.purchased_by_user"
     }],
     staticClass: "c-btn p-product-detail__btn--purchase",
     attrs: {
-      disabled: _vm.isShopUser || _vm.isMyProduct || _vm.product.is_purchased
+      disabled: _vm.isShopUser || _vm.product.is_my_product || _vm.product.is_purchased
     },
     on: {
       click: _vm.purchase
@@ -21649,7 +21840,7 @@ var render = function render() {
     on: {
       click: _vm.cancel
     }
-  }, [_vm._v("\n\t\t\t\t\t\t購入キャンセル\n\t\t\t\t\t")])], 1)]), _vm._v(" "), _c("div", {
+  }, [_vm._v("購入キャンセル\n\t\t\t\t\t")])], 1)]), _vm._v(" "), _c("div", {
     staticClass: "p-product-detail__detail"
   }, [_vm._v("\n\t\t\t\t" + _vm._s(_vm.product.detail) + "\n\t\t\t")]), _vm._v(" "), _c("div", {
     staticClass: "p-product-detail__twitter-container"
@@ -21979,6 +22170,135 @@ var render = function render() {
       type: "submit"
     }
   }, [_vm._v("出品する\n\t\t\t\t")])])], 1)])]);
+};
+var staticRenderFns = [];
+render._withStripped = true;
+
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/review/RegisterReview.vue?vue&type=template&id=fae16552":
+/*!*****************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib/loaders/templateLoader.js??ref--6!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/review/RegisterReview.vue?vue&type=template&id=fae16552 ***!
+  \*****************************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function render() {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("div", {
+    staticClass: "p-register-review"
+  }, [_c("Loading", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: _vm.loading,
+      expression: "loading"
+    }],
+    attrs: {
+      color: "#f96204"
+    }
+  }), _vm._v(" "), _c("form", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: !_vm.loading,
+      expression: "!loading"
+    }],
+    staticClass: "p-register-review-review__form",
+    on: {
+      submit: function submit($event) {
+        $event.preventDefault();
+        return _vm.submit.apply(null, arguments);
+      }
+    }
+  }, [_c("h2", {
+    staticClass: "p-register-review__title"
+  }, [_vm._v("レビュー投稿")]), _vm._v(" "), _c("div", {
+    staticClass: "p-register-review__user-info"
+  }, [_c("img", {
+    staticClass: "c-icon p-register-review__icon",
+    attrs: {
+      src: _vm.product.user_image,
+      alt: ""
+    }
+  }), _vm._v(" "), _c("div", [_c("div", {
+    staticClass: "p-register-review__user-name"
+  }, [_vm._v(_vm._s(_vm.product.user_name))])])]), _vm._v(" "), _c("div", {
+    staticClass: "p-register-review__sub-title"
+  }, [_vm._v("ユーザーの評価")]), _vm._v(" "), _vm.errors ? _c("div", _vm._l(_vm.errors.recommendation, function (msg) {
+    return _c("div", {
+      key: msg,
+      staticClass: "p-error"
+    }, [_vm._v(_vm._s(msg))]);
+  }), 0) : _vm._e(), _vm._v(" "), _c("div", {
+    staticClass: "p-register-review__sub-title"
+  }, [_vm._v("レビュータイトル")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.reviewForm.title,
+      expression: "reviewForm.title"
+    }],
+    staticClass: "c-input p-register-review__input",
+    attrs: {
+      type: "text",
+      id: "title",
+      placeholder: "もっとも伝いたいポイントはなんですか？"
+    },
+    domProps: {
+      value: _vm.reviewForm.title
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.reviewForm, "title", $event.target.value);
+      }
+    }
+  }), _vm._v(" "), _vm.errors ? _c("div", _vm._l(_vm.errors.title, function (msg) {
+    return _c("div", {
+      key: msg,
+      staticClass: "p-error"
+    }, [_vm._v(_vm._s(msg))]);
+  }), 0) : _vm._e(), _vm._v(" "), _c("div", {
+    staticClass: "p-register-review__sub-title"
+  }, [_vm._v("レビュー内容")]), _vm._v(" "), _c("textarea", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.reviewForm.comment,
+      expression: "reviewForm.comment"
+    }],
+    staticClass: "c-input p-register-review__textarea",
+    attrs: {
+      id: "comment",
+      placeholder: "レビューの内容を入力してください"
+    },
+    domProps: {
+      value: _vm.reviewForm.comment
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.reviewForm, "comment", $event.target.value);
+      }
+    }
+  }), _vm._v(" "), _vm.errors ? _c("div", _vm._l(_vm.errors.comment, function (msg) {
+    return _c("div", {
+      key: msg,
+      staticClass: "p-error"
+    }, [_vm._v(_vm._s(msg))]);
+  }), 0) : _vm._e(), _vm._v(" "), _c("button", {
+    staticClass: "c-btn p-register-review__btn",
+    attrs: {
+      type: "submit"
+    }
+  }, [_vm._v("投稿する\n\t\t")])])], 1);
 };
 var staticRenderFns = [];
 render._withStripped = true;
@@ -23365,6 +23685,28 @@ var render = function render() {
       id: _vm.id
     }
   })], 1);
+};
+var staticRenderFns = [];
+render._withStripped = true;
+
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/user/Reviewed.vue?vue&type=template&id=23441bc0":
+/*!*********************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib/loaders/templateLoader.js??ref--6!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/user/Reviewed.vue?vue&type=template&id=23441bc0 ***!
+  \*********************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function render() {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("div", [_vm._v("レビューーーーーーーーーーーーーー")]);
 };
 var staticRenderFns = [];
 render._withStripped = true;
@@ -68809,25 +69151,25 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vue_read_more__WEBPACK_IMPORTED_M
 //==============================================
 // フィルター
 //==============================================
-//金額にカンマ(,)と¥マークをつける
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.filter('numberFormat', function (price) {
+  //金額にカンマ(,)と¥マークをつける
   return price.toLocaleString('ja-JP', {
     style: 'currency',
     currency: 'JPY'
   });
 });
-//日付を「⚪︎日前」の書式で返す
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.filter('moment', function (date) {
+  //日付を「⚪︎日前」の書式で返す
   moment__WEBPACK_IMPORTED_MODULE_5___default.a.locale('ja'); //日本語化する
   return moment__WEBPACK_IMPORTED_MODULE_5___default()(date).fromNow();
 });
-//日付を「年月日」の書式で返す
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.filter('momentDate', function (date) {
+  //日付を「年月日」の書式で返す
   moment__WEBPACK_IMPORTED_MODULE_5___default.a.locale('ja'); //日本語化する
   return moment__WEBPACK_IMPORTED_MODULE_5___default()(date).format('YYYY-MM-DD');
 });
-//日付を「残り⚪︎日」の書式で返す
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.filter('momentExpire', function (date) {
+  //日付を「残り⚪︎日」の書式で返す
   moment__WEBPACK_IMPORTED_MODULE_5___default.a.locale('ja');
   var expire = moment__WEBPACK_IMPORTED_MODULE_5___default()(date);
   var today = moment__WEBPACK_IMPORTED_MODULE_5___default()().format('YYYY-MM-DD');
@@ -68848,6 +69190,7 @@ var createApp = /*#__PURE__*/function () {
           new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
             el: '#app',
             store: _store__WEBPACK_IMPORTED_MODULE_2__["default"],
+            //ストアを読み込む
             router: _router__WEBPACK_IMPORTED_MODULE_3__["default"],
             //ルーティングの定義を読み込む
             components: {
@@ -70379,6 +70722,75 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/review/RegisterReview.vue":
+/*!***********************************************************!*\
+  !*** ./resources/js/components/review/RegisterReview.vue ***!
+  \***********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _RegisterReview_vue_vue_type_template_id_fae16552__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./RegisterReview.vue?vue&type=template&id=fae16552 */ "./resources/js/components/review/RegisterReview.vue?vue&type=template&id=fae16552");
+/* harmony import */ var _RegisterReview_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./RegisterReview.vue?vue&type=script&lang=js */ "./resources/js/components/review/RegisterReview.vue?vue&type=script&lang=js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _RegisterReview_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"],
+  _RegisterReview_vue_vue_type_template_id_fae16552__WEBPACK_IMPORTED_MODULE_0__["render"],
+  _RegisterReview_vue_vue_type_template_id_fae16552__WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/review/RegisterReview.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/review/RegisterReview.vue?vue&type=script&lang=js":
+/*!***********************************************************************************!*\
+  !*** ./resources/js/components/review/RegisterReview.vue?vue&type=script&lang=js ***!
+  \***********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_RegisterReview_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./RegisterReview.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/review/RegisterReview.vue?vue&type=script&lang=js");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_RegisterReview_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/review/RegisterReview.vue?vue&type=template&id=fae16552":
+/*!*****************************************************************************************!*\
+  !*** ./resources/js/components/review/RegisterReview.vue?vue&type=template&id=fae16552 ***!
+  \*****************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_RegisterReview_vue_vue_type_template_id_fae16552__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??ref--6!../../../../node_modules/vue-loader/lib??vue-loader-options!./RegisterReview.vue?vue&type=template&id=fae16552 */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/review/RegisterReview.vue?vue&type=template&id=fae16552");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_RegisterReview_vue_vue_type_template_id_fae16552__WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_RegisterReview_vue_vue_type_template_id_fae16552__WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/components/user/Canceled.vue":
 /*!***************************************************!*\
   !*** ./resources/js/components/user/Canceled.vue ***!
@@ -70862,6 +71274,75 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/user/Reviewed.vue":
+/*!***************************************************!*\
+  !*** ./resources/js/components/user/Reviewed.vue ***!
+  \***************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Reviewed_vue_vue_type_template_id_23441bc0__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Reviewed.vue?vue&type=template&id=23441bc0 */ "./resources/js/components/user/Reviewed.vue?vue&type=template&id=23441bc0");
+/* harmony import */ var _Reviewed_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Reviewed.vue?vue&type=script&lang=js */ "./resources/js/components/user/Reviewed.vue?vue&type=script&lang=js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Reviewed_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Reviewed_vue_vue_type_template_id_23441bc0__WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Reviewed_vue_vue_type_template_id_23441bc0__WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/user/Reviewed.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/user/Reviewed.vue?vue&type=script&lang=js":
+/*!***************************************************************************!*\
+  !*** ./resources/js/components/user/Reviewed.vue?vue&type=script&lang=js ***!
+  \***************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Reviewed_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./Reviewed.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/user/Reviewed.vue?vue&type=script&lang=js");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Reviewed_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/user/Reviewed.vue?vue&type=template&id=23441bc0":
+/*!*********************************************************************************!*\
+  !*** ./resources/js/components/user/Reviewed.vue?vue&type=template&id=23441bc0 ***!
+  \*********************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_Reviewed_vue_vue_type_template_id_23441bc0__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??ref--6!../../../../node_modules/vue-loader/lib??vue-loader-options!./Reviewed.vue?vue&type=template&id=23441bc0 */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/user/Reviewed.vue?vue&type=template&id=23441bc0");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_Reviewed_vue_vue_type_template_id_23441bc0__WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_Reviewed_vue_vue_type_template_id_23441bc0__WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/router.js":
 /*!********************************!*\
   !*** ./resources/js/router.js ***!
@@ -70895,11 +71376,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_user_MyPage__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./components/user/MyPage */ "./resources/js/components/user/MyPage.vue");
 /* harmony import */ var _components_user_Posted__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./components/user/Posted */ "./resources/js/components/user/Posted.vue");
 /* harmony import */ var _components_user_Purchased__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./components/user/Purchased */ "./resources/js/components/user/Purchased.vue");
+/* harmony import */ var _components_user_Reviewed__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./components/user/Reviewed */ "./resources/js/components/user/Reviewed.vue");
+/* harmony import */ var _components_review_RegisterReview__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./components/review/RegisterReview */ "./resources/js/components/review/RegisterReview.vue");
 
 
 
 
 //コンポーネントをインポートする
+
+
 
 
 
@@ -70927,34 +71412,26 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
 
 //パスとコンポーネントのマッピング
 var routes = [{
-  //会員登録
   path: '/register',
+  //会員登録
   name: 'register',
   component: _components_auth_Register__WEBPACK_IMPORTED_MODULE_5__["default"],
   beforeEnter: function beforeEnter(to, from, next) {
-    //ログイン済みでアクセスしたらトップページを表示する
-    if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/check']) {
-      next({
-        name: 'index'
-      });
-    } else {
-      next();
-    }
+    //ログイン状態でアクセスしたらトップページを表示する
+    _store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/check'] ? next({
+      name: 'index'
+    }) : next();
   }
 }, {
-  //ログイン
   path: '/login',
+  //ログイン
   name: 'login',
   component: _components_auth_Login__WEBPACK_IMPORTED_MODULE_6__["default"],
   beforeEnter: function beforeEnter(to, from, next) {
     //ログイン状態でアクセスしたらトップページを表示する
-    if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/check']) {
-      next({
-        name: 'index'
-      });
-    } else {
-      next();
-    }
+    _store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/check'] ? next({
+      name: 'index'
+    }) : next();
   }
 }, {
   //パスワードリセットメール送信
@@ -70963,13 +71440,9 @@ var routes = [{
   component: _components_auth_passwords_PassResetEmail__WEBPACK_IMPORTED_MODULE_3__["default"],
   beforeEnter: function beforeEnter(to, from, next) {
     //ログイン状態でアクセスしたらトップページを表示する
-    if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/check']) {
-      next({
-        name: 'index'
-      });
-    } else {
-      next();
-    }
+    _store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/check'] ? next({
+      name: 'index'
+    }) : next();
   }
 }, {
   //パスワードリセットリンク送信
@@ -70978,13 +71451,9 @@ var routes = [{
   component: _components_auth_passwords_PassResetForm__WEBPACK_IMPORTED_MODULE_4__["default"],
   beforeEnter: function beforeEnter(to, from, next) {
     //ログイン状態でアクセスしたらトップページを表示する
-    if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/check']) {
-      next({
-        name: 'index'
-      });
-    } else {
-      next();
-    }
+    _store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/check'] ? next({
+      name: 'index'
+    }) : next();
   }
 }, {
   //インデックス(商品一覧)画面
@@ -71008,10 +71477,15 @@ var routes = [{
   path: '/products/register',
   name: 'product.register',
   component: _components_product_RegisterProduct__WEBPACK_IMPORTED_MODULE_15__["default"],
+  // beforeEnter(to, from, next) { //ログインユーザーかつお店の人がアクセスしたら商品登録ページを表示
+  //   (store.getters['auth/check'] && store.getters['auth/isShopUser']) ? next() : next({ name: 'index' });
+  // }
   beforeEnter: function beforeEnter(to, from, next) {
+    // todo: 挙動がおかしいので要編集
     //ログインユーザーかつお店の人がアクセスしたらトップページを表示する
     if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/check'] && _store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/isShopUser']) {
       next();
+      //利用者だったらインデックス画面に移動する
     } else {
       next({
         name: 'index'
@@ -71025,13 +71499,30 @@ var routes = [{
   component: _components_product_EditProduct__WEBPACK_IMPORTED_MODULE_12__["default"],
   props: true,
   beforeEnter: function beforeEnter(to, from, next) {
-    //ログイン状態かつコンビニユーザーがページにアクセスした場合(true)、そのまま移動させる
-    if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/check'] && _store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/isShopUser']) {
+    //ログイン状態かつ利用者ユーザーがページにアクセスした場合(true)、そのまま移動させる
+    if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/check'] && !_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/isShopUser']) {
       next();
-      //ログインしていなければログイン画面に移動させる
+      //それ以外ならインデックス画面に移動する
     } else {
       next({
-        name: 'login'
+        name: 'index'
+      });
+    }
+  }
+}, {
+  //レビュー投稿
+  path: '/reviews/:id/register',
+  name: 'review.register',
+  component: _components_review_RegisterReview__WEBPACK_IMPORTED_MODULE_24__["default"],
+  props: true,
+  beforeEnter: function beforeEnter(to, from, next) {
+    //ログイン状態かつ利用者ユーザーがページにアクセスした場合(true)、そのまま移動させる
+    if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/check'] && !_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/isShopUser']) {
+      next();
+      //それ以外ならインデックス画面に移動する
+    } else {
+      next({
+        name: 'index'
       });
     }
   }
@@ -71140,6 +71631,22 @@ var routes = [{
   path: '/user/:id/canceled',
   name: 'user.canceled',
   component: _components_user_Canceled__WEBPACK_IMPORTED_MODULE_16__["default"],
+  props: true,
+  beforeEnter: function beforeEnter(to, from, next) {
+    //todo: ユーザーによって処理を分ける
+    if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/check']) {
+      next();
+    } else {
+      next({
+        name: 'login'
+      });
+    }
+  }
+}, {
+  //レビューしたユーザー一覧
+  path: '/user/:id/reviewed',
+  name: 'user.reviewed',
+  component: _components_user_Reviewed__WEBPACK_IMPORTED_MODULE_23__["default"],
   props: true,
   beforeEnter: function beforeEnter(to, from, next) {
     //todo: ユーザーによって処理を分ける

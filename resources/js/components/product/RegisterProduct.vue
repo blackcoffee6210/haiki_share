@@ -208,16 +208,15 @@ export default {
 		},
 	},
 	methods: {
-		//カテゴリー取得
-		async getCategories() {
+		async getCategories() { //カテゴリー取得
 			const response = await axios.get('/api/categories');
-			//responseステータスがOKじゃなかったら
-			if(response.status !== OK) {
+			
+			if(response.status !== OK) { //responseステータスがOKじゃなかったら
 				this.$store.commit('error/setCode', response.status);
 				return false;
 			}
-			//プロパティに値をセットする
-			this.categories = response.data;
+			
+			this.categories = response.data; //プロパティに値をセットする
 		},
 		//フォームでファイルが選択されたら実行されるメソッド
 		onFileChange(event) {
