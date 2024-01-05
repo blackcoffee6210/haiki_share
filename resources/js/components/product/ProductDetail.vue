@@ -92,8 +92,9 @@
 						</button>
 						
 						<!-- レビュー投稿ボタン -->
+						<!-- 購入したユーザーかつレビューを投稿していないユーザーのときに表示 -->
 						<router-link class="c-btn p-product-detail__btn"
-												 v-show="product.purchased_by_user"
+												 v-show="product.purchased_by_user && !product.reviewed_by_user"
 												 :to="{ name: 'review.register', params: {id: id.toString() } }">レビュー投稿
 						</router-link>
 						
@@ -163,7 +164,8 @@ export default {
 			errors: null,        //エラーメッセージを格納するプロパティ
 			buttonActive: false, //TOPボタンを表示する
 			scroll: 0,           //scroll
-			loading: false       //ローディングを表示するかどうかを判定するプロパティ
+			loading: false,      //ローディングを表示するかどうかを判定するプロパティ
+			isReviewed: {}
 		}
 	},
 	computed: {
@@ -186,8 +188,8 @@ export default {
 			if(this.product.liked_by_user) { //ログインユーザーが既に「いいね」を押していたらtrueをセット
 				this.isLike = true;
 			}
+			console.log(this.product);
 		},
-		
 		async onLikeClick() { //「お気に入りボタン」を押したときの処理を行うメソッド
 			if(!this.isLogin) { //ログインしていなかったらアレートを出す
 				if(confirm('いいね機能を使うにはログインしてください')) {

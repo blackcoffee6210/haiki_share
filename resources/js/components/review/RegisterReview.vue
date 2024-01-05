@@ -1,6 +1,5 @@
 <template>
 	<!--todo: classエラー処理を入れる -->
-	<!--todo: inputタグ上にスペースができてるので修正 -->
 	<div class="p-review-form" v-cloak>
 		
 		<h2 class="c-title p-review-form__title">レビュー投稿</h2>
@@ -138,6 +137,7 @@
 				</label>
 				<input type="text"
 							 class="c-input p-review-form__input"
+							 :class="{ 'c-input__err': errors.title }"
 							 id="title"
 							 v-model="reviewForm.title"
 							 placeholder="もっとも伝いたいポイントはなんですか？">
@@ -154,6 +154,7 @@
 							 class="c-label p-review-form__label">レビューの内容
 				</label>
 				<textarea class="c-input p-review-form__textarea"
+									:class="{ 'c-input__err': errors.detail }"
 									id="detail"
 									v-model="reviewForm.detail"
 									placeholder="レビューの内容を入力してください"
@@ -197,6 +198,7 @@ export default {
 				title: null,
 				detail: null
 			},
+			product: {},
 			recommendations: {},
 			reviewForm: {              //レビューフォーム
 				sender_id: null,         //送信者のユーザーid
@@ -211,17 +213,18 @@ export default {
 	computed: {
 		...mapGetters({
 			userId: 'auth/userId'
-		})
+		}),
+		
 	},
 	methods: {
 		async getShopUser() { //商品idを元に出品ユーザーを取得
 			const response = await axios.get(`/api/users/${this.id}/shopUser`); //API通信
-			
+
 			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
 				this.$store.commit('error/setCode', response.status);
 				return false;
 			}
-			
+
 			this.reviewForm.shopUser    = response.data[0];                 //出品者の情報
 			this.reviewForm.sender_id   = this.userId;                      //送信者（レビュー投稿者）のユーザーid
 			this.reviewForm.receiver_id = this.reviewForm.shopUser.user_id; //受信者（出品者）のユーザーid
@@ -234,9 +237,7 @@ export default {
 				this.$store.commit('error/setCode', response.status);
 				return false;
 			}
-			
 			this.recommendations = response.data;
-			console.log(this.recommendations);
 		},
 		async submit() {       //レビュー投稿
 			this.loading = true; //ローディングを表示する
@@ -253,6 +254,9 @@ export default {
 				this.$store.commit('error/setCode', response.status);
 				return false;
 			}
+			
+			//todo: 商品詳細画面の「レビュー投稿ボタン」を非表示にする処理を実装
+			// this.product.reviewed_by_user = true;
 			
 			this.$store.commit('message/setContent', { //メッセージ登録
 				content: 'レビューを投稿しました！',

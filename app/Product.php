@@ -23,7 +23,7 @@ class Product extends Model
 	protected $appends = [
 		'user_image', 'user_name', 'email', 'branch', 'category_name', 'is_my_product',
 		'likes_count', 'liked_by_user', 'purchased_by_user', 'is_purchased',
-		'canceled_by_user'
+		'canceled_by_user', 'reviewed_by_user'
 	];
 
 	//$visibleはJSONに含める属性を定義する
@@ -33,7 +33,7 @@ class Product extends Model
 		'expire', 'deleted_at', 'created_at', 'updated_at',
 		'user_image', 'user_name', 'email', 'branch', 'category_name', 'is_my_product',
 		'likes_count', 'liked_by_user', 'purchased_by_user', 'is_purchased',
-		'canceled_by_user'
+		'canceled_by_user', 'reviewed_by_user'
 	];
 
 	//=====================================================
@@ -145,6 +145,17 @@ class Product extends Model
 		return $this->cancels->contains(function($user) { //LaravelのコレクションメソッドでログインユーザーのIDと合致する商品キャンセルが含まれるか調べる
 			return $user->id === Auth::user()->id; //一致したらtrueを返す
 		});
+	}
+	/**
+	 * アクセサ - reviewed_by_user
+	 * @return boolean
+	 */
+	public function getReviewedByUserAttribute() //リクエストしたユーザーがレビューを投稿しているかどうかを取得するアクセサ
+	{
+		if(Auth::guest() ) { //ユーザーがゲストの場合(ログインしていなければ)falseを返す
+			return false;
+		}
+		return false;
 	}
 
 	//======================================================

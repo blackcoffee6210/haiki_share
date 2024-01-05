@@ -17766,7 +17766,9 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       //TOPボタンを表示する
       scroll: 0,
       //scroll
-      loading: false //ローディングを表示するかどうかを判定するプロパティ
+      loading: false,
+      //ローディングを表示するかどうかを判定するプロパティ
+      isReviewed: {}
     };
   },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])({
@@ -17801,7 +17803,8 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
                 //ログインユーザーが既に「いいね」を押していたらtrueをセット
                 _this.isLike = true;
               }
-            case 8:
+              console.log(_this.product);
+            case 9:
             case "end":
               return _context.stop();
           }
@@ -18316,6 +18319,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         title: null,
         detail: null
       },
+      product: {},
       recommendations: {},
       reviewForm: {
         //レビューフォーム
@@ -18387,8 +18391,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               return _context2.abrupt("return", false);
             case 6:
               _this2.recommendations = response.data;
-              console.log(_this2.recommendations);
-            case 8:
+            case 7:
             case "end":
               return _context2.stop();
           }
@@ -18427,6 +18430,9 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               _this3.$store.commit('error/setCode', response.status);
               return _context3.abrupt("return", false);
             case 11:
+              //todo: 商品詳細画面の「レビュー投稿ボタン」を非表示にする処理を実装
+              // this.product.reviewed_by_user = true;
+
               _this3.$store.commit('message/setContent', {
                 //メッセージ登録
                 content: 'レビューを投稿しました！'
@@ -21765,8 +21771,8 @@ var render = function render() {
     directives: [{
       name: "show",
       rawName: "v-show",
-      value: _vm.product.purchased_by_user,
-      expression: "product.purchased_by_user"
+      value: _vm.product.purchased_by_user && !_vm.product.reviewed_by_user,
+      expression: "product.purchased_by_user && !product.reviewed_by_user"
     }],
     staticClass: "c-btn p-product-detail__btn",
     attrs: {
@@ -22319,6 +22325,9 @@ var render = function render() {
       expression: "reviewForm.title"
     }],
     staticClass: "c-input p-review-form__input",
+    "class": {
+      "c-input__err": _vm.errors.title
+    },
     attrs: {
       type: "text",
       id: "title",
@@ -22351,6 +22360,9 @@ var render = function render() {
       expression: "reviewForm.detail"
     }],
     staticClass: "c-input p-review-form__textarea",
+    "class": {
+      "c-input__err": _vm.errors.detail
+    },
     attrs: {
       id: "detail",
       placeholder: "レビューの内容を入力してください"
