@@ -4,7 +4,7 @@
 <br>
 出品者: {{ $params['receiver_name'] }}<br>
 ユーザーの評価: {{ $params['recommendation'] }}<br>
-レビュータイトル: {{ $params['title'] }}円<br>
+レビュータイトル: {{ $params['title'] }}<br>
 レビューの内容: {{ $params['detail'] }}<br>
 投稿日時: {{ $params['reviewed_at'] }}<br>
 <br>

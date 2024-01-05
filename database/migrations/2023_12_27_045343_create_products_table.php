@@ -25,9 +25,8 @@ class CreateProductsTable extends Migration
             $table->softDeletes();
             $table->timestamps();
 
-            //外部キー
-            $table->foreign('user_id')->references('id')->on('users');
-	        $table->foreign('category_id')->references('id')->on('categories');
+            $table->foreign('user_id')->references('id')->on('users');          //外部キー
+	        $table->foreign('category_id')->references('id')->on('categories'); //外部キー
 
         });
     }

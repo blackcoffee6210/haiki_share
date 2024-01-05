@@ -21,4 +21,8 @@ class Review extends Model
 	{
 		return $this->belongsTo('App\User');
 	}
+	public function recommendation() //ユーザー評価テーブル
+	{
+		return $this->belongsTo('App\Recommendation');
+	}
 }

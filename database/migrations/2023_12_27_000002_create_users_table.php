@@ -29,8 +29,7 @@ class CreateUsersTable extends Migration
             $table->softDeletes();
             $table->timestamps();
 
-            //外部キー
-	        $table->foreign('prefecture_id')->references('id')->on('prefectures');
+	        $table->foreign('prefecture_id')->references('id')->on('prefectures'); //外部キー
         });
     }
 

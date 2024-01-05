@@ -568,22 +568,9 @@ body {
 }
 
 .c-btn--twitter {
-  position: relative;
+  display: inline-block;
   background: #00acee;
   color: white;
-  padding: 5px 10px;
-  border-radius: 3px;
-  display: inline-block;
-  border-bottom: 2px solid #007baa;
-}
-
-.c-btn--twitter:active {
-  border-bottom: 0;
-  bottom: -2px;
-}
-
-.c-btn--twitter:hover {
-  cursor: pointer;
 }
 
 .c-btn--white {
@@ -2685,8 +2672,22 @@ body {
 
 @media screen and (max-width: 450px) {
   .p-review-form__form {
-    padding: 10px;
+    padding: 20px;
   }
+}
+
+.p-review-form__user-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.p-review-form__icon {
+  margin-right: 10px;
+}
+
+.p-review-form__user-name {
+  font-size: 1.8rem;
 }
 
 .p-review-form__recommendation__container {

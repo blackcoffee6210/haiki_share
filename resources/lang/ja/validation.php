@@ -160,7 +160,7 @@ return [
 		'current_password'          => '現在のパスワード',
 		'new_password'              => '新しいパスワード',
 		'new_password_confirmation' => '新しいパスワード(確認)',
-		'recommendation'            => 'ユーザーの評価',
+		'recommendation_id'         => 'ユーザーの評価',
 		'title'                     => 'レビュータイトル'
 	],
 	'values' => [

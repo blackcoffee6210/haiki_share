@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreReview;
 use App\Mail\ReviewedReceiverNotification;
 use App\Mail\ReviewedSenderNotification;
+use App\Recommendation;
 use App\Review;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -20,15 +21,17 @@ class ReviewController extends Controller
 
 	public function store(StoreReview $request) //レビュー投稿
 	{
-		$review         = new Review;                //インスタンス生成
-		$sender_email   = Auth::user()->email;       //送信者のEmail
+		$recommendation = Recommendation::find($request->recommendation_id); //ユーザー評価(name)を取得
+
+		$review         = new Review;                  //インスタンス生成
+		$sender_email   = Auth::user()->email;         //送信者のEmail
 		$receiver_email = $request->shopUser['email']; //受信者のEmail
 
-		$review->sender_id      = $request->sender_id;
-		$review->receiver_id    = $request->receiver_id;
-		$review->recommendation = $request->recommendation;
-		$review->title          = $request->title;
-		$review->detail         = $request->detail;
+		$review->sender_id         = $request->sender_id;
+		$review->receiver_id       = $request->receiver_id;
+		$review->recommendation_id = $request->recommendation_id;
+		$review->title             = $request->title;
+		$review->detail            = $request->detail;
 		$review->save();
 
 //		todo: メール送信機能実装
@@ -38,7 +41,7 @@ class ReviewController extends Controller
 			'receiver_id'    => $request->receiver_id,
 			'receiver_name'  => $request->shopUser['name'],
 			'receiver_image' => $request->shopUser['image'],
-			'recommendation' => $request->recommendation,
+			'recommendation' => $recommendation['name'],
 			'title'          => $request->title,
 			'detail'         => $request->detail,
 			'reviewed_at'    => Carbon::now()

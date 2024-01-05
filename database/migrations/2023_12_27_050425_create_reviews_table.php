@@ -15,17 +15,17 @@ class CreateReviewsTable extends Migration
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('sender_id');   //送信者のユーザーid
-            $table->unsignedBigInteger('receiver_id'); //受信者のユーザーid
-            $table->string('title');                   //レビュータイトル
-            $table->integer('recommendation');         //おすすめかどうか
-            $table->string('detail');                  //レビューの内容
+            $table->unsignedBigInteger('sender_id');         //送信者のユーザーid
+            $table->unsignedBigInteger('receiver_id');       //受信者のユーザーid
+            $table->unsignedBigInteger('recommendation_id'); //おすすめかどうか
+	        $table->string('title');                         //レビュータイトル
+            $table->string('detail');                        //レビューの内容
             $table->softDeletes();
             $table->timestamps();
 
-            //外部キー
-	        $table->foreign('sender_id')->references('id')->on('users');
-	        $table->foreign('receiver_id')->references('id')->on('users');
+	        $table->foreign('sender_id')->references('id')->on('users');                   //外部キー
+	        $table->foreign('receiver_id')->references('id')->on('users');                 //外部キー
+	        $table->foreign('recommendation_id')->references('id')->on('recommendations'); //外部キー
         });
     }
 

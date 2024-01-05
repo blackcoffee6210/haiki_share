@@ -55,7 +55,7 @@
 					<div class="p-product-detail__btn-container">
 						<!-- 商品編集ボタン(自分の商品のときだけ & 購入されていない) -->
 						<router-link class="c-btn p-product-detail__btn--edit"
-												 v-if="product.is_my_product && !product.is_purchased"
+												 v-show="product.is_my_product && !product.is_purchased"
 												 :to="{ name: 'product.edit', params: {id: id.toString() } }">編集する
 						</router-link>
 						
@@ -91,6 +91,12 @@
 							<span v-else>購入</span>
 						</button>
 						
+						<!-- レビュー投稿ボタン -->
+						<router-link class="c-btn p-product-detail__btn"
+												 v-show="product.purchased_by_user"
+												 :to="{ name: 'review.register', params: {id: id.toString() } }">レビュー投稿
+						</router-link>
+						
 						<!-- 購入キャンセルボタン	-->
 						<!-- 自分が購入した商品のときに表示 -->
 						<!--todo: 購入から3日以内または賞味期限1日前まではキャンセル可能-->
@@ -113,7 +119,7 @@
 													title="vue-social-sharingのテスト"
 													quote="Vue is a progressive framework for building user interfaces."
 													hashtags="haiki_share"
-													inline-template class="c-btn--twitter">
+													inline-template class="c-btn c-btn--twitter">
 						<network network="twitter">
 							<font-awesome-icon :icon="['fab', 'twitter']" /> Twitter
 						</network>
@@ -266,7 +272,7 @@ export default {
 				}
 				
 				this.product.purchased_by_user = false; //購入キャンセルをしたのでpurchased_by_userにfalseをセット
-				this.product.canceled_by_user = true; //canceled_by_userにtrueをセット
+				this.product.canceled_by_user  = true; //canceled_by_userにtrueをセット
 				
 				this.$store.commit('message/setContent', { //メッセージ登録
 					content: '購入をキャンセルしました'

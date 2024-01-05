@@ -1,5 +1,4 @@
 .p-review-form {
-  //width: 640px;
   width: 480px;
   margin: 0 auto;
   @include mq() {
@@ -17,8 +16,19 @@
     position: relative;
     padding: $space_xl;
     @include mq() {
-      padding: $space_m;
+      padding: $space_xl;
     }
+  }
+  &__user-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: $space_xl;
+  }
+  &__icon {
+    margin-right: $space_m;
+  }
+  &__user-name {
+    font-size: $font-size_l;
   }
   &__recommendation {
     &__container {

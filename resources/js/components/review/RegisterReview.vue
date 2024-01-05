@@ -24,50 +24,109 @@
 				
 				<!-- ユーザーの評価 -->
 				<div>ユーザーの評価</div>
+				<!--<div class="p-review-form__recommendation__container">-->
+				<!--	<div v-for="recommendation in recommendations"-->
+				<!--			 :key="recommendation.id">-->
+				<!--		<input type="radio"-->
+				<!--					 :id="recommendation.id"-->
+				<!--					 class="p-review-form__recommendation__input"-->
+				<!--					 name="recommend"-->
+				<!--					 :value="recommendation.id"-->
+				<!--					 v-model.number="reviewForm.recommendation">-->
+				<!--		<label :for="recommendation.id"-->
+				<!--					 class="p-review-form__recommendation__label">-->
+				<!--			<font-awesome-icon style="font-size: 24px;"-->
+				<!--												 :icon="['far', 'laugh-beam']"-->
+				<!--												 color="#ff6f80" />-->
+				<!--			<span class="u-ml5">{{ recommendation.name }}</span>-->
+				<!--		</label>-->
+				<!--	</div>-->
+				<!--</div>-->
 				<div class="p-review-form__recommendation__container">
 					<input type="radio"
-								 id="recommend1"
+								 :id="'recommend' + recommendations[0].id"
 								 class="p-review-form__recommendation__input"
 								 name="recommend"
-								 value="1"
-								 v-model.number="reviewForm.recommendation">
-					<label for="recommend1"
+								 :value="recommendations[0].id"
+								 v-model.number="reviewForm.recommendation_id">
+					<label :for="'recommend' + recommendations[0].id"
 								 class="p-review-form__recommendation__label">
 						<font-awesome-icon style="font-size: 24px;"
 															 :icon="['far', 'laugh-beam']"
 															 color="#ff6f80" />
-						<span class="u-ml5">とてもオススメ</span>
+						<span class="u-ml5">{{ recommendations[0].name }}</span>
 					</label>
 					<input type="radio"
-								 id="recommend2"
+								 :id="'recommend' + recommendations[1].id"
 								 class="p-review-form__recommendation__input"
 								 name="recommend"
-								 value="2"
-								 v-model.number="reviewForm.recommendation">
-					<label for="recommend2"
+								 :value="recommendations[1].id"
+								 v-model.number="reviewForm.recommendation_id">
+					<label :for="'recommend' + recommendations[1].id"
 								 class="p-review-form__recommendation__label">
-						<font-awesome-icon style="font-size: 20px;"
-															 :icon="['fas', 'smile']"
+						<font-awesome-icon style="font-size: 24px;"
+															 :icon="['far', 'smile']"
 															 color="#ff6f80" />
-						<span class="u-ml5">オススメ</span>
+						<span class="u-ml5">{{ recommendations[1].name }}</span>
 					</label>
 					<input type="radio"
-								 id="recommend3"
+								 :id="'recommend' + recommendations[2].id"
 								 class="p-review-form__recommendation__input"
 								 name="recommend"
-								 value="3"
-								 v-model.number="reviewForm.recommendation">
-					<label for="recommend3"
+								 :value="recommendations[2].id"
+								 v-model.number="reviewForm.recommendation_id">
+					<label :for="'recommend' + recommendations[2].id"
 								 class="p-review-form__recommendation__label">
-						<font-awesome-icon style="font-size: 20px;"
-															 :icon="['fas', 'meh']"
+						<font-awesome-icon style="font-size: 24px;"
+															 :icon="['far', 'meh']"
 															 color="#ff6f80" />
-						<span class="u-ml5">オススメしない</span>
+						<span class="u-ml5">{{ recommendations[2].name }}</span>
 					</label>
 				</div>
+				<!--<div class="p-review-form__recommendation__container">-->
+				<!--	<input type="radio"-->
+				<!--				 id="recommend1"-->
+				<!--				 class="p-review-form__recommendation__input"-->
+				<!--				 name="recommend"-->
+				<!--				 value="1"-->
+				<!--				 v-model.number="reviewForm.recommendation">-->
+				<!--	<label for="recommend1"-->
+				<!--				 class="p-review-form__recommendation__label">-->
+				<!--		<font-awesome-icon style="font-size: 24px;"-->
+				<!--											 :icon="['far', 'laugh-beam']"-->
+				<!--											 color="#ff6f80" />-->
+				<!--		<span class="u-ml5">とてもオススメ</span>-->
+				<!--	</label>-->
+				<!--	<input type="radio"-->
+				<!--				 id="recommend2"-->
+				<!--				 class="p-review-form__recommendation__input"-->
+				<!--				 name="recommend"-->
+				<!--				 value="2"-->
+				<!--				 v-model.number="reviewForm.recommendation">-->
+				<!--	<label for="recommend2"-->
+				<!--				 class="p-review-form__recommendation__label">-->
+				<!--		<font-awesome-icon style="font-size: 20px;"-->
+				<!--											 :icon="['fas', 'smile']"-->
+				<!--											 color="#ff6f80" />-->
+				<!--		<span class="u-ml5">オススメ</span>-->
+				<!--	</label>-->
+				<!--	<input type="radio"-->
+				<!--				 id="recommend3"-->
+				<!--				 class="p-review-form__recommendation__input"-->
+				<!--				 name="recommend"-->
+				<!--				 value="3"-->
+				<!--				 v-model.number="reviewForm.recommendation">-->
+				<!--	<label for="recommend3"-->
+				<!--				 class="p-review-form__recommendation__label">-->
+				<!--		<font-awesome-icon style="font-size: 20px;"-->
+				<!--											 :icon="['fas', 'meh']"-->
+				<!--											 color="#ff6f80" />-->
+				<!--		<span class="u-ml5">オススメしない</span>-->
+				<!--	</label>-->
+				<!--</div>-->
 				<!-- エラーメッセージ	-->
 				<div v-if="errors">
-					<div v-for="msg in errors.recommendation"
+					<div v-for="msg in errors.recommendation_id"
 							 :key="msg"
 							 class="p-error">{{ msg }}
 					</div>
@@ -133,19 +192,19 @@ export default {
 	data() {
 		return {
 			loading: false, //ローディング
-			// shopUser: {},   //出品ユーザーの情報
 			errors: {       //エラーメッセージ
-				recommendation: null,
+				recommendation_id: null,
 				title: null,
 				detail: null
 			},
-			reviewForm: {           //レビューフォーム
-				sender_id: null,      //送信者のユーザーid
-				receiver_id: null,    //受信者のユーザーid
-				recommendation: null, //ユーザー評価
-				title: '',            //レビュータイトル
-				detail: '',            //レビューコメント
-				shopUser: {},   //出品ユーザーの情報
+			recommendations: {},
+			reviewForm: {              //レビューフォーム
+				sender_id: null,         //送信者のユーザーid
+				receiver_id: null,       //受信者のユーザーid
+				recommendation_id: null, //ユーザー評価
+				title: '',               //レビュータイトル
+				detail: '',              //レビューコメント
+				shopUser: {},            //出品ユーザーの情報
 			}
 		}
 	},
@@ -167,6 +226,17 @@ export default {
 			this.reviewForm.sender_id   = this.userId;                      //送信者（レビュー投稿者）のユーザーid
 			this.reviewForm.receiver_id = this.reviewForm.shopUser.user_id; //受信者（出品者）のユーザーid
 			console.log(this.reviewForm);
+		},
+		async getRecommendation() { //ユーザー評価取得
+			const response = await axios.get('/api/recommendations') //API接続
+			
+			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
+				this.$store.commit('error/setCode', response.status);
+				return false;
+			}
+			
+			this.recommendations = response.data;
+			console.log(this.recommendations);
 		},
 		async submit() {       //レビュー投稿
 			this.loading = true; //ローディングを表示する
@@ -195,6 +265,7 @@ export default {
 		$route: {
 			async handler() {
 				this.getShopUser();
+				this.getRecommendation();
 			},
 			immediate: true
 		}

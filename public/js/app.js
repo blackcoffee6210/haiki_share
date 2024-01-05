@@ -18310,20 +18310,20 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     return {
       loading: false,
       //ローディング
-      // shopUser: {},   //出品ユーザーの情報
       errors: {
         //エラーメッセージ
-        recommendation: null,
+        recommendation_id: null,
         title: null,
         detail: null
       },
+      recommendations: {},
       reviewForm: {
         //レビューフォーム
         sender_id: null,
         //送信者のユーザーid
         receiver_id: null,
         //受信者のユーザーid
-        recommendation: null,
+        recommendation_id: null,
         //ユーザー評価
         title: '',
         //レビュータイトル
@@ -18367,70 +18367,99 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         }, _callee);
       }))();
     },
-    submit: function submit() {
+    getRecommendation: function getRecommendation() {
       var _this2 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
         var response;
         return _regeneratorRuntime().wrap(function _callee2$(_context2) {
           while (1) switch (_context2.prev = _context2.next) {
             case 0:
-              //レビュー投稿
-              _this2.loading = true; //ローディングを表示する
-              _context2.next = 3;
-              return axios.post('/api/reviews', _this2.reviewForm);
-            case 3:
+              _context2.next = 2;
+              return axios.get('/api/recommendations');
+            case 2:
               response = _context2.sent;
-              //API接続
-
-              _this2.loading = false; //API通信が終わったらローディングを非表示にする
-              if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["UNPROCESSABLE_ENTITY"])) {
-                _context2.next = 8;
+              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
+                _context2.next = 6;
                 break;
               }
-              //responseステータスがバリデーションエラーなら後続の処理を行う
-              _this2.errors = response.data.errors;
-              return _context2.abrupt("return", false);
-            case 8:
-              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["CREATED"])) {
-                _context2.next = 11;
-                break;
-              }
-              //responseステータスがCREATEDじゃなかったら後続の処理を行う
+              //responseステータスがOKじゃなかったらエラーコードをセットする
               _this2.$store.commit('error/setCode', response.status);
               return _context2.abrupt("return", false);
-            case 11:
-              _this2.$store.commit('message/setContent', {
-                //メッセージ登録
-                content: 'レビューを投稿しました！'
-              });
-              _this2.$router.push({
-                name: 'user.mypage',
-                params: {
-                  id: _this2.userId.toString()
-                }
-              }); //マイページに遷移
-            case 13:
+            case 6:
+              _this2.recommendations = response.data;
+              console.log(_this2.recommendations);
+            case 8:
             case "end":
               return _context2.stop();
           }
         }, _callee2);
+      }))();
+    },
+    submit: function submit() {
+      var _this3 = this;
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+        var response;
+        return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+          while (1) switch (_context3.prev = _context3.next) {
+            case 0:
+              //レビュー投稿
+              _this3.loading = true; //ローディングを表示する
+              _context3.next = 3;
+              return axios.post('/api/reviews', _this3.reviewForm);
+            case 3:
+              response = _context3.sent;
+              //API接続
+
+              _this3.loading = false; //API通信が終わったらローディングを非表示にする
+              if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["UNPROCESSABLE_ENTITY"])) {
+                _context3.next = 8;
+                break;
+              }
+              //responseステータスがバリデーションエラーなら後続の処理を行う
+              _this3.errors = response.data.errors;
+              return _context3.abrupt("return", false);
+            case 8:
+              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["CREATED"])) {
+                _context3.next = 11;
+                break;
+              }
+              //responseステータスがCREATEDじゃなかったら後続の処理を行う
+              _this3.$store.commit('error/setCode', response.status);
+              return _context3.abrupt("return", false);
+            case 11:
+              _this3.$store.commit('message/setContent', {
+                //メッセージ登録
+                content: 'レビューを投稿しました！'
+              });
+              _this3.$router.push({
+                name: 'user.mypage',
+                params: {
+                  id: _this3.userId.toString()
+                }
+              }); //マイページに遷移
+            case 13:
+            case "end":
+              return _context3.stop();
+          }
+        }, _callee3);
       }))();
     }
   },
   watch: {
     $route: {
       handler: function handler() {
-        var _this3 = this;
-        return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
-          return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-            while (1) switch (_context3.prev = _context3.next) {
+        var _this4 = this;
+        return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+          return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+            while (1) switch (_context4.prev = _context4.next) {
               case 0:
-                _this3.getShopUser();
-              case 1:
+                _this4.getShopUser();
+                _this4.getRecommendation();
+              case 2:
               case "end":
-                return _context3.stop();
+                return _context4.stop();
             }
-          }, _callee3);
+          }, _callee4);
         }))();
       },
       immediate: true
@@ -21680,7 +21709,13 @@ var render = function render() {
     staticClass: "p-product-detail__date"
   }, [_vm._v("\n\t\t\t\t\t\t\t" + _vm._s(_vm._f("moment")(_vm.product.created_at)) + "\n\t\t\t\t\t\t")])])]), _vm._v(" "), _c("div", {
     staticClass: "p-product-detail__btn-container"
-  }, [_vm.product.is_my_product && !_vm.product.is_purchased ? _c("router-link", {
+  }, [_c("router-link", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: _vm.product.is_my_product && !_vm.product.is_purchased,
+      expression: "product.is_my_product && !product.is_purchased"
+    }],
     staticClass: "c-btn p-product-detail__btn--edit",
     attrs: {
       to: {
@@ -21690,7 +21725,7 @@ var render = function render() {
         }
       }
     }
-  }, [_vm._v("編集する\n\t\t\t\t\t")]) : _vm._e(), _vm._v(" "), _c("button", {
+  }, [_vm._v("編集する\n\t\t\t\t\t")]), _vm._v(" "), _c("button", {
     staticClass: "c-btn c-btn--white p-product-detail__btn--like",
     style: {
       "border-color": [_vm.isLike ? "#ff3c53" : "lightgray"],
@@ -21726,7 +21761,23 @@ var render = function render() {
     on: {
       click: _vm.purchase
     }
-  }, [_vm.product.is_purchased ? _c("span", [_vm._v("購入済み")]) : _c("span", [_vm._v("購入")])]), _vm._v(" "), _c("button", {
+  }, [_vm.product.is_purchased ? _c("span", [_vm._v("購入済み")]) : _c("span", [_vm._v("購入")])]), _vm._v(" "), _c("router-link", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: _vm.product.purchased_by_user,
+      expression: "product.purchased_by_user"
+    }],
+    staticClass: "c-btn p-product-detail__btn",
+    attrs: {
+      to: {
+        name: "review.register",
+        params: {
+          id: _vm.id.toString()
+        }
+      }
+    }
+  }, [_vm._v("レビュー投稿\n\t\t\t\t\t")]), _vm._v(" "), _c("button", {
     directives: [{
       name: "show",
       rawName: "v-show",
@@ -21742,7 +21793,7 @@ var render = function render() {
   }, [_vm._v("\n\t\t\t\t" + _vm._s(_vm.product.detail) + "\n\t\t\t")]), _vm._v(" "), _c("div", {
     staticClass: "p-product-detail__twitter-container"
   }, [_c("social-sharing", {
-    staticClass: "c-btn--twitter",
+    staticClass: "c-btn c-btn--twitter",
     attrs: {
       url: "http://127.0.0.1:8001/products/48",
       title: "vue-social-sharingのテスト",
@@ -22134,8 +22185,8 @@ var render = function render() {
     directives: [{
       name: "model",
       rawName: "v-model.number",
-      value: _vm.reviewForm.recommendation,
-      expression: "reviewForm.recommendation",
+      value: _vm.reviewForm.recommendation_id,
+      expression: "reviewForm.recommendation_id",
       modifiers: {
         number: true
       }
@@ -22143,22 +22194,22 @@ var render = function render() {
     staticClass: "p-review-form__recommendation__input",
     attrs: {
       type: "radio",
-      id: "recommend1",
-      name: "recommend",
-      value: "1"
+      id: "recommend" + _vm.recommendations[0].id,
+      name: "recommend"
     },
     domProps: {
-      checked: _vm._q(_vm.reviewForm.recommendation, _vm._n("1"))
+      value: _vm.recommendations[0].id,
+      checked: _vm._q(_vm.reviewForm.recommendation_id, _vm._n(_vm.recommendations[0].id))
     },
     on: {
       change: function change($event) {
-        _vm.$set(_vm.reviewForm, "recommendation", _vm._n("1"));
+        _vm.$set(_vm.reviewForm, "recommendation_id", _vm._n(_vm.recommendations[0].id));
       }
     }
   }), _vm._v(" "), _c("label", {
     staticClass: "p-review-form__recommendation__label",
     attrs: {
-      "for": "recommend1"
+      "for": "recommend" + _vm.recommendations[0].id
     }
   }, [_c("font-awesome-icon", {
     staticStyle: {
@@ -22170,12 +22221,12 @@ var render = function render() {
     }
   }), _vm._v(" "), _c("span", {
     staticClass: "u-ml5"
-  }, [_vm._v("とてもオススメ")])], 1), _vm._v(" "), _c("input", {
+  }, [_vm._v(_vm._s(_vm.recommendations[0].name))])], 1), _vm._v(" "), _c("input", {
     directives: [{
       name: "model",
       rawName: "v-model.number",
-      value: _vm.reviewForm.recommendation,
-      expression: "reviewForm.recommendation",
+      value: _vm.reviewForm.recommendation_id,
+      expression: "reviewForm.recommendation_id",
       modifiers: {
         number: true
       }
@@ -22183,39 +22234,39 @@ var render = function render() {
     staticClass: "p-review-form__recommendation__input",
     attrs: {
       type: "radio",
-      id: "recommend2",
-      name: "recommend",
-      value: "2"
+      id: "recommend" + _vm.recommendations[1].id,
+      name: "recommend"
     },
     domProps: {
-      checked: _vm._q(_vm.reviewForm.recommendation, _vm._n("2"))
+      value: _vm.recommendations[1].id,
+      checked: _vm._q(_vm.reviewForm.recommendation_id, _vm._n(_vm.recommendations[1].id))
     },
     on: {
       change: function change($event) {
-        _vm.$set(_vm.reviewForm, "recommendation", _vm._n("2"));
+        _vm.$set(_vm.reviewForm, "recommendation_id", _vm._n(_vm.recommendations[1].id));
       }
     }
   }), _vm._v(" "), _c("label", {
     staticClass: "p-review-form__recommendation__label",
     attrs: {
-      "for": "recommend2"
+      "for": "recommend" + _vm.recommendations[1].id
     }
   }, [_c("font-awesome-icon", {
     staticStyle: {
-      "font-size": "20px"
+      "font-size": "24px"
     },
     attrs: {
-      icon: ["fas", "smile"],
+      icon: ["far", "smile"],
       color: "#ff6f80"
     }
   }), _vm._v(" "), _c("span", {
     staticClass: "u-ml5"
-  }, [_vm._v("オススメ")])], 1), _vm._v(" "), _c("input", {
+  }, [_vm._v(_vm._s(_vm.recommendations[1].name))])], 1), _vm._v(" "), _c("input", {
     directives: [{
       name: "model",
       rawName: "v-model.number",
-      value: _vm.reviewForm.recommendation,
-      expression: "reviewForm.recommendation",
+      value: _vm.reviewForm.recommendation_id,
+      expression: "reviewForm.recommendation_id",
       modifiers: {
         number: true
       }
@@ -22223,34 +22274,34 @@ var render = function render() {
     staticClass: "p-review-form__recommendation__input",
     attrs: {
       type: "radio",
-      id: "recommend3",
-      name: "recommend",
-      value: "3"
+      id: "recommend" + _vm.recommendations[2].id,
+      name: "recommend"
     },
     domProps: {
-      checked: _vm._q(_vm.reviewForm.recommendation, _vm._n("3"))
+      value: _vm.recommendations[2].id,
+      checked: _vm._q(_vm.reviewForm.recommendation_id, _vm._n(_vm.recommendations[2].id))
     },
     on: {
       change: function change($event) {
-        _vm.$set(_vm.reviewForm, "recommendation", _vm._n("3"));
+        _vm.$set(_vm.reviewForm, "recommendation_id", _vm._n(_vm.recommendations[2].id));
       }
     }
   }), _vm._v(" "), _c("label", {
     staticClass: "p-review-form__recommendation__label",
     attrs: {
-      "for": "recommend3"
+      "for": "recommend" + _vm.recommendations[2].id
     }
   }, [_c("font-awesome-icon", {
     staticStyle: {
-      "font-size": "20px"
+      "font-size": "24px"
     },
     attrs: {
-      icon: ["fas", "meh"],
+      icon: ["far", "meh"],
       color: "#ff6f80"
     }
   }), _vm._v(" "), _c("span", {
     staticClass: "u-ml5"
-  }, [_vm._v("オススメしない")])], 1)]), _vm._v(" "), _vm.errors ? _c("div", _vm._l(_vm.errors.recommendation, function (msg) {
+  }, [_vm._v(_vm._s(_vm.recommendations[2].name))])], 1)]), _vm._v(" "), _vm.errors ? _c("div", _vm._l(_vm.errors.recommendation_id, function (msg) {
     return _c("div", {
       key: msg,
       staticClass: "p-error"

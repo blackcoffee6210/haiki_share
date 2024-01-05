@@ -54,5 +54,7 @@ Route::get('/refresh-token', function(Request $request) { //トークンリフ�
 	return response()->json();
 });
 Route::get('/user', function() { return Auth::user(); })->name('user'); //ログインユーザーを返す
-Route::get('/categories', 'CategoryController');                        //カテゴリー取得API
-Route::get('/prefectures', 'PrefectureController');                     //都道府県取得API
+Route::get('/categories',      'CategoryController');                   //カテゴリー取得API
+Route::get('/prefectures',     'PrefectureController');                 //都道府県取得API
+Route::get('/recommendations', 'RecommendationController');             //ユーザー評価取得API
+

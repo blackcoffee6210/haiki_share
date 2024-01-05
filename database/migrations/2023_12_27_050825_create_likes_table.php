@@ -19,9 +19,8 @@ class CreateLikesTable extends Migration
             $table->unsignedBigInteger('product_id'); //商品id
             $table->timestamps();
 
-            //外部キー
-	        $table->foreign('user_id')->references('id')->on('users');
-	        $table->foreign('product_id')->references('id')->on('products');
+	        $table->foreign('user_id')->references('id')->on('users');       //外部キー
+	        $table->foreign('product_id')->references('id')->on('products'); //外部キー
         });
     }
 

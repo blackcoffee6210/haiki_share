@@ -24,11 +24,11 @@ class StoreReview extends FormRequest
     public function rules()
     {
         return [
-            'sender_id'      => 'required|integer',
-	        'receiver_id'    => 'required|integer',
-	        'recommendation' => 'required|integer',
-	        'title'          => 'required|string|max:255',
-	        'detail'         => 'required|string|max:255',
+            'sender_id'         => 'required|integer',
+	        'receiver_id'       => 'required|integer',
+	        'recommendation_id' => 'required|integer',
+	        'title'             => 'required|string|max:255',
+	        'detail'            => 'required|string|max:255',
         ];
     }
 
