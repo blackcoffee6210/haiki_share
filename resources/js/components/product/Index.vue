@@ -110,8 +110,7 @@ import { OK }     from "../../util";
 export default {
 	name: "Index",
 	props: {
-		//ルーター(router.js)から渡されるpageプロパティを受け取る
-		page: {
+		page: { //ルーター(router.js)から渡されるpageプロパティを受け取る
 			type: Number,
 			required: false,
 			default: 1
@@ -137,40 +136,31 @@ export default {
 		}
 	},
 	computed: {
-		//絞り込んだ商品を返す
-		filteredProducts() {
-			//絞り込み後の商品を格納する新しい配列
-			let newProducts = [];
+		filteredProducts() { //絞り込んだ商品を返す
+			let newProducts = []; //絞り込み後の商品を格納する新しい配列
 			
-			//カテゴリーが追加されたら、カテゴリーIDが一致する商品だけを表示する
-			for(let i = 0; i < this.products.length; i++) {
-				//表示対象かどうかを判定するフラグ
-				let isShow = true;
+			for(let i = 0; i < this.products.length; i++) { //カテゴリーが追加されたら、カテゴリーIDが一致する商品だけを表示する
+				let isShow = true; //表示対象かどうかを判定するフラグ
 				
-				//i番目の商品が表示可能かどうかを判定する
 				if(this.sortCategory !== 0 &&
-					 this.sortCategory !== this.products[i].category_id) {
-					//カテゴリーのセレクトボックスが選択されている(0じゃない) かつ
-					//カテゴリーのセレクトボックスと商品カテゴリーIDが一致しないものは非表示にする
+					 this.sortCategory !== this.products[i].category_id) { //i番目の商品が表示可能かどうかを判定する
+					//カテゴリーが選択されていて(0じゃない) かつカテゴリーと商品カテゴリーIDが一致しないものは非表示にする
 					isShow = false;
 				}
-				//リアルタイム検索をするための処理
-				if(isShow && this.products[i].name.indexOf(this.keyword) !== -1) {
+				if(isShow && this.products[i].name.indexOf(this.keyword) !== -1) { //リアルタイム検索をするための処理
 					newProducts.push(this.products[i]);
 				}
 			}
-			//新しい配列を並び替える
-			if(this.sortPrice === 1) {
+			
+			if(this.sortPrice === 1) { //新しい配列を並び替える
 				//元の順番にsortしているので並び替えはなし
-			}
-			//価格が安い順に並び替える
-			else if(this.sortPrice === 2) {
+				
+			}else if(this.sortPrice === 2) { //価格が安い順に並び替える
 				newProducts.sort(function(a, b) {
 					return a.price - b.price;
 				});
-			}
-			//価格が高い順に並び替える
-			else if(this.sortPrice === 3) {
+				
+			}else if(this.sortPrice === 3) { //価格が高い順に並び替える
 				newProducts.sort(function(a, b) {
 					return b.price - a.price;
 				})
@@ -178,47 +168,39 @@ export default {
 			
 			//todo: ここに賞味期限でソートする処理を実装する
 			
-			//絞り込み後の商品を返す
-			return newProducts;
+			return newProducts; //絞り込み後の商品を返す
 		},
-		//商品数のカウント
-		count() {
+		count() { //商品数のカウント
 			return this.filteredProducts.length;
 		}
 	},
 	methods: {
-		//カテゴリー取得メソッド
-		async getCategories() {
-			//API接続
-			const response = await axios.get('/api/categories');
-			//responseステータスがOKじゃなかったらエラーコードをセット
-			if(response.status !== OK) {
+		async getCategories() { //カテゴリー取得メソッド
+			const response = await axios.get('/api/categories'); //API接続
+			
+			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
 				this.$store.commit('error/setCode', response.status);
 				return false;
 			}
-			//プロパティにresponseデータを代入
-			this.categories = response.data;
+			this.categories = response.data; //プロパティにresponseデータを代入
 		},
-		//商品取得メソッド
-		async getProducts() {
-			//ローディングを表示する
-			this.loading = true;
-			//API接続
-			const response = await axios.get(`/api/products?page=${this.page}`);
-			//API通信が終わったらローディングを非表示にする
-			this.loading = false;
+		async getProducts() { //商品取得メソッド
+			this.loading = true; //ローディングを表示する
 			
-			//responseステータスがOKじゃなかったらエラーコードをセットする
-			if(response.status !== OK) {
+			const response = await axios.get(`/api/products?page=${this.page}`); //API接続
+			
+			this.loading = false; //API通信が終わったらローディングを非表示にする
+			
+			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
 				this.$store.commit('error/setCode', response.status);
 				return false;
 			}
 			//response.dataだとレスポンスのJSONの取得になる
 			//productはresponse.data.dataの中になるので、下記のような書き方になる
-			this.products    = response.data.data;        //商品情報
+			this.products    = response.data.data;         //商品情報
 			this.currentPage = response.data.current_page; //現在のページ
 			this.lastPage    = response.data.last_page;    //最後のページ
-			this.total       = response.data.total;       //商品の数
+			this.total       = response.data.total;        //商品の数
 		}
 	},
 	watch: {
@@ -227,8 +209,7 @@ export default {
 				await this.getCategories();
 				await this.getProducts();
 			},
-			//immediateをtrueにすると、コンポーネントが生成されたタイミングでも実行する
-			immediate: true
+			immediate: true //immediateをtrueにすると、コンポーネントが生成されたタイミングでも実行する
 		}
 	}
 }

@@ -95,40 +95,27 @@ export default {
 	},
 	computed: {
 		...mapState({
-			//通信失敗の場合、つまりapiStatusがfalseの場合はインデックスへの移動を行わないように制御する
-			//trueまたはfalseが入る
-			apiStatus: state   => state.auth.apiStatus,
-			//loginErrorMessageを参照する
-			loginErrors: state => state.auth.loginErrorMessages
+			apiStatus: state   => state.auth.apiStatus, //通信失敗の場合はインデックスへの移動を行わないように制御する
+			loginErrors: state => state.auth.loginErrorMessages //loginErrorMessageを参照する
 		})
 	},
 	methods: {
-		//ログイン
-		async login() {
-			//authストアのloginアクションを呼び出す
-			await this.$store.dispatch('auth/login', this.loginForm);
+		async login() { //ログイン
+			await this.$store.dispatch('auth/login', this.loginForm); //authストアのloginアクションを呼び出す
 			
-			//apiStatusが成功(true)だった場合のみindexへ移動する
-			if(this.apiStatus) {
-				//メッセージ登録
-				this.$store.commit('message/setContent', {
+			if(this.apiStatus) { //apiStatusが成功(true)だった場合のみindexへ移動する
+				this.$store.commit('message/setContent', { //メッセージ登録
 					content: 'ログインしました！',
 				})
 				
-				//トップページに移動する
-				// this.$router.push({name: 'index'});
-				//元々アクセスしたかったページにリダイレクトする
-				this.$router.push(this.$router.go(-1));
+				this.$router.push(this.$router.go(-1)); //元々アクセスしたかったページにリダイレクトする
 			}
 		},
-		//エラーメッセージをクリアするメソッド
-		//これがないと別のページに行って戻ってくると以前のエラーが表示されたままになる
-		clearError() {
+		clearError() { //エラーメッセージをクリアするメソッド(これがないと別のページに行って戻ってくると以前のエラーが表示されたままになる)
 			this.$store.commit('auth/setLoginErrorMessages', null);
 		},
 	},
-	created() {
-		//ログインページを表示するタイミング、つまりcreatedライフサイクルフックでエラーをクリアする
+	created() { //ログインページを表示するタイミング、つまりcreatedライフサイクルフックでエラーをクリアする
 		this.clearError();
 	}
 }

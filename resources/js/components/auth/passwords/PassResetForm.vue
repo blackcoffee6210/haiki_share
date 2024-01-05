@@ -80,24 +80,23 @@ export default {
 	},
 	methods: {
 		async submit() {
-			//API通信
-			const response = await axios.post('/api/password/reset', this.passResetForm);
-			//responseステータスがUNPROCESSABLE_ENTITY(バリデーションエラー)なら以下の処理を行う
-			if(response.status === UNPROCESSABLE_ENTITY) {
+			const response = await axios.post('/api/password/reset', this.passResetForm); //API通信
+			
+			if(response.status === UNPROCESSABLE_ENTITY) { //responseステータスがUNPROCESSABLE_ENTITY(バリデーションエラー)なら以下の処理を行う
 				this.errors = response.data.errors;
 				return false;
 			}
-			//responseステータスがOKじゃなかったら後続の処理を行う
-			if(response.status !== OK) {
+			
+			if(response.status !== OK) { //responseステータスがOKじゃなかったら後続の処理を行う
 				this.$store.commit('error/setCode', response.status);
 				return false;
 			}
-			//メッセージ登録
-			this.$store.commit('message/setContent', {
+			
+			this.$store.commit('message/setContent', { //メッセージ登録
 				content: 'パスワードを変更しました',
 			});
-			//インデックス画面に移動する
-			this.$router.push({ name: 'index' });
+			
+			this.$router.push({ name: 'index' }); //インデックス画面に移動する
 		}
 	}
 }

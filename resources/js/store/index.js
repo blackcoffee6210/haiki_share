@@ -5,13 +5,11 @@ import auth    from './auth';
 import error   from './error';
 import message from './message';
 
-//Vuexを使う
-Vue.use(Vuex);
+Vue.use(Vuex); //Vuexを使う
 
 const store = new Vuex.Store({
   modules: {
-    //csrf
-    csrf: document.querySelector('meta[name="csrf-token"]')
+    csrf: document.querySelector('meta[name="csrf-token"]') //csrf
                   .getAttribute('content'),
     auth,
     error,

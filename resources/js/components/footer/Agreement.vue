@@ -169,10 +169,8 @@ export default {
 	data() {
 		return {
 			name: 'Haiki Share',
-			//TOPボタンを表示する
-			buttonActive: false,
-			//scroll
-			scroll: 0,
+			buttonActive: false, //TOPボタンを表示する
+			scroll: 0,           //scroll
 		}
 	},
 	methods: {
@@ -185,12 +183,8 @@ export default {
 		scrollWindow() {
 			const top = 100; //ボタンを表示させたい位置
 			this.scroll = window.scrollY;
-			if(top <= this.scroll) {
-				this.buttonActive = true;
-			} else {
-				this.buttonActive = false;
-			}
-		},
+			(top <= this.scroll) ? this.buttonActive = true : this.buttonActive = false;
+		}
 	},
 	mounted() {
 		window.addEventListener('scroll', this.scrollWindow);

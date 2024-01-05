@@ -85,7 +85,6 @@
 		</p>
 		
 		<!-- TOPへ	-->
-		<!--<GoTop  />-->
 		<transition name="top">
 			<button class="c-go-top"
 							v-show="buttonActive"
@@ -101,10 +100,8 @@ export default {
 		return {
 			name: 'Haiki Share',
 			email: 'mail@haiki_share.com',
-			//TOPボタンを表示する
-			buttonActive: false,
-			//scroll
-			scroll: 0,
+			buttonActive: false, //TOPボタンを表示する
+			scroll: 0, //scroll
 		}
 	},
 	methods: {

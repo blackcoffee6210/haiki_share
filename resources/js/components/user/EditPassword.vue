@@ -107,48 +107,39 @@ export default {
 	data() {
 		return {
 			loading: false, //ローディング
-			errors: { //エラーメッセージを格納するプロパティ
+			errors: {       //エラーメッセージを格納するプロパティ
 				current_password: null,
 				new_password: null,
 				new_password_confirmation: null
 			},
 			passwordForm: {
-				current_password: '', //現在のパスワード
-				new_password: '', //新しいパスワード
+				current_password: '',         //現在のパスワード
+				new_password: '',             //新しいパスワード
 				new_password_confirmation: '' //新しいパスワード(確認)
 			}
 		}
 	},
 	methods: {
-		//パスワード更新処理
-		async update() {
-			//ローディングを表示する
-			this.loading = true;
-			//API通信
-			const response = await axios.post(`/api/users/${this.id}/updatePassword`, this.passwordForm);
-			//API通信が終わったらローディングを非表示にする
-			this.loading = false;
+		async update() { //パスワード更新処理
+			this.loading = true; //ローディングを表示する
+			const response = await axios.post(`/api/users/${this.id}/updatePassword`, this.passwordForm); //API通信
+			this.loading = false; //API通信が終わったらローディングを非表示にする
 			
-			//responseステータスがUNPROCESSABLE_ENTITY(バリデーションエラー)なら後続の処理を行う
-			if(response.status === UNPROCESSABLE_ENTITY) {
-				//レスポンスのエラーメッセージを格納する
-				this.errors = response.data.errors;
+			if(response.status === UNPROCESSABLE_ENTITY) { //responseステータスがバリデーションエラーなら後続の処理を行う
+				this.errors = response.data.errors; //レスポンスのエラーメッセージを格納する
 				return false;
 			}
 			
-			//responseステータスがOKじゃなかったらエラーコードをセット
-			if(response.status !== OK) {
+			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
 				this.$store.commit('error/setCode', response.status);
 				return false;
 			}
 			
-			//メッセージ登録
-			this.$store.commit('message/setContent', {
+			this.$store.commit('message/setContent', { //メッセージ登録
 				content: 'パスワードを変更しました！'
 			})
 			
-			//マイページに移動
-			this.$router.push({ name: 'user.mypage' });
+			this.$router.push({ name: 'user.mypage' }); //マイページに移動
 		}
 	}
 }

@@ -1,18 +1,16 @@
 /*
- *クッキーの値を取得する
  * @param {String} searchKey 検索するキー
  * @returns {String} キーに対応する値
  */
-export function getCookieValue(searchKey) {
+export function getCookieValue(searchKey) { //クッキーの値を取得する
   if(typeof searchKey === 'undefined') {
     return '';
   }
 
   let val = '';
-  // document.cookie によってクッキーは以下の形式で参照できる
-  //「name=12345;token=67890;key=abc」
-  document.cookie.split(';').forEach(cookie => {
-    const [key, value] = cookie.split('=');
+
+  document.cookie.split(';').forEach(cookie => { // document.cookie によってクッキーは以下の形式で参照できる
+    const [key, value] = cookie.split('=');      //「name=12345;token=67890;key=abc」
     if(key === searchKey) {
       return val = value;
     }
@@ -21,8 +19,10 @@ export function getCookieValue(searchKey) {
   return val;
 }
 
-//ステータスコードの定義
-//他のプログラムはこれをインポートして使うようにする
+/**
+ * ステータスコードの定義
+ * 他のプログラムはこれをインポートして使うようにする
+ */
 export const OK                    = 200; //OK
 export const CREATED               = 201; //リソースの作成
 export const NOT_FOUND             = 404; //404エラー

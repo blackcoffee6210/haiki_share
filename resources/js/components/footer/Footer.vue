@@ -42,18 +42,14 @@ export default {
 		}),
 	},
 	methods: {
-		//ログアウト
-		async logout() {
-			//dispatchメソッドでauthストアのlogoutアクションを呼び出す
-			await this.$store.dispatch('auth/logout');
-			//通信成功なら下記の処理を実行
-			if(this.apiStatus) {
-				//メッセージを登録
-				this.$store.commit('message/setContent', {
+		async logout() { //ログアウト
+			await this.$store.dispatch('auth/logout'); //dispatchメソッドでauthストアのlogoutアクションを呼び出す
+			
+			if(this.apiStatus) { //通信成功なら下記の処理を実行
+				this.$store.commit('message/setContent', { //メッセージを登録
 					content: 'ログアウトしました'
 				});
-				//記事一覧画面へ移動する
-				this.$router.push({ name: 'index' }).catch(() => {});
+				this.$router.push({ name: 'index' }).catch(() => {}); //記事一覧画面へ移動する
 			}
 		}
 	}

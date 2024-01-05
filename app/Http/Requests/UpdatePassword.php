@@ -37,8 +37,7 @@ class UpdatePassword extends FormRequest
 		$validator->after(function ($validator) {
 			$auth = Auth::user(); //ログインユーザー情報を変数に入れる
 
-			//現在のパスワードとDBパスワードが合わなければエラー
-			if(!(Hash::check($this->input('current_password'), $auth->password))
+			if(!(Hash::check($this->input('current_password'), $auth->password)) //現在のパスワードとDBパスワードが合わなければエラー
 				&& !$this->input('current_password') == '') {
 				$validator->errors()->add('current_password', '現在のパスワードが違います');
 			}

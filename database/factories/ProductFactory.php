@@ -11,13 +11,12 @@ use Illuminate\Http\UploadedFile;
 
 $factory->define(Product::class, function (Faker $faker) {
 
-	$file = UploadedFile::fake()->image('product.jpg');
-	$path = $file->store('public/images');
+	$file          = UploadedFile::fake()->image('product.jpg');
+	$path          = $file->store('public/images');
 	$read_tmp_path = str_replace('public/images/','/storage/images/',$path);
 
 	return [
 		'user_id'     => function() { return factory(User::class); },
-//		'user_id'     => function() { return factory(User::class)->create()->id; },
 		'image'       => $read_tmp_path,
 		'category_id' => mt_rand(1, 11),
 		'name'        => $faker->name,

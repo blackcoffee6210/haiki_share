@@ -131,54 +131,41 @@ export default {
 		})
 	},
 	methods: {
-		//購入された商品一覧
-		async getProducts() {
-			//ローディングを表示する
-			this.loading = true;
-			//API通信
-			const response = await axios.get(`/api/users/${this.id}/purchased`);
-			//API通信が終わったらローディングを非表示にする
-			this.loading = false;
+		async getProducts() { //購入された商品一覧
+			this.loading = true; //ローディングを表示する
 			
-			//responseステータスがOKじゃなかったらエラーコードをセット
-			if(response.status !== OK) {
+			const response = await axios.get(`/api/users/${this.id}/purchased`); //API通信
+			
+			this.loading = false; //API通信が終わったらローディングを非表示にする
+			
+			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
 				this.$store.commit('error/setCode', response.status);
 				return false;
 			}
-			//プロパティにデータをセット
-			this.products = response.data;
-			console.log('productの中身：' + this.products);
+			this.products = response.data; //プロパティにデータをセット
 		},
-		//購入キャンセル処理
-		async cancel(product) {
-			//プロパティに値をセット
-			this.product = product;
+		async cancel(product) { //購入キャンセル処理
+			this.product = product; //プロパティに値をセット
 			
 			if(confirm('購入をキャンセルしますか？')) {
-				//ローディングを表示する
-				this.loading = true;
-				//API通信
-				const response = await axios.post(`/api/products/${this.product.id}/cancel`, this.product);
-				//API通信が終わったらローディングを非表示にする
-				this.loading = false;
+				this.loading = true; //ローディングを表示する
 				
-				//responseステータスがOKじゃなかったらエラーコードをセット
-				if (response.status !== OK) {
+				const response = await axios.post(`/api/products/${this.product.id}/cancel`, this.product); //API通信
+				
+				this.loading = false; //API通信が終わったらローディングを非表示にする
+				
+				if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
 					this.$store.commit('error/setCode', response.status);
 					return false;
 				}
-				//購入キャンセルをしたのでpurchased_by_userにfalseをセット
-				this.product.purchased_by_user = false;
-				//canceled_by_userにtrueをセット
-				this.product.canceled_by_user = true;
+				this.product.purchased_by_user = false; //購入キャンセルをしたのでpurchased_by_userにfalseをセット
+				this.product.canceled_by_user  = true; //canceled_by_userにtrueをセット
 				
-				//メッセージ登録
-				this.$store.commit('message/setContent', {
+				this.$store.commit('message/setContent', { //メッセージ登録
 					content: '購入をキャンセルしました',
 				});
 				
-				//マイページに遷移する
-				this.$router.push({name: 'user.mypage', params: {id: this.id}});
+				this.$router.push({name: 'user.mypage', params: {id: this.id}}); //マイページに遷移する
 			}
 		},
 	},
@@ -187,8 +174,7 @@ export default {
 			async handler() {
 				await this.getProducts();
 			},
-			//immediateをtrueにすると、コンポーネントが生成されたタイミングでも実行する
-			immediate: true
+			immediate: true //immediateをtrueにすると、コンポーネントが生成されたタイミングでも実行する
 		}
 	}
 }

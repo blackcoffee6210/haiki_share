@@ -163,49 +163,39 @@ export default {
 	},
 	computed: {
 		...mapState({
-			//通信失敗の場合、つまりapiStatusがfalseの場合はインデックスへの移動を行わないように制御する
-			//trueまたはfalseが入る
-			apiStatus     : state => state.auth.apiStatus,
+			apiStatus     : state => state.auth.apiStatus, //通信失敗の場合、つまりapiStatusがfalseの場合はインデックスへの移動を行わないように制御する
 			registerErrors: state => state.auth.registerErrorMessages
 		}),
-		//名前インプットエリアのplaceholderを利用者とお店で切り替える
-		name() {
-			if(this.registerForm.group === 1) {
-				return 'ハイキ君';
-			}else if(this.registerForm.group === 2) {
-				return 'ファミリーストア';
+		name() { //名前インプットエリアのplaceholderを利用者とお店で切り替える
+			switch (this.registerForm.group) {
+				case 1:
+					return 'ハイキ君';
+				case 2:
+					return 'ファミリーストア';
 			}
-		},
+		}
 	},
 	methods: {
-		//都道府県取得
-		async getPrefectures() {
+		async getPrefectures() { //都道府県取得
 			const response = await axios.get('/api/prefectures');
-			//responseステータスがOKじゃなかったら
-			if(response.status !== OK) {
+			
+			if(response.status !== OK) { //responseステータスがOKじゃなかったら
 				this.$store.commit('error/setCode', response.status);
 				return false;
 			}
-			//プロパティに値をセットする
-			this.prefectures = response.data;
+			this.prefectures = response.data; //プロパティに値をセットする
 		},
-		//ユーザー登録
-		async register() {
-			//dispatchメソッドでauthストアのregisterアクションを呼び出す
-			//第一引数はアクション名、第二引数はフォームの入力値を渡す
-			await this.$store.dispatch('auth/register', this.registerForm);
-			//apiStatusがtrue(通信成功)なら後続の処理を行う
-			if(this.apiStatus) {
-				//メッセージを登録
-				this.$store.commit('message/setContent', {
+		async register() { //ユーザー登録
+			await this.$store.dispatch('auth/register', this.registerForm); //dispatchメソッドでauthストアのregisterアクションを呼び出す
+			
+			if(this.apiStatus) { //apiStatusがtrue(通信成功)なら後続の処理を行う
+				this.$store.commit('message/setContent', { //メッセージを登録
 					content: 'ユーザー登録しました！',
 				});
-				//トップページ(index画面)に移動する
-				this.$router.push({ name: 'index' });
+				this.$router.push({ name: 'index' }); //トップページ(index画面)に移動する
 			}
 		},
-		//エラーメッセージをクリアするメソッド
-		clearError() {
+		clearError() { //エラーメッセージをクリアするメソッド
 			this.$store.commit('auth/setRegisterErrorMessages', null);
 		}
 	},

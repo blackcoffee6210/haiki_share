@@ -8,44 +8,43 @@ use App\Product;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
     public function __construct()
     {
-    	//認証
-	    $this->middleware('auth');
+	    $this->middleware('auth'); //認証
     }
 
-    //ユーザー情報取得
-	public function index(string $id) {
+	public function index(string $id) { //ユーザー情報取得
     	$user = User::find($id);
     	return $user;
 	}
 
-	//プロフィール更新
-	public function updateProfile(UpdateUser $request)
+	public function shopUser(string $id) //購入した商品のコンビニユーザーを取得
 	{
-		//DBからユーザー情報を取得する
-		$user = User::find($request->id);
+		$shopUser = DB::table('products')
+					  ->join('users', 'products.user_id', '=', 'users.id')
+					  ->where('products.id', '=', $id)
+					  ->where('users.group', '=', 2)
+					  ->get();
+		return $shopUser;
+	}
 
-		//画像が送信されていたらバリデーションを行う
-		if($request->file('image')) {
-			$request->validate([
-				'image' => 'file|mimes:jpg,jpeg,png'
-			]);
+	public function updateProfile(UpdateUser $request) //プロフィール更新
+	{
+		$user = User::find($request->id); //DBからユーザー情報を取得する
 
-			//formDataから画像の名前を取得する
-			$original_name = $request->file('image')->getClientOriginalName();
-			//保存する画像名を作成
-			$file_name = date('Ymd_His') . '_' . $original_name;
-			//名前を変更して保存。保存先のパスを返す
-			$image_path = $request->file('image')->storeAs('public/images', $file_name);
-			//HTML出力用の整形とパスの修正
-			$image_path = str_replace('public/images/', '/storage/images/', $image_path);
-		}
-		//画像が送信されていなかったらDBの画像を使う
-		else {
+		if($request->file('image')) { //画像が送信されていたらバリデーションを行う
+			$request->validate([ 'image' => 'file|mimes:jpg,jpeg,png' ]);
+
+			$original_name = $request->file('image')->getClientOriginalName();                        //formDataから画像の名前を取得する
+			$file_name     = date('Ymd_His') . '_' . $original_name;                                //保存する画像名を作成
+			$image_path    = $request->file('image')->storeAs('public/images', $file_name);      //名前を変更して保存。保存先のパスを返す
+			$image_path    = str_replace('public/images/', '/storage/images/', $image_path); //HTML出力用の整形とパスの修正
+
+		}else { //画像が送信されていなかったらDBの画像を使う
 			$image_path = $user->image;
 		}
 
@@ -60,38 +59,31 @@ class UserController extends Controller
 		return response($user, 200);
 	}
 
-	//パスワード変更
-	public function updatePassword(UpdatePassword $request)
+	public function updatePassword(UpdatePassword $request) //パスワード変更
 	{
-		//ログインユーザーの情報を変数に入れる
-		$user = Auth::user();
-		//新しいパスワードをセットする
-		$user->password = bcrypt($request->get('new_password'));
+		$user = Auth::user(); //ログインユーザーの情報を変数に入れる
+		$user->password = bcrypt($request->get('new_password')); //新しいパスワードをセットする
 		$user->save();
 
 		return response($user, 200);
 	}
 
-	//出品した商品取得
-	public function posted(string $id)
+	public function posted(string $id) //出品した商品取得
 	{
 		return User::find($id)->products()->orderByDesc('products.created_at')->get();
 	}
 
-	//購入した商品一覧(利用者)
-	public function purchased(string $id)
+	public function purchased(string $id) //購入した商品一覧(利用者)
 	{
 		return User::find($id)->histories()->orderByDesc('histories.created_at')->get();
 	}
 
-	//いいねした商品一覧(利用者)
-	public function liked(string $id)
+	public function liked(string $id) //いいねした商品一覧(利用者)
 	{
 		return User::find($id)->likes()->orderByDesc('likes.created_at')->get();
 	}
 
-	//キャンセルした商品一覧(利用者)
-	public function canceled(string $id)
+	public function canceled(string $id) //キャンセルした商品一覧(利用者)
 	{
 		return User::find($id)->cancels()->orderByDesc('cancels.created_at')->get();
 	}

@@ -50,31 +50,29 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-    	//groupが1であれば「利用者」なので、以下のバリデーションを実行
-        if($data['group'] == 1) {
-	        return Validator::make($data, [
-	            'group'                 => ['required', 'integer'],
-		        'name'                  => ['required', 'string', 'max:255'],
-		        'email'                 => ['required', 'string', 'email:filter', 'max:255',
-			                                Rule::unique('users', 'email')->whereNull('deleted_at')],
-				'password'              => ['required', 'string', 'min:8', 'confirmed'],
-		        'password_confirmation' => ['required', 'string', 'min:8'],
-	        ]);
-        }
-        //groupが2であれば「コンビニの人」なので、以下のバリデーションを実行
-        else if($data['group'] == 2) {
-	        return Validator::make($data, [
-		        'group'                 => ['required', 'integer'],
-		        'name'                  => ['required', 'string', 'max:255'],
-		        'branch'                => ['required', 'string', 'max:255'],
-		        'address'               => ['required', 'string', 'max:255'],
-		        'prefecture_id'         => ['required', 'integer'],
-		        'email'                 => ['required',  'string', 'email:filter', 'max:255',
-			                                Rule::unique('users', 'email')->whereNull('deleted_at')],
-		        'password'              => ['required', 'string', 'min:8', 'confirmed'],
-		        'password_confirmation' => ['required', 'string', 'min:8']
-	        ]);
-        }
+    	switch ($data['group']) {
+		    case 1: //groupが1であれば「利用者」なので、以下のバリデーションを実行
+			    return Validator::make($data, [
+				    'group'                 => ['required', 'integer'],
+				    'name'                  => ['required', 'string', 'max:255'],
+				    'email'                 => ['required', 'string', 'email:filter', 'max:255',
+					                             Rule::unique('users', 'email')->whereNull('deleted_at')],
+				    'password'              => ['required', 'string', 'min:8', 'confirmed'],
+				    'password_confirmation' => ['required', 'string', 'min:8'],
+			    ]);
+		    case 2: //groupが2であれば「コンビニの人」なので、以下のバリデーションを実行
+			    return Validator::make($data, [
+				    'group'                 => ['required', 'integer'],
+				    'name'                  => ['required', 'string', 'max:255'],
+				    'branch'                => ['required', 'string', 'max:255'],
+				    'address'               => ['required', 'string', 'max:255'],
+				    'prefecture_id'         => ['required', 'integer'],
+				    'email'                 => ['required',  'string', 'email:filter', 'max:255',
+					                             Rule::unique('users', 'email')->whereNull('deleted_at')],
+				    'password'              => ['required', 'string', 'min:8', 'confirmed'],
+				    'password_confirmation' => ['required', 'string', 'min:8']
+			    ]);
+	    }
     }
 
     /**
@@ -85,29 +83,28 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-    	if($data['group'] == 1) {
-    		return User::create([
-    			'group'    => $data['group'],
-	            'name'     => $data['name'],
-	            'email'    => $data['email'],
-	            'password' => Hash::make($data['password']),
-	        ]);
+	    switch ($data['group']) {
+		    case 1: //groupが1であれば「利用者」なので、以下のバリデーションを実行
+			    return User::create([
+				    'group'    => $data['group'],
+				    'name'     => $data['name'],
+				    'email'    => $data['email'],
+				    'password' => Hash::make($data['password'])
+			    ]);
+		    case 2: //groupが2であれば「コンビニの人」なので、以下のバリデーションを実行
+			    return User::create([
+				    'group'         => $data['group'],
+				    'name'          => $data['name'],
+				    'branch'        => $data['branch'],
+				    'prefecture_id' => $data['prefecture_id'],
+				    'address'       => $data['address'],
+				    'email'         => $data['email'],
+				    'password'      => Hash::make($data['password'])
+			    ]);
 	    }
-    	else if($data['group'] == 2) {
-    		return User::create([
-    			'group'         => $data['group'],
-    	  	  	'name'          => $data['name'],
-	            'branch'        => $data['branch'],
-			    'prefecture_id' => $data['prefecture_id'],
-			    'address'       => $data['address'],
-			    'email'         => $data['email'],
-			    'password'      => Hash::make($data['password'])
-	        ]);
-        }
     }
 
-    //レスポンスをカスタマイズしたい場合はregisteredメソッドをオーバーライドする
-	protected function registered(Request $request, $user)
+	protected function registered(Request $request, $user) //レスポンスをカスタマイズしたい場合はregisteredメソッドをオーバーライドする
 	{
 		return $user;
 	}

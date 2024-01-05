@@ -27,25 +27,17 @@ export default {
 		})
 	},
 	watch: {
-		//errorモジュールのステートを監視する
-		// INTERNAL_SERVER_ERRORだった場合にはエラーページに移動する
-		errorCode: {
+		errorCode: {                                                 //errorモジュールのステートを監視する
 			async handler(val) {
-				if (val === INTERNAL_SERVER_ERROR) {
-					//500エラーページに遷移する
-					this.$router.push({ name: 'systemError' });
-				}
-				// 認証切れだった場合はログインページに移動する
-				else if (val === UNAUTHORIZED) {
-					//トークンをリフレッシュ
-					await axios.get('/api/refresh-token');
-					//ストアのuserをクリア
-					this.$store.commit('auth/setUser', null);
-					//ログイン画面に遷移させる
-					this.$router.push({name: 'login'});
-				}
-				//404エラーだった場合は404ページに移動する
-				else if (val === NOT_FOUND) {
+				if (val === INTERNAL_SERVER_ERROR) {                     // INTERNAL_SERVER_ERRORだった場合にはエラーページに移動する
+					this.$router.push({ name: 'systemError' });            //500エラーページに遷移する
+					
+				}else if (val === UNAUTHORIZED) {                        // 認証切れだった場合はログインページに移動する
+					await axios.get('/api/refresh-token');             //トークンをリフレッシュ
+					this.$store.commit('auth/setUser', null); //ストアのuserをクリア
+					this.$router.push({name: 'login'});                    //ログイン画面に遷移させる
+					
+				}else if (val === NOT_FOUND) {                           //404エラーだった場合は404ページに移動する
 					this.$router.push({name: 'NotFound'});
 				}
 			},

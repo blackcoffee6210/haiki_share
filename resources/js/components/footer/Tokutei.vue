@@ -68,7 +68,7 @@
 						<!--										params: { id: (check) ? userId.toString() : -1 }-->
 						<!--									}"-->
 						<!--						 class="p-tokutei__withdraw">-->
-							コチラ
+						<a href="">コチラ</a>
 						<!--</router-link>-->
 						から行なってください。
 					</td>

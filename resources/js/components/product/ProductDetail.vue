@@ -26,7 +26,6 @@
 					</div>
 				</div>
 				
-				
 				<div class="p-product-detail__flex">
 					<!-- ユーザー情報のコンテナ(左側) -->
 					<div class="p-product-detail__user-info">
@@ -141,8 +140,7 @@ import StarRating from 'vue-star-rating';
 
 export default {
 	name: "ProductDetail",
-	props: {
-		//router.jsからidが渡される
+	props: { //router.jsからidが渡される
 		id: {
 			type: String,
 			required: true
@@ -154,7 +152,7 @@ export default {
 	},
 	data() {
 		return {
-			product: {},       //商品情報
+			product: {},         //商品情報
 			isLike: false,       //「いいね」しているかどうか
 			errors: null,        //エラーメッセージを格納するプロパティ
 			buttonActive: false, //TOPボタンを表示する
@@ -164,177 +162,130 @@ export default {
 	},
 	computed: {
 		...mapGetters({
-			isLogin: 'auth/check', //true または false が返ってくる
-			userId: 'auth/userId', //ユーザーIDを取得
+			isLogin: 'auth/check',        //true または false が返ってくる
+			userId: 'auth/userId',        //ユーザーIDを取得
 			isShopUser: 'auth/isShopUser' //コンビニユーザならtrueが入る
-		}),
-		//自分の商品かどうかを真偽値で返す
-		// isMyProduct() {
-		// 	//商品idとログインidが同じであればtrueを返す
-		// 	if(this.product.user_id === this.userId) {
-		// 		return true;
-		// 	}
-		// }
+		})
 	},
 	methods: {
-		//商品詳細情報取得
-		async getProduct() {
+		async getProduct() { //商品詳細情報取得
 			const response = await axios.get(`/api/products/${this.id}`);
 			
-			//responseステータスがOKじゃなかったらエラーコードをセット
-			if(response.status !== OK) {
+			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
 				this.$store.commit('error/setCode', response.status);
 				return false;
 			}
-			//responseデータをproductプロパティに代入
-			this.product = response.data;
-			//ログインユーザーが既に「いいね」を押していたらtrueをセットする
-			if(this.product.liked_by_user) {
+			
+			this.product = response.data; //responseデータをproductプロパティに代入
+			if(this.product.liked_by_user) { //ログインユーザーが既に「いいね」を押していたらtrueをセット
 				this.isLike = true;
 			}
 		},
-		//「お気に入りボタン」を押したときの処理を行うメソッド
-		async onLikeClick() {
-			//ログインしていなかったらアレートを出す
-			if(!this.isLogin) {
+		
+		async onLikeClick() { //「お気に入りボタン」を押したときの処理を行うメソッド
+			if(!this.isLogin) { //ログインしていなかったらアレートを出す
 				if(confirm('いいね機能を使うにはログインしてください')) {
-					//ログインページに遷移
-					this.$router.push({name: 'login'});
+					this.$router.push({name: 'login'}); //ログインページに遷移
 					return false;
 				}
 			}
-			//いいねを押していたらいいねを外す
-			if(this.product.liked_by_user) {
+			if(this.product.liked_by_user) { //すでにいいねを押していたらいいねを外す
 				this.unlike();
-			//いいねしていなかったらいいねをつける
-			} else {
+			} else { //いいねしていなかったらいいねをつける
 				this.like();
 			}
 		},
-		//お気に入り登録
-		async like() {
+		async like() { //お気に入り登録メソッド
 			const response = await axios.post(`/api/products/${this.id}/like`);
 			
-			//responseステータスがOKじゃなかったらエラーコードをセット
-			if(response.status !== OK) {
+			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
 				this.$store.commit('error/setCode', response.status);
-				//後続の処理を抜ける
-				return false;
+				return false; //後続の処理を抜ける
 			}
-			//トータルのいいね数を1増やす
-			this.product.likes_count += 1;
-			//ログインユーザーが「いいね」をしたのでtrueをセット
-			this.product.liked_by_user = true;
+			this.product.likes_count += 1; //トータルのいいね数を1増やす
+			this.product.liked_by_user = true; //ログインユーザーが「いいね」をしたのでtrueをセット
 			this.isLike = true;
-			console.log('いいねしました');
 		},
-		//お気に入り解除
-		async unlike() {
+		async unlike() { //お気に入り解除メソッド
 			const response = await axios.delete(`/api/products/${this.id}/unlike`);
 			
-			//responseステータスがOKじゃなかったらエラーコードをセット
-			if(response.status !== OK) {
+			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
 				this.$store.commit('error/setCode', response.status);
 				return false;
 			}
-			//トータルのいいね数を1減らす
-			this.product.likes_count -= 1;
-			//ログインユーザーが「いいね解除」したのでfalseをセット
-			this.product.liked_by_user = false;
+			this.product.likes_count -= 1; //トータルのいいね数を1減らす
+			this.product.liked_by_user = false; //ログインユーザーが「いいね解除」したのでfalseをセット
 			this.isLike = false;
-			console.log('いいねを解除しました');
 		},
-		//商品購入処理
-		async purchase() {
-			//ユーザーがログインしているかチェック
-			if(!this.isLogin) {
+		async purchase() { //商品購入処理
+
+			if(!this.isLogin) { //ユーザーがログインしているかチェック
 				if(confirm('商品を購入するにはログインしてください')) {
-					//ログインページに遷移
-					this.$router.push({name: 'login'});
+					this.$router.push({name: 'login'}); //ログインページに遷移
 				}
 				return false;
 			}
-			//商品をキャンセルしたユーザーは再度購入できない
-			if(this.product.canceled_by_user) {
+			if(this.product.canceled_by_user) { //商品をキャンセルしたユーザーは再度購入できない
 				alert('一度キャンセルした商品は購入できません');
 				return false;
 			}
-			
-			//アレートで「購入しますか?」と表示し、「はい」を押すと以下の処理を実行
-			if(confirm('購入しますか？')) {
-				//ローディングを表示する
-				this.loading = true;
-				//商品購入APIに接続
-				const response = await axios.post(`/api/products/${this.id}/purchase`, this.product);
+			if(confirm('購入しますか？')) { //アレートで「購入しますか?」と表示し、「はい」を押すと以下の処理を実行
+				this.loading = true; //ローディングを表示する
+				const response = await axios.post(`/api/products/${this.id}/purchase`, this.product); //商品購入APIに接続
+				this.loading = false; //API通信が終わったらローディングを非表示にする
 				
-				//API通信が終わったらローディングを非表示にする
-				this.loading = false;
-				
-				//responseステータスがOKじゃなかったらエラーコードをセットする
-				if (response.status !== OK) {
+				if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
 					this.$store.commit('error/setCode', response.status);
-					//後続の処理を抜ける
-					return false;
+					return false; //後続の処理を抜ける
 				}
 				
-				//ログインユーザーが商品を購入したのでtrueをセット(購入済み)にする
-				this.product.purchased_by_user = true;
+				this.product.purchased_by_user = true; //ログインユーザーが商品を購入したのでtrueをセット(購入済み)にする
 				
-				//商品を購入したため、「いいね」をしていたら外す
-				if(this.product.liked_by_user) {
+				if(this.product.liked_by_user) { //商品を購入したため、「いいね」をしていたら外す
 					this.unlike();
 				}
 				
-				//メッセージ登録
-				this.$store.commit('message/setContent', {
-					content: '商品を購入しました！',
-					timeout: 5000
+				this.$store.commit('message/setContent', { //メッセージ登録
+					content: '商品を購入しました！'
 				});
-				//自画面(商品詳細)に遷移する
-				this.$router.push({name: 'product.detail', params: {id: this.id}}).catch(() => {} );
+				
+				this.$router.push({name: 'product.detail', params: {id: this.id}}).catch(() => {} ); //自画面(商品詳細)に遷移する
 			}
 		},
-		//購入キャンセル
-		async cancel() {
+		async cancel() { //購入キャンセル
 			if(confirm('購入をキャンセルしますか？')) {
-				//ローディングを表示する
-				this.loading = true;
-				//API通信
-				const response = await axios.post(`/api/products/${this.product.id}/cancel`, this.product);
-				//API通信が終わったらローディングを非表示にする
-				this.loading = false;
-				//responseステータスがOKじゃなかったらエラーコードをセット
-				if (response.status !== OK) {
+				this.loading = true; //ローディングを表示する
+				
+				const response = await axios.post(`/api/products/${this.product.id}/cancel`, this.product); //API通信
+				
+				this.loading = false; //API通信が終わったらローディングを非表示にする
+				
+				if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
 					this.$store.commit('error/setCode', response.status);
 					return false;
 				}
-				//購入キャンセルをしたのでpurchased_by_userにfalseをセット
-				this.product.purchased_by_user = false;
-				//canceled_by_userにtrueをセット
-				this.product.canceled_by_user = true;
 				
-				//メッセージ登録
-				this.$store.commit('message/setContent', {
-					content: '購入をキャンセルしました',
+				this.product.purchased_by_user = false; //購入キャンセルをしたのでpurchased_by_userにfalseをセット
+				this.product.canceled_by_user = true; //canceled_by_userにtrueをセット
+				
+				this.$store.commit('message/setContent', { //メッセージ登録
+					content: '購入をキャンセルしました'
 				});
 				
-				//インデックス画面に遷移する
-				this.$router.push({ name: 'index' });
+				this.$router.push({ name: 'index' }); //インデックス画面に遷移する
 			}
 		},
-		//「TOPにもどる」ボタンを押したときの処理
-		returnTop() {
+		returnTop() { //「TOPにもどる」ボタンを押したときの処理
 			window.scrollTo({
 				top: 0,
 				behavior: 'smooth'
 			});
 		},
-		//「TOPにもどる」ボタンを表示するメソッド
-		scrollWindow() {
+		scrollWindow() { //「TOPにもどる」ボタンを表示するメソッド
 			const top = 100; //ボタンを表示させたい位置
 			this.scroll = window.scrollY;
-			//scrollがtop以上になったらボタンを表示する
-			(top <= this.scroll) ? this.buttonActive = true
+			
+			(top <= this.scroll) ? this.buttonActive = true //scrollがtop以上になったらボタンを表示する
 													 : this.buttonActive = false;
 		},
 	},

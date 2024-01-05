@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateProduct extends FormRequest
+class StoreReview extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,13 +21,14 @@ class UpdateProduct extends FormRequest
      *
      * @return array
      */
-    public function rules() //賞味期限は含めない(不正防止のため)
+    public function rules()
     {
         return [
-	        'category_id' => 'required|integer',
-	        'name'        => 'required|string|max:255',
-	        'detail'      => 'required|string|max:255',
-	        'price'       => 'required|integer|between:50,10000'
+            'sender_id'      => 'required|integer',
+	        'receiver_id'    => 'required|integer',
+	        'recommendation' => 'required|integer',
+	        'title'          => 'required|string|max:255',
+	        'detail'         => 'required|string|max:255',
         ];
     }
 
@@ -35,8 +36,7 @@ class UpdateProduct extends FormRequest
 	{
 		parent::attributes();
 		return [
-			'image' => '商品画像',
-			'name'  => '商品名'
+			'detail' => 'レビューの内容'
 		];
 	}
 }

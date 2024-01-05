@@ -110,32 +110,26 @@ export default {
 		}
 	},
 	methods: {
-		//出品した商品一覧取得
-		async getProducts() {
-			//ローディングを表示する
-			this.loading = true;
-			//API通信
-			const response = await axios.get(`/api/users/${this.id}/posted`);
-			//API通信が終わったらローディングを非表示にする
-			this.loading = false;
+		async getProducts() { //出品した商品一覧取得
+			this.loading = true; //ローディングを表示する
 			
-			//responseステータスがOKじゃなかったらエラーコードをセット
-			if(response.status !== OK) {
+			const response = await axios.get(`/api/users/${this.id}/posted`); //API通信
+			
+			this.loading = false; //API通信が終わったらローディングを非表示にする
+			
+			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
 				this.$store.commit('error/setCode', response.status);
 				return false;
 			}
-			//プロパティにresponseデータをセットする
-			this.products = response.data;
+			this.products = response.data; //プロパティにresponseデータをセットする
 		}
 	},
 	watch: {
-		//$routeを監視してページが変わったときにgetProductsメソッドが実行されるようにする
-		$route: {
+		$route: { //$routeを監視してページが変わったときにgetProductsメソッドが実行されるようにする
 			async handler() {
 				await this.getProducts();
 			},
-			//immediateをtrueにすると、コンポーネントが生成されたタイミングでも実行する
-			immediate: true
+			immediate: true //immediateをtrueにすると、コンポーネントが生成されたタイミングでも実行する
 		}
 	}
 }

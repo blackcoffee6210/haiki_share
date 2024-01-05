@@ -68,29 +68,25 @@ export default {
 			apiStatus: state => state.auth.apiStatus,
 		}),
 		...mapGetters({
-			isLogin: 'auth/check', //trueまたはfalseが返ってくる(ログインしていたらtrue)
-			username: 'auth/username',
+			isLogin:    'auth/check', //trueまたはfalseが返ってくる(ログインしていたらtrue)
+			username:   'auth/username',
 			isShopUser: 'auth/isShopUser'
 		}),
 	},
 	methods: {
-		//ハンバーガーメニューをtoggleで切り替える
-		toggleNav() {
+		toggleNav() { //ハンバーガーメニューをtoggleで切り替える
 			return this.active = !this.active;
 		},
-		//ログアウト
-		async logout() {
+		async logout() { //ログアウト
 			await this.$store.dispatch('auth/logout');
-			//通信成功(true)なら以下の処理を実行
-			if(this.apiStatus) {
-				//「ログアウト」メッセージ登録
-				this.$store.commit('message/setContent', {
+			
+			if(this.apiStatus) { //通信成功(true)なら以下の処理を実行
+				this.$store.commit('message/setContent', { //「ログアウト」メッセージ登録
 					content: 'ログアウトしました'
 				});
-				//メニューを切り替える(スマホのハンバーガーメニューを閉じる)
-				this.toggleNav();
-				//商品一覧画面に移動する
-				this.$router.push({ name: 'index' }).catch(() => {});
+				this.toggleNav(); //メニューを切り替える(スマホのハンバーガーメニューを閉じる)
+				
+				this.$router.push({ name: 'index' }).catch(() => {}); //商品一覧画面に移動する
 			}
 		}
 	},

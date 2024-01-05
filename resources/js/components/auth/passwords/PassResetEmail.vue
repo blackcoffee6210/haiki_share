@@ -53,26 +53,24 @@ export default {
 	},
 	methods: {
 		async submit() {
-			//ローディングを表示する
-			this.loading = true;
-			//API通信
-			const response = await axios.post('/api/password/email', this.passResetForm);
-			//API通信が終わったらローディングを非表示にする
-			this.loading = false;
 			
-			//responseステータスがUNPROCESSABLE＿ENTITY(バリデーションエラー)なら後続の処理を行う
-			if(response.status === UNPROCESSABLE_ENTITY) {
+			this.loading = true; //ローディングを表示する
+			
+			const response = await axios.post('/api/password/email', this.passResetForm); //API通信
+			
+			this.loading = false; //API通信が終わったらローディングを非表示にする
+			
+			if(response.status === UNPROCESSABLE_ENTITY) { //responseステータスがUNPROCESSABLE＿ENTITY(バリデーションエラー)なら後続の処理を行う
 				this.errors = response.data.errors;
 				return false;
 			}
-			//responseステータスがOK(成功)ならメッセージを登録
-			if(response.status === OK) {
+			
+			if(response.status === OK) { //responseステータスがOK(成功)ならメッセージを登録
 				this.$store.commit('message/setContent', {
 					content: 'パスワード再設定メールを送信しました',
-					timeout: 5000
 				})
-				//インデックス画面に移動する
-				this.$router.push({name: 'index'});
+				
+				this.$router.push({name: 'index'}); //インデックス画面に移動する
 			}
 		}
 	}

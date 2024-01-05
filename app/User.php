@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
@@ -42,12 +43,10 @@ class User extends Authenticatable
     ];
 
 	/**
-	 * パスワードリセット通知の送信をオーバーライド
-	 *
 	 * @param  string  $token
 	 * @return void
 	 */
-	public function sendPasswordResetNotification($token)
+	public function sendPasswordResetNotification($token) //パスワードリセット通知の送信をオーバーライド
 	{
 		$this->notify(new PasswordResetNotification($token));
 	}
@@ -55,27 +54,27 @@ class User extends Authenticatable
 	//====================================================
     //リレーション
 	//====================================================
-	//都道府県テーブル
-	public function prefecture()
+	public function prefecture() //都道府県テーブル
 	{
 		return $this->belongsTo('App\Prefecture');
 	}
-	//商品テーブル
-	public function products() {
+
+	public function products() //商品テーブル
+	{
 		return $this->hasMany('App\Product');
 	}
-	//お気に入りテーブル
-	public function likes()
+
+	public function likes() //お気に入りテーブル
 	{
 		return $this->belongsToMany('App\Product', 'likes')->withTimestamps();
 	}
-	//購入履歴テーブル
-	public function histories()
+
+	public function histories() //購入履歴テーブル
 	{
 		return $this->belongsToMany('App\Product', 'histories')->withTimestamps();
 	}
-	//購入キャンセルテーブル
-	public function cancels()
+
+	public function cancels() //購入キャンセルテーブル
 	{
 		return $this->belongsToMany('App\Product', 'cancels')->withTimestamps();
 	}

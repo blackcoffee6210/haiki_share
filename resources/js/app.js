@@ -1,14 +1,13 @@
 import './bootstrap';
-
-import Vue              from 'vue';
-import store            from './store'; //グローバルコンポーネント
-import router           from './router'; //ルーティングの定義をインポートする
-import App              from './App.vue'; //ルートコンポーネントをインポートする
-import moment           from 'moment'; //時刻操作や表現をしたいとき使う
-import VueScrollTo      from 'vue-scrollto';  //スクロール
+import Vue              from 'vue';                //Vueをインポート
+import store            from './store';            //グローバルコンポーネント
+import router           from './router';           //ルーティングの定義をインポートする
+import App              from './App.vue';          //ルートコンポーネントをインポートする
+import moment           from 'moment';             //時刻操作や表現をしたいとき使う
+import VueScrollTo      from 'vue-scrollto';       //スクロール
 import VueSocialSharing from 'vue-social-sharing'; //twitterシェア
-import StarRating       from 'vue-star-rating'; //レビューの星
-import ReadMore         from 'vue-read-more'; //「もっと見る」表示
+import StarRating       from 'vue-star-rating';    //レビューの星
+import ReadMore         from 'vue-read-more';      //「もっと見る」表示
 
 //======================
 //FontAwesome
@@ -18,9 +17,8 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { fas }             from '@fortawesome/free-solid-svg-icons';
 import { fab }             from '@fortawesome/free-brands-svg-icons';
 import { far }             from '@fortawesome/free-regular-svg-icons';
-// FontAwesome Setup
-// library.add(faHeart, faBookmark, faComment);
-library.add(fas, fab, far);
+
+library.add(fas, fab, far); // FontAwesome Setup
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.config.productionTip = false;
 
@@ -36,11 +34,11 @@ Vue.filter('numberFormat', function (price) { //金額にカンマ(,)と¥マー
   return price.toLocaleString('ja-JP', { style: 'currency', currency: 'JPY'});
 });
 Vue.filter('moment', function(date) { //日付を「⚪︎日前」の書式で返す
-  moment.locale('ja'); //日本語化する
+  moment.locale('ja');                   //日本語化する
   return moment(date).fromNow();
 })
 Vue.filter('momentDate', function (date) { //日付を「年月日」の書式で返す
-  moment.locale('ja'); //日本語化する
+  moment.locale('ja');                        //日本語化する
   return moment(date).format('YYYY-MM-DD');
 })
 Vue.filter('momentExpire', function(date) { //日付を「残り⚪︎日」の書式で返す
@@ -50,17 +48,14 @@ Vue.filter('momentExpire', function(date) { //日付を「残り⚪︎日」の�
   return expire.diff(today, 'days');
 })
 
-//アプリ起動時、Vueインスタンス生成前にauth/currentUserアクションを呼び出す
-//画面をリロードしてもログイン状態を保持するための処理
-const createApp = async () => {
-  await store.dispatch('auth/currentUser');
-  //currentUserアクションの非同期処理が終わってからVueインスタンスを生成する
+const createApp = async () => { //アプリ起動時、Vueインスタンス生成前にauth/currentUserアクションを呼び出す(リロードしてもログイン状態を保持するため)
+  await store.dispatch('auth/currentUser'); //currentUserアクションの非同期処理が終わってからVueインスタンスを生成する
   new Vue({
     el: '#app',
-    store, //ストアを読み込む
-    router, //ルーティングの定義を読み込む
+    store,               //ストアを読み込む
+    router,              //ルーティングの定義を読み込む
     components: { App }, //ルートコンポーネントの使用を宣言する
-    template: '<App />' //ルートコンポーネントを描画する
+    template: '<App />'  //ルートコンポーネントを描画する
   });
 };
 createApp();

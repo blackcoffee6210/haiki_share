@@ -200,68 +200,55 @@ export default {
 		...mapGetters({
 			isShopUser: 'auth/isShopUser',
 		}),
-		//名前インプットエリアのplaceholderを利用者とお店で切り替える
-		name() {
-			if(this.user.group === 1) {
-				return 'ハイキ君';
-			}else if(this.user.group === 2) {
-				return 'ファミリーストア';
+		name() { //名前インプットエリアのplaceholderを利用者とお店で切り替える
+			switch (this.user.group) {
+				case 1:
+					return 'ハイキ君';
+				case 2:
+					return 'ファミリーストア';
 			}
-		},
+		}
 	},
 	methods: {
-		//ユーザー情報取得
-		async getUser() {
+		async getUser() { //ユーザー情報取得
 			const response = await axios.get(`/api/users/${this.id}`);
 			
-			//responseステータスがOKじゃなかったらエラーコードをセットする
-			if(response.status !== OK) {
+			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
 				this.$store.commit('error/setCode', response.status);
 				return false;
 			}
-			//responseデータをuserプロパティに代入
-			this.user = response.data;
+			this.user = response.data; //responseデータをuserプロパティに代入
 			console.log(this.user);
 		},
-		//フォームでファイルが選択されたら実行される
-		onFileChange(event) {
-			//何も選択されていなかったら処理中断
-			if(event.target.files.length === 0) {
+		onFileChange(event) { //フォームでファイルが選択されたら実行される
+			if(event.target.files.length === 0) { //何も選択されていなかったら処理中断
 				this.reset();
 				return false;
 			}
-			//ファイルが画像ではなかったら処理中断
-			if(!event.target.files[0].type.match('image.*')) {
+			if(!event.target.files[0].type.match('image.*')) { //ファイルが画像ではなかったら処理中断
 				this.reset();
 				return false;
 			}
-			//FileReaderクラスのインスタンスを取得
-			const reader = new FileReader;
+			const reader = new FileReader; //FileReaderクラスのインスタンスを取得
 			
-			//ファイルを読み込み終わったタイミングで実行する処理
-			reader.onload = e => {
+			reader.onload = e => { //ファイルを読み込み終わったタイミングで実行する処理
 				//previewに読み込み結果（データURL）を代入する
 				//previewに値が入ると<output>につけたv-ifがtrueと判定される
 				//また<output>内部の<img>のsrc属性はpreviewの値を参照しているので
 				//結果として画像が表示される
 				this.preview = e.target.result;
 			}
-			//ファイルを読み込む
-			//読み込まれたファイルはデータURL形式で受け取れる(上記onload参照)
-			reader.readAsDataURL(event.target.files[0]);
-			//データに入力値のファイルを代入
-			this.user.image = event.target.files[0];
+			
+			reader.readAsDataURL(event.target.files[0]); //ファイルを読み込む(ファイルはデータURL形式で受け取れる(上記onload参照))
+			this.user.image = event.target.files[0]; //データに入力値のファイルを代入
 		},
-		//入力欄の値とプレビュー表示をクリアするメソッド
-		reset() {
+		reset() { //入力欄の値とプレビュー表示をクリアするメソッド
 			this.preview = '';
 			this.user.image = null;
 			this.$el.querySelector('input[type="file"]').value = null;
 		},
-		//プロフィール更新処理
-		async update() {
-			//ローディングを表示する
-			this.loading = true;
+		async update() { //プロフィール更新処理
+			this.loading = true; //ローディングを表示する
 			
 			const formData = new FormData;
 			formData.append('image',     this.user.image);
@@ -271,44 +258,34 @@ export default {
 			formData.append('email',     this.user.email);
 			formData.append('introduce', this.user.introduce);
 			
-			const response = await axios.post(`/api/users/${this.id}/updateProfile`, formData);
+			const response = await axios.post(`/api/users/${this.id}/updateProfile`, formData); //API通信
 			
-			//API通信が終わったらローディングを非表示にする
-			this.loading = false;
+			this.loading = false; //API通信が終わったらローディングを非表示にする
 			
-			//responseステータスがUNPROCESSABLE_ENTITY(バリデーションエラー)ならエラーメッセージをセット
-			if(response.status === UNPROCESSABLE_ENTITY) {
-				//レスポンスのエラーメッセージを格納する
-				this.errors = response.data.errors;
+			if(response.status === UNPROCESSABLE_ENTITY) {　//responseステータスがバリデーションエラーならエラーメッセージをセット
+				this.errors = response.data.errors;　//レスポンスのエラーメッセージを格納する
 				return false;
 			}
+			this.reset(); //送信が完了したら入力値をクリアする
 			
-			//送信が完了したら入力値をクリアする
-			this.reset();
-			
-			//responseステータスがOKじゃなかったらエラーコードをセット
-			if(response.status !== OK) {
+			if(response.status !== OK) {　//responseステータスがOKじゃなかったらエラーコードをセット
 				this.$store.commit('error/setCode', response.status);
 				return false;
 			}
 			
-			//メッセージ登録
-			this.$store.commit('message/setContent', {
+			this.$store.commit('message/setContent', {　//メッセージ登録
 				content: 'プロフィールを更新しました！',
 			})
 			
-			//マイページに移動する
-			this.$router.push({name: 'user.mypage', params: { id: this.id }});
+			this.$router.push({name: 'user.mypage', params: { id: this.id }}); //マイページに移動する
 		}
 	},
-	watch: {
-		//$routeを監視してページが変わったときにgetUserが実行されるようにする
+	watch: { //$routeを監視してページが変わったときにgetUserが実行されるようにする
 		$route: {
 			async handler() {
 				await this.getUser();
 			},
-			//immediateをtrueにすると、コンポーネントが生成されたタイミングでも実行する
-			immediate: true
+			immediate: true //immediateをtrueにすると、コンポーネントが生成されたタイミングでも実行する
 		}
 	}
 }

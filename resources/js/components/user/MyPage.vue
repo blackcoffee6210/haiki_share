@@ -125,7 +125,6 @@
 						</div>
 					</section>
 					
-					
 					<!-- お気に入りした商品 -->
 					<!--todo: ユーザーが利用者のとき表示-->
 					<div class="p-mypage__title-container">
@@ -235,7 +234,6 @@
 							</div>
 						</div>
 					</section>
-					
 					
 					<!--todo: ユーザーがコンビニのときに表示-->
 					<!-- 購入者からのレビュー一覧 -->

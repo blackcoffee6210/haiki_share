@@ -64,7 +64,7 @@
 			<router-link class="p-sidebar__link"
 									 v-if="isShopUser"
 									 :to="{ name: 'user.canceled',
-									  			params: { id: id.toString() }}" >キャンセルした商品一覧
+									  			params: { id: id.toString() }}" >キャンセルされた商品一覧
 			</router-link>
 			<!--	レビューしたユーザー一覧 -->
 			<a class="p-sidebar__link"
@@ -115,8 +115,8 @@ export default {
 	methods: {
 		async logout() {
 			await this.$store.dispatch('auth/logout');
-			//通信成功ならloginページへ移動する
-			if(this.apiStatus) {
+			
+			if(this.apiStatus) { //通信成功ならloginページへ移動する
 				this.$router.push({name: 'index'});
 			}
 		}

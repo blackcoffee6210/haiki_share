@@ -113,56 +113,39 @@ export default {
 		})
 	},
 	methods: {
-		//いいねした商品一覧
-		async getProducts() {
-			//ローディングを表示する
-			this.loading = true;
-			//API通信
-			const response = await axios.get(`/api/users/${this.id}/liked`);
-			//API通信が終わったらローディングを非表示にする
-			this.loading = false;
+		async getProducts() { //いいねした商品一覧
+			this.loading = true; //ローディングを表示する
 			
-			//responseステータスがOKじゃなかったら後続の処理を行う
-			if(response.status !== OK) {
+			const response = await axios.get(`/api/users/${this.id}/liked`); //API通信
+			
+			this.loading = false; //API通信が終わったらローディングを非表示にする
+			
+			if(response.status !== OK) { //responseステータスがOKじゃなかったら後続の処理を行う
 				this.$store.commit('error/setCode', response.status);
 				return false;
 			}
-			//プロパティにデータをセット
-			this.products = response.data;
+			this.products = response.data; //プロパティにデータをセット
 		},
-		//お気に入りを削除する
-		async unlike(product) {
-			//引数の値をプロパティにセット
-			this.product = product;
+		async unlike(product) { //お気に入りを削除する
+			this.product = product; //引数の値をプロパティにセット
 			
 			if(confirm('お気に入りを解除しますか?')) {
-				//API通信
-				// const response = await axios.delete(`/api/products/${this.product.id}/unlike`);
-				const response = await axios.delete(`/api/products/${this.product.id}/unlike`);
+				const response = await axios.delete(`/api/products/${this.product.id}/unlike`); //API通信
 				
-				//responseステータスがOKじゃなかったらエラーコードをセット
-				if (response.status !== OK) {
+				if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
 					this.$store.commit('error/setCode', response.status);
 					return false;
 				}
 				
-				//いいねの数を1個減らす
-				this.product.likes_count -= 1;
-				//いいね解除したので、ユーザーのいいねをtrueからfalseにする
-				this.product.liked_by_user = false;
-				//一覧表示に表示しない
-				this.isLike = false;
+				this.product.likes_count -= 1; //いいねの数を1個減らす
+				this.product.liked_by_user = false; //いいね解除したので、ユーザーのいいねをtrueからfalseにする
+				this.isLike = false; //一覧表示に表示しない
 				
-				//メッセージ登録
-				this.$store.commit('message/setContent', {
+				this.$store.commit('message/setContent', { //メッセージ登録
 					content: 'お気に入りを解除しました',
 				});
 				
-				//マイページに遷移する
-				this.$router.push({name: 'user.mypage', params: {id: this.id}});
-				
-				//自画面に遷移する
-				// this.$router.push({name: 'user.liked', params: {id: this.id}}).catch(() => {} );
+				this.$router.push({name: 'user.mypage', params: {id: this.id}}); //マイページに遷移する
 			}
 		}
 	},
@@ -171,8 +154,7 @@ export default {
 			async handler() {
 				await this.getProducts();
 			},
-			//immediateをtrueにすると、コンポーネントが生成されたタイミングでも実行する
-			immediate: true
+			immediate: true //immediateをtrueにすると、コンポーネントが生成されたタイミングでも実行する
 		}
 	}
 }

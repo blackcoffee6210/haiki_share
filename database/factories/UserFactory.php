@@ -22,16 +22,10 @@ use Faker\Generator as Faker;
  */
 
 $factory->define(User::class, function (Faker $faker) {
-
-	//グループの数値をランダムで変数に入れる
-//	$group = mt_rand(1, 2);
-	$group = 2;
-
-	//お店の名前を配列に入れる
+	$group = 2; //グループの数値を入れる
 	$array = array('Family Store', 'Seven Mart', 'mini step', 'Coco Mart',
-						'LOWSON', 'SEVEN TWELVE');
-	//お店の名前のキーをランダムで取得する
-	$key = array_rand($array, 1);
+				   'LOWSON', 'SEVEN TWELVE'); //お店の名前を配列に入れる
+	$key   = array_rand($array, 1); //お店の名前のキーをランダムで取得する
 
     return [
     	'group'             => $group,

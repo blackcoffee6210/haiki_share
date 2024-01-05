@@ -1,33 +1,33 @@
 <template>
 	<main class="l-main">
-		<div class="p-register-product">
+		<div class="p-product-form">
 			
-			<h2 class="c-title p-register-product__title">商品出品</h2>
+			<h2 class="c-title p-product-form__title">商品出品</h2>
 			
-			<div class="p-register-product__background">
+			<div class="p-product-form__background">
 				<!-- ローディング -->
 				<Loading color="#f96204" v-show="loading"/>
 				
 				<!-- フォームエリア	-->
-				<form class="p-register-product__form"
+				<form class="p-product-form__form"
 							v-show="!loading"
 							@submit.prevent="submit">
 					
 					<!-- 商品画像	-->
 					<div class="u-p-relative">
-						<label class="p-register-product__label-img"
-									 :class="{ 'p-register-product__label-img__err': errors.image }">
+						<label class="p-product-form__label-img"
+									 :class="{ 'p-product-form__label-img__err': errors.image }">
 							<input type="file"
-										 class="p-register-product__img"
+										 class="p-product-form__img"
 										 
 										 @change="onFileChange">
-							<output class="p-register-product__output" v-if="preview">
+							<output class="p-product-form__output" v-if="preview">
 								<img :src="preview"
-										 class="p-register-product__output-img"
+										 class="p-product-form__output-img"
 										 alt="">
 							</output>
 						</label>
-						<div class="p-register-product__img-text" v-if="!preview">
+						<div class="p-product-form__img-text" v-if="!preview">
 							商品画像を設定する
 						</div>
 					</div>
@@ -41,9 +41,9 @@
 					
 					<!-- カテゴリー -->
 					<label for="category_id"
-								 class="c-label p-register-product__label">カテゴリー
+								 class="c-label p-product-form__label">カテゴリー
 					</label>
-					<select class="c-select p-register-product__input"
+					<select class="c-select p-product-form__input"
 									:class="{ 'c-select__err': errors.category_id }"
 									id="category_id"
 									v-model="product.category_id">
@@ -63,10 +63,10 @@
 					
 					<!-- 商品名	-->
 					<label for="name"
-								 class="c-label p-register-product__label">商品名
+								 class="c-label p-product-form__label">商品名
 					</label>
 					<input type="text"
-								 class="c-input p-register-product__input"
+								 class="c-input p-product-form__input"
 								 :class="{ 'c-input__err': errors.name }"
 								 id="name"
 								 v-model="product.name"
@@ -81,9 +81,9 @@
 					
 					<!-- 商品の内容	-->
 					<label for="detail"
-								 class="c-label p-register-product__label">商品の内容
+								 class="c-label p-product-form__label">商品の内容
 					</label>
-					<textarea	class="c-input p-register-product__textarea"
+					<textarea	class="c-input p-product-form__textarea"
 										:class="{ 'c-input__err': errors.detail }"
 										id="detail"
 										v-model="product.detail"
@@ -99,12 +99,12 @@
 					
 					<!-- 賞味期限 -->
 					<label for="expire_date"
-								 class="c-label p-register-product__label">賞味期限
+								 class="c-label p-product-form__label">賞味期限
 					</label>
 					<input type="text"
 								 onfocusin="this.type='date'"
 								 onfocusout="this.type='text'"
-								 class="c-input p-register-product__input"
+								 class="c-input p-product-form__input"
 								 :class="{ 'c-input__err': errors.expire }"
 								 id="expire_date"
 								 :min="tomorrow"
@@ -121,17 +121,17 @@
 					
 					<!-- 金額	-->
 					<label for="price"
-								 class="c-label p-register-product__label">金額
+								 class="c-label p-product-form__label">金額
 					</label>
 					<div class="u-d-flex">
 						<input type="text"
-									 class="c-input p-register-product__input p-register-product__input--yen"
+									 class="c-input p-product-form__input p-product-form__input--yen"
 									 :class="{ 'c-input__err': errors.price }"
 									 id="price"
 									 v-model="product.price"
 									 placeholder="1000">
-						<div class="p-register-product__yen"
-								 :class="{'p-register-product__yen__err': errors.price }">円
+						<div class="p-product-form__yen"
+								 :class="{'p-product-form__yen__err': errors.price }">円
 						</div>
 					</div>
 					<!-- エラーメッセージ	-->
@@ -143,7 +143,7 @@
 					</div>
 					
 					<!-- ボタン	-->
-					<button class="c-btn p-register-product__btn"
+					<button class="c-btn p-product-form__btn"
 									type="submit">出品する
 					</button>
 				</form>
@@ -171,12 +171,9 @@ export default {
 				expire: '',
 				price: ''
 			},
-			//カテゴリーを格納するプロパティ
-			categories: {},
-			//データURLを格納するプロパティ
-			preview: null,
-			//エラーメッセージを格納するプロパティ
-			errors: {
+			categories: {}, //カテゴリーを格納するプロパティ
+			preview: null,  //データURLを格納するプロパティ
+			errors: {       //エラーメッセージを格納するプロパティ
 				image: null,
 				category_id: null,
 				name: null,
@@ -184,24 +181,19 @@ export default {
 				expire: null,
 				price: null
 			},
-			// errors: null,
-			//ローディングを表示するかどうかを判定するプロパティ
-			loading: false
+			loading: false //ローディングを表示するかどうかを判定するプロパティ
 		}
 	},
 	computed: {
 		...mapGetters({
-			//ユーザーID
-			userId: 'auth/userId'
+			userId: 'auth/userId' //ユーザーID
 		}),
-		//明日の日付をYYYY-MM-DDの書式で返す
-		tomorrow() {
+		tomorrow() { //明日の日付をYYYY-MM-DDの書式で返す
 			let dt = new Date();
 			dt.setDate(dt.getDate() + 1);
 			return this.formatDate(dt);
 		},
-		//賞味期限を登録できる最大の日付
-		maxDate() {
+		maxDate() { //賞味期限を登録できる最大の日付
 			let dt = new Date();
 			dt.setDate(dt.getDate() + 30);
 			return this.formatDate(dt);
@@ -215,57 +207,42 @@ export default {
 				this.$store.commit('error/setCode', response.status);
 				return false;
 			}
-			
 			this.categories = response.data; //プロパティに値をセットする
 		},
-		//フォームでファイルが選択されたら実行されるメソッド
-		onFileChange(event) {
-			//何も選択されていなかったら処理中断
-			if(event.target.files.length === 0) {
+		onFileChange(event) { //フォームでファイルが選択されたら実行されるメソッド
+			if(event.target.files.length === 0) { //何も選択されていなかったら処理中断
 				this.reset();
 				return false;
 			}
-			//ファイルが画像ではなかったら処理中断
-			if(!event.target.files[0].type.match('image.*')) {
+			if(!event.target.files[0].type.match('image.*')) { //ファイルが画像ではなかったら処理中断
 				this.reset();
 				return false;
 			}
-			//FileReaderクラスのインスタンスを取得
-			const reader = new FileReader;
+			const reader = new FileReader; //FileReaderクラスのインスタンスを取得
 			
-			//ファイルを読み込み終わったタイミングで実行する処理
-			reader.onload = e => {
+			reader.onload = e => { //ファイルを読み込み終わったタイミングで実行する処理
 				//previewに読み込み結果（データURL）を代入する
 				//previewに値が入ると<output>につけたv-ifがtrueと判定される
 				//また<output>内部の<img>のsrc属性はpreviewの値を参照しているので
 				//結果として画像が表示される
 				this.preview = e.target.result;
 			}
-			
-			//ファイルを読み込む
-			//読み込まれたファイルはデータURL形式で受け取れる(上記onload参照)
-			reader.readAsDataURL(event.target.files[0]);
-			//データに入力値のファイルを代入
-			this.product.image = event.target.files[0];
+			reader.readAsDataURL(event.target.files[0]); //ファイルを読み込む(ファイルはデータURL形式で受け取れる(上記onload参照))
+			this.product.image = event.target.files[0]; //データに入力値のファイルを代入
 		},
-		//入力欄の値とプレビュー表示をクリアするメソッド
-		reset() {
+		reset() { //入力欄の値とプレビュー表示をクリアするメソッド
 			this.preview = '';
 			this.product.image = null;
 			this.$el.querySelector('input[type="file"]').value = null;
 		},
-		//日付をYYYY-MM-DDの書式で返すメソッド
-		formatDate(dt) {
+		formatDate(dt) { //日付をYYYY-MM-DDの書式で返すメソッド
 			let y = dt.getFullYear();
 			let m = ('00' + (dt.getMonth() + 1)).slice(-2);
 			let d = ('00' + dt.getDate()).slice(-2);
 			return (y + '-' + m + '-' + d);
 		},
-		
-		//商品登録メソッド
-		async submit() {
-			//ローティングを表示する
-			this.loading = true;
+		async submit() { //商品登録メソッド
+			this.loading = true; //ローティングを表示する
 			
 			const formData = new FormData;
 			formData.append('user_id',     this.userId);
@@ -276,36 +253,25 @@ export default {
 			formData.append('price',       this.product.price);
 			formData.append('expire',      this.product.expire);
 			
-			//商品登録APIを呼び出す
-			const response = await axios.post('/api/products', formData);
-			//API通信が終わったらローディングを非表示にする
-			this.loading =false;
+			const response = await axios.post('/api/products', formData); //商品登録APIを呼び出す
 			
-			//responseステータスがUNPROCESSABLE_ENTITY(バリデーションエラー)なら後続の処理を行う
-			if(response.status === UNPROCESSABLE_ENTITY) {
-				//responseエラーメッセージをプロパティに格納する
-				this.errors = response.data.errors;
-				//後続の処理を抜ける
-				return false;
+			this.loading =false; //API通信が終わったらローディングを非表示にする
+			
+			if(response.status === UNPROCESSABLE_ENTITY) { //responseステータスがバリデーションエラーなら後続の処理を行う
+				this.errors = response.data.errors; //responseエラーメッセージをプロパティに格納する
+				return false; //後続の処理を抜ける
 			}
-			//送信が完了したら入力値をクリアする
-			this.reset();
+			this.reset(); //送信が完了したら入力値をクリアする
 			
-			//responseステータスがCREATEDじゃなかったら(商品登録できなかったら)後続の処理を行う
-			if(response.status !== CREATED) {
-				//エラー情報を渡す
-				this.$store.commit('error/setCode', response.status);
-				//後続の処理を抜ける
-				return false;
+			if(response.status !== CREATED) { //responseステータスがCREATEDじゃなかったら(商品登録できなかったら)後続の処理を行う
+				this.$store.commit('error/setCode', response.status); //エラー情報を渡す
+				return false; //後続の処理を抜ける
 			}
-			
-			//上のif文を抜けたら登録成功なので、メッセージを登録する
-			this.$store.commit('message/setContent', {
+			this.$store.commit('message/setContent', { //上のif文を抜けたら登録成功なので、メッセージを登録する
 				content: '商品を登録しました！'
 			});
 			
-			//トップページへ移動する
-			this.$router.push({ name: 'index' });
+			this.$router.push({ name: 'index' }); //トップページへ移動する
 		}
 	},
 	watch: {

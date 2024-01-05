@@ -33,12 +33,10 @@ export default {
 		}
 	},
 	computed: {
-		//最初のページを返す算出プロパティ
-		isFirstPage() {
+		isFirstPage() { //最初のページを返す算出プロパティ
 			return this.currentPage === 1;
 		},
-		isLastPage() {
-			//最後のページを返す算出プロパティ
+		isLastPage() { //最後のページを返す算出プロパティ
 			return this.currentPage === this.lastPage;
 		}
 	}

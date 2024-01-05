@@ -8,16 +8,14 @@ use Illuminate\Support\Facades\Auth;
 
 class Product extends Model
 {
-    //ソフトデリート
-	use SoftDeletes;
+	use SoftDeletes; //ソフトデリート
 
 	protected $fillable = [
 		'user_id', 'category_id', 'image', 'name', 'detail',
 		'price', 'expire', 'deleted_at'
 	];
 
-	//$perPageは、paginate()のデフォルト件数を変更するプロパティ
-	protected $perPage = 12;
+	protected $perPage = 12; //$perPageは、paginate()のデフォルト件数を変更するプロパティ
 
 	//JSONに含めるアクセサ
 	//アクセサとは、DBから取得したデータを自動的に加工することができる機能
@@ -45,8 +43,7 @@ class Product extends Model
 	 * アクセサ - user_name
 	 * @return string
 	 */
-	//ユーザー名を取得する
-	public function getUserNameAttribute()
+	public function getUserNameAttribute() //ユーザー名を取得する
 	{
 		return $this->user->name;
 	}
@@ -54,8 +51,7 @@ class Product extends Model
 	 * アクセサ - email
 	 * @return string
 	 */
-	//ユーザーのEmailを取得する
-	public function getEmailAttribute()
+	public function getEmailAttribute() //ユーザーのEmailを取得する
 	{
 		return $this->user->email;
 	}
@@ -63,8 +59,7 @@ class Product extends Model
 	 * アクセサ - user_name
 	 * @return string
 	 */
-	//支店名を取得する
-	public function getBranchAttribute()
+	public function getBranchAttribute() //支店名を取得する
 	{
 		return $this->user->branch;
 	}
@@ -73,8 +68,7 @@ class Product extends Model
 	 * アクセサ - user_image
 	 * @string
 	 */
-	//ユーザー画像を取得する
-	public function getUserImageAttribute()
+	public function getUserImageAttribute() //ユーザー画像を取得する
 	{
 		return $this->user->image;
 	}
@@ -82,8 +76,7 @@ class Product extends Model
 	 * アクセサ - category_name
 	 * @string
 	 */
-	//商品カテゴリー名を取得する
-	public function getCategoryNameAttribute()
+	public function getCategoryNameAttribute() //商品カテゴリー名を取得する
 	{
 		return $this->category->name;
 	}
@@ -91,22 +84,18 @@ class Product extends Model
 	 * アクセサ - is_my_product
 	 * @return boolean
 	 */
-	//自分の商品かどうかを真偽値で返す
-	public function getIsMyProductAttribute()
+	public function getIsMyProductAttribute() //自分の商品かどうかを真偽値で返す
 	{
-		//ユーザーがゲストの場合(ログインしていなければ)falseを返す
-		if(Auth::guest() ) {
+		if(Auth::guest()) { //ユーザーがゲストの場合(ログインしていなければ)falseを返す
 			return false;
 		}
-		//商品のユーザーidとログインidが同じであればtrueを返す
-		return ($this->user_id === Auth::user()->id) ? true : false;
+		return ($this->user_id === Auth::user()->id) ? true : false; //商品のユーザーidとログインidが同じであればtrueを返す
 	}
 	/**
 	 * アクセサ - likes_count
 	 * @return int
 	 */
-	//いいね数を取得するアクセサ
-	public function getLikesCountAttribute()
+	public function getLikesCountAttribute() //いいね数を取得するアクセサ
 	{
 		return $this->likes->count();
 	}
@@ -114,82 +103,64 @@ class Product extends Model
 	 * アクセサ - liked_by_user
 	 * @return boolean
 	 */
-	//リクエストしたユーザーがいいねしているかどうかを取得するアクセサ
-	//trueまたはfalseを返す
-	public function getLikedByUserAttribute()
+	public function getLikedByUserAttribute() //リクエストしたユーザーがいいねしているかどうかを取得するアクセサ
 	{
-		//ユーザーがゲストの場合(ログインしていなければ)falseを返す
-		if(Auth::guest() ) {
+		if(Auth::guest() ) { //ユーザーがゲストの場合(ログインしていなければ)falseを返す
 			return false;
 		}
-		//Laravelのコレクションメソッドcontainを使って、
-		//ログインユーザーのIDと合致するいいねが含まれるか調べる
-		return $this->likes->contains(function($user) {
-			//一致したらtrueを返す
-			return $user->id === Auth::user()->id;
+		return $this->likes->contains(function($user) { //Laravelのコレクションメソッドcontainを使って、ログインユーザーのIDと合致するいいねが含まれるか調べる
+			return $user->id === Auth::user()->id; //一致したらtrueを返す
 		});
 	}
 	/**
 	 * アクセサ - purchased_by_user
 	 * @return boolean
 	 */
-	//リクエストしたユーザーが商品を購入済みかどうかを取得する
-	public function getPurchasedByUserAttribute()
+	public function getPurchasedByUserAttribute() //リクエストしたユーザーが商品を購入済みかどうかを取得する
 	{
-		//ユーザーがゲストの場合(ログインしていなければ)falseを返す
-		if(Auth::guest()) {
+		if(Auth::guest()) { //ユーザーがゲストの場合(ログインしていなければ)falseを返す
 			return false;
 		}
-		//historiesテーブルのuser_idとログインユーザーidが合致するか調べる
-		return $this->histories->contains(function($user) {
-			//idが一致したらtrueを返す
-			return $user->id === Auth::user()->id;
+		return $this->histories->contains(function($user) { //historiesテーブルのuser_idとログインユーザーidが合致するか調べる
+			return $user->id === Auth::user()->id; //idが一致したらtrueを返す
 		});
 	}
 	/**
 	 * アクセサ - is_purchased
 	 * @return boolean
 	 */
-	//商品が購入されているかどうかを真偽値で返すアクセサ
-	public function getIsPurchasedAttribute()
+	public function getIsPurchasedAttribute() //商品が購入されているかどうかを真偽値で返すアクセサ
 	{
-		//historiesテーブルにカウントがある(=購入されている)のでtrueを返す
-		return ($this->histories->count()) ? true : false;
+		return ($this->histories->count()) ? true : false; //historiesテーブルにカウントがある(=購入されている)のでtrueを返す
 	}
 	/**
 	 * アクセサ - canceled_by_user
 	 * @return boolean
 	 */
-	//リクエストしたユーザーがキャンセルしたかどうかを取得するアクセサ
-	//trueまたはfalseを返す
-	public function getCanceledByUserAttribute()
+	public function getCanceledByUserAttribute() //リクエストしたユーザーがキャンセルしたかどうかを取得するアクセサ
 	{
-		//ユーザーがゲストの場合(ログインしていなければ)falseを返す
-		if(Auth::guest() ) {
+		if(Auth::guest() ) { //ユーザーがゲストの場合(ログインしていなければ)falseを返す
 			return false;
 		}
-		//Laravelのコレクションメソッドcontainを使って、
-		//ログインユーザーのIDと合致する商品キャンセルが含まれるか調べる
-		return $this->cancels->contains(function($user) {
-			//一致したらtrueを返す
-			return $user->id === Auth::user()->id;
+		return $this->cancels->contains(function($user) { //LaravelのコレクションメソッドでログインユーザーのIDと合致する商品キャンセルが含まれるか調べる
+			return $user->id === Auth::user()->id; //一致したらtrueを返す
 		});
 	}
-
 
 	//======================================================
 	//リレーション
 	//======================================================
-	//ユーザーテーブル
-	public function user() {
+	public function user() //ユーザーテーブル
+	{
 		return $this->belongsTo('App\User');
 	}
-	//カテゴリーテーブル
-	public function category() {
+
+	public function category() //カテゴリーテーブル
+	{
 		return $this->belongsTo('App\Category');
 	}
-	//お気に入りテーブル
-	public function likes()
+
+	public function likes() //お気に入りテーブル
 	{
 		//likesテーブルを中間テーブルとしたproductsテーブルとusersテーブルの多対多の関係を表している
 		//今回はlikesテーブルに当たるモデルクラスは作成しない
@@ -200,14 +171,14 @@ class Product extends Model
 		//withTimestampsは、このリレーションメソッドを使ってlikesテーブルにデータを挿入したとき、
 		//created_atおよびupdated_atカラムを更新させるための指定の仕方
 	}
-	//購入履歴テーブル
-	public function histories()
+
+	public function histories() //購入履歴テーブル
 	{
 		return $this->belongsToMany('App\User', 'histories')
 					->withTimestamps();
 	}
-	//購入キャンセルテーブル
-	public function cancels()
+
+	public function cancels() //購入キャンセルテーブル
 	{
 		return $this->belongsToMany('App\User', 'cancels')->withTimestamps();
 	}

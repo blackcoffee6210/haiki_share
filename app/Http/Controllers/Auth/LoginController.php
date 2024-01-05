@@ -38,14 +38,12 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    //authenticatedメソッドをオーバーライドしてレスポンスをカスタマイズする
-    protected function authenticated(Request $request, $user)
+    protected function authenticated(Request $request, $user) //authenticatedメソッドをオーバーライドしてレスポンスをカスタマイズする
     {
     	return $user;
     }
 
-    //validateLoginメソッドをオーバーライド（ログイン画面からのリクエストをカスタマイズ）
-	protected function validateLogin(Request $request)
+	protected function validateLogin(Request $request) //validateLoginメソッドをオーバーライド（ログイン画面からのリクエストをカスタマイズ）
 	{
 		$request->validate([
 			$this->username() => 'required|string',
@@ -54,18 +52,14 @@ class LoginController extends Controller
 		]);
 	}
 
-	//credentialsメソッドをオーバーライド（loginFormのgroupプロパティを取得するため）
-	protected function credentials(Request $request)
+	protected function credentials(Request $request) //credentialsメソッドをオーバーライド（loginFormのgroupプロパティを取得するため）
 	{
 		return $request->only($this->username(), 'password', 'group');
 	}
 
-	//loggedOutメソッドをオーバーライドしてレスポンスをカスタマイズする
-    protected function loggedOut(Request $request)
+    protected function loggedOut(Request $request) //loggedOutメソッドをオーバーライドしてレスポンスをカスタマイズする
     {
-    	//セッションを再生成する
-	    $request->session()->regenerate();
-
+	    $request->session()->regenerate(); //セッションを再生成する
 	    return response()->json();
     }
 }

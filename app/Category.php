@@ -8,8 +8,7 @@ class Category extends Model
 {
     protected $fillable = ['name'];
 
-    //リレーション
-	public function products()
+	public function products() //リレーション
 	{
 		return $this->hasMany('App\Product');
 	}

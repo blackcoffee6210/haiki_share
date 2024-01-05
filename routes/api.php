@@ -29,6 +29,7 @@ Route::post('/products/{id}/cancel',   'ProductController@cancel');   //商品�
 // User
 //=================================================================
 Route::get('/users/{id}',                 'UserController@index');          //ユーザー情報取得
+Route::get('/users/{id}/shopUser',        'UserController@shopUser');       //コンピニユーザー情報取得
 Route::post('/users/{id}/updateProfile',  'UserController@updateProfile');  //プロフィール更新
 Route::post('/users/{id}/updatePassword', 'UserController@updatePassword'); //パスワード更新
 Route::get('/users/{id}/posted',          'UserController@posted');         //出品した商品一覧
@@ -40,9 +41,9 @@ Route::get('/users/{id}/reviewed',        'UserController@reviewed');       //�
 //=================================================================
 // Review
 //=================================================================
-Route::post('/reviews/{id}/', 'ReviewController@store');        //レビュー登録 todo: 処理実装
-Route::post('/reviews/{id}/update', 'ReviewController@update'); //レビュー編集 todo: 処理実装
-Route::delete('/reviews/{id}', 'ReviewController@destroy');     //レビュー削除 todo: 処理実装
+Route::post('/reviews',             'ReviewController@store');   //レビュー登録
+Route::post('/reviews/{id}/update', 'ReviewController@update');  //レビュー編集 todo: 処理実装
+Route::delete('/reviews/{id}',      'ReviewController@destroy'); //レビュー削除 todo: 処理実装
 
 
 //=================================================================
@@ -53,5 +54,5 @@ Route::get('/refresh-token', function(Request $request) { //トークンリフ�
 	return response()->json();
 });
 Route::get('/user', function() { return Auth::user(); })->name('user'); //ログインユーザーを返す
-Route::get('/categories', 'CategoryController'); //カテゴリー取得API
-Route::get('/prefectures', 'PrefectureController'); //都道府県取得API
+Route::get('/categories', 'CategoryController');                        //カテゴリー取得API
+Route::get('/prefectures', 'PrefectureController');                     //都道府県取得API

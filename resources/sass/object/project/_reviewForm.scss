@@ -1,0 +1,86 @@
+.p-review-form {
+  //width: 640px;
+  width: 480px;
+  margin: 0 auto;
+  @include mq() {
+    width: 100%;
+  }
+  &__title {
+    background: $bg-color;
+    padding-bottom: $space_s;
+  }
+  &__background {
+    background: $white;
+  }
+  &__form {
+    width: 100%;
+    position: relative;
+    padding: $space_xl;
+    @include mq() {
+      padding: $space_m;
+    }
+  }
+  &__recommendation {
+    &__container {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      line-height: 2;
+      & input:checked + label {
+        border: none;
+        background: #fdbf99;
+        color: $white;
+        font-weight: bold;
+      }
+    }
+    &__label {
+      display: block;
+      width: 32%;
+      background: $white;
+      border: 1px solid $gray-color;
+      border-radius: 3px;
+      box-shadow: 0 2px 0 #dcdcdc;
+      font-size: $font-size_m;
+      padding: 5px;
+      text-decoration: none;
+      &:hover {
+        box-shadow: none;
+        position: relative;
+        top: 2px;
+        transition: .3s;
+      }
+    }
+    &__input {
+      display: none;
+    }
+  }
+
+  &__label {
+    margin: $space_xl 0 $space_s 0;
+  }
+  &__input {
+    width: 100%;
+    &__err {
+      border: 1px solid $error-color;
+      border-left: 0;
+      background: $error-color-bg;
+    }
+    @include mq() {
+      margin-top: $space_xl;
+    }
+  }
+  &__textarea {
+    width: 100%;
+    height: 200px;
+    @include mq() {
+      margin-top: $space_xl;
+    }
+  }
+  &__btn-container {
+    display: flex;
+    justify-content: flex-end;
+  }
+  &__btn {
+    margin: $space_2xl 0 0 auto;
+  }
+}

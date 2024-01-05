@@ -1,121 +1,200 @@
 <template>
-	<div class="p-register-review">
-		<!-- ローディング -->
-		<Loading color="#f96204" v-show="loading" />
+	<!--todo: classエラー処理を入れる -->
+	<!--todo: inputタグ上にスペースができてるので修正 -->
+	<div class="p-review-form" v-cloak>
 		
-		<form class="p-register-review-review__form"
-					v-show="!loading"
-					@submit.prevent="submit">
-			<h2 class="p-register-review__title">レビュー投稿</h2>
+		<h2 class="c-title p-review-form__title">レビュー投稿</h2>
+		
+		<div class="p-review-form__background">
+			<!-- ローディング -->
+			<Loading color="#f96204" v-show="loading" />
 			
-			<!-- ユーザーの情報 -->
-			<div class="p-register-review__user-info">
-				<img :src="product.user_image"
-						 alt=""
-						 class="c-icon p-register-review__icon">
-				<div>
-					<div class="p-register-review__user-name">{{ product.user_name }}</div>
+			<!-- レビュー投稿フォーム -->
+			<form class="p-review-form__form"
+						v-show="!loading"
+						@submit.prevent="submit">
+				
+				<!-- ユーザーの情報 -->
+				<div class="p-review-form__user-info">
+					<img :src="reviewForm.shopUser.image"
+							 alt=""
+							 class="c-icon p-review-form__icon">
+					<div class="p-review-form__user-name">{{ reviewForm.shopUser.name }}</div>
 				</div>
-			</div>
-			
-			<!-- ユーザーの評価 -->
-			<div class="p-register-review__sub-title">ユーザーの評価</div>
-			<!-- todo: メルカリのユーザー評価を参考にする(おすすめ、ふつう、おすすめしないの3つ) -->
-			<!-- エラーメッセージ	-->
-			<div v-if="errors">
-				<div v-for="msg in errors.recommendation" :key="msg" class="p-error">{{ msg }}</div>
-			</div>
-			
-			<!-- タイトル -->
-			<div class="p-register-review__sub-title">レビュータイトル</div>
-			<input type="text"
-						 class="c-input p-register-review__input"
-						 id="title"
-						 v-model="reviewForm.title"
-						 placeholder="もっとも伝いたいポイントはなんですか？">
-			<!-- エラーメッセージ	-->
-			<div v-if="errors">
-				<div v-for="msg in errors.title" :key="msg" class="p-error">{{ msg }}</div>
-			</div>
-			
-			<!-- レビューの内容 -->
-			<div class="p-register-review__sub-title">レビュー内容</div>
-			<textarea class="c-input p-register-review__textarea"
-								id="comment"
-								v-model="reviewForm.comment"
-								placeholder="レビューの内容を入力してください"
-			></textarea>
-			<!-- エラーメッセージ	-->
-			<div v-if="errors">
-				<div v-for="msg in errors.comment" :key="msg" class="p-error">{{ msg }}</div>
-			</div>
-			
-			<!-- 投稿ボタン -->
-			<button class="c-btn p-register-review__btn"
-							type="submit">投稿する
-			</button>
-		</form>
+				
+				<!-- ユーザーの評価 -->
+				<div>ユーザーの評価</div>
+				<div class="p-review-form__recommendation__container">
+					<input type="radio"
+								 id="recommend1"
+								 class="p-review-form__recommendation__input"
+								 name="recommend"
+								 value="1"
+								 v-model.number="reviewForm.recommendation">
+					<label for="recommend1"
+								 class="p-review-form__recommendation__label">
+						<font-awesome-icon style="font-size: 24px;"
+															 :icon="['far', 'laugh-beam']"
+															 color="#ff6f80" />
+						<span class="u-ml5">とてもオススメ</span>
+					</label>
+					<input type="radio"
+								 id="recommend2"
+								 class="p-review-form__recommendation__input"
+								 name="recommend"
+								 value="2"
+								 v-model.number="reviewForm.recommendation">
+					<label for="recommend2"
+								 class="p-review-form__recommendation__label">
+						<font-awesome-icon style="font-size: 20px;"
+															 :icon="['fas', 'smile']"
+															 color="#ff6f80" />
+						<span class="u-ml5">オススメ</span>
+					</label>
+					<input type="radio"
+								 id="recommend3"
+								 class="p-review-form__recommendation__input"
+								 name="recommend"
+								 value="3"
+								 v-model.number="reviewForm.recommendation">
+					<label for="recommend3"
+								 class="p-review-form__recommendation__label">
+						<font-awesome-icon style="font-size: 20px;"
+															 :icon="['fas', 'meh']"
+															 color="#ff6f80" />
+						<span class="u-ml5">オススメしない</span>
+					</label>
+				</div>
+				<!-- エラーメッセージ	-->
+				<div v-if="errors">
+					<div v-for="msg in errors.recommendation"
+							 :key="msg"
+							 class="p-error">{{ msg }}
+					</div>
+				</div>
+				
+				<!-- タイトル -->
+				<label for="title"
+							 class="c-label p-review-form__label">レビュータイトル
+				</label>
+				<input type="text"
+							 class="c-input p-review-form__input"
+							 id="title"
+							 v-model="reviewForm.title"
+							 placeholder="もっとも伝いたいポイントはなんですか？">
+				<!-- エラーメッセージ	-->
+				<div v-if="errors">
+					<div v-for="msg in errors.title"
+							 :key="msg"
+							 class="p-error">{{ msg }}
+					</div>
+				</div>
+				
+				<!-- レビューの内容 -->
+				<label for="detail"
+							 class="c-label p-review-form__label">レビューの内容
+				</label>
+				<textarea class="c-input p-review-form__textarea"
+									id="detail"
+									v-model="reviewForm.detail"
+									placeholder="レビューの内容を入力してください"
+				></textarea>
+				<!-- エラーメッセージ	-->
+				<div v-if="errors">
+					<div v-for="msg in errors.detail"
+							 :key="msg"
+							 class="p-error">{{ msg }}
+					</div>
+				</div>
+				
+				<!-- 投稿ボタン -->
+				<button class="c-btn p-review-form__btn"
+								type="submit">投稿する
+				</button>
+			</form>
+		</div>
 	</div>
 </template>
 
 <script>
 import Loading from "../Loading";
-import { OK } from "../../util";
+import { CREATED, OK, UNPROCESSABLE_ENTITY } from "../../util";
+import { mapGetters } from 'vuex';
 
 export default {
 	name: "RegisterReview",
 	components: {
 		Loading
 	},
+	props: {
+		id: String,
+		required: true
+	},
 	data() {
 		return {
 			loading: false, //ローディング
-			product: {},    //商品情報
-			categories: {}, //カテゴリー情報
+			// shopUser: {},   //出品ユーザーの情報
 			errors: {       //エラーメッセージ
 				recommendation: null,
 				title: null,
-				comment: null
+				detail: null
 			},
-			reviewForm: {          //レビューフォーム
-				product_id: this.id, //商品id
-				recommendation: 0,   //ユーザー評価
-				title: '',           //レビュータイトル
-				comment: ''          //レビューコメント
+			reviewForm: {           //レビューフォーム
+				sender_id: null,      //送信者のユーザーid
+				receiver_id: null,    //受信者のユーザーid
+				recommendation: null, //ユーザー評価
+				title: '',            //レビュータイトル
+				detail: '',            //レビューコメント
+				shopUser: {},   //出品ユーザーの情報
 			}
 		}
 	},
+	computed: {
+		...mapGetters({
+			userId: 'auth/userId'
+		})
+	},
 	methods: {
-		async getCategories() { //カテゴリー取得
-			const response = await axios.get('/api/categories');
-			//responseステータスがOKじゃなかったら
-			if(response.status !== OK) {
+		async getShopUser() { //商品idを元に出品ユーザーを取得
+			const response = await axios.get(`/api/users/${this.id}/shopUser`); //API通信
+			
+			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
 				this.$store.commit('error/setCode', response.status);
 				return false;
 			}
-			//プロパティに値をセットする
-			this.categories = response.data;
-		},
-		async getProduct() { //商品情報取得
-			this.loading = true; //ローティングを表示する
 			
-			const response = await axios.get(`/api/products/${this.id}`); //API通信
+			this.reviewForm.shopUser    = response.data[0];                 //出品者の情報
+			this.reviewForm.sender_id   = this.userId;                      //送信者（レビュー投稿者）のユーザーid
+			this.reviewForm.receiver_id = this.reviewForm.shopUser.user_id; //受信者（出品者）のユーザーid
+			console.log(this.reviewForm);
+		},
+		async submit() {       //レビュー投稿
+			this.loading = true; //ローディングを表示する
+			
+			const response = await axios.post('/api/reviews', this.reviewForm); //API接続
 			
 			this.loading = false; //API通信が終わったらローディングを非表示にする
 			
-			if(response.status !== OK) { //responseステータスがOKじゃなかったら後続の処理を行う
+			if(response.status === UNPROCESSABLE_ENTITY) { //responseステータスがバリデーションエラーなら後続の処理を行う
+				this.errors = response.data.errors;
+				return false;
+			}
+			if(response.status !== CREATED) { //responseステータスがCREATEDじゃなかったら後続の処理を行う
 				this.$store.commit('error/setCode', response.status);
 				return false;
 			}
 			
-			this.product = response.data; //プロパティに値をセットする
-		},
+			this.$store.commit('message/setContent', { //メッセージ登録
+				content: 'レビューを投稿しました！',
+			});
+			
+			this.$router.push({ name: 'user.mypage', params: { id: this.userId.toString() } }); //マイページに遷移
+		}
 	},
 	watch: {
 		$route: {
 			async handler() {
-				await this.getCategories();
-				await this.getProduct();
+				this.getShopUser();
 			},
 			immediate: true
 		}

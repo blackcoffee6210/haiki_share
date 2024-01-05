@@ -7,7 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class PurchasedSellerNotification extends Mailable
+class ReviewedReceiverNotification extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -30,8 +30,8 @@ class PurchasedSellerNotification extends Mailable
      */
     public function build()
     {
-	    return $this->subject('商品が購入されました！')
-		            ->with('params', $this->_params)
-		            ->view('emails.purchasedSeller');
+	    return $this->subject('レビューが投稿されました！')
+		    ->with('params', $this->_params)
+		    ->view('emails.reviewedReceiver');
     }
 }

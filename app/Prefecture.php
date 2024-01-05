@@ -8,8 +8,7 @@ class Prefecture extends Model
 {
     protected $fillable = ['name', 'kana'];
 
-    //リレーション
-	public function users()
+	public function users() //リレーション
 	{
 		$this->hasMany('App\User');
 	}

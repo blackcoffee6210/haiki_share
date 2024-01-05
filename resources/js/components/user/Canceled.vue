@@ -127,23 +127,18 @@ export default {
 		})
 	},
 	methods: {
-		//キャンセルされた商品一覧取得
-		async getProducts() {
-			//ローディングを表示する
-			this.loading = true;
-			//API通信
-			const response = await axios.get(`/api/users/${this.id}/canceled`);
-			//API通信が終わったらローディングを非表示にする
-			this.loading = false;
+		async getProducts() { //キャンセルされた商品一覧取得
+			this.loading = true; //ローディングを表示する
 			
-			//responseステータスがOKじゃなかったらエラーコードをセット
-			if (response.status !== OK) {
+			const response = await axios.get(`/api/users/${this.id}/canceled`); //API通信
+			
+			this.loading = false; //API通信が終わったらローディングを非表示にする
+			
+			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
 				this.$store.commit('error/setCode', response.status);
 				return false;
 			}
-			//プロパティにデータをセット
-			this.products = response.data;
-			console.log('productの中身：' + this.products);
+			this.products = response.data; //プロパティにデータをセット
 		}
 	},
 	watch: {
@@ -151,8 +146,7 @@ export default {
 			async handler() {
 				await this.getProducts();
 			},
-			//immediateをtrueにすると、コンポーネントが生成されたタイミングでも実行する
-			immediate: true
+			immediate: true //immediateをtrueにすると、コンポーネントが生成されたタイミングでも実行する
 		}
 	}
 }
