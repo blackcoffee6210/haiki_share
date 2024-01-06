@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UpdatePassword;
 use App\Http\Requests\UpdateUser;
 use App\Product;
+use App\Review;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -86,5 +87,11 @@ class UserController extends Controller
 	public function canceled(string $id) //キャンセルした商品一覧(利用者)
 	{
 		return User::find($id)->cancels()->orderByDesc('cancels.created_at')->get();
+	}
+
+	public function reviewed(string $id) //レビュー一覧(利用者)
+	{
+//		return User::find($id)->reviews()->where('sender_id', $id)->orderByDesc('reviews.created_at')->get();
+		return Review::where('sender_id', $id)->orderByDesc('reviews.created_at')->get();
 	}
 }

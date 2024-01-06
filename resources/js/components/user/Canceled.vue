@@ -96,10 +96,10 @@
 </template>
 
 <script>
-import Loading from "../Loading";
-import Product from "../product/Product";
-import Sidebar from "../Sidebar";
-import { OK }  from "../../util";
+import Loading        from "../Loading";
+import Product        from "../product/Product";
+import Sidebar        from "../Sidebar";
+import { OK }         from "../../util";
 import { mapGetters } from 'vuex';
 
 export default {

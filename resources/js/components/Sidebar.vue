@@ -67,13 +67,14 @@
 									  			params: { id: id.toString() }}" >キャンセルされた商品一覧
 			</router-link>
 			<!--	レビューしたユーザー一覧 -->
-			<a class="p-sidebar__link"
-				 v-if="!isShopUser">レビューしたユーザー一覧
-			</a>
-			<!--<router-link class="p-sidebar__link"-->
-			<!--						 v-if="!isShopUser"-->
-			<!--						 :to="{ name: 'user.reviewed', params: { id: id.toString() }}" >-->
-			<!--</router-link>-->
+			<!--<a class="p-sidebar__link"-->
+			<!--	 v-if="!isShopUser">レビューしたユーザー一覧-->
+			<!--</a>-->
+			<router-link class="p-sidebar__link"
+									 v-if="!isShopUser"
+									 :to="{ name: 'user.reviewed',
+									  		  params: { id: id.toString() }}" >レビューしたユーザー一覧
+			</router-link>
 			<!-- レビューされたユーザー一覧 -->
 			<a class="p-sidebar__link"
 				 v-if="isShopUser">レビューされたユーザー一覧

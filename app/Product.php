@@ -63,7 +63,6 @@ class Product extends Model
 	{
 		return $this->user->branch;
 	}
-
 	/**
 	 * アクセサ - user_image
 	 * @string

@@ -78,4 +78,14 @@ class User extends Authenticatable
 	{
 		return $this->belongsToMany('App\Product', 'cancels')->withTimestamps();
 	}
+
+	public function senderReviews() //レビューテーブル(利用者)
+	{
+		return $this->hasMany('App\Review', 'sender_id');
+	}
+
+	public function receiverReviews() //レビューテーブル(出品者)
+	{
+		return $this->hasMany('App\Review', 'receiver_id');
+	}
 }

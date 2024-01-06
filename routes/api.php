@@ -36,7 +36,7 @@ Route::get('/users/{id}/posted',          'UserController@posted');         //�
 Route::get('/users/{id}/purchased',       'UserController@purchased');      //購入した商品一覧
 Route::get('/users/{id}/liked',           'UserController@liked');          //いいねした商品一覧
 Route::get('/users/{id}/canceled',        'UserController@canceled');       //キャンセルした商品一覧
-Route::get('/users/{id}/reviewed',        'UserController@reviewed');       //レビューした商品一覧
+Route::get('/users/{id}/reviewed',        'UserController@reviewed');       //レビュー一覧
 
 //=================================================================
 // Review

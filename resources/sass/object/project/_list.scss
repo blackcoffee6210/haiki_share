@@ -3,6 +3,21 @@
   @include mq() {
     margin-right: initial;
   }
+  &__no-product,
+  &__no-review {
+    text-align: center;
+    padding-top: 150px;
+  }
+  &__review-title {
+    margin-top: $space_s;
+    margin-bottom: $space_m;
+    font-weight: bold;
+    word-wrap: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 1; //1行に丸める
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
   &__title {
     margin-bottom: 7px;
     @include mq() {
@@ -32,8 +47,9 @@
     @include mq() {
       height: initial;
     }
-    &--review {
+    &__review {
       width: 100%;
+      padding: $space_m;
     }
   }
   &__card-left {
@@ -47,11 +63,6 @@
     @include mq() {
       height: 100px;
     }
-    &--review {
-      display: block;
-      width: 100%;
-      height: 50px;
-    }
   }
   &__card-body {
     padding: $space_m;
@@ -63,9 +74,6 @@
       align-items: center;
       justify-content: space-between;
     }
-    &--review {
-      padding: $space_m;
-    }
   }
   &__name {
     font-weight: bold;
@@ -74,6 +82,19 @@
     -webkit-line-clamp: 1; //1行に丸める
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
+  &__recommendation {
+    font-size: $font-size_s;
+    font-weight: bold;
+    padding: 0 $space_s;
+    border-radius: 3px;
+    background: #fdbf99;
+    color: $white;
+  }
+  &__detail {
+    min-height: 120px;
+    max-height: 120px;
+    margin-bottom: $space_m;
   }
   &__price {
     font-weight: bold;
@@ -98,14 +119,17 @@
       margin-bottom: 0;
     }
   }
+  &__user-info__review {
+    display: flex;
+    align-items: flex-start;
+  }
   &__icon {
     margin-right: $space_m;
     width: 30px;
     height: 30px;
-    &--review {
-      width: 30px;
-      height: 30px;
-    }
+  }
+  &__review-icon {
+    margin-right: $space_m;
   }
   &__usr-name {
     word-wrap: break-word;
@@ -156,15 +180,6 @@
     margin-bottom: $space_m;
     height: 30px;
   }
-  &__review-title {
-    font-weight: bold;
-    margin-left: $space_m;
-    word-wrap: break-word;
-    display: -webkit-box;
-    -webkit-line-clamp: 1; //1行に丸める
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
   &__comment {
     font-size: $font-size_m;
     //line-height: 1.5;
@@ -176,70 +191,5 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-  &__time {
-    font-size: $font-size_s;
-  }
-  &__no-product {
-    text-align: center;
-    padding-top: 150px;
-  }
 
-  //レビュー一覧
-  &__card--review {
-    &__body {
-
-    }
-    &__product-name {
-      font-weight: bold;
-      word-wrap: break-word;
-      display: -webkit-box;
-      -webkit-line-clamp: 1; //1行に丸める
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-    &__summary {
-      word-wrap: break-word;
-      display: -webkit-box;
-      -webkit-line-clamp: 2; //1行に丸める
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      border-bottom: 1px solid $gray-color;
-      padding-bottom: $space_s;
-      margin-bottom: $space_m;
-    }
-    &__user-info {
-      display: flex;
-      align-items: center;
-      margin-bottom: $space_s;
-    }
-    &__icon {
-      width: 30px;
-      height: 30px;
-      margin-right: $space_m;
-    }
-    &__user-name {
-      width: 215px;
-      word-wrap: break-word;
-      display: -webkit-box;
-      -webkit-line-clamp: 1; //1行に丸める
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-    &__date {
-      font-size: $font-size_s;
-    }
-    &__title {
-      font-weight: bold;
-      margin-bottom: -$space_m;
-    }
-    &__comment {
-      margin-top: $space_s;
-      font-size: $font-size_s;
-      word-wrap: break-word;
-      display: -webkit-box;
-      -webkit-line-clamp: 3; //1行に丸める
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-  }
 }

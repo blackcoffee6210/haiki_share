@@ -1,9 +1,121 @@
 <template>
-	<div>レビューーーーーーーーーーーーーー</div>
+	<div class="l-main">
+		<main class="l-main__2column">
+			<div class="p-list">
+				<h2 class="c-title p-list__title">
+					<span v-show="isShopUser">レビューされたユーザー一覧</span>
+					<span v-show="!isShopUser">レビューしたユーザー一覧</span>
+				</h2>
+				
+				<!-- ローディング -->
+				<Loading v-show="loading" />
+				
+				<!-- レビューがなければ表示する -->
+				<div v-if="!reviews.length"
+						 class="p-list__no-review">
+					<span v-show="isShopUser">ユーザーからのレビューはありません</span>
+					<span v-show="!isShopUser">レビューしたユーザーはいません</span>
+				</div>
+				
+				<div class="p-list__card-container" v-show="!loading">
+					
+					<!-- カード -->
+					<div class="c-card p-list__card__review"
+							 v-for="review in reviews"
+							 :key="review.id">
+						<!-- レビュー詳細画面のリンク -->
+						<router-link class="c-card__link"
+												 :to="{ name: 'review.detail',
+												 				params: { id: review.id.toString() }}" />
+
+						<div class="p-list__user-info__review">
+							<!-- ユーザーの画像	-->
+							<img class="c-icon p-list__review-icon"
+									 :src="review.receiver_image"
+									 alt="">
+							<div>
+								<!-- レビュー相手の名前	-->
+								<div class="p-list__name">{{ review.receiver_name }}</div>
+								<!-- ユーザーの評価 -->
+								<div class="p-list__recommendation">{{ review.recommend }}</div>
+							</div>
+						</div>
+						
+						<!-- レビュータイトル -->
+						<div class="p-list__review-title">{{ review.title }}</div>
+						
+						<!-- レビューの内容 -->
+						<div class="p-list__detail">{{ review.detail }}</div>
+						
+						<!-- ボタン	-->
+						<div class="p-list__btn-container">
+							<!-- 詳細を見るボタン -->
+							<router-link class="c-btn p-list__btn p-list__btn--detail"
+													 :to="{ name: 'review.detail',
+																	params: { id: review.id.toString() }}">詳細を見る
+							</router-link>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+		
+		<!-- サイドバー	-->
+		<Sidebar :id="id" />
+	</div>
 </template>
 
 <script>
+import Loading        from "../Loading";
+import Sidebar        from "../Sidebar";
+import { OK }         from "../../util";
+import { mapGetters } from 'vuex';
+
 export default {
-	name: "Reviewed"
+	name: "Reviewed",
+	props: {
+		id: {
+			type: String,
+			required: true
+		}
+	},
+	components: {
+		Loading,
+		Sidebar
+	},
+	data() {
+		return {
+			loading: false,
+			reviews: {}
+		}
+	},
+	computed: {
+		...mapGetters({
+			isShopUser: 'auth/isShopUser'
+		})
+	},
+	methods: {
+		async getReviews() { //レビュー一覧取得
+			this.loading = true; //ローディングを表示する
+			
+			const response = await axios.get(`/api/users/${this.id}/reviewed`); //API通信
+			
+			this.loading = false; //API通信が終わったらローディングを非表示にする
+			
+			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
+				this.$store.commit('error/setCode', response.status);
+				return false;
+			}
+			this.reviews = response.data; //プロパティにデータをセット
+		}
+	},
+	watch: {
+		$route: {
+			async handler() {
+				await this.getReviews();
+			},
+			immediate: true //immediateをtrueにすると、コンポーネントが生成されたタイミングでも実行する
+		}
+	}
 }
 </script>
