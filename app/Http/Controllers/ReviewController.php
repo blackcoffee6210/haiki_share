@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreReview;
+use App\Http\Requests\UpdateReview;
 use App\Mail\ReviewedReceiverNotification;
 use App\Mail\ReviewedSenderNotification;
 use App\Recommendation;
@@ -17,6 +18,12 @@ class ReviewController extends Controller
 	public function __construct()
 	{
 		$this->middleware('auth'); //認証
+	}
+
+	public function show(string $sender_id) //レビュー取得
+	{
+		$review = Review::with(['sender', 'receiver', 'recommendation'])->where('sender_id', $sender_id)->get();
+		return $review;
 	}
 
 	public function store(StoreReview $request) //レビュー投稿
@@ -34,7 +41,6 @@ class ReviewController extends Controller
 		$review->detail            = $request->detail;
 		$review->save();
 
-//		todo: メール送信機能実装
 		$params = [ //メール送信に必要な情報を用意
 			'sender_name'    => Auth::user()->name,
 			'sender_image'   => Auth::user()->image,
@@ -51,5 +57,29 @@ class ReviewController extends Controller
 		Mail::to($receiver_email)->send(new ReviewedReceiverNotification($params)); //受信者にメールを送信
 
 		return response($review, 201);
+	}
+
+	public function update(UpdateReview $request) //レビュー更新
+	{
+//		$review = Review::with(['sender', 'receiver', 'recommendation'])
+//						->where('sender_id', $request->sender_id)->get();  //DBからデータを取ってくる
+//
+//		$review->sender_id         = $request->sender_id;
+//		$review->receiver_id       = $request->receiver_id;
+//		$review->recommendation_id = $request->recommendation_id;
+//		$review->title             = $request->title;
+//		$review->detail            = $request->detail;
+//		$review->save();
+
+		$review = Review::with(['sender', 'receiver', 'recommendation'])
+						->where('sender_id', $request->sender_id)->update([
+							'recommendation_id' => $request->recommendation_id,
+							'title'             => $request->title,
+							'detail'            => $request->detail
+						]);
+
+		//レビュー更新処理はメールを送らない
+
+		return response($review, 200);
 	}
 }

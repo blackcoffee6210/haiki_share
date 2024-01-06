@@ -18,7 +18,7 @@ Route::post('/password/reset', 'Auth\ResetPasswordController@reset')->name('pass
 Route::get('/products',                'ProductController@index');     //商品一覧取得
 Route::get('/products/{id}',           'ProductController@show');      //商品情報取得
 Route::post('/products',               'ProductController@store');     //商品登録
-Route::post('/products/{id}/update',   'ProductController@update');    //商品更新
+Route::post('/products/{id}',          'ProductController@update');    //商品更新
 Route::delete('/products/{id}',        'ProductController@destroy');   //商品削除      todo: 処理実装
 Route::post('/products/{id}/purchase', 'ProductController@purchase');  //商品購入
 Route::post('/products/{id}/like',     'ProductController@like');      //お気に入り登録 todo: LikeController作成後、切り出す
@@ -41,9 +41,10 @@ Route::get('/users/{id}/reviewed',        'UserController@reviewed');       //�
 //=================================================================
 // Review
 //=================================================================
-Route::post('/reviews',             'ReviewController@store');   //レビュー登録
-Route::post('/reviews/{id}/update', 'ReviewController@update');  //レビュー編集 todo: 処理実装
-Route::delete('/reviews/{id}',      'ReviewController@destroy'); //レビュー削除 todo: 処理実装
+Route::post('/reviews',        'ReviewController@store');   //レビュー登録
+Route::get('/reviews/{id}',    'ReviewController@show');;   //レビュー取得
+Route::post('/reviews/update', 'ReviewController@update');  //レビュー編集 todo: 処理実装
+Route::delete('/reviews/{id}', 'ReviewController@destroy'); //レビュー削除 todo: 処理実装
 
 
 //=================================================================

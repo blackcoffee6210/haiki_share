@@ -261,7 +261,7 @@ export default {
 			formData.append('detail',      this.product.detail);
 			formData.append('price',       this.product.price);
 			
-			const response = await axios.post(`/api/products/${this.product.id}/update`, formData); //API通信
+			const response = await axios.post(`/api/products/${this.product.id}`, formData); //API通信
 			
 			this.loading = false; //API通信が終わったらローディングを非表示にする
 			

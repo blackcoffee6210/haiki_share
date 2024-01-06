@@ -14,6 +14,7 @@ import EditProduct     from "./components/product/EditProduct";
 import Index           from "./components/product/Index";
 import ProductDetail   from "./components/product/ProductDetail";
 import RegisterProduct from "./components/product/RegisterProduct";
+import EditReview      from "./components/review/EditReview";
 import RegisterReview  from "./components/review/RegisterReview";
 import Canceled        from "./components/user/Canceled";
 import EditPassword    from "./components/user/EditPassword";
@@ -22,7 +23,8 @@ import Liked           from "./components/user/Liked";
 import MyPage          from "./components/user/MyPage";
 import Posted          from "./components/user/Posted";
 import Purchased       from "./components/user/Purchased";
-import Reviewed        from "./components/user/Reviewed";                // ↑ここまで
+import Reviewed        from "./components/user/Reviewed";               // ↑ここまで
+
 
 Vue.use(VueRouter); //VueRouterプラグインを利用する(<router-view>コンポーネントなどを使うことができる)
 
@@ -99,6 +101,15 @@ const routes = [ //パスとコンポーネントのマッピング
     path: '/reviews/:id/register', //レビュー投稿(利用者)
     name: 'review.register',
     component: RegisterReview,
+    props: true,
+    beforeEnter(to, from, next) { //ログイン状態かつ利用者ユーザーがページにアクセスした場合(true)、そのまま移動させる
+      (store.getters['auth/check'] && !store.getters['auth/isShopUser']) ? next() : next({name: 'index'} );
+    }
+  },
+  {
+    path: '/reviews/:id/edit', //レビュー編集(利用者)
+    name: 'review.edit',
+    component: EditReview,
     props: true,
     beforeEnter(to, from, next) { //ログイン状態かつ利用者ユーザーがページにアクセスした場合(true)、そのまま移動させる
       (store.getters['auth/check'] && !store.getters['auth/isShopUser']) ? next() : next({name: 'index'} );

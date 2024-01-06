@@ -49,11 +49,16 @@
 						
 						<!-- ボタン	-->
 						<div class="p-list__btn-container">
-							<!-- 詳細を見るボタン -->
+							<!-- 編集ボタン -->
 							<router-link class="c-btn p-list__btn p-list__btn--detail"
-													 :to="{ name: 'review.detail',
-																	params: { id: review.id.toString() }}">詳細を見る
+													 :to="{ name: 'review.edit',
+																	params: { id: id.toString() }}">編集する
 							</router-link>
+							<!--&lt;!&ndash; 詳細を見るボタン &ndash;&gt;-->
+							<!--<router-link class="c-btn p-list__btn p-list__btn&#45;&#45;detail"-->
+							<!--						 :to="{ name: 'review.detail',-->
+							<!--										params: { id: review.id.toString() }}">詳細を見る-->
+							<!--</router-link>-->
 						</div>
 					</div>
 				</div>

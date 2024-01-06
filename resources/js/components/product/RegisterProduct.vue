@@ -163,6 +163,7 @@ export default {
 	},
 	data() {
 		return {
+			loading: false, //ローディングを表示するかどうかを判定するプロパティ
 			product: {
 				image: '',
 				category_id: '',
@@ -180,8 +181,7 @@ export default {
 				detail: null,
 				expire: null,
 				price: null
-			},
-			loading: false //ローディングを表示するかどうかを判定するプロパティ
+			}
 		}
 	},
 	computed: {
