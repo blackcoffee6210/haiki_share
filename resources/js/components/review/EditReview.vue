@@ -110,10 +110,18 @@
 					</div>
 				</div>
 				
-				<!-- 投稿ボタン -->
-				<button class="c-btn p-review-form__btn"
-								type="submit">投稿する
-				</button>
+				<div class="p-review-form__btn-container">
+					<!-- 削除ボタン	-->
+					<button class="c-btn c-btn--white p-review-form__btn--delete"
+									@click="deleteReview"
+									type="button">削除する
+					</button>
+					
+					<!-- 投稿ボタン -->
+					<button class="c-btn p-review-form__btn--update"
+									type="submit">投稿する
+					</button>
+				</div>
 			</form>
 		</div>
 	</div>
@@ -187,6 +195,27 @@ export default {
 			});
 			
 			this.$router.push({name: 'user.mypage', params: {id: this.id.toString()}}); //マイページに遷移
+		},
+		async deleteReview() { //レビュー削除
+			if(confirm('レビューを削除しますか?')) {
+				this.loading = true; //ローティングを表示する
+
+				const response = await axios.delete(`/api/reviews/${this.id}`); //API通信
+
+				this.loading =false; //API通信が終わったらローディングを非表示にする
+
+				if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
+					this.$store.commit('error/setCode', response.status);
+					return false;
+				}
+
+				this.$store.commit('message/setContent', { //メッセージ登録
+					content: 'レビューを削除しました'
+				});
+				
+				this.$router.push({ name: 'user.mypage',
+					params: { id: this.id.toString() }}); //マイページに移動する
+			}
 		}
 	},
 	watch: {

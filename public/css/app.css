@@ -2715,6 +2715,14 @@ body {
   margin: 30px 0 0 auto;
 }
 
+.p-review-form__btn--delete {
+  margin: 30px 10px 0 0;
+}
+
+.p-review-form__btn--update {
+  margin: 30px 0 0 0;
+}
+
 .p-sidebar {
   border-radius: 3px;
   background: #fff;

@@ -92,5 +92,11 @@
   }
   &__btn {
     margin: $space_2xl 0 0 auto;
+    &--delete {
+      margin: $space_2xl $space_m 0 0;
+    }
+    &--update {
+      margin: $space_2xl 0 0 0;
+    }
   }
 }

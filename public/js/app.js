@@ -18424,23 +18424,67 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee3);
       }))();
+    },
+    deleteReview: function deleteReview() {
+      var _this4 = this;
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+        var response;
+        return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+          while (1) switch (_context4.prev = _context4.next) {
+            case 0:
+              if (!confirm('レビューを削除しますか?')) {
+                _context4.next = 11;
+                break;
+              }
+              _this4.loading = true; //ローティングを表示する
+              _context4.next = 4;
+              return axios["delete"]("/api/reviews/".concat(_this4.id));
+            case 4:
+              response = _context4.sent;
+              //API通信
+
+              _this4.loading = false; //API通信が終わったらローディングを非表示にする
+              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
+                _context4.next = 9;
+                break;
+              }
+              //responseステータスがOKじゃなかったらエラーコードをセット
+              _this4.$store.commit('error/setCode', response.status);
+              return _context4.abrupt("return", false);
+            case 9:
+              _this4.$store.commit('message/setContent', {
+                //メッセージ登録
+                content: 'レビューを削除しました'
+              });
+              _this4.$router.push({
+                name: 'user.mypage',
+                params: {
+                  id: _this4.id.toString()
+                }
+              }); //マイページに移動する
+            case 11:
+            case "end":
+              return _context4.stop();
+          }
+        }, _callee4);
+      }))();
     }
   },
   watch: {
     $route: {
       handler: function handler() {
-        var _this4 = this;
-        return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
-          return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-            while (1) switch (_context4.prev = _context4.next) {
+        var _this5 = this;
+        return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+          return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+            while (1) switch (_context5.prev = _context5.next) {
               case 0:
-                _this4.getRecommendation();
-                _this4.getReview();
+                _this5.getRecommendation();
+                _this5.getReview();
               case 2:
               case "end":
-                return _context4.stop();
+                return _context5.stop();
             }
-          }, _callee4);
+          }, _callee5);
         }))();
       },
       immediate: true
@@ -22651,12 +22695,22 @@ var render = function render() {
       key: msg,
       staticClass: "p-error"
     }, [_vm._v(_vm._s(msg) + "\n\t\t\t\t")]);
-  }), 0) : _vm._e(), _vm._v(" "), _c("button", {
-    staticClass: "c-btn p-review-form__btn",
+  }), 0) : _vm._e(), _vm._v(" "), _c("div", {
+    staticClass: "p-review-form__btn-container"
+  }, [_c("button", {
+    staticClass: "c-btn c-btn--white p-review-form__btn--delete",
+    attrs: {
+      type: "button"
+    },
+    on: {
+      click: _vm.deleteReview
+    }
+  }, [_vm._v("削除する\n\t\t\t\t")]), _vm._v(" "), _c("button", {
+    staticClass: "c-btn p-review-form__btn--update",
     attrs: {
       type: "submit"
     }
-  }, [_vm._v("投稿する\n\t\t\t")])])], 1)]);
+  }, [_vm._v("投稿する\n\t\t\t\t")])])])], 1)]);
 };
 var staticRenderFns = [];
 render._withStripped = true;

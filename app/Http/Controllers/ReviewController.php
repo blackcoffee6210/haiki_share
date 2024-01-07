@@ -61,25 +61,18 @@ class ReviewController extends Controller
 
 	public function update(UpdateReview $request) //レビュー更新
 	{
-//		$review = Review::with(['sender', 'receiver', 'recommendation'])
-//						->where('sender_id', $request->sender_id)->get();  //DBからデータを取ってくる
-//
-//		$review->sender_id         = $request->sender_id;
-//		$review->receiver_id       = $request->receiver_id;
-//		$review->recommendation_id = $request->recommendation_id;
-//		$review->title             = $request->title;
-//		$review->detail            = $request->detail;
-//		$review->save();
-
 		$review = Review::with(['sender', 'receiver', 'recommendation'])
 						->where('sender_id', $request->sender_id)->update([
 							'recommendation_id' => $request->recommendation_id,
 							'title'             => $request->title,
 							'detail'            => $request->detail
 						]);
-
 		//レビュー更新処理はメールを送らない
-
 		return response($review, 200);
+	}
+
+	public function destroy(string $sender_id) //レビュー削除
+	{
+		return response(Review::where('sender_id', $sender_id)->delete(), 200);
 	}
 }
