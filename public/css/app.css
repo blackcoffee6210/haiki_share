@@ -2580,11 +2580,11 @@ body {
 }
 
 .p-product-form__btn {
-  margin: 30px 0 0 auto;
+  margin: 30px 0 0 0;
 }
 
-.p-product-form__btn--delete {
-  background: #bbb;
+.p-product-form__btn--delete,
+.p-product-form__btn--back {
   margin: 30px 10px 0 0;
 }
 
@@ -2748,13 +2748,13 @@ body {
   color: #333;
   padding: 15px;
   padding-left: 25px;
-  border-left: 3px solid transparent;
+  border-left: 5px solid transparent;
 }
 
 .p-sidebar__link:hover {
   color: #333;
   background: rgba(0, 0, 0, 0.05);
-  border-left: 3px solid #f96204;
+  border-left: 5px solid #f96204;
   transition: 0.3s;
 }
 

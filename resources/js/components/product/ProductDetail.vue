@@ -115,7 +115,8 @@
 				</div>
 				
 				<!-- twitterシェアボタン -->
-				<div class="p-product-detail__twitter-container">
+				<!-- 自分の商品のときは表示しない -->
+				<div class="p-product-detail__twitter-container" v-show="!product.is_my_product">
 					<social-sharing url="http://127.0.0.1:8001/products/48"
 													title="vue-social-sharingのテスト"
 													quote="Vue is a progressive framework for building user interfaces."

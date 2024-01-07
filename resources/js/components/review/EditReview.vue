@@ -202,7 +202,7 @@ export default {
 
 				const response = await axios.delete(`/api/reviews/${this.id}`); //API通信
 
-				this.loading =false; //API通信が終わったらローディングを非表示にする
+				this.loading = false; //API通信が終わったらローディングを非表示にする
 
 				if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
 					this.$store.commit('error/setCode', response.status);

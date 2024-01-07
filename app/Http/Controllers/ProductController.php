@@ -91,6 +91,12 @@ class ProductController extends Controller
 		return response($product, 200); //商品情報とstatusを返す
 	}
 
+	public function destroy(string $id) //商品削除
+	{
+		Product::find($id)->delete();
+		return response(['product_id' => $id], 200); //商品情報取得
+	}
+
 	public function like(string $id) //お気に入り登録
 	{
 		$product = Product::where('id', $id)->with('likes')->first();

@@ -145,7 +145,7 @@
 					
 					<div class="p-product-form__btn-container">
 						<!-- 削除ボタン	-->
-						<button class="c-btn p-product-form__btn p-product-form__btn--delete"
+						<button class="c-btn c-btn--white p-product-form__btn--delete"
 										@click="deleteProduct"
 										type="button">削除する
 						</button>
@@ -292,9 +292,9 @@ export default {
 			if(confirm('商品を削除しますか?')) {
 				this.loading = true; //ローティングを表示する
 				
-				const response = await axios.post(`/api/products/${this.id}`); //API通信
+				const response = await axios.delete(`/api/products/${this.id}`); //API通信
 				
-				this.loading =false; //API通信が終わったらローディングを非表示にする
+				this.loading = false; //API通信が終わったらローディングを非表示にする
 				
 				if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
 					this.$store.commit('error/setCode', response.status);

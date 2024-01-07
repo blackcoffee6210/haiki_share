@@ -21,11 +21,11 @@
     color: $font-color;
     padding: $space_l;
     padding-left: 25px;
-    border-left: 3px solid transparent;
+    border-left: 5px solid transparent;
     &:hover {
       color: $font-color;
       background: rgba(0,0,0,.05);
-      border-left: 3px solid $main-color;
+      border-left: 5px solid $main-color;
       transition: .3s;
     }
     @include mq() {

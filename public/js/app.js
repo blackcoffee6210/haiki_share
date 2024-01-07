@@ -17440,7 +17440,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               }
               _this5.loading = true; //ローティングを表示する
               _context4.next = 7;
-              return axios.post("/api/products/".concat(_this5.id));
+              return axios["delete"]("/api/products/".concat(_this5.id));
             case 7:
               response = _context4.sent;
               //API通信
@@ -21663,7 +21663,7 @@ var render = function render() {
   }), 0) : _vm._e(), _vm._v(" "), _c("div", {
     staticClass: "p-product-form__btn-container"
   }, [_c("button", {
-    staticClass: "c-btn p-product-form__btn p-product-form__btn--delete",
+    staticClass: "c-btn c-btn--white p-product-form__btn--delete",
     attrs: {
       type: "button"
     },
@@ -22111,6 +22111,12 @@ var render = function render() {
   }, [_vm._v("購入キャンセル\n\t\t\t\t\t")])], 1)]), _vm._v(" "), _c("div", {
     staticClass: "p-product-detail__detail"
   }, [_vm._v("\n\t\t\t\t" + _vm._s(_vm.product.detail) + "\n\t\t\t")]), _vm._v(" "), _c("div", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: !_vm.product.is_my_product,
+      expression: "!product.is_my_product"
+    }],
     staticClass: "p-product-detail__twitter-container"
   }, [_c("social-sharing", {
     staticClass: "c-btn c-btn--twitter",
@@ -22432,12 +22438,21 @@ var render = function render() {
       key: msg,
       staticClass: "p-error"
     }, [_vm._v(_vm._s(msg) + "\n\t\t\t\t\t")]);
-  }), 0) : _vm._e(), _vm._v(" "), _c("button", {
+  }), 0) : _vm._e(), _vm._v(" "), _c("div", {
+    staticClass: "p-product-form__btn-container"
+  }, [_c("a", {
+    staticClass: "c-btn c-btn--white p-product-form__btn--back",
+    on: {
+      click: function click($event) {
+        return _vm.$router.back();
+      }
+    }
+  }, [_vm._v("もどる\n\t\t\t\t\t")]), _vm._v(" "), _c("button", {
     staticClass: "c-btn p-product-form__btn",
     attrs: {
       type: "submit"
     }
-  }, [_vm._v("出品する\n\t\t\t\t")])])], 1)])]);
+  }, [_vm._v("出品する\n\t\t\t\t\t")])])])], 1)])]);
 };
 var staticRenderFns = [];
 render._withStripped = true;
