@@ -14,13 +14,18 @@
 		<img :src="product.image"
 				 alt=""
 				 class="p-product__img">
+		
 		<!-- カードボディ -->
 		<div class="p-product__card-body">
 			<div class="p-product__container">
 				<!-- 商品の名前	-->
-				<div class="p-product__name">{{ product.name }}</div>
+				<div class="p-product__name">
+					{{ product.name }}
+				</div>
 				<!-- 料金	-->
-				<div class="p-product__price">{{ product.price | numberFormat }}</div>
+				<div class="p-product__price">
+					{{ product.price | numberFormat }}
+				</div>
 			</div>
 			
 			<!-- 賞味期限 -->
@@ -57,6 +62,9 @@
 					</div>
 				</div>
 			</div>
+			
+			<!-- ボタン	-->
+			<slot></slot>
 		</div>
 	</div>
 	<!--<div class="c-card p-product">-->

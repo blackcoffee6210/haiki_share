@@ -17569,8 +17569,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
         if (this.sortCategory !== 0 && this.sortCategory !== this.products[i].category_id) {
           //i番目の商品が表示可能かどうかを判定する
-          //カテゴリーが選択されていて(0じゃない) かつカテゴリーと商品カテゴリーIDが一致しないものは非表示にする
-          isShow = false;
+          isShow = false; //カテゴリーが選択されていて(0じゃない) かつカテゴリーと商品カテゴリーIDが一致しないものは非表示にする
         }
         if (isShow && this.products[i].name.indexOf(this.keyword) !== -1) {
           //リアルタイム検索をするための処理
@@ -17601,7 +17600,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
   },
   methods: {
-    getCategories: function getCategories() {
+    getRecommend: function getRecommend() {
       var _this = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
         var response;
@@ -17609,81 +17608,111 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) switch (_context.prev = _context.next) {
             case 0:
               _context.next = 2;
-              return axios.get('/api/categories');
+              return axios.get('/api/products/ranking');
             case 2:
               response = _context.sent;
               if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_3__["OK"])) {
                 _context.next = 6;
                 break;
               }
-              //responseステータスがOKじゃなかったらエラーコードをセット
               _this.$store.commit('error/setCode', response.status);
               return _context.abrupt("return", false);
             case 6:
-              _this.categories = response.data; //プロパティにresponseデータを代入
-            case 7:
+              _this.recommendProducts = response.data;
+              console.log(response.data);
+            case 8:
             case "end":
               return _context.stop();
           }
         }, _callee);
       }))();
     },
-    getProducts: function getProducts() {
+    getCategories: function getCategories() {
       var _this2 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
         var response;
         return _regeneratorRuntime().wrap(function _callee2$(_context2) {
           while (1) switch (_context2.prev = _context2.next) {
             case 0:
-              //商品取得メソッド
-              _this2.loading = true; //ローディングを表示する
-              _context2.next = 3;
-              return axios.get("/api/products?page=".concat(_this2.page));
-            case 3:
+              _context2.next = 2;
+              return axios.get('/api/categories');
+            case 2:
               response = _context2.sent;
-              //API接続
-
-              _this2.loading = false; //API通信が終わったらローディングを非表示にする
               if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_3__["OK"])) {
-                _context2.next = 8;
+                _context2.next = 6;
                 break;
               }
-              //responseステータスがOKじゃなかったらエラーコードをセットする
+              //responseステータスがOKじゃなかったらエラーコードをセット
               _this2.$store.commit('error/setCode', response.status);
               return _context2.abrupt("return", false);
-            case 8:
-              //response.dataだとレスポンスのJSONの取得になる
-              //productはresponse.data.dataの中になるので、下記のような書き方になる
-              _this2.products = response.data.data; //商品情報
-              _this2.currentPage = response.data.current_page; //現在のページ
-              _this2.lastPage = response.data.last_page; //最後のページ
-              _this2.total = response.data.total; //商品の数
-            case 12:
+            case 6:
+              _this2.categories = response.data; //プロパティにresponseデータを代入
+            case 7:
             case "end":
               return _context2.stop();
           }
         }, _callee2);
+      }))();
+    },
+    getProducts: function getProducts() {
+      var _this3 = this;
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+        var response;
+        return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+          while (1) switch (_context3.prev = _context3.next) {
+            case 0:
+              //商品取得メソッド
+              _this3.loading = true; //ローディングを表示する
+              _context3.next = 3;
+              return axios.get("/api/products?page=".concat(_this3.page));
+            case 3:
+              response = _context3.sent;
+              //API接続
+
+              _this3.loading = false; //API通信が終わったらローディングを非表示にする
+              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_3__["OK"])) {
+                _context3.next = 8;
+                break;
+              }
+              //responseステータスがOKじゃなかったらエラーコードをセットする
+              _this3.$store.commit('error/setCode', response.status);
+              return _context3.abrupt("return", false);
+            case 8:
+              //response.dataだとレスポンスのJSONの取得になる
+              //productはresponse.data.dataの中になるので、下記のような書き方になる
+              _this3.products = response.data.data; //商品情報
+              _this3.currentPage = response.data.current_page; //現在のページ
+              _this3.lastPage = response.data.last_page; //最後のページ
+              _this3.total = response.data.total; //商品の数
+            case 12:
+            case "end":
+              return _context3.stop();
+          }
+        }, _callee3);
       }))();
     }
   },
   watch: {
     $route: {
       handler: function handler() {
-        var _this3 = this;
-        return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
-          return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-            while (1) switch (_context3.prev = _context3.next) {
+        var _this4 = this;
+        return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+          return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+            while (1) switch (_context4.prev = _context4.next) {
               case 0:
-                _context3.next = 2;
-                return _this3.getCategories();
+                _context4.next = 2;
+                return _this4.getRecommend();
               case 2:
-                _context3.next = 4;
-                return _this3.getProducts();
+                _context4.next = 4;
+                return _this4.getCategories();
               case 4:
+                _context4.next = 6;
+                return _this4.getProducts();
+              case 6:
               case "end":
-                return _context3.stop();
+                return _context4.stop();
             }
-          }, _callee3);
+          }, _callee4);
         }))();
       },
       immediate: true //immediateをtrueにすると、コンポーネントが生成されたタイミングでも実行する
@@ -17940,6 +17969,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
             case 10:
               response = _context5.sent;
               //商品購入APIに接続
+
               _this5.loading = false; //API通信が終わったらローディングを非表示にする
               if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_0__["OK"])) {
                 _context5.next = 15;
@@ -19136,9 +19166,10 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Loading__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Loading */ "./resources/js/components/Loading.vue");
-/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Sidebar */ "./resources/js/components/Sidebar.vue");
-/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../util */ "./resources/js/util.js");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _product_Product__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../product/Product */ "./resources/js/components/product/Product.vue");
+/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Sidebar */ "./resources/js/components/Sidebar.vue");
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../util */ "./resources/js/util.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw new Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw new Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -19148,6 +19179,7 @@ function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t =
 function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : String(i); }
 function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+
 
 
 
@@ -19162,7 +19194,8 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
   },
   components: {
     Loading: _Loading__WEBPACK_IMPORTED_MODULE_0__["default"],
-    Sidebar: _Sidebar__WEBPACK_IMPORTED_MODULE_1__["default"]
+    Product: _product_Product__WEBPACK_IMPORTED_MODULE_1__["default"],
+    Sidebar: _Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   data: function data() {
     return {
@@ -19172,7 +19205,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       isLike: true
     };
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_3__["mapGetters"])({
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_4__["mapGetters"])({
     isShopUser: 'auth/isShopUser'
   })),
   methods: {
@@ -19192,7 +19225,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               //API通信
 
               _this.loading = false; //API通信が終わったらローディングを非表示にする
-              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_2__["OK"])) {
+              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_3__["OK"])) {
                 _context.next = 8;
                 break;
               }
@@ -19225,7 +19258,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               return axios["delete"]("/api/products/".concat(_this2.product.id, "/unlike"));
             case 4:
               response = _context2.sent;
-              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_2__["OK"])) {
+              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_3__["OK"])) {
                 _context2.next = 8;
                 break;
               }
@@ -19342,12 +19375,14 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Loading__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Loading */ "./resources/js/components/Loading.vue");
-/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Sidebar */ "./resources/js/components/Sidebar.vue");
-/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../util */ "./resources/js/util.js");
+/* harmony import */ var _product_Product__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../product/Product */ "./resources/js/components/product/Product.vue");
+/* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Sidebar */ "./resources/js/components/Sidebar.vue");
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../util */ "./resources/js/util.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw new Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw new Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 
 
 
@@ -19361,7 +19396,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   components: {
     Loading: _Loading__WEBPACK_IMPORTED_MODULE_0__["default"],
-    Sidebar: _Sidebar__WEBPACK_IMPORTED_MODULE_1__["default"]
+    Product: _product_Product__WEBPACK_IMPORTED_MODULE_1__["default"],
+    Sidebar: _Sidebar__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   data: function data() {
     return {
@@ -19386,7 +19422,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               //API通信
 
               _this.loading = false; //API通信が終わったらローディングを非表示にする
-              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_2__["OK"])) {
+              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_3__["OK"])) {
                 _context.next = 8;
                 break;
               }
@@ -21840,7 +21876,52 @@ var render = function render() {
     staticClass: "l-sidebar"
   }, [_c("div", {
     staticClass: "p-sidebar-index"
-  }, [_c("input", {
+  }, [_c("h2", {
+    staticClass: "c-title p-sidebar-index__title"
+  }, [_vm._v("おすすめの商品")]), _vm._v(" "), _vm._l(_vm.recommendProducts, function (product) {
+    return _c("div", {
+      key: product.id,
+      staticClass: "c-card p-sidebar-index__card"
+    }, [_c("router-link", {
+      staticClass: "c-card__link",
+      attrs: {
+        to: {
+          name: "product.detail",
+          params: {
+            id: product.id.toString()
+          }
+        }
+      }
+    }), _vm._v(" "), _c("img", {
+      staticClass: "p-sidebar-index__img",
+      attrs: {
+        src: product.image,
+        alt: ""
+      }
+    }), _vm._v(" "), _c("div", {
+      staticClass: "p-sidebar-index__right"
+    }, [_c("div", {
+      staticClass: "p-sidebar-index__card-title"
+    }, [_vm._v(_vm._s(product.name))]), _vm._v(" "), _c("div", {
+      staticClass: "p-sidebar-index__price-container"
+    }, [_c("div", {
+      staticClass: "p-sidebar-index__price"
+    }, [_vm._v(_vm._s(_vm._f("numberFormat")(product.price)))]), _vm._v(" "), _c("div", {
+      staticClass: "p-sidebar-index__expire"
+    }, [_vm._v("\n\t\t\t\t\t\t\t残り\n\t\t\t\t\t\t\t" + _vm._s(_vm._f("momentExpire")(product.expire)) + "\n\t\t\t\t\t\t\t日\n\t\t\t\t\t\t")])]), _vm._v(" "), _c("div", {
+      staticClass: "c-flex"
+    }, [_c("img", {
+      staticClass: "c-icon p-sidebar-index__icon",
+      attrs: {
+        src: product.user_image,
+        alt: ""
+      }
+    }), _vm._v(" "), _c("div", {
+      staticClass: "p-sidebar-index__name"
+    }, [_vm._v(_vm._s(product.user_name))])])])], 1);
+  }), _vm._v(" "), _c("h2", {
+    staticClass: "c-title p-sidebar-index__title"
+  }, [_vm._v("商品検索")]), _vm._v(" "), _c("input", {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -21861,7 +21942,7 @@ var render = function render() {
         _vm.keyword = $event.target.value;
       }
     }
-  })])])]);
+  })], 2)])]);
 };
 var staticRenderFns = [];
 render._withStripped = true;
@@ -21917,9 +21998,9 @@ var render = function render() {
     staticClass: "p-product__container"
   }, [_c("div", {
     staticClass: "p-product__name"
-  }, [_vm._v(_vm._s(_vm.product.name))]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n\t\t\t\t" + _vm._s(_vm.product.name) + "\n\t\t\t")]), _vm._v(" "), _c("div", {
     staticClass: "p-product__price"
-  }, [_vm._v(_vm._s(_vm._f("numberFormat")(_vm.product.price)))])]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n\t\t\t\t" + _vm._s(_vm._f("numberFormat")(_vm.product.price)) + "\n\t\t\t")])]), _vm._v(" "), _c("div", {
     staticClass: "p-product__expire"
   }, [_c("div", [_vm._v("賞味期限")]), _vm._v(" "), _c("div", [_vm._v("\n\t\t\t\t残り\n\t\t\t\t"), _c("span", {
     staticClass: "p-product__expire__date"
@@ -21947,7 +22028,7 @@ var render = function render() {
     staticClass: "p-product__date"
   }, [_vm._v(_vm._s(_vm._f("moment")(_vm.product.created_at)))]), _vm._v(" "), _c("div", {
     staticClass: "p-product__category"
-  }, [_vm._v(_vm._s(_vm.product.category_name))])])])])])], 1);
+  }, [_vm._v(_vm._s(_vm.product.category_name))])])])]), _vm._v(" "), _vm._t("default")], 2)], 1);
 };
 var staticRenderFns = [];
 render._withStripped = true;
@@ -21997,13 +22078,17 @@ var render = function render() {
     staticClass: "c-badge"
   }, [_c("div", {
     staticClass: "c-badge__sold"
-  }, [_vm._v("SOLD")])]), _vm._v(" "), _c("img", {
+  }, [_vm._v("SOLD")])]), _vm._v(" "), _c("div", {
+    staticClass: "u-p-relative"
+  }, [_c("img", {
     staticClass: "p-product-detail__img",
     attrs: {
       src: _vm.product.image,
       alt: ""
     }
   }), _vm._v(" "), _c("div", {
+    staticClass: "p-product-detail__category"
+  }, [_vm._v(_vm._s(_vm.product.category_name))])]), _vm._v(" "), _c("div", {
     staticClass: "p-product-detail__name-container"
   }, [_c("h2", {
     staticClass: "p-product-detail__product-name"
@@ -23064,11 +23149,15 @@ var render = function render() {
     }],
     staticClass: "p-list__card-container"
   }, _vm._l(_vm.products, function (product) {
-    return _c("div", {
+    return _c("Product", {
       key: product.id,
-      staticClass: "c-card p-list__card"
+      attrs: {
+        product: product
+      }
+    }, [_c("div", {
+      staticClass: "p-product__btn-container"
     }, [_c("router-link", {
-      staticClass: "c-card__link",
+      staticClass: "c-btn p-product__btn",
       attrs: {
         to: {
           name: "product.detail",
@@ -23077,60 +23166,8 @@ var render = function render() {
           }
         }
       }
-    }), _vm._v(" "), _c("div", {
-      directives: [{
-        name: "show",
-        rawName: "v-show",
-        value: product.is_purchased,
-        expression: "product.is_purchased"
-      }],
-      staticClass: "c-badge"
-    }, [_c("div", {
-      staticClass: "c-badge__sold"
-    }, [_vm._v("SOLD")])]), _vm._v(" "), _c("img", {
-      staticClass: "p-list__img",
-      attrs: {
-        src: product.image,
-        alt: ""
-      }
-    }), _vm._v(" "), _c("div", {
-      staticClass: "p-list__card-body"
-    }, [_c("div", {
-      staticClass: "p-list__card-body__container"
-    }, [_c("div", {
-      staticClass: "p-list__name"
-    }, [_vm._v(_vm._s(product.name))]), _vm._v(" "), _c("div", {
-      staticClass: "p-list__price"
-    }, [_vm._v("\n\t\t\t\t\t\t\t\t" + _vm._s(_vm._f("numberFormat")(product.price)) + "\n\t\t\t\t\t\t\t")])]), _vm._v(" "), _c("div", {
-      staticClass: "p-list__expire"
-    }, [_c("div", [_vm._v("賞味期限")]), _vm._v(" "), _c("div", [_vm._v("\n\t\t\t\t\t\t\t\t残り\n\t\t\t\t\t\t\t\t"), _c("span", {
-      staticClass: "p-product__expire__date"
-    }, [_vm._v("\n\t\t\t\t\t\t\t\t\t" + _vm._s(_vm._f("momentExpire")(product.expire)) + "\n\t\t\t\t\t\t\t\t")]), _vm._v("\n\t\t\t\t\t\t\t\t日\n\t\t\t\t\t\t\t")])]), _vm._v(" "), _c("div", {
-      staticClass: "p-list__usr-info"
-    }, [_c("img", {
-      staticClass: "c-icon p-list__icon",
-      attrs: {
-        src: product.user_image,
-        alt: ""
-      }
-    }), _vm._v(" "), _c("div", [_c("div", {
-      staticClass: "p-list__usr-name"
-    }, [_vm._v("\n\t\t\t\t\t\t\t\t\t" + _vm._s(product.user_name) + "\n\t\t\t\t\t\t\t\t")]), _vm._v(" "), _c("div", {
-      staticClass: "p-list__date"
-    }, [_vm._v("\n\t\t\t\t\t\t\t\t\t" + _vm._s(_vm._f("moment")(product.created_at)) + "\n\t\t\t\t\t\t\t\t")])])]), _vm._v(" "), _c("div", {
-      staticClass: "p-list__btn-container"
-    }, [_c("router-link", {
-      staticClass: "c-btn p-list__btn p-list__btn--detail",
-      attrs: {
-        to: {
-          name: "product.detail",
-          params: {
-            id: product.id.toString()
-          }
-        }
-      }
-    }, [_vm._v("詳細を見る\n\t\t\t\t\t\t\t")])], 1)])], 1);
-  }), 0)], 1)]), _vm._v(" "), _c("Sidebar", {
+    }, [_vm._v("詳細を見る\n\t\t\t\t\t\t")])], 1)]);
+  }), 1)], 1)]), _vm._v(" "), _c("Sidebar", {
     attrs: {
       id: _vm.id
     }
@@ -23654,11 +23691,15 @@ var render = function render() {
     }],
     staticClass: "p-list__card-container"
   }, _vm._l(_vm.products, function (product) {
-    return _vm.isLike ? _c("div", {
+    return _vm.isLike ? _c("Product", {
       key: product.id,
-      staticClass: "c-card p-list__card"
+      attrs: {
+        product: product
+      }
+    }, [_c("div", {
+      staticClass: "p-product__btn-container"
     }, [_c("router-link", {
-      staticClass: "c-card__link",
+      staticClass: "c-btn p-product__btn",
       attrs: {
         to: {
           name: "product.detail",
@@ -23667,57 +23708,8 @@ var render = function render() {
           }
         }
       }
-    }), _vm._v(" "), _c("div", {
-      directives: [{
-        name: "show",
-        rawName: "v-show",
-        value: product.is_purchased,
-        expression: "product.is_purchased"
-      }],
-      staticClass: "c-badge"
-    }, [_c("div", {
-      staticClass: "c-badge__sold"
-    }, [_vm._v("SOLD")])]), _vm._v(" "), _c("img", {
-      staticClass: "p-list__img",
-      attrs: {
-        src: product.image,
-        alt: ""
-      }
-    }), _vm._v(" "), _c("div", {
-      staticClass: "p-list__card-body"
-    }, [_c("div", {
-      staticClass: "p-list__card-body__container"
-    }, [_c("div", {
-      staticClass: "p-list__name"
-    }, [_vm._v(_vm._s(product.name))]), _vm._v(" "), _c("div", {
-      staticClass: "p-list__price"
-    }, [_vm._v("\n\t\t\t\t\t\t\t\t" + _vm._s(_vm._f("numberFormat")(product.price)) + "\n\t\t\t\t\t\t\t")])]), _vm._v(" "), _c("div", {
-      staticClass: "p-list__expire"
-    }, [_c("div", [_vm._v("賞味期限")]), _vm._v(" "), _c("div", [_vm._v("\n\t\t\t\t\t\t\t\t残り\n\t\t\t\t\t\t\t\t"), _c("span", {
-      staticClass: "p-product__expire__date"
-    }, [_vm._v("\n\t\t\t\t\t\t\t\t\t" + _vm._s(_vm._f("momentExpire")(product.expire)) + "\n\t\t\t\t\t\t\t\t")]), _vm._v("\n\t\t\t\t\t\t\t\t日\n\t\t\t\t\t\t\t")])]), _vm._v(" "), _c("div", {
-      staticClass: "p-list__usr-info"
-    }, [_c("img", {
-      staticClass: "c-icon p-list__icon",
-      attrs: {
-        src: product.user_image,
-        alt: ""
-      }
-    }), _vm._v(" "), _c("div", [_c("div", {
-      staticClass: "p-list__usr-name"
-    }, [_vm._v("\n\t\t\t\t\t\t\t\t\t" + _vm._s(product.user_name) + "\n\t\t\t\t\t\t\t\t")]), _vm._v(" "), _c("div", {
-      staticClass: "p-list__date"
-    }, [_vm._v("\n\t\t\t\t\t\t\t\t\t" + _vm._s(_vm._f("moment")(product.created_at)) + "\n\t\t\t\t\t\t\t\t")])])]), _vm._v(" "), _c("div", {
-      staticClass: "p-list__btn-container"
-    }, [_c("button", {
-      staticClass: "c-btn p-list__btn p-list__btn--like",
-      on: {
-        click: function click($event) {
-          return _vm.unlike(product);
-        }
-      }
-    }, [_vm._v("お気に入り解除\n\t\t\t\t\t\t\t")])])])], 1) : _vm._e();
-  }), 0)], 1)]), _vm._v(" "), _c("Sidebar", {
+    }, [_vm._v("詳細を見る\n\t\t\t\t\t\t")])], 1)]) : _vm._e();
+  }), 1)], 1)]), _vm._v(" "), _c("Sidebar", {
     attrs: {
       id: _vm.id
     }
@@ -24139,61 +24131,13 @@ var render = function render() {
     }],
     staticClass: "p-list__card-container"
   }, _vm._l(_vm.products, function (product) {
-    return _c("div", {
+    return _c("Product", {
       key: product.id,
-      staticClass: "c-card p-list__card"
-    }, [_c("router-link", {
-      staticClass: "c-card__link",
       attrs: {
-        to: {
-          name: "product.detail",
-          params: {
-            id: product.id.toString()
-          }
-        }
+        product: product
       }
-    }), _vm._v(" "), _c("div", {
-      directives: [{
-        name: "show",
-        rawName: "v-show",
-        value: product.is_purchased,
-        expression: "product.is_purchased"
-      }],
-      staticClass: "c-badge"
     }, [_c("div", {
-      staticClass: "c-badge__sold"
-    }, [_vm._v("SOLD")])]), _vm._v(" "), _c("img", {
-      staticClass: "p-list__img",
-      attrs: {
-        src: product.image,
-        alt: ""
-      }
-    }), _vm._v(" "), _c("div", {
-      staticClass: "p-list__card-body"
-    }, [_c("div", {
-      staticClass: "p-list__card-body__container"
-    }, [_c("div", {
-      staticClass: "p-list__name"
-    }, [_vm._v(_vm._s(product.name))]), _vm._v(" "), _c("div", {
-      staticClass: "p-list__price"
-    }, [_vm._v("\n\t\t\t\t\t\t\t\t" + _vm._s(_vm._f("numberFormat")(product.price)) + "\n\t\t\t\t\t\t\t")])]), _vm._v(" "), _c("div", {
-      staticClass: "p-list__expire"
-    }, [_c("div", [_vm._v("賞味期限")]), _vm._v(" "), _c("div", [_vm._v("\n\t\t\t\t\t\t\t\t残り\n\t\t\t\t\t\t\t\t"), _c("span", {
-      staticClass: "p-product__expire__date"
-    }, [_vm._v("\n\t\t\t\t\t\t\t\t\t" + _vm._s(_vm._f("momentExpire")(product.expire)) + "\n\t\t\t\t\t\t\t\t")]), _vm._v("\n\t\t\t\t\t\t\t\t日\n\t\t\t\t\t\t\t")])]), _vm._v(" "), _c("div", {
-      staticClass: "p-list__usr-info"
-    }, [_c("img", {
-      staticClass: "c-icon p-list__icon",
-      attrs: {
-        src: product.user_image,
-        alt: ""
-      }
-    }), _vm._v(" "), _c("div", [_c("div", {
-      staticClass: "p-list__usr-name"
-    }, [_vm._v("\n\t\t\t\t\t\t\t\t\t" + _vm._s(product.user_name) + "\n\t\t\t\t\t\t\t\t")]), _vm._v(" "), _c("div", {
-      staticClass: "p-list__date"
-    }, [_vm._v("\n\t\t\t\t\t\t\t\t\t" + _vm._s(_vm._f("moment")(product.created_at)) + "\n\t\t\t\t\t\t\t\t")])])]), _vm._v(" "), _c("div", {
-      staticClass: "p-list__btn-container"
+      staticClass: "p-product__btn-container"
     }, [_c("router-link", {
       directives: [{
         name: "show",
@@ -24210,7 +24154,7 @@ var render = function render() {
           }
         }
       }
-    }, [_vm._v("編集する\n\t\t\t\t\t\t\t")]), _vm._v(" "), _c("router-link", {
+    }, [_vm._v("編集する\n\t\t\t\t\t\t")]), _vm._v(" "), _c("router-link", {
       directives: [{
         name: "show",
         rawName: "v-show",
@@ -24226,8 +24170,8 @@ var render = function render() {
           }
         }
       }
-    }, [_vm._v("詳細を見る\n\t\t\t\t\t\t\t")])], 1)])], 1);
-  }), 0)], 1)]), _vm._v(" "), _c("Sidebar", {
+    }, [_vm._v("詳細を見る\n\t\t\t\t\t\t")])], 1)]);
+  }), 1)], 1)]), _vm._v(" "), _c("Sidebar", {
     attrs: {
       id: _vm.id
     }
@@ -24307,70 +24251,22 @@ var render = function render() {
     }],
     staticClass: "p-list__card-container"
   }, _vm._l(_vm.products, function (product) {
-    return _c("div", {
+    return _c("Product", {
       key: product.id,
-      staticClass: "c-card p-list__card"
-    }, [_c("router-link", {
-      staticClass: "c-card__link",
       attrs: {
-        to: {
-          name: "product.detail",
-          params: {
-            id: product.id.toString()
-          }
-        }
+        product: product
       }
-    }), _vm._v(" "), _c("div", {
-      directives: [{
-        name: "show",
-        rawName: "v-show",
-        value: product.is_purchased,
-        expression: "product.is_purchased"
-      }],
-      staticClass: "c-badge"
     }, [_c("div", {
-      staticClass: "c-badge__sold"
-    }, [_vm._v("SOLD")])]), _vm._v(" "), _c("img", {
-      staticClass: "p-list__img",
-      attrs: {
-        src: product.image,
-        alt: ""
-      }
-    }), _vm._v(" "), _c("div", {
-      staticClass: "p-list__card-body"
-    }, [_c("div", {
-      staticClass: "p-list__card-body__container"
-    }, [_c("div", {
-      staticClass: "p-list__name"
-    }, [_vm._v(_vm._s(product.name))]), _vm._v(" "), _c("div", {
-      staticClass: "p-list__price"
-    }, [_vm._v("\n\t\t\t\t\t\t\t\t" + _vm._s(_vm._f("numberFormat")(product.price)) + "\n\t\t\t\t\t\t\t")])]), _vm._v(" "), _c("div", {
-      staticClass: "p-list__expire"
-    }, [_c("div", [_vm._v("賞味期限")]), _vm._v(" "), _c("div", [_vm._v("\n\t\t\t\t\t\t\t\t残り\n\t\t\t\t\t\t\t\t"), _c("span", {
-      staticClass: "p-product__expire__date"
-    }, [_vm._v("\n\t\t\t\t\t\t\t\t\t" + _vm._s(_vm._f("momentExpire")(product.expire)) + "\n\t\t\t\t\t\t\t\t")]), _vm._v("\n\t\t\t\t\t\t\t\t日\n\t\t\t\t\t\t\t")])]), _vm._v(" "), _c("div", {
-      staticClass: "p-list__usr-info"
-    }, [_c("img", {
-      staticClass: "c-icon p-list__icon",
-      attrs: {
-        src: product.user_image,
-        alt: ""
-      }
-    }), _vm._v(" "), _c("div", [_c("div", {
-      staticClass: "p-list__usr-name"
-    }, [_vm._v("\n\t\t\t\t\t\t\t\t\t" + _vm._s(product.user_name) + "\n\t\t\t\t\t\t\t\t")]), _vm._v(" "), _c("div", {
-      staticClass: "p-list__date"
-    }, [_vm._v("\n\t\t\t\t\t\t\t\t\t" + _vm._s(_vm._f("moment")(product.created_at)) + "\n\t\t\t\t\t\t\t\t")])])]), _vm._v(" "), _c("div", {
-      staticClass: "p-list__btn-container"
+      staticClass: "p-product__btn-container"
     }, [_c("button", {
-      staticClass: "c-btn c-btn--white p-list__btn p-list__btn--cancel",
+      staticClass: "c-btn c-btn--white p-product__btn",
       on: {
         click: function click($event) {
           return _vm.cancel(product);
         }
       }
-    }, [_vm._v("購入キャンセル\n\t\t\t\t\t\t\t")])])])], 1);
-  }), 0)], 1)]), _vm._v(" "), _c("Sidebar", {
+    }, [_vm._v("購入キャンセル\n\t\t\t\t\t\t")])])]);
+  }), 1)], 1)]), _vm._v(" "), _c("Sidebar", {
     attrs: {
       id: _vm.id
     }

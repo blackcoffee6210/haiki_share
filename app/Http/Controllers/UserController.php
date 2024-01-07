@@ -91,7 +91,6 @@ class UserController extends Controller
 
 	public function reviewed(string $id) //レビュー一覧(利用者)
 	{
-//		return User::find($id)->reviews()->where('sender_id', $id)->orderByDesc('reviews.created_at')->get();
 		return Review::where('sender_id', $id)->orderByDesc('reviews.created_at')->get();
 	}
 }

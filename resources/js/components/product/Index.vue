@@ -65,33 +65,41 @@
 		<!-- サイドバー	-->
 		<aside class="l-sidebar" v-show="!loading">
 			<div class="p-sidebar-index">
-				<!--&lt;!&ndash;title&ndash;&gt;-->
-				<!--<h2 class="c-title p-sidebar-index__title">おすすめ記事</h2>-->
+				<!--title-->
+				<h2 class="c-title p-sidebar-index__title">おすすめの商品</h2>
 				
-				<!--&lt;!&ndash; おすすめの記事 &ndash;&gt;-->
-				<!--<div class="p-sidebar-index__recommend"></div>-->
-				<!--&lt;!&ndash; card	&ndash;&gt;-->
-				<!--<div class="c-card p-sidebar-index__card"-->
-				<!--		 v-for="article in recommendArticles"-->
-				<!--		 :key="article.id">-->
-				<!--	<router-link class="c-card__link"-->
-				<!--							 :to="{ name: 'article.detail', params: { id: article.id.toString() }}" />-->
-				<!--	<img class="p-sidebar-index__img"-->
-				<!--			 :src="article.image"-->
-				<!--			 alt="">-->
-				<!--	<div class="p-sidebar-index__right">-->
-				<!--		<div class="p-sidebar-index__card-title">{{ article.name }}</div>-->
-				<!--		<div class="c-flex">-->
-				<!--			<img class="c-icon p-sidebar-index__icon"-->
-				<!--					 :src="article.user_image"-->
-				<!--					 alt="">-->
-				<!--			<div class="p-sidebar-index__name">{{ article.user_name }}</div>-->
-				<!--		</div>-->
-				<!--		<div class="p-sidebar-index__price">{{ article.price | numberFormat }}</div>-->
-				<!--	</div>-->
-				<!--</div>-->
+				<!-- おすすめの商品 -->
+				<!-- card	-->
+				<div class="c-card p-sidebar-index__card"
+						 v-for="product in recommendProducts"
+						 :key="product.id">
+					<router-link class="c-card__link"
+											 :to="{ name: 'product.detail',
+											  			params: { id: product.id.toString() }}" />
+					<img class="p-sidebar-index__img"
+							 :src="product.image"
+							 alt="">
+					<div class="p-sidebar-index__right">
+						<div class="p-sidebar-index__card-title">{{ product.name }}</div>
+						<div class="p-sidebar-index__price-container">
+							<div class="p-sidebar-index__price">{{ product.price | numberFormat }}</div>
+							<div class="p-sidebar-index__expire">
+								残り
+								{{ product.expire | momentExpire }}
+								日
+							</div>
+						</div>
+						<div class="c-flex">
+							<img class="c-icon p-sidebar-index__icon"
+									 :src="product.user_image"
+									 alt="">
+							<div class="p-sidebar-index__name">{{ product.user_name }}</div>
+						</div>
+					</div>
+				</div>
 				
 				<!-- 検索ボックス -->
+				<h2 class="c-title p-sidebar-index__title">商品検索</h2>
 				<input type="text"
 							 placeholder="SEARCH"
 							 v-model="keyword"
@@ -144,8 +152,7 @@ export default {
 				
 				if(this.sortCategory !== 0 &&
 					 this.sortCategory !== this.products[i].category_id) { //i番目の商品が表示可能かどうかを判定する
-					//カテゴリーが選択されていて(0じゃない) かつカテゴリーと商品カテゴリーIDが一致しないものは非表示にする
-					isShow = false;
+					isShow = false; //カテゴリーが選択されていて(0じゃない) かつカテゴリーと商品カテゴリーIDが一致しないものは非表示にする
 				}
 				if(isShow && this.products[i].name.indexOf(this.keyword) !== -1) { //リアルタイム検索をするための処理
 					newProducts.push(this.products[i]);
@@ -175,6 +182,16 @@ export default {
 		}
 	},
 	methods: {
+		async getRecommend() { //おすすめの商品を5件取得
+			const response = await axios.get('/api/products/ranking');
+			
+			if(response.status !== OK) {
+				this.$store.commit('error/setCode', response.status);
+				return false;
+			}
+			this.recommendProducts = response.data;
+			console.log(response.data);
+		},
 		async getCategories() { //カテゴリー取得メソッド
 			const response = await axios.get('/api/categories'); //API接続
 			
@@ -206,6 +223,7 @@ export default {
 	watch: {
 		$route: {
 			async handler() {
+				await this.getRecommend();
 				await this.getCategories();
 				await this.getProducts();
 			},

@@ -14,69 +14,27 @@
 				</div>
 				
 				<div class="p-list__card-container" v-show="!loading">
-					<!-- カード -->
-					<div class="c-card p-list__card"
-							 v-for="product in products"
-							 :key="product.id">
-						<router-link class="c-card__link"
-												 :to="{ name: 'product.detail',
-												  			params: { id: product.id.toString() }}" />
-						<!-- SOLDバッジ -->
-						<div class="c-badge" v-show="product.is_purchased">
-							<div class="c-badge__sold">SOLD</div>
+					
+					<!-- Productコンポーネント -->
+					<Product v-for="product in products"
+									 :key="product.id"
+									 :product="product">
+						<div class="p-product__btn-container">
+							<!-- 編集ボタン -->
+							<router-link class="c-btn p-list__btn p-list__btn--edit"
+													 v-show="!product.is_purchased"
+													 :to="{ name: 'product.edit',
+														  			params: { id: product.id.toString() }}">編集する
+							</router-link>
+							<!-- 商品が購入されていたら詳細ボタンを表示 -->
+							<router-link class="c-btn p-list__btn p-list__btn--detail"
+													 v-show="product.is_purchased"
+													 :to="{ name: 'product.detail',
+														  			params: { id: product.id.toString() }}">詳細を見る
+							</router-link>
 						</div>
-						<!-- 商品の画像	-->
-						<img class="p-list__img"
-								 :src="product.image"
-								 alt="">
-						<div class="p-list__card-body">
-							<div class="p-list__card-body__container">
-								<!-- 商品の名前	-->
-								<div class="p-list__name">{{ product.name }}</div>
-								<!-- 料金	-->
-								<div class="p-list__price">
-									{{ product.price | numberFormat }}
-								</div>
-							</div>
-							<!-- 賞味期限 -->
-							<div class="p-list__expire">
-								<div>賞味期限</div>
-								<div>
-									残り
-									<span class="p-product__expire__date">
-										{{ product.expire | momentExpire }}
-									</span>
-									日
-								</div>
-							</div>
-							<div class="p-list__usr-info">
-								<img :src="product.user_image"
-										 alt=""
-										 class="c-icon p-list__icon">
-								<div>
-									<div class="p-list__usr-name">
-										{{ product.user_name }}
-									</div>
-									<div class="p-list__date">
-										{{ product.created_at | moment }}
-									</div>
-								</div>
-							</div>
-							<!-- ボタン	-->
-							<div class="p-list__btn-container">
-								<!-- 編集ボタン -->
-								<router-link class="c-btn p-list__btn p-list__btn--edit"
-														 v-show="!product.is_purchased"
-														 :to="{ name: 'product.edit', params: { id: product.id.toString() }}">編集する
-								</router-link>
-								<!-- 購入していたら詳細ボタンを表示(CSS型崩れ防止) -->
-								<router-link class="c-btn p-list__btn p-list__btn--detail"
-														 v-show="product.is_purchased"
-														 :to="{ name: 'product.detail', params: { id: product.id.toString() }}">詳細を見る
-								</router-link>
-							</div>
-						</div>
-					</div>
+					</Product>
+					
 				</div>
 			</div>
 		</main>
@@ -88,6 +46,7 @@
 
 <script>
 import Loading from "../Loading";
+import Product from "../product/Product";
 import Sidebar from "../Sidebar";
 import { OK }  from "../../util";
 
@@ -101,6 +60,7 @@ export default {
 	},
 	components: {
 		Loading,
+		Product,
 		Sidebar
 	},
 	data() {

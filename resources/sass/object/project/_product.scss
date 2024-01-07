@@ -99,4 +99,14 @@
       padding: 2px $space_s;
     }
   }
+  &__btn-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: $space_m;
+  }
+  &__btn {
+    width: 100%;
+    z-index: 2;
+  }
 }

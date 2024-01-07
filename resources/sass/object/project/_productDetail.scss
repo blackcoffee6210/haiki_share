@@ -19,6 +19,18 @@
       margin-bottom: $space_m;
     }
   }
+  &__category {
+    position: absolute;
+    color: $white;
+    letter-spacing: .05em;
+    background: $sub-color;
+    padding: 5px 30px;
+    border-radius: 20px;
+    top: 15px;
+    right: 15px;
+    font-weight: bold;
+
+  }
   &__name-container {
     display: flex;
     align-items: center;

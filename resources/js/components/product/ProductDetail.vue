@@ -13,10 +13,15 @@
 					<div class="c-badge__sold">SOLD</div>
 				</div>
 				
-				<!-- 商品の画像	-->
-				<img :src="product.image"
-						 alt=""
-						 class="p-product-detail__img">
+				<div class="u-p-relative">
+					<!-- 商品の画像	-->
+					<img :src="product.image"
+							 alt=""
+							 class="p-product-detail__img">
+					<div class="p-product-detail__category">{{ product.category_name }}</div>
+				</div>
+				
+				
 				
 				<!-- 商品名と金額のコンテナ	-->
 				<div class="p-product-detail__name-container">
@@ -239,9 +244,11 @@ export default {
 				return false;
 			}
 			if(confirm('購入しますか？')) { //アレートで「購入しますか?」と表示し、「はい」を押すと以下の処理を実行
-				this.loading = true; //ローディングを表示する
+				this.loading   = true; //ローディングを表示する
+				
 				const response = await axios.post(`/api/products/${this.id}/purchase`, this.product); //商品購入APIに接続
-				this.loading = false; //API通信が終わったらローディングを非表示にする
+				
+				this.loading   = false; //API通信が終わったらローディングを非表示にする
 				
 				if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
 					this.$store.commit('error/setCode', response.status);

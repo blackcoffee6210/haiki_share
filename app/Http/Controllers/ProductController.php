@@ -30,6 +30,12 @@ class ProductController extends Controller
 		return $products;
 	}
 
+	public function ranking() //お気に入りが多い５件を取得
+	{
+		$products = Product::withCount('likes')->orderByDesc('likes_count')->take(5)->get();
+		return $products;
+	}
+
 	public function show(string $id) //商品情報取得
 	{
 		$product = Product::with(['user', 'category', 'likes', 'histories'])

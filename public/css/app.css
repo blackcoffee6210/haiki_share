@@ -945,7 +945,7 @@ body {
 
 .p-edit-password__form {
   width: 50%;
-  height: 470px;
+  height: 530px;
   margin-left: auto;
   margin-right: auto;
   padding: 20px;
@@ -2206,6 +2206,18 @@ body {
   }
 }
 
+.p-product__btn-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.p-product__btn {
+  width: 100%;
+  z-index: 2;
+}
+
 .p-product-detail {
   width: 680px;
   margin: 0 auto;
@@ -2231,6 +2243,18 @@ body {
     height: 200px;
     margin-bottom: 10px;
   }
+}
+
+.p-product-detail__category {
+  position: absolute;
+  color: #fff;
+  letter-spacing: 0.05em;
+  background: #fdbf99;
+  padding: 5px 30px;
+  border-radius: 20px;
+  top: 15px;
+  right: 15px;
+  font-weight: bold;
 }
 
 .p-product-detail__name-container {
@@ -2800,22 +2824,32 @@ body {
 
 @media screen and (min-width: 451px) and (max-width:820px) {
   .p-sidebar-index__title {
-    margin-top: initial;
-    margin-bottom: initial;
+    margin-top: 60px;
+    margin-bottom: 25px;
   }
 }
 
 .p-sidebar-index__card {
-  height: 70px;
+  height: 85px;
   position: relative;
   display: flex;
   align-items: center;
   margin-bottom: 20px;
 }
 
+.p-sidebar-index__card:last-child {
+  margin-bottom: 0;
+}
+
 @media screen and (max-width: 450px) {
   .p-sidebar-index__card {
     margin-bottom: 10px;
+  }
+}
+
+@media screen and (min-width: 451px) and (max-width:820px) {
+  .p-sidebar-index__card {
+    height: 110px;
   }
 }
 
@@ -2825,10 +2859,22 @@ body {
   height: 100%;
 }
 
+@media screen and (min-width: 451px) and (max-width:820px) {
+  .p-sidebar-index__img {
+    width: 45%;
+  }
+}
+
 .p-sidebar-index__right {
   width: 60%;
   height: 100%;
   padding: 5px;
+}
+
+@media screen and (min-width: 451px) and (max-width:820px) {
+  .p-sidebar-index__right {
+    width: 55%;
+  }
 }
 
 .p-sidebar-index__card-title {
@@ -2839,6 +2885,18 @@ body {
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+.p-sidebar-index__price-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@media screen and (min-width: 451px) and (max-width:820px) {
+  .p-sidebar-index__price-container {
+    display: block;
+  }
 }
 
 .p-sidebar-index__name {
@@ -2857,7 +2915,7 @@ body {
 }
 
 .p-sidebar-index__price {
-  font-size: 1.2rem;
+  font-weight: bold;
 }
 
 .p-sidebar-index__search {
