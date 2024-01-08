@@ -25,6 +25,7 @@ Route::post('/products/{id}/purchase', 'ProductController@purchase'); //商品�
 Route::post('/products/{id}/like',     'ProductController@like');     //お気に入り登録 todo: LikeController作成後、切り出す
 Route::delete('/products/{id}/unlike', 'ProductController@unlike');   //お気に入り解除 todo: LikeController作成後、切り出す
 Route::post('/products/{id}/cancel',   'ProductController@cancel');   //商品キャンセル
+Route::get('/products/{id}/reviewed',  'ProductController@review');   //レビュー投稿済みかどうか
 
 //=================================================================
 // User
@@ -38,6 +39,7 @@ Route::get('/users/{id}/purchased',       'UserController@purchased');      //�
 Route::get('/users/{id}/wasPurchased',    'UserController@wasPurchased');   //購入された商品一覧
 Route::get('/users/{id}/liked',           'UserController@liked');          //いいねした商品一覧
 Route::get('/users/{id}/canceled',        'UserController@canceled');       //キャンセルした商品一覧
+Route::get('/users/{id}/wasCanceled',     'UserController@wasCanceled');    //キャンセルされた商品一覧
 Route::get('/users/{id}/reviewed',        'UserController@reviewed');       //レビュー一覧
 
 //=================================================================

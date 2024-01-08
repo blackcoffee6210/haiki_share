@@ -149,7 +149,8 @@ export default {
 				title: '',               //レビュータイトル
 				detail: '',              //レビューコメント
 				shopUser: {},            //出品ユーザーの情報
-			}
+			},
+			
 		}
 	},
 	computed: {

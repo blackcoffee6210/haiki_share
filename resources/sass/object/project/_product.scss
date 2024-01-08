@@ -9,6 +9,15 @@
       height: 80px;
     }
   }
+  &__cancel {
+    padding: 3px 20px;
+    background: $img-color-bg;
+    position: absolute;
+    top: 5px;
+    right: 0;
+    border-radius: 5px 0 0 5px;
+    font-size: $font-size_m;
+  }
   &__card-body {
     padding: $space_m;
     @include mq() {

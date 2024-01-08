@@ -175,7 +175,7 @@ const routes = [ //パスとコンポーネントのマッピング
     component: Canceled,
     props: true,
     beforeEnter(to, from ,next) { //ログイン状態かつ利用者ユーザーがページにアクセスした場合(true)、そのまま移動させる
-      (store.getters['auth/check'] && !store.getters['auth/isShopUser']) ? next() : next({name: 'index'});
+      (store.getters['auth/check']) ? next() : next({name: 'index'});
     }
   },
   {

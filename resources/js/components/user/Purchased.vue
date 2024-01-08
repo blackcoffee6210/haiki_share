@@ -70,7 +70,7 @@ export default {
 		return {
 			loading: false,
 			products: {},
-			product: {}
+			// product: {}
 		}
 	},
 	computed: {

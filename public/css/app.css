@@ -2082,6 +2082,16 @@ body {
   }
 }
 
+.p-product__cancel {
+  padding: 3px 20px;
+  background: #e7e4e1;
+  position: absolute;
+  top: 5px;
+  right: 0;
+  border-radius: 5px 0 0 5px;
+  font-size: 1.4rem;
+}
+
 .p-product__card-body {
   padding: 10px;
 }
@@ -2617,7 +2627,7 @@ body {
 }
 
 .p-review-form {
-  width: 480px;
+  width: 500px;
   margin: 0 auto;
 }
 

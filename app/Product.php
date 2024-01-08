@@ -23,7 +23,7 @@ class Product extends Model
 	protected $appends = [
 		'user_image', 'user_name', 'email', 'branch', 'category_name', 'is_my_product',
 		'likes_count', 'liked_by_user', 'purchased_by_user', 'is_purchased',
-		'canceled_by_user', 'reviewed_by_user'
+		'canceled_by_user', 'is_canceled', 'cancels_count'
 	];
 
 	//$visibleはJSONに含める属性を定義する
@@ -33,7 +33,7 @@ class Product extends Model
 		'expire', 'deleted_at', 'created_at', 'updated_at',
 		'user_image', 'user_name', 'email', 'branch', 'category_name', 'is_my_product',
 		'likes_count', 'liked_by_user', 'purchased_by_user', 'is_purchased',
-		'canceled_by_user', 'reviewed_by_user'
+		'canceled_by_user', 'is_canceled', 'cancels_count'
 	];
 
 	//=====================================================
@@ -146,15 +146,20 @@ class Product extends Model
 		});
 	}
 	/**
-	 * アクセサ - reviewed_by_user
+	 * アクセサ - is_canceled
 	 * @return boolean
 	 */
-	public function getReviewedByUserAttribute() //リクエストしたユーザーがレビューを投稿しているかどうかを取得するアクセサ
+	public function getIsCanceledAttribute() //商品がキャンセルされているかどうかを真偽値で返すアクセサ
 	{
-		if(Auth::guest() ) { //ユーザーがゲストの場合(ログインしていなければ)falseを返す
-			return false;
-		}
-		return false;
+		return ($this->cancels->count()) ? true : false; //historiesテーブルにカウントがある(=購入されている)のでtrueを返す
+	}
+	/**
+	 * アクセサ - cancels_count
+	 * @return int
+	 */
+	public function getCancelsCountAttribute() //キャンセル数を取得するアクセサ
+	{
+		return $this->cancels->count();
 	}
 
 	//======================================================

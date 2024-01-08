@@ -21,6 +21,7 @@
 					
 					<!-- Productコンポーネント -->
 					<Product v-for="product in products"
+									 v-show="product.is_canceled"
 									 :key="product.id"
 									 :product="product">
 						<div class="p-product__btn-container">
@@ -29,6 +30,7 @@
 													 :to="{ name: 'product.detail',
 													  			params: { id: product.id.toString() }}">詳細を見る
 							</router-link>
+							<div class="p-product__cancel">{{ product.cancels_count }}回</div>
 						</div>
 					</Product>
 					
@@ -73,10 +75,23 @@ export default {
 		})
 	},
 	methods: {
-		async getProducts() { //キャンセルされた商品一覧取得
+		async getProducts() { //キャンセルした商品一覧取得
 			this.loading = true; //ローディングを表示する
 			
 			const response = await axios.get(`/api/users/${this.id}/canceled`); //API通信
+			
+			this.loading = false; //API通信が終わったらローディングを非表示にする
+			
+			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
+				this.$store.commit('error/setCode', response.status);
+				return false;
+			}
+			this.products = response.data; //プロパティにデータをセット
+		},
+		async getWasCanceled() { //キャンセルされた商品一覧
+			this.loading = true;
+			
+			const response = await axios.get(`/api/users/${this.id}/wasCanceled`); //API通信
 			
 			this.loading = false; //API通信が終わったらローディングを非表示にする
 			
@@ -90,7 +105,7 @@ export default {
 	watch: {
 		$route: {
 			async handler() {
-				await this.getProducts();
+				this.isShopUser ? await this.getWasCanceled() : await this.getProducts();
 			},
 			immediate: true //immediateをtrueにすると、コンポーネントが生成されたタイミングでも実行する
 		}

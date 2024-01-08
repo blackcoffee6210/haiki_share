@@ -95,6 +95,12 @@ class UserController extends Controller
 		return User::find($id)->cancels()->orderByDesc('cancels.created_at')->get();
 	}
 
+	public function wasCanceled(string $id) //キャンセルされた商品一覧（コンビニ）
+	{
+		$products = Product::with(['user', 'category', 'likes', 'histories', 'cancels'])->where('user_id', $id)->get();
+		return response($products, 200);
+	}
+
 	public function reviewed(string $id) //レビュー一覧(利用者)
 	{
 		return Review::where('sender_id', $id)->orderByDesc('reviews.created_at')->get();

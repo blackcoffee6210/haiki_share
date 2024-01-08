@@ -99,7 +99,7 @@
 						<!-- レビュー投稿ボタン -->
 						<!-- 購入したユーザーかつレビューを投稿していないユーザーのときに表示 -->
 						<router-link class="c-btn p-product-detail__btn"
-												 v-show="product.purchased_by_user && !product.reviewed_by_user"
+												 v-show="product.purchased_by_user"
 												 :to="{ name: 'review.register', params: {id: id.toString() } }">レビュー投稿
 						</router-link>
 						
@@ -171,7 +171,7 @@ export default {
 			buttonActive: false, //TOPボタンを表示する
 			scroll: 0,           //scroll
 			loading: false,      //ローディングを表示するかどうかを判定するプロパティ
-			isReviewed: {}
+			isReviewed: '',
 		}
 	},
 	computed: {
@@ -179,7 +179,10 @@ export default {
 			isLogin: 'auth/check',        //true または false が返ってくる
 			userId: 'auth/userId',        //ユーザーIDを取得
 			isShopUser: 'auth/isShopUser' //コンビニユーザならtrueが入る
-		})
+		}),
+		isReviewedByUser() {
+			// (reviews.sender_id === Auth::id() && reviews.receiver_id === products.user_id) ? true : false;
+		}
 	},
 	methods: {
 		async getProduct() { //商品詳細情報取得
@@ -194,7 +197,6 @@ export default {
 			if(this.product.liked_by_user) { //ログインユーザーが既に「いいね」を押していたらtrueをセット
 				this.isLike = true;
 			}
-			console.log(this.product);
 		},
 		async onLikeClick() { //「お気に入りボタン」を押したときの処理を行うメソッド
 			if(!this.isLogin) { //ログインしていなかったらアレートを出す
@@ -312,6 +314,7 @@ export default {
 		$route: {
 			async handler() {
 				await this.getProduct();
+				await this.getReview();
 			},
 			immediate: true
 		}
