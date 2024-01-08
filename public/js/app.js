@@ -19523,14 +19523,13 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         return _regeneratorRuntime().wrap(function _callee$(_context) {
           while (1) switch (_context.prev = _context.next) {
             case 0:
-              //購入された商品一覧
+              //購入した商品一覧
               _this.loading = true; //ローディングを表示する
               _context.next = 3;
               return axios.get("/api/users/".concat(_this.id, "/purchased"));
             case 3:
               response = _context.sent;
               //API通信
-
               _this.loading = false; //API通信が終わったらローディングを非表示にする
               if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_3__["OK"])) {
                 _context.next = 8;
@@ -19548,71 +19547,113 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         }, _callee);
       }))();
     },
-    cancel: function cancel(product) {
+    getWasPurchased: function getWasPurchased() {
       var _this2 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
         var response;
         return _regeneratorRuntime().wrap(function _callee2$(_context2) {
           while (1) switch (_context2.prev = _context2.next) {
             case 0:
-              //購入キャンセル処理
-              _this2.product = product; //プロパティに値をセット
-              if (!confirm('購入をキャンセルしますか？')) {
-                _context2.next = 14;
-                break;
-              }
+              //購入された商品一覧
               _this2.loading = true; //ローディングを表示する
-              _context2.next = 5;
-              return axios.post("/api/products/".concat(_this2.product.id, "/cancel"), _this2.product);
-            case 5:
+              _context2.next = 3;
+              return axios.get("/api/users/".concat(_this2.id, "/wasPurchased"));
+            case 3:
               response = _context2.sent;
               //API通信
-
               _this2.loading = false; //API通信が終わったらローディングを非表示にする
               if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_3__["OK"])) {
-                _context2.next = 10;
+                _context2.next = 8;
                 break;
               }
               //responseステータスがOKじゃなかったらエラーコードをセット
               _this2.$store.commit('error/setCode', response.status);
               return _context2.abrupt("return", false);
+            case 8:
+              _this2.products = response.data; //プロパティにデータをセット
+              console.log(response.data);
             case 10:
-              _this2.product.purchased_by_user = false; //購入キャンセルをしたのでpurchased_by_userにfalseをセット
-              _this2.product.canceled_by_user = true; //canceled_by_userにtrueをセット
-
-              _this2.$store.commit('message/setContent', {
-                //メッセージ登録
-                content: '購入をキャンセルしました'
-              });
-              _this2.$router.push({
-                name: 'user.mypage',
-                params: {
-                  id: _this2.id
-                }
-              }); //マイページに遷移する
-            case 14:
             case "end":
               return _context2.stop();
           }
         }, _callee2);
+      }))();
+    },
+    cancel: function cancel(product) {
+      var _this3 = this;
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+        var response;
+        return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+          while (1) switch (_context3.prev = _context3.next) {
+            case 0:
+              //購入キャンセル処理
+              _this3.product = product; //プロパティに値をセット
+              if (!confirm('購入をキャンセルしますか？')) {
+                _context3.next = 14;
+                break;
+              }
+              _this3.loading = true; //ローディングを表示する
+              _context3.next = 5;
+              return axios.post("/api/products/".concat(_this3.product.id, "/cancel"), _this3.product);
+            case 5:
+              response = _context3.sent;
+              //API通信
+
+              _this3.loading = false; //API通信が終わったらローディングを非表示にする
+              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_3__["OK"])) {
+                _context3.next = 10;
+                break;
+              }
+              //responseステータスがOKじゃなかったらエラーコードをセット
+              _this3.$store.commit('error/setCode', response.status);
+              return _context3.abrupt("return", false);
+            case 10:
+              _this3.product.purchased_by_user = false; //購入キャンセルをしたのでpurchased_by_userにfalseをセット
+              _this3.product.canceled_by_user = true; //canceled_by_userにtrueをセット
+
+              _this3.$store.commit('message/setContent', {
+                //メッセージ登録
+                content: '購入をキャンセルしました'
+              });
+              _this3.$router.push({
+                name: 'user.mypage',
+                params: {
+                  id: _this3.id
+                }
+              }); //マイページに遷移する
+            case 14:
+            case "end":
+              return _context3.stop();
+          }
+        }, _callee3);
       }))();
     }
   },
   watch: {
     $route: {
       handler: function handler() {
-        var _this3 = this;
-        return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
-          return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-            while (1) switch (_context3.prev = _context3.next) {
+        var _this4 = this;
+        return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+          return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+            while (1) switch (_context4.prev = _context4.next) {
               case 0:
-                _context3.next = 2;
-                return _this3.getProducts();
-              case 2:
+                if (!_this4.isShopUser) {
+                  _context4.next = 5;
+                  break;
+                }
+                _context4.next = 3;
+                return _this4.getWasPurchased();
+              case 3:
+                _context4.next = 7;
+                break;
+              case 5:
+                _context4.next = 7;
+                return _this4.getProducts();
+              case 7:
               case "end":
-                return _context3.stop();
+                return _context4.stop();
             }
-          }, _callee3);
+          }, _callee4);
         }))();
       },
       immediate: true //immediateをtrueにすると、コンポーネントが生成されたタイミングでも実行する
@@ -20055,17 +20096,7 @@ var render = function render() {
         }
       }
     }
-  }, [_vm._v("いいねした商品一覧\n\t\t")]) : _vm._e(), _vm._v(" "), _vm.isShopUser ? _c("router-link", {
-    staticClass: "p-sidebar__link",
-    attrs: {
-      to: {
-        name: "user.liked",
-        params: {
-          id: _vm.id.toString()
-        }
-      }
-    }
-  }, [_vm._v("いいねされた商品一覧\n\t\t")]) : _vm._e(), _vm._v(" "), !_vm.isShopUser ? _c("router-link", {
+  }, [_vm._v("いいねした商品一覧\n\t\t")]) : _vm._e(), _vm._v(" "), !_vm.isShopUser ? _c("router-link", {
     staticClass: "p-sidebar__link",
     attrs: {
       to: {
@@ -24252,6 +24283,12 @@ var render = function render() {
     staticClass: "p-list__card-container"
   }, _vm._l(_vm.products, function (product) {
     return _c("Product", {
+      directives: [{
+        name: "show",
+        rawName: "v-show",
+        value: product.is_purchased,
+        expression: "product.is_purchased"
+      }],
       key: product.id,
       attrs: {
         product: product
@@ -24259,13 +24296,35 @@ var render = function render() {
     }, [_c("div", {
       staticClass: "p-product__btn-container"
     }, [_c("button", {
+      directives: [{
+        name: "show",
+        rawName: "v-show",
+        value: !_vm.isShopUser,
+        expression: "!isShopUser"
+      }],
       staticClass: "c-btn c-btn--white p-product__btn",
       on: {
         click: function click($event) {
           return _vm.cancel(product);
         }
       }
-    }, [_vm._v("購入キャンセル\n\t\t\t\t\t\t")])])]);
+    }, [_vm._v("購入キャンセル\n\t\t\t\t\t\t")]), _vm._v(" "), _c("router-link", {
+      directives: [{
+        name: "show",
+        rawName: "v-show",
+        value: _vm.isShopUser,
+        expression: "isShopUser"
+      }],
+      staticClass: "c-btn p-product__btn",
+      attrs: {
+        to: {
+          name: "product.detail",
+          params: {
+            id: product.id.toString()
+          }
+        }
+      }
+    }, [_vm._v("詳細を見る\n\t\t\t\t\t\t")])], 1)]);
   }), 1)], 1)]), _vm._v(" "), _c("Sidebar", {
     attrs: {
       id: _vm.id
@@ -72321,18 +72380,6 @@ var routes = [
     });
   }
 }, {
-  path: '/users/:id/purchased',
-  //購入した商品一覧(利用者)
-  name: 'user.purchased',
-  component: _components_user_Purchased__WEBPACK_IMPORTED_MODULE_24__["default"],
-  props: true,
-  beforeEnter: function beforeEnter(to, from, next) {
-    //ログイン状態かつ利用者ユーザーがページにアクセスした場合(true)、そのまま移動させる
-    _store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/check'] && !_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/isShopUser'] ? next() : next({
-      name: 'index'
-    });
-  }
-}, {
   path: '/user/:id/liked',
   //いいねした商品一覧(利用者)
   name: 'user.liked',
@@ -72341,6 +72388,18 @@ var routes = [
   beforeEnter: function beforeEnter(to, from, next) {
     //ログイン状態かつ利用者ユーザーがページにアクセスした場合(true)、そのまま移動させる
     _store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/check'] && !_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/isShopUser'] ? next() : next({
+      name: 'index'
+    });
+  }
+}, {
+  path: '/users/:id/purchased',
+  //購入した商品一覧(利用者)
+  name: 'user.purchased',
+  component: _components_user_Purchased__WEBPACK_IMPORTED_MODULE_24__["default"],
+  props: true,
+  beforeEnter: function beforeEnter(to, from, next) {
+    //ログイン状態かつ利用者ユーザーがページにアクセスした場合(true)、そのまま移動させる
+    _store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/check'] ? next() : next({
       name: 'index'
     });
   }

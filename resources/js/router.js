@@ -152,21 +152,21 @@ const routes = [ //パスとコンポーネントのマッピング
     }
   },
   {
-    path: '/users/:id/purchased', //購入した商品一覧(利用者)
-    name: 'user.purchased',
-    component: Purchased,
-    props: true,
-    beforeEnter(to, from ,next) { //ログイン状態かつ利用者ユーザーがページにアクセスした場合(true)、そのまま移動させる
-      (store.getters['auth/check'] && !store.getters['auth/isShopUser']) ? next() : next({name: 'index'});
-    }
-  },
-  {
     path: '/user/:id/liked', //いいねした商品一覧(利用者)
     name: 'user.liked',
     component: Liked,
     props: true,
     beforeEnter(to, from ,next) { //ログイン状態かつ利用者ユーザーがページにアクセスした場合(true)、そのまま移動させる
       (store.getters['auth/check'] && !store.getters['auth/isShopUser']) ? next() : next({name: 'index'});
+    }
+  },
+  {
+    path: '/users/:id/purchased', //購入した商品一覧(利用者)
+    name: 'user.purchased',
+    component: Purchased,
+    props: true,
+    beforeEnter(to, from ,next) { //ログイン状態かつ利用者ユーザーがページにアクセスした場合(true)、そのまま移動させる
+      (store.getters['auth/check']) ? next() : next({name: 'index'});
     }
   },
   {

@@ -36,12 +36,6 @@
 									 :to="{ name: 'user.liked',
 									  			params: { id: id.toString() }}" >いいねした商品一覧
 			</router-link>
-			<!-- いいねされた商品一覧 -->
-			<router-link class="p-sidebar__link"
-									 v-if="isShopUser"
-									 :to="{ name: 'user.liked',
-									  			params: { id: id.toString() }}" >いいねされた商品一覧
-			</router-link>
 			<!-- 購入した商品一覧 -->
 			<router-link class="p-sidebar__link"
 									 v-if="!isShopUser"

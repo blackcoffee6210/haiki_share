@@ -69,14 +69,14 @@ export default {
 		})
 	},
 	methods: {
-		async getProducts() { //いいねした商品一覧
+		async getProducts() {  //いいねした商品一覧
 			this.loading = true; //ローディングを表示する
 			
 			const response = await axios.get(`/api/users/${this.id}/liked`); //API通信
 			
 			this.loading = false; //API通信が終わったらローディングを非表示にする
 			
-			if(response.status !== OK) { //responseステータスがOKじゃなかったら後続の処理を行う
+			if (response.status !== OK) { //responseステータスがOKじゃなかったら後続の処理を行う
 				this.$store.commit('error/setCode', response.status);
 				return false;
 			}

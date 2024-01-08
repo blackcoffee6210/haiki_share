@@ -79,6 +79,12 @@ class UserController extends Controller
 		return User::find($id)->histories()->orderByDesc('histories.created_at')->get();
 	}
 
+	public function wasPurchased(string $id) //購入された商品一覧(コンビニ)
+	{
+		$products = Product::with(['user', 'category', 'likes', 'histories'])->where('user_id', $id)->get();
+		return response($products, 200);
+	}
+
 	public function liked(string $id) //いいねした商品一覧(利用者)
 	{
 		return User::find($id)->likes()->orderByDesc('likes.created_at')->get();
