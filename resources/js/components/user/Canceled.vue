@@ -30,7 +30,8 @@
 													 :to="{ name: 'product.detail',
 													  			params: { id: product.id.toString() }}">詳細を見る
 							</router-link>
-							<div class="p-product__cancel">{{ product.cancels_count }}回</div>
+							<!-- キャンセルされた数をカウントして表示（「いいね」みたいに） -->
+							<div class="p-product__cancel" v-show="isShopUser">{{ product.cancels_count }}回</div>
 						</div>
 					</Product>
 					

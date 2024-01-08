@@ -40,7 +40,8 @@ Route::get('/users/{id}/wasPurchased',    'UserController@wasPurchased');   //�
 Route::get('/users/{id}/liked',           'UserController@liked');          //いいねした商品一覧
 Route::get('/users/{id}/canceled',        'UserController@canceled');       //キャンセルした商品一覧
 Route::get('/users/{id}/wasCanceled',     'UserController@wasCanceled');    //キャンセルされた商品一覧
-Route::get('/users/{id}/reviewed',        'UserController@reviewed');       //レビュー一覧
+Route::get('/users/{id}/reviewed',        'UserController@reviewed');       //レビューしたユーザー一覧
+Route::get('/users/{id}/wasReviewed',     'UserController@wasReviewed');    //レビューされたユーザー一覧
 
 //=================================================================
 // Review

@@ -105,4 +105,10 @@ class UserController extends Controller
 	{
 		return Review::where('sender_id', $id)->orderByDesc('reviews.created_at')->get();
 	}
+
+	public function wasReviewed(string $id) //レビュー一覧(コンビニ)
+	{
+		return Review::where('receiver_id', $id)->orderByDesc('reviews.created_at')->get();
+
+	}
 }

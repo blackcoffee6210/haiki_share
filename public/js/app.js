@@ -19619,8 +19619,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               return _context2.abrupt("return", false);
             case 8:
               _this2.products = response.data; //プロパティにデータをセット
-              console.log(response.data);
-            case 10:
+            case 9:
             case "end":
               return _context2.stop();
           }
@@ -19790,23 +19789,66 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           }
         }, _callee);
       }))();
+    },
+    getWasReviewed: function getWasReviewed() {
+      var _this2 = this;
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+        var response;
+        return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+          while (1) switch (_context2.prev = _context2.next) {
+            case 0:
+              //レビュ一したユーザー覧取得
+              _this2.loading = true; //ローディングを表示する
+              _context2.next = 3;
+              return axios.get("/api/users/".concat(_this2.id, "/wasReviewed"));
+            case 3:
+              response = _context2.sent;
+              //API通信
+
+              _this2.loading = false; //API通信が終わったらローディングを非表示にする
+              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_2__["OK"])) {
+                _context2.next = 8;
+                break;
+              }
+              //responseステータスがOKじゃなかったらエラーコードをセット
+              _this2.$store.commit('error/setCode', response.status);
+              return _context2.abrupt("return", false);
+            case 8:
+              _this2.reviews = response.data; //プロパティにデータをセット
+              console.log(response.data);
+            case 10:
+            case "end":
+              return _context2.stop();
+          }
+        }, _callee2);
+      }))();
     }
   },
   watch: {
     $route: {
       handler: function handler() {
-        var _this2 = this;
-        return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-          return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-            while (1) switch (_context2.prev = _context2.next) {
+        var _this3 = this;
+        return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+          return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+            while (1) switch (_context3.prev = _context3.next) {
               case 0:
-                _context2.next = 2;
-                return _this2.getReviews();
-              case 2:
+                if (!_this3.isShopUser) {
+                  _context3.next = 5;
+                  break;
+                }
+                _context3.next = 3;
+                return _this3.getWasReviewed();
+              case 3:
+                _context3.next = 7;
+                break;
+              case 5:
+                _context3.next = 7;
+                return _this3.getReviews();
+              case 7:
               case "end":
-                return _context2.stop();
+                return _context3.stop();
             }
-          }, _callee2);
+          }, _callee3);
         }))();
       },
       immediate: true //immediateをtrueにすると、コンポーネントが生成されたタイミングでも実行する
@@ -20144,7 +20186,7 @@ var render = function render() {
         }
       }
     }
-  }, [_vm._v("いいねした商品一覧\n\t\t")]) : _vm._e(), _vm._v(" "), !_vm.isShopUser ? _c("router-link", {
+  }, [_vm._v("いいねした商品一覧\n\t\t")]) : _vm._e(), _vm._v(" "), _c("router-link", {
     staticClass: "p-sidebar__link",
     attrs: {
       to: {
@@ -20154,27 +20196,21 @@ var render = function render() {
         }
       }
     }
-  }, [_vm._v("購入した商品一覧\n\t\t")]) : _vm._e(), _vm._v(" "), _vm.isShopUser ? _c("router-link", {
-    staticClass: "p-sidebar__link",
-    attrs: {
-      to: {
-        name: "user.purchased",
-        params: {
-          id: _vm.id.toString()
-        }
-      }
-    }
-  }, [_vm._v("購入された商品一覧\n\t\t")]) : _vm._e(), _vm._v(" "), !_vm.isShopUser ? _c("router-link", {
-    staticClass: "p-sidebar__link",
-    attrs: {
-      to: {
-        name: "user.canceled",
-        params: {
-          id: _vm.id.toString()
-        }
-      }
-    }
-  }, [_vm._v("キャンセルした商品一覧\n\t\t")]) : _vm._e(), _vm._v(" "), _vm.isShopUser ? _c("router-link", {
+  }, [_c("span", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: _vm.isShopUser,
+      expression: "isShopUser"
+    }]
+  }, [_vm._v("購入された商品一覧")]), _vm._v(" "), _c("span", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: !_vm.isShopUser,
+      expression: "!isShopUser"
+    }]
+  }, [_vm._v("購入した商品一覧")])]), _vm._v(" "), _c("router-link", {
     staticClass: "p-sidebar__link",
     attrs: {
       to: {
@@ -20184,7 +20220,21 @@ var render = function render() {
         }
       }
     }
-  }, [_vm._v("キャンセルされた商品一覧\n\t\t")]) : _vm._e(), _vm._v(" "), !_vm.isShopUser ? _c("router-link", {
+  }, [_c("span", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: _vm.isShopUser,
+      expression: "isShopUser"
+    }]
+  }, [_vm._v("キャンセルされた商品一覧")]), _vm._v(" "), _c("span", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: !_vm.isShopUser,
+      expression: "!isShopUser"
+    }]
+  }, [_vm._v("キャンセルした商品一覧")])]), _vm._v(" "), _c("router-link", {
     staticClass: "p-sidebar__link",
     attrs: {
       to: {
@@ -20194,9 +20244,21 @@ var render = function render() {
         }
       }
     }
-  }, [_vm._v("レビューしたユーザー一覧\n\t\t")]) : _vm._e(), _vm._v(" "), _vm.isShopUser ? _c("a", {
-    staticClass: "p-sidebar__link"
-  }, [_vm._v("レビューされたユーザー一覧\n\t\t")]) : _vm._e(), _vm._v(" "), _c("button", {
+  }, [_c("span", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: _vm.isShopUser,
+      expression: "isShopUser"
+    }]
+  }, [_vm._v("レビューされたユーザー一覧")]), _vm._v(" "), _c("span", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: !_vm.isShopUser,
+      expression: "!isShopUser"
+    }]
+  }, [_vm._v("レビューしたユーザー一覧")])]), _vm._v(" "), _c("button", {
     staticClass: "p-sidebar__link",
     on: {
       click: _vm.logout
@@ -22876,7 +22938,14 @@ var render = function render() {
     }, [_vm._v(_vm._s(msg) + "\n\t\t\t\t")]);
   }), 0) : _vm._e(), _vm._v(" "), _c("div", {
     staticClass: "p-review-form__btn-container"
-  }, [_c("button", {
+  }, [_c("a", {
+    staticClass: "c-btn c-btn--white p-product-form__btn--back",
+    on: {
+      click: function click($event) {
+        return _vm.$router.back();
+      }
+    }
+  }, [_vm._v("もどる\n\t\t\t\t")]), _vm._v(" "), _c("button", {
     staticClass: "c-btn c-btn--white p-review-form__btn--delete",
     attrs: {
       type: "button"
@@ -23252,6 +23321,12 @@ var render = function render() {
         }
       }
     }, [_vm._v("詳細を見る\n\t\t\t\t\t\t")]), _vm._v(" "), _c("div", {
+      directives: [{
+        name: "show",
+        rawName: "v-show",
+        value: _vm.isShopUser,
+        expression: "isShopUser"
+      }],
       staticClass: "p-product__cancel"
     }, [_vm._v(_vm._s(product.cancels_count) + "回")])], 1)]);
   }), 1)], 1)]), _vm._v(" "), _c("Sidebar", {
@@ -24477,6 +24552,24 @@ var render = function render() {
     }), _vm._v(" "), _c("div", {
       staticClass: "p-list__user-info__review"
     }, [_c("img", {
+      directives: [{
+        name: "show",
+        rawName: "v-show",
+        value: _vm.isShopUser,
+        expression: "isShopUser"
+      }],
+      staticClass: "c-icon p-list__review-icon",
+      attrs: {
+        src: review.sender_image,
+        alt: ""
+      }
+    }), _vm._v(" "), _c("img", {
+      directives: [{
+        name: "show",
+        rawName: "v-show",
+        value: !_vm.isShopUser,
+        expression: "!isShopUser"
+      }],
       staticClass: "c-icon p-list__review-icon",
       attrs: {
         src: review.receiver_image,
@@ -24484,7 +24577,21 @@ var render = function render() {
       }
     }), _vm._v(" "), _c("div", [_c("div", {
       staticClass: "p-list__name"
-    }, [_vm._v(_vm._s(review.receiver_name))]), _vm._v(" "), _c("div", {
+    }, [_c("span", {
+      directives: [{
+        name: "show",
+        rawName: "v-show",
+        value: _vm.isShopUser,
+        expression: "isShopUser"
+      }]
+    }, [_vm._v(_vm._s(review.sender_name))]), _vm._v(" "), _c("span", {
+      directives: [{
+        name: "show",
+        rawName: "v-show",
+        value: !_vm.isShopUser,
+        expression: "!isShopUser"
+      }]
+    }, [_vm._v(_vm._s(review.receiver_name))])]), _vm._v(" "), _c("div", {
       staticClass: "p-list__recommendation"
     }, [_vm._v(_vm._s(review.recommend))])])]), _vm._v(" "), _c("div", {
       staticClass: "p-list__review-title"
@@ -24493,6 +24600,28 @@ var render = function render() {
     }, [_vm._v(_vm._s(review.detail))]), _vm._v(" "), _c("div", {
       staticClass: "p-list__btn-container"
     }, [_c("router-link", {
+      directives: [{
+        name: "show",
+        rawName: "v-show",
+        value: _vm.isShopUser,
+        expression: "isShopUser"
+      }],
+      staticClass: "c-btn p-list__btn p-list__btn--detail",
+      attrs: {
+        to: {
+          name: "review.detail",
+          params: {
+            id: review.id.toString()
+          }
+        }
+      }
+    }, [_vm._v("詳細を見る\n\t\t\t\t\t\t")]), _vm._v(" "), _c("router-link", {
+      directives: [{
+        name: "show",
+        rawName: "v-show",
+        value: !_vm.isShopUser,
+        expression: "!isShopUser"
+      }],
       staticClass: "c-btn p-list__btn p-list__btn--detail",
       attrs: {
         to: {
@@ -72425,7 +72554,7 @@ var routes = [
   }
 }, {
   path: '/users/:id/posted',
-  //出品した商品一覧
+  //出品した商品一覧（コンビニユーザー）
   name: 'user.posted',
   component: _components_user_Posted__WEBPACK_IMPORTED_MODULE_23__["default"],
   props: true,
@@ -72454,32 +72583,32 @@ var routes = [
   component: _components_user_Purchased__WEBPACK_IMPORTED_MODULE_24__["default"],
   props: true,
   beforeEnter: function beforeEnter(to, from, next) {
-    //ログイン状態かつ利用者ユーザーがページにアクセスした場合(true)、そのまま移動させる
+    //ログイン状態でページにアクセスした場合(true)、そのまま移動させる
     _store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/check'] ? next() : next({
       name: 'index'
     });
   }
 }, {
-  path: '/user/:id/canceled',
-  //キャンセルした商品一覧(利用者)
+  path: '/users/:id/canceled',
+  //キャンセルした（された）商品一覧
   name: 'user.canceled',
   component: _components_user_Canceled__WEBPACK_IMPORTED_MODULE_18__["default"],
   props: true,
   beforeEnter: function beforeEnter(to, from, next) {
-    //ログイン状態かつ利用者ユーザーがページにアクセスした場合(true)、そのまま移動させる
+    //ログイン状態でページにアクセスした場合(true)、そのまま移動させる
     _store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/check'] ? next() : next({
       name: 'index'
     });
   }
 }, {
-  path: '/user/:id/reviewed',
-  //レビューしたユーザー一覧(利用者)
+  path: '/users/:id/reviewed',
+  //レビューした(された)ユーザー一覧(利用者)
   name: 'user.reviewed',
   component: _components_user_Reviewed__WEBPACK_IMPORTED_MODULE_25__["default"],
   props: true,
   beforeEnter: function beforeEnter(to, from, next) {
-    //ログイン状態かつ利用者ユーザーがページにアクセスした場合(true)、そのまま移動させる
-    _store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/check'] && !_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/isShopUser'] ? next() : next({
+    //ログイン状態でページにアクセスした場合(true)、そのまま移動させる
+    _store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/check'] ? next() : next({
       name: 'index'
     });
   }

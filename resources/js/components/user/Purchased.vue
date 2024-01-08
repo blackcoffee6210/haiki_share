@@ -100,7 +100,6 @@ export default {
 				return false;
 			}
 			this.products = response.data; //プロパティにデータをセット
-			console.log(response.data);
 		},
 		async cancel(product) {   //購入キャンセル処理
 			this.product = product; //プロパティに値をセット

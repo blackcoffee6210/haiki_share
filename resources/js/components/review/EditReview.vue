@@ -111,6 +111,10 @@
 				</div>
 				
 				<div class="p-review-form__btn-container">
+					<!-- ボタン -->
+					<a @click="$router.back()"
+						 class="c-btn c-btn--white p-product-form__btn--back">もどる
+					</a>
 					<!-- 削除ボタン	-->
 					<button class="c-btn c-btn--white p-review-form__btn--delete"
 									@click="deleteReview"

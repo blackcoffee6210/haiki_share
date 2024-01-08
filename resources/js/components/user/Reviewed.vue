@@ -27,15 +27,23 @@
 						<router-link class="c-card__link"
 												 :to="{ name: 'review.detail',
 												 				params: { id: review.id.toString() }}" />
-
+					
 						<div class="p-list__user-info__review">
 							<!-- ユーザーの画像	-->
 							<img class="c-icon p-list__review-icon"
+									 :src="review.sender_image"
+									 v-show="isShopUser"
+									 alt="">
+							<img class="c-icon p-list__review-icon"
 									 :src="review.receiver_image"
+									 v-show="!isShopUser"
 									 alt="">
 							<div>
 								<!-- レビュー相手の名前	-->
-								<div class="p-list__name">{{ review.receiver_name }}</div>
+								<div class="p-list__name">
+									<span v-show="isShopUser">{{ review.sender_name }}</span>
+									<span v-show="!isShopUser">{{ review.receiver_name }}</span>
+								</div>
 								<!-- ユーザーの評価 -->
 								<div class="p-list__recommendation">{{ review.recommend }}</div>
 							</div>
@@ -49,18 +57,21 @@
 						
 						<!-- ボタン	-->
 						<div class="p-list__btn-container">
-							<!-- 編集ボタン -->
+							<!-- 詳細を見るボタン(コンビニユーザー) -->
 							<router-link class="c-btn p-list__btn p-list__btn--detail"
+													 v-show="isShopUser"
+													 :to="{ name: 'review.detail',
+																	params: { id: review.id.toString() }}">詳細を見る
+							</router-link>
+							<!-- 編集ボタン(利用者) -->
+							<router-link class="c-btn p-list__btn p-list__btn--detail"
+													 v-show="!isShopUser"
 													 :to="{ name: 'review.edit',
 																	params: { id: id.toString() }}">編集する
 							</router-link>
-							<!--&lt;!&ndash; 詳細を見るボタン &ndash;&gt;-->
-							<!--<router-link class="c-btn p-list__btn p-list__btn&#45;&#45;detail"-->
-							<!--						 :to="{ name: 'review.detail',-->
-							<!--										params: { id: review.id.toString() }}">詳細を見る-->
-							<!--</router-link>-->
 						</div>
 					</div>
+					
 				</div>
 			</div>
 		</main>
@@ -112,12 +123,26 @@ export default {
 				return false;
 			}
 			this.reviews = response.data; //プロパティにデータをセット
-		}
+		},
+		async getWasReviewed() { //レビュ一したユーザー覧取得
+			this.loading = true; //ローディングを表示する
+			
+			const response = await axios.get(`/api/users/${this.id}/wasReviewed`); //API通信
+			
+			this.loading = false; //API通信が終わったらローディングを非表示にする
+			
+			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
+				this.$store.commit('error/setCode', response.status);
+				return false;
+			}
+			this.reviews = response.data; //プロパティにデータをセット
+			console.log(response.data);
+		},
 	},
 	watch: {
 		$route: {
 			async handler() {
-				await this.getReviews();
+				this.isShopUser ? await this.getWasReviewed() : await this.getReviews();
 			},
 			immediate: true //immediateをtrueにすると、コンポーネントが生成されたタイミングでも実行する
 		}

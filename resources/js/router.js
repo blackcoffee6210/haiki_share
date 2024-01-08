@@ -143,7 +143,7 @@ const routes = [ //パスとコンポーネントのマッピング
     }
   },
   {
-    path: '/users/:id/posted', //出品した商品一覧
+    path: '/users/:id/posted', //出品した商品一覧（コンビニユーザー）
     name: 'user.posted',
     component: Posted,
     props: true,
@@ -165,26 +165,26 @@ const routes = [ //パスとコンポーネントのマッピング
     name: 'user.purchased',
     component: Purchased,
     props: true,
-    beforeEnter(to, from ,next) { //ログイン状態かつ利用者ユーザーがページにアクセスした場合(true)、そのまま移動させる
+    beforeEnter(to, from ,next) { //ログイン状態でページにアクセスした場合(true)、そのまま移動させる
       (store.getters['auth/check']) ? next() : next({name: 'index'});
     }
   },
   {
-    path: '/user/:id/canceled', //キャンセルした商品一覧(利用者)
+    path: '/users/:id/canceled', //キャンセルした（された）商品一覧
     name: 'user.canceled',
     component: Canceled,
     props: true,
-    beforeEnter(to, from ,next) { //ログイン状態かつ利用者ユーザーがページにアクセスした場合(true)、そのまま移動させる
+    beforeEnter(to, from ,next) { //ログイン状態でページにアクセスした場合(true)、そのまま移動させる
       (store.getters['auth/check']) ? next() : next({name: 'index'});
     }
   },
   {
-    path: '/user/:id/reviewed', //レビューしたユーザー一覧(利用者)
+    path: '/users/:id/reviewed', //レビューした(された)ユーザー一覧(利用者)
     name: 'user.reviewed',
     component: Reviewed,
     props: true,
-    beforeEnter(to, from ,next) { //ログイン状態かつ利用者ユーザーがページにアクセスした場合(true)、そのまま移動させる
-      (store.getters['auth/check'] && !store.getters['auth/isShopUser']) ? next() : next({name: 'index'});
+    beforeEnter(to, from ,next) { //ログイン状態でページにアクセスした場合(true)、そのまま移動させる
+      (store.getters['auth/check']) ? next() : next({name: 'index'});
     }
   },
   {
