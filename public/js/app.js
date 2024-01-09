@@ -18336,8 +18336,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     Loading: _Loading__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   props: {
-    id: String,
+    s_id: String,
     //利用者のユーザーid
+    r_id: String,
+    //コンビニユーザーid
     required: true
   },
   data: function data() {
@@ -18390,7 +18392,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) switch (_context2.prev = _context2.next) {
             case 0:
               _context2.next = 2;
-              return axios.get("/api/reviews/".concat(_this2.id));
+              return axios.get("/api/reviews/".concat(_this2.s_id, "/").concat(_this2.r_id));
             case 2:
               response = _context2.sent;
               if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
@@ -18451,7 +18453,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               _this3.$router.push({
                 name: 'user.mypage',
                 params: {
-                  id: _this3.id.toString()
+                  id: _this3.s_id.toString()
                 }
               }); //マイページに遷移
             case 13:
@@ -18474,7 +18476,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               }
               _this4.loading = true; //ローティングを表示する
               _context4.next = 4;
-              return axios["delete"]("/api/reviews/".concat(_this4.id));
+              return axios["delete"]("/api/reviews/".concat(_this4.s_id, "/").concat(_this4.r_id));
             case 4:
               response = _context4.sent;
               //API通信
@@ -18495,7 +18497,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               _this4.$router.push({
                 name: 'user.mypage',
                 params: {
-                  id: _this4.id.toString()
+                  id: _this4.s_id.toString()
                 }
               }); //マイページに移動する
             case 11:
@@ -22142,7 +22144,7 @@ var render = function render() {
       icon: ["fas", "heart"],
       color: "#ff6f80"
     }
-  }), _vm._v("\n\t\t\t" + _vm._s(_vm.product.likes_count) + "\n\t\t")], 1)]), _vm._v(" "), _c("div", {
+  }), _vm._v("\n\t\t\t" + _vm._s(_vm.product.likes_count) + "\n\t\t")], 1), _vm._v(" "), _vm._t("cancel_count")], 2), _vm._v(" "), _c("div", {
     staticClass: "p-product__card-body"
   }, [_c("div", {
     staticClass: "p-product__container"
@@ -22178,7 +22180,7 @@ var render = function render() {
     staticClass: "p-product__date"
   }, [_vm._v(_vm._s(_vm._f("moment")(_vm.product.created_at)))]), _vm._v(" "), _c("div", {
     staticClass: "p-product__category"
-  }, [_vm._v(_vm._s(_vm.product.category_name))])])])]), _vm._v(" "), _vm._t("default")], 2)], 1);
+  }, [_vm._v(_vm._s(_vm.product.category_name))])])])]), _vm._v(" "), _vm._t("btn")], 2)], 1);
 };
 var staticRenderFns = [];
 render._withStripped = true;
@@ -23318,7 +23320,11 @@ var render = function render() {
         product: product
       }
     }, [_c("div", {
-      staticClass: "p-product__btn-container"
+      staticClass: "p-product__btn-container",
+      attrs: {
+        slot: "btn"
+      },
+      slot: "btn"
     }, [_c("router-link", {
       staticClass: "c-btn p-product__btn",
       attrs: {
@@ -23329,15 +23335,19 @@ var render = function render() {
           }
         }
       }
-    }, [_vm._v("詳細を見る\n\t\t\t\t\t\t")]), _vm._v(" "), _c("div", {
+    }, [_vm._v("詳細を見る\n\t\t\t\t\t\t")])], 1), _vm._v(" "), _c("div", {
       directives: [{
         name: "show",
         rawName: "v-show",
         value: _vm.isShopUser,
         expression: "isShopUser"
       }],
-      staticClass: "p-product__cancel"
-    }, [_vm._v(_vm._s(product.cancels_count) + "回")])], 1)]);
+      staticClass: "p-product__cancel",
+      attrs: {
+        slot: "cancel_count"
+      },
+      slot: "cancel_count"
+    }, [_vm._v(_vm._s(product.cancels_count) + "回\n\t\t\t\t\t")])]);
   }), 1)], 1)]), _vm._v(" "), _c("Sidebar", {
     attrs: {
       id: _vm.id
@@ -24308,7 +24318,11 @@ var render = function render() {
         product: product
       }
     }, [_c("div", {
-      staticClass: "p-product__btn-container"
+      staticClass: "p-product__btn-container",
+      attrs: {
+        slot: "btn"
+      },
+      slot: "btn"
     }, [_c("router-link", {
       directives: [{
         name: "show",
@@ -24434,7 +24448,11 @@ var render = function render() {
         product: product
       }
     }, [_c("div", {
-      staticClass: "p-product__btn-container"
+      staticClass: "p-product__btn-container",
+      attrs: {
+        slot: "btn"
+      },
+      slot: "btn"
     }, [_c("button", {
       directives: [{
         name: "show",
@@ -24636,7 +24654,8 @@ var render = function render() {
         to: {
           name: "review.edit",
           params: {
-            id: _vm.id.toString()
+            s_id: _vm.id.toString(),
+            r_id: review.receiver_id
           }
         }
       }
@@ -72514,7 +72533,7 @@ var routes = [
     });
   }
 }, {
-  path: '/reviews/:id/edit',
+  path: '/reviews/:s_id/:r_id/edit',
   //レビュー編集(利用者)
   name: 'review.edit',
   component: _components_review_EditReview__WEBPACK_IMPORTED_MODULE_16__["default"],

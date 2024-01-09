@@ -141,7 +141,8 @@ export default {
 		Loading
 	},
 	props: {
-		id: String, //利用者のユーザーid
+		s_id: String, //利用者のユーザーid
+		r_id: String, //コンビニユーザーid
 		required: true
 	},
 	data() {
@@ -167,7 +168,7 @@ export default {
 			this.recommendations = response.data;
 		},
 		async getReview() { //レビュー取得
-			const response = await axios.get(`/api/reviews/${this.id}`);
+			const response = await axios.get(`/api/reviews/${this.s_id}/${this.r_id}`);
 			
 			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
 				this.$store.commit('error/setCode', response.status);
@@ -198,13 +199,13 @@ export default {
 				content: 'レビューを更新しました！',
 			});
 			
-			this.$router.push({name: 'user.mypage', params: {id: this.id.toString()}}); //マイページに遷移
+			this.$router.push({name: 'user.mypage', params: {id: this.s_id.toString()}}); //マイページに遷移
 		},
 		async deleteReview() { //レビュー削除
 			if(confirm('レビューを削除しますか?')) {
 				this.loading = true; //ローティングを表示する
 
-				const response = await axios.delete(`/api/reviews/${this.id}`); //API通信
+				const response = await axios.delete(`/api/reviews/${this.s_id}/${this.r_id}`); //API通信
 
 				this.loading = false; //API通信が終わったらローディングを非表示にする
 
@@ -218,7 +219,7 @@ export default {
 				});
 				
 				this.$router.push({ name: 'user.mypage',
-					params: { id: this.id.toString() }}); //マイページに移動する
+					params: { id: this.s_id.toString() }}); //マイページに移動する
 			}
 		}
 	},

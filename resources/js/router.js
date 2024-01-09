@@ -107,7 +107,7 @@ const routes = [ //パスとコンポーネントのマッピング
     }
   },
   {
-    path: '/reviews/:id/edit', //レビュー編集(利用者)
+    path: '/reviews/:s_id/:r_id/edit', //レビュー編集(利用者)
     name: 'review.edit',
     component: EditReview,
     props: true,

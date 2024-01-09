@@ -20,6 +20,7 @@
 													 color="#ff6f80" />
 				{{ product.likes_count }}
 			</div>
+			<slot name="cancel_count"></slot>
 		</div>
 		
 		<!-- カードボディ -->
@@ -71,7 +72,7 @@
 			</div>
 			
 			<!-- ボタン	-->
-			<slot></slot>
+			<slot name="btn"></slot>
 		</div>
 	</div>
 	<!--<div class="c-card p-product">-->

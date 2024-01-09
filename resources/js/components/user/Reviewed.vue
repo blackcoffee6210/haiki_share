@@ -67,7 +67,11 @@
 							<router-link class="c-btn p-list__btn p-list__btn--detail"
 													 v-show="!isShopUser"
 													 :to="{ name: 'review.edit',
-																	params: { id: id.toString() }}">編集する
+																	params: {
+													 					s_id: id.toString(),
+													 					r_id: review.receiver_id
+																	}
+													 			}">編集する
 							</router-link>
 						</div>
 					</div>

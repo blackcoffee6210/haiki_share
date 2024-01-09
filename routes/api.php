@@ -46,10 +46,10 @@ Route::get('/users/{id}/wasReviewed',     'UserController@wasReviewed');    //�
 //=================================================================
 // Review
 //=================================================================
-Route::post('/reviews',        'ReviewController@store');   //レビュー登録
-Route::get('/reviews/{id}',    'ReviewController@show');;   //レビュー取得
-Route::post('/reviews/update', 'ReviewController@update');  //レビュー編集 todo: 処理実装
-Route::delete('/reviews/{id}', 'ReviewController@destroy'); //レビュー削除 todo: 処理実装
+Route::post('/reviews',                 'ReviewController@store');   //レビュー登録
+Route::get('/reviews/{s_id}/{r_id}',    'ReviewController@show');;   //レビュー取得
+Route::post('/reviews/update',          'ReviewController@update');  //レビュー編集 todo: 処理実装
+Route::delete('/reviews/{s_id}/{r_id}', 'ReviewController@destroy'); //レビュー削除 todo: 処理実装
 
 
 //=================================================================

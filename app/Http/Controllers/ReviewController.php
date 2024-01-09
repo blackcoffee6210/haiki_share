@@ -20,9 +20,12 @@ class ReviewController extends Controller
 		$this->middleware('auth'); //認証
 	}
 
-	public function show(string $sender_id) //レビュー取得
+	public function show(string $s_id, string $r_id) //レビュー取得
 	{
-		$review = Review::with(['sender', 'receiver', 'recommendation'])->where('sender_id', $sender_id)->get();
+		$review = Review::with(['sender', 'receiver', 'recommendation'])
+			->where('sender_id', $s_id)
+			->where('receiver_id', $r_id)
+			->get();
 		return $review;
 	}
 
@@ -62,7 +65,9 @@ class ReviewController extends Controller
 	public function update(UpdateReview $request) //レビュー更新
 	{
 		$review = Review::with(['sender', 'receiver', 'recommendation'])
-						->where('sender_id', $request->sender_id)->update([
+						->where('sender_id', $request->sender_id)
+						->where('receiver_id', $request->receiver_id)
+						->update([
 							'recommendation_id' => $request->recommendation_id,
 							'title'             => $request->title,
 							'detail'            => $request->detail
@@ -71,8 +76,11 @@ class ReviewController extends Controller
 		return response($review, 200);
 	}
 
-	public function destroy(string $sender_id) //レビュー削除
+	public function destroy(string $s_id, string $r_id) //レビュー削除
 	{
-		return response(Review::where('sender_id', $sender_id)->delete(), 200);
+		$review = Review::where('sender_id', $s_id)
+						->where('receiver_id', $r_id)
+						->delete();
+		return response($review, 200);
 	}
 }

@@ -19,18 +19,19 @@
 					<Product v-for="product in products"
 									 :key="product.id"
 									 :product="product">
-						<div class="p-product__btn-container">
+						<div class="p-product__btn-container"
+								 slot="btn">
 							<!-- 編集ボタン -->
 							<router-link class="c-btn p-list__btn p-list__btn--edit"
 													 v-show="!product.is_purchased"
 													 :to="{ name: 'product.edit',
-														  			params: { id: product.id.toString() }}">編集する
+																	params: { id: product.id.toString() }}">編集する
 							</router-link>
 							<!-- 商品が購入されていたら詳細ボタンを表示 -->
 							<router-link class="c-btn p-list__btn p-list__btn--detail"
 													 v-show="product.is_purchased"
 													 :to="{ name: 'product.detail',
-														  			params: { id: product.id.toString() }}">詳細を見る
+																	params: { id: product.id.toString() }}">詳細を見る
 							</router-link>
 						</div>
 					</Product>

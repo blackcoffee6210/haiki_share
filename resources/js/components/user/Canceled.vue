@@ -24,14 +24,20 @@
 									 v-show="product.is_canceled"
 									 :key="product.id"
 									 :product="product">
-						<div class="p-product__btn-container">
+						<!-- btnスロット -->
+						<div class="p-product__btn-container"
+								 slot="btn">
 							<!-- 詳細を見るボタン -->
 							<router-link class="c-btn p-product__btn"
 													 :to="{ name: 'product.detail',
 													  			params: { id: product.id.toString() }}">詳細を見る
 							</router-link>
-							<!-- キャンセルされた数をカウントして表示（「いいね」みたいに） -->
-							<div class="p-product__cancel" v-show="isShopUser">{{ product.cancels_count }}回</div>
+						</div>
+						<!-- キャンセルスロット -->
+						<!-- キャンセルされた数をカウントして表示（「いいね」みたいに） -->
+						<div class="p-product__cancel"
+								 slot="cancel_count"
+								 v-show="isShopUser">{{ product.cancels_count }}回
 						</div>
 					</Product>
 					
