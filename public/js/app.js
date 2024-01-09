@@ -22127,13 +22127,22 @@ var render = function render() {
     staticClass: "c-badge"
   }, [_c("div", {
     staticClass: "c-badge__sold"
-  }, [_vm._v("SOLD")])]), _vm._v(" "), _c("img", {
+  }, [_vm._v("SOLD")])]), _vm._v(" "), _c("div", {
+    staticClass: "p-product__img-container"
+  }, [_c("img", {
     staticClass: "p-product__img",
     attrs: {
       src: _vm.product.image,
       alt: ""
     }
   }), _vm._v(" "), _c("div", {
+    staticClass: "p-product__heart"
+  }, [_c("font-awesome-icon", {
+    attrs: {
+      icon: ["fas", "heart"],
+      color: "#ff6f80"
+    }
+  }), _vm._v("\n\t\t\t" + _vm._s(_vm.product.likes_count) + "\n\t\t")], 1)]), _vm._v(" "), _c("div", {
     staticClass: "p-product__card-body"
   }, [_c("div", {
     staticClass: "p-product__container"

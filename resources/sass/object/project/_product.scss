@@ -1,13 +1,25 @@
 .p-product {
   width: 100%;
   position: relative;
+  &__img-container {
+    position: relative;
+  }
   &__img {
     display: block;
-    height: 120px;
+    height: 140px;
     width: 100%;
     @include mq() {
       height: 80px;
     }
+  }
+  &__heart {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    font-size: $font-size_l;
+    background: rgba(255,255,255,.4);
+    //background: rgba(0, 0, 0, .4);
+    padding: $space_s $space_m;
   }
   &__cancel {
     padding: 3px 20px;

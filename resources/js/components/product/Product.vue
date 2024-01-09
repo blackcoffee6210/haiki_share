@@ -11,9 +11,16 @@
 		</div>
 		
 		<!-- 商品の画像	-->
-		<img :src="product.image"
-				 alt=""
-				 class="p-product__img">
+		<div class="p-product__img-container">
+			<img :src="product.image"
+					 alt=""
+					 class="p-product__img">
+			<div class="p-product__heart">
+				<font-awesome-icon :icon="['fas', 'heart']"
+													 color="#ff6f80" />
+				{{ product.likes_count }}
+			</div>
+		</div>
 		
 		<!-- カードボディ -->
 		<div class="p-product__card-body">

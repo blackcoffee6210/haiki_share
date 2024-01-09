@@ -2070,9 +2070,13 @@ body {
   position: relative;
 }
 
+.p-product__img-container {
+  position: relative;
+}
+
 .p-product__img {
   display: block;
-  height: 120px;
+  height: 140px;
   width: 100%;
 }
 
@@ -2080,6 +2084,15 @@ body {
   .p-product__img {
     height: 80px;
   }
+}
+
+.p-product__heart {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  font-size: 1.8rem;
+  background: rgba(255, 255, 255, 0.4);
+  padding: 5px 10px;
 }
 
 .p-product__cancel {
