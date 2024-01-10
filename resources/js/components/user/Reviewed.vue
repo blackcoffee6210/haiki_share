@@ -23,7 +23,7 @@
 					<div class="c-card p-list__card__review"
 							 v-for="review in reviews"
 							 :key="review.id">
-						<!-- レビュー詳細画面のリンク -->
+						 <!--レビュー詳細画面のリンク-->
 						<router-link class="c-card__link"
 												 :to="{ name: 'review.detail',
 												 				params: { id: review.id.toString() }}" />
@@ -68,7 +68,7 @@
 													 v-show="!isShopUser"
 													 :to="{ name: 'review.edit',
 																	params: {
-													 					s_id: id.toString(),
+													 					s_id: review.sender_id,
 													 					r_id: review.receiver_id
 																	}
 													 			}">編集する
@@ -106,7 +106,7 @@ export default {
 	data() {
 		return {
 			loading: false,
-			reviews: {}
+			reviews: {},
 		}
 	},
 	computed: {
@@ -127,8 +127,10 @@ export default {
 				return false;
 			}
 			this.reviews = response.data; //プロパティにデータをセット
+			this.s_id = response
+			console.log(this.reviews);
 		},
-		async getWasReviewed() { //レビュ一したユーザー覧取得
+		async getWasReviewed() { //レビュ一取得
 			this.loading = true; //ローディングを表示する
 			
 			const response = await axios.get(`/api/users/${this.id}/wasReviewed`); //API通信

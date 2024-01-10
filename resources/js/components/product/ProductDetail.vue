@@ -97,9 +97,9 @@
 						</button>
 						
 						<!-- レビュー投稿ボタン -->
-						<!-- 購入したユーザーかつレビューを投稿していないユーザーのときに表示 -->
+						<!-- 購入したユーザーかつレビューを投稿していないときに表示 -->
 						<router-link class="c-btn p-product-detail__btn"
-												 v-show="product.purchased_by_user"
+												 v-show="product.purchased_by_user && !isReviewed"
 												 :to="{ name: 'review.register', params: {id: id.toString() } }">レビュー投稿
 						</router-link>
 						
@@ -171,7 +171,7 @@ export default {
 			buttonActive: false, //TOPボタンを表示する
 			scroll: 0,           //scroll
 			loading: false,      //ローディングを表示するかどうかを判定するプロパティ
-			isReviewed: '',
+			isReviewed: false
 		}
 	},
 	computed: {
@@ -290,7 +290,7 @@ export default {
 				this.$router.push({ name: 'index' }); //インデックス画面に遷移する
 			}
 		},
-		async getIsReviewed() { //レビュー投稿済みかどうか
+		async getMyReview() { //レビュー投稿済みかどうか
 			const response = await axios.get(`/api/products/${this.product.user_id}/isReviewed`); //API接続
 			
 			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
@@ -298,11 +298,7 @@ export default {
 				return false;
 			}
 			
-			this.isReviewed = response.data[0]; //responseデータをproductプロパティに代入
-			console.log('isReviewedの中身');
-			console.log(response.data[0]);
-			console.log(response.data);
-			console.log()
+			response.data[0] ? this.isReviewed = true : this.isReviewed = false; //レビュー投稿済みならtrue、なければfalseをセット
 		},
 		returnTop() { //「TOPにもどる」ボタンを押したときの処理
 			window.scrollTo({
@@ -325,7 +321,7 @@ export default {
 		$route: {
 			async handler() {
 				await this.getProduct();
-				await this.getIsReviewed();
+				await this.getMyReview();
 			},
 			immediate: true
 		}

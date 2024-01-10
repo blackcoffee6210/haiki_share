@@ -70,30 +70,32 @@
 				
 				<!-- おすすめの商品 -->
 				<!-- card	-->
-				<div class="c-card p-sidebar-index__card"
-						 v-for="product in recommendProducts"
-						 :key="product.id">
-					<router-link class="c-card__link"
-											 :to="{ name: 'product.detail',
-											  			params: { id: product.id.toString() }}" />
-					<img class="p-sidebar-index__img"
-							 :src="product.image"
-							 alt="">
-					<div class="p-sidebar-index__right">
-						<div class="p-sidebar-index__card-title">{{ product.name }}</div>
-						<div class="p-sidebar-index__price-container">
-							<div class="p-sidebar-index__price">{{ product.price | numberFormat }}</div>
-							<div class="p-sidebar-index__expire">
-								残り
-								{{ product.expire | momentExpire }}
-								日
+				<div class="p-sidebar-index__card-container">
+					<div class="c-card p-sidebar-index__card"
+							 v-for="product in recommendProducts"
+							 :key="product.id">
+						<router-link class="c-card__link"
+												 :to="{ name: 'product.detail',
+																params: { id: product.id.toString() }}" />
+						<img class="p-sidebar-index__img"
+								 :src="product.image"
+								 alt="">
+						<div class="p-sidebar-index__right">
+							<div class="p-sidebar-index__card-title">{{ product.name }}</div>
+							<div class="p-sidebar-index__price-container">
+								<div class="p-sidebar-index__price">{{ product.price | numberFormat }}</div>
+								<div class="p-sidebar-index__expire">
+									残り
+									{{ product.expire | momentExpire }}
+									日
+								</div>
 							</div>
-						</div>
-						<div class="c-flex">
-							<img class="c-icon p-sidebar-index__icon"
-									 :src="product.user_image"
-									 alt="">
-							<div class="p-sidebar-index__name">{{ product.user_name }}</div>
+							<div class="c-flex">
+								<img class="c-icon p-sidebar-index__icon"
+										 :src="product.user_image"
+										 alt="">
+								<div class="p-sidebar-index__name">{{ product.user_name }}</div>
+							</div>
 						</div>
 					</div>
 				</div>

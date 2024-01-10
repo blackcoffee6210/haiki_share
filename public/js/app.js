@@ -17797,7 +17797,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       //scroll
       loading: false,
       //ローディングを表示するかどうかを判定するプロパティ
-      isReviewed: ''
+      isReviewed: false
     };
   },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])({
@@ -18045,7 +18045,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         }, _callee6);
       }))();
     },
-    getIsReviewed: function getIsReviewed() {
+    getMyReview: function getMyReview() {
       var _this7 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
         var response;
@@ -18064,12 +18064,8 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               _this7.$store.commit('error/setCode', response.status);
               return _context7.abrupt("return", false);
             case 6:
-              _this7.isReviewed = response.data[0]; //responseデータをproductプロパティに代入
-              console.log('isReviewedの中身');
-              console.log(response.data[0]);
-              console.log(response.data);
-              console.log();
-            case 11:
+              response.data[0] ? _this7.isReviewed = true : _this7.isReviewed = false; //レビュー投稿済みならtrue、なければfalseをセット
+            case 7:
             case "end":
               return _context7.stop();
           }
@@ -18106,7 +18102,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
                 return _this8.getProduct();
               case 2:
                 _context8.next = 4;
-                return _this8.getIsReviewed();
+                return _this8.getMyReview();
               case 4:
               case "end":
                 return _context8.stop();
@@ -19812,7 +19808,9 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               return _context.abrupt("return", false);
             case 8:
               _this.reviews = response.data; //プロパティにデータをセット
-            case 9:
+              _this.s_id = response;
+              console.log(_this.reviews);
+            case 11:
             case "end":
               return _context.stop();
           }
@@ -19826,7 +19824,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         return _regeneratorRuntime().wrap(function _callee2$(_context2) {
           while (1) switch (_context2.prev = _context2.next) {
             case 0:
-              //レビュ一したユーザー覧取得
+              //レビュ一取得
               _this2.loading = true; //ローディングを表示する
               _context2.next = 3;
               return axios.get("/api/users/".concat(_this2.id, "/wasReviewed"));
@@ -22040,7 +22038,9 @@ var render = function render() {
     staticClass: "p-sidebar-index"
   }, [_c("h2", {
     staticClass: "c-title p-sidebar-index__title"
-  }, [_vm._v("おすすめの商品")]), _vm._v(" "), _vm._l(_vm.recommendProducts, function (product) {
+  }, [_vm._v("おすすめの商品")]), _vm._v(" "), _c("div", {
+    staticClass: "p-sidebar-index__card-container"
+  }, _vm._l(_vm.recommendProducts, function (product) {
     return _c("div", {
       key: product.id,
       staticClass: "c-card p-sidebar-index__card"
@@ -22070,7 +22070,7 @@ var render = function render() {
       staticClass: "p-sidebar-index__price"
     }, [_vm._v(_vm._s(_vm._f("numberFormat")(product.price)))]), _vm._v(" "), _c("div", {
       staticClass: "p-sidebar-index__expire"
-    }, [_vm._v("\n\t\t\t\t\t\t\t残り\n\t\t\t\t\t\t\t" + _vm._s(_vm._f("momentExpire")(product.expire)) + "\n\t\t\t\t\t\t\t日\n\t\t\t\t\t\t")])]), _vm._v(" "), _c("div", {
+    }, [_vm._v("\n\t\t\t\t\t\t\t\t残り\n\t\t\t\t\t\t\t\t" + _vm._s(_vm._f("momentExpire")(product.expire)) + "\n\t\t\t\t\t\t\t\t日\n\t\t\t\t\t\t\t")])]), _vm._v(" "), _c("div", {
       staticClass: "c-flex"
     }, [_c("img", {
       staticClass: "c-icon p-sidebar-index__icon",
@@ -22081,7 +22081,7 @@ var render = function render() {
     }), _vm._v(" "), _c("div", {
       staticClass: "p-sidebar-index__name"
     }, [_vm._v(_vm._s(product.user_name))])])])], 1);
-  }), _vm._v(" "), _c("label", {
+  }), 0), _vm._v(" "), _c("label", {
     staticClass: "c-label p-sidebar-index__title u-font-bold",
     attrs: {
       "for": "search"
@@ -22108,7 +22108,7 @@ var render = function render() {
         _vm.keyword = $event.target.value;
       }
     }
-  })], 2)])]);
+  })])])]);
 };
 var staticRenderFns = [];
 render._withStripped = true;
@@ -22345,8 +22345,8 @@ var render = function render() {
     directives: [{
       name: "show",
       rawName: "v-show",
-      value: _vm.product.purchased_by_user,
-      expression: "product.purchased_by_user"
+      value: _vm.product.purchased_by_user && !_vm.isReviewed,
+      expression: "product.purchased_by_user && !isReviewed"
     }],
     staticClass: "c-btn p-product-detail__btn",
     attrs: {
@@ -24677,7 +24677,7 @@ var render = function render() {
         to: {
           name: "review.edit",
           params: {
-            s_id: _vm.id.toString(),
+            s_id: review.sender_id,
             r_id: review.receiver_id
           }
         }
@@ -72321,14 +72321,15 @@ __webpack_require__.r(__webpack_exports__);
 /*!***************************************************!*\
   !*** ./resources/js/components/user/Reviewed.vue ***!
   \***************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Reviewed_vue_vue_type_template_id_23441bc0__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Reviewed.vue?vue&type=template&id=23441bc0 */ "./resources/js/components/user/Reviewed.vue?vue&type=template&id=23441bc0");
 /* harmony import */ var _Reviewed_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Reviewed.vue?vue&type=script&lang=js */ "./resources/js/components/user/Reviewed.vue?vue&type=script&lang=js");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _Reviewed_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _Reviewed_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -72358,7 +72359,7 @@ component.options.__file = "resources/js/components/user/Reviewed.vue"
 /*!***************************************************************************!*\
   !*** ./resources/js/components/user/Reviewed.vue?vue&type=script&lang=js ***!
   \***************************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
