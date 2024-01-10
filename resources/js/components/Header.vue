@@ -22,18 +22,22 @@
 					<span class="p-header__hamburger__line" :class="{ 'v-line02': active }"></span>
 					<span class="p-header__hamburger__line" :class="{ 'v-line03': active }"></span>
 				</button>
-			
+				
 				<!-- ログイン時のメニュー -->
 				<nav v-if="isLogin" class="p-header__nav" :class="{ 'v-slide': active }">
+					<!--<span class="p-header__greeting">こんにちは、{{ username }}さん</span>-->
+					<!-- 出品ボタン -->
 					<router-link :to="{ name: 'product.register' }"
 											 class="p-header__link"
 											 v-show="isShopUser"
 											 @click="toggleNav">出品する
 					</router-link>
+					<!-- マイページ -->
 					<router-link :to="{ name: 'user.mypage', params: { id: user.id.toString()} }"
 											 class="p-header__link"
 											 @click="toggleNav">マイページ
 					</router-link>
+					<!-- ログアウト -->
 					<button class="p-header__link" @click="logout">ログアウト</button>
 				</nav>
 				
@@ -42,12 +46,15 @@
 					<!-- ログインボタン -->
 					<router-link :to="{ name: 'login' }"
 											 class="p-header__link"
-											 @click="toggleNav">ログイン</router-link>
+											 @click="toggleNav">ログイン
+					</router-link>
 					<!-- ユーザー登録ボタン -->
 					<router-link :to="{ name: 'register' }"
 											 class="p-header__link"
-											 @click="toggleNav">新規登録</router-link>
+											 @click="toggleNav">新規登録
+					</router-link>
 				</nav>
+				
 			</div>
 		</div>
 	</header>
@@ -64,7 +71,7 @@ export default {
 	},
 	computed: {
 		...mapState({
-			user: state => state.auth.user,
+			user:      state => state.auth.user,
 			apiStatus: state => state.auth.apiStatus,
 		}),
 		...mapGetters({

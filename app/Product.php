@@ -73,7 +73,7 @@ class Product extends Model
 	}
 	/**
 	 * アクセサ - category_name
-	 * @string
+	 * @return string
 	 */
 	public function getCategoryNameAttribute() //商品カテゴリー名を取得する
 	{
@@ -172,7 +172,7 @@ class Product extends Model
 
 	public function category() //カテゴリーテーブル
 	{
-		return $this->belongsTo('App\Category');
+		return $this->belongsTo('App\Category', 'category_id');
 	}
 
 	public function likes() //お気に入りテーブル

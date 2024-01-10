@@ -14,10 +14,8 @@ class CreateHistoriesTable extends Migration
     public function up()
     {
         Schema::create('histories', function (Blueprint $table) {
-            $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');    //ユーザーid
             $table->unsignedBigInteger('product_id'); //商品id
-            $table->softDeletes();
             $table->timestamps();
 
 	        $table->foreign('user_id')->references('id')->on('users');       //外部キー

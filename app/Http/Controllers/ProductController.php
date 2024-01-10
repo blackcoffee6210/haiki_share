@@ -19,14 +19,15 @@ class ProductController extends Controller
 {
 	public function __construct()
 	{
-		$this->middleware('auth')->except(['index', 'show']); //認証なしでアクセスしたいAPIはexceptに書く
+		$this->middleware('auth')
+			 ->except(['index', 'show']); //認証なしでアクセスしたいAPIはexceptに書く
 	}
 
 	public function index() //商品一覧取得
 	{
-		$products = Product::with(['user', 'category', 'likes', 'histories'])
+		$products = Product::with(['user', 'category', 'likes', 'histories', 'cancels'])
 						   ->orderByDesc('created_at')
-						   ->paginate();
+						   ->paginate(); //get()の代わりにpaginateを使うとtotalやcurrent_pageが自動的に追加される
 		return $products;
 	}
 
@@ -36,6 +37,11 @@ class ProductController extends Controller
 		return $products;
 	}
 
+	/**
+	 * 商品詳細
+	 * @param string $id
+	 * @return Product
+	 */
 	public function show(string $id) //商品情報取得
 	{
 		$product = Product::with(['user', 'category', 'likes', 'histories'])
@@ -182,6 +188,15 @@ class ProductController extends Controller
 		Mail::to($seller_email)->send(new CanceledSellerNotification($params)); //売り手にメールを送信
 
 		return response($product, 200);
+	}
+
+	public function isReviewed(string $id) {
+		$review = DB::table('reviews')
+					->join('products', 'reviews.receiver_id', '=', 'products.user_id')
+					->where('reviews.sender_id', '=', Auth::id())
+					->where('products.user_id', $id)
+					->get();
+		return $review;
 	}
 }
 

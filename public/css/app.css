@@ -1321,9 +1321,13 @@ body {
   }
 }
 
+.p-header__greeting {
+  font-weight: bold;
+}
+
 .p-header__link {
   position: relative;
-  margin-right: 20px;
+  margin-left: 20px;
   font-weight: bold;
 }
 
@@ -2091,7 +2095,7 @@ body {
   bottom: 0;
   right: 0;
   font-size: 1.8rem;
-  background: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.5);
   padding: 5px 10px;
 }
 
@@ -2186,7 +2190,6 @@ body {
 .p-product__icon {
   width: 40px;
   height: 40px;
-  margin-right: 5px;
 }
 
 @media screen and (max-width: 450px) {
@@ -2211,7 +2214,6 @@ body {
 }
 
 .p-product__date {
-  margin-right: 10px;
   font-size: 1.2rem;
 }
 
@@ -2219,7 +2221,7 @@ body {
   font-size: 1.2rem;
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 20px;
-  padding: 0 5px;
+  padding: 5px;
 }
 
 @media screen and (max-width: 450px) {

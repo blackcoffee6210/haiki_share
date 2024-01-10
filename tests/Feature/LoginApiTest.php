@@ -25,7 +25,7 @@ class LoginApiTest extends TestCase
 	public function should_登録済みのユーザーを認証して返却する()
 	{
 		$response = $this->json('POST', route('login'), [
-			'group'    => 1,
+			'group'    => 2,
 			'email'    => $this->user->email,
 			'password' => 'password',
 		]);

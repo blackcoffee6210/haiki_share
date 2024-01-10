@@ -179,10 +179,7 @@ export default {
 			isLogin: 'auth/check',        //true または false が返ってくる
 			userId: 'auth/userId',        //ユーザーIDを取得
 			isShopUser: 'auth/isShopUser' //コンビニユーザならtrueが入る
-		}),
-		isReviewedByUser() {
-			// (reviews.sender_id === Auth::id() && reviews.receiver_id === products.user_id) ? true : false;
-		}
+		})
 	},
 	methods: {
 		async getProduct() { //商品詳細情報取得
@@ -293,6 +290,20 @@ export default {
 				this.$router.push({ name: 'index' }); //インデックス画面に遷移する
 			}
 		},
+		async getIsReviewed() { //レビュー投稿済みかどうか
+			const response = await axios.get(`/api/products/${this.product.user_id}/isReviewed`); //API接続
+			
+			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
+				this.$store.commit('error/setCode', response.status);
+				return false;
+			}
+			
+			this.isReviewed = response.data[0]; //responseデータをproductプロパティに代入
+			console.log('isReviewedの中身');
+			console.log(response.data[0]);
+			console.log(response.data);
+			console.log()
+		},
 		returnTop() { //「TOPにもどる」ボタンを押したときの処理
 			window.scrollTo({
 				top: 0,
@@ -314,7 +325,7 @@ export default {
 		$route: {
 			async handler() {
 				await this.getProduct();
-				await this.getReview();
+				await this.getIsReviewed();
 			},
 			immediate: true
 		}

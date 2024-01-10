@@ -23,7 +23,7 @@ import Liked           from "./components/user/Liked";
 import MyPage          from "./components/user/MyPage";
 import Posted          from "./components/user/Posted";
 import Purchased       from "./components/user/Purchased";
-import Reviewed        from "./components/user/Reviewed";               // ↑ここまで
+import Reviewed        from "./components/user/Reviewed";                 // ↑ここまで
 
 
 Vue.use(VueRouter); //VueRouterプラグインを利用する(<router-view>コンポーネントなどを使うことができる)

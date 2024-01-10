@@ -7,11 +7,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Review extends Model
 {
-    use softDeletes; //ソフトデリート
-
 	protected $fillable = [
 		'sender_id', 'receiver_id', 'recommendation_id',
-		'title', 'detail', 'deleted_at'
+		'title', 'detail'
 		];
 
 	//ユーザー画像、ユーザー名、投稿日、ユーザー評価、タイトル、コメント
@@ -23,8 +21,7 @@ class Review extends Model
 
 	//$visibleはJSONに含める属性を定義する
 	protected $visible = [
-		'id', 'sender_id', 'receiver_id', 'recommendation_id', 'title', 'detail',
-		'deleted_at', 'created_at', 'updated_at',
+		'id', 'sender_id', 'receiver_id', 'recommendation_id', 'title', 'detail', 'created_at', 'updated_at',
 		'sender_name', 'receiver_name', 'sender_image', 'receiver_image',
 		'recommend'
 	];

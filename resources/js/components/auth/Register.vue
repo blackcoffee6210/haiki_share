@@ -20,9 +20,6 @@
 			</h2>
 			<form class="p-auth-form__form" @submit.prevent="register">
 				
-				<!-- csrf -->
-				<input type="hidden" name="_token" :value="$store.state.csrf">
-				
 				<!-- name -->
 				<label for="name" class="c-label p-auth-form__label">
 					<span v-show="registerForm.group === 1">お名前</span>
@@ -36,7 +33,10 @@
 							 :placeholder="name">
 				<!-- エラーメッセージ	-->
 				<div v-if="registerErrors">
-					<div v-for="msg in registerErrors.name" :key="msg" class="p-error">{{ msg }}</div>
+					<div v-for="msg in registerErrors.name"
+							 :key="msg"
+							 class="p-error">{{ msg }}
+					</div>
 				</div>
 				
 				<!-- 支店 -->
@@ -50,7 +50,10 @@
 								 placeholder="渋谷109前店">
 					<!-- エラーメッセージ	-->
 					<div v-if="registerErrors">
-						<div v-for="msg in registerErrors.branch" :key="msg" class="p-error">{{ msg }}</div>
+						<div v-for="msg in registerErrors.branch"
+								 :key="msg"
+								 class="p-error">{{ msg }}
+						</div>
 					</div>
 				</div>
 				
@@ -68,7 +71,10 @@
 					</select>
 					<!-- エラーメッセージ	-->
 					<div v-if="registerErrors">
-						<div v-for="msg in registerErrors.prefecture_id" :key="msg" class="p-error">{{ msg }}</div>
+						<div v-for="msg in registerErrors.prefecture_id"
+								 :key="msg"
+								 class="p-error">{{ msg }}
+						</div>
 					</div>
 				</div>
 				
@@ -85,7 +91,10 @@
 								 placeholder="渋谷区宇田川町26-4">
 					<!-- エラーメッセージ	-->
 					<div v-if="registerErrors">
-						<div v-for="msg in registerErrors.address" :key="msg" class="p-error">{{ msg }}</div>
+						<div v-for="msg in registerErrors.address"
+								 :key="msg"
+								 class="p-error">{{ msg }}
+						</div>
 					</div>
 				</div>
 				

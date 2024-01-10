@@ -14,13 +14,11 @@ class CreateReviewsTable extends Migration
     public function up()
     {
         Schema::create('reviews', function (Blueprint $table) {
-            $table->bigIncrements('id');
             $table->unsignedBigInteger('sender_id');         //送信者のユーザーid
             $table->unsignedBigInteger('receiver_id');       //受信者のユーザーid
             $table->unsignedBigInteger('recommendation_id'); //おすすめかどうか
 	        $table->string('title');                         //レビュータイトル
             $table->string('detail');                        //レビューの内容
-            $table->softDeletes();
             $table->timestamps();
 
 	        $table->foreign('sender_id')->references('id')->on('users');                   //外部キー

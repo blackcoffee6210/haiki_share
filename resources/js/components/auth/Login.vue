@@ -14,6 +14,7 @@
 			</ul>
 			<h2 class="c-title p-auth-form__title" v-show="loginForm.group === 1">ログイン（利用者）</h2>
 			<h2 class="c-title p-auth-form__title" v-show="loginForm.group === 2">ログイン（お店の方）</h2>
+			
 			<!-- preventをつけてデフォルトのフォーム送信の挙動をキャンセルする -->
 			<form class="p-auth-form__form" @submit.prevent="login">
 				

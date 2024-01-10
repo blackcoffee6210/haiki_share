@@ -99,10 +99,13 @@
 				</div>
 				
 				<!-- 検索ボックス -->
-				<h2 class="c-title p-sidebar-index__title">商品検索</h2>
+				<label class="c-label p-sidebar-index__title u-font-bold"
+							 for="search">商品検索
+				</label>
 				<input type="text"
 							 placeholder="SEARCH"
 							 v-model="keyword"
+							 id="search"
 							 class="c-input p-sidebar-index__search">
 			</div>
 		</aside>

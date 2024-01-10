@@ -107,8 +107,7 @@
       }
     }
   }
-  //ナビゲーション
-  &__nav {
+  &__nav { //ナビゲーション
     display: block;
     @include mq() {
       position: fixed;
@@ -128,9 +127,12 @@
       }
     }
   }
+  &__greeting {
+    font-weight: bold;
+  }
   &__link {
     position: relative;
-    margin-right: $space_xl;
+    margin-left: $space_xl;
     font-weight: bold;
     @include mq() {
       width: 100%;

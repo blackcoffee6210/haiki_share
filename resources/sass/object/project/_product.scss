@@ -17,7 +17,7 @@
     bottom: 0;
     right: 0;
     font-size: $font-size_l;
-    background: rgba(255,255,255,.4);
+    background: rgba(255,255,255,.5);
     //background: rgba(0, 0, 0, .4);
     padding: $space_s $space_m;
   }
@@ -90,7 +90,7 @@
   &__icon {
     width: 40px;
     height: 40px;
-    margin-right: $space_s;
+    //margin-right: $space_s;
     @include mq() {
       width: 25px;
       height: 25px;
@@ -107,14 +107,14 @@
     }
   }
   &__date {
-    margin-right: $space_m;
+    //margin-right: $space_m;
     font-size: $font-size_s;
   }
   &__category {
     font-size: $font-size_s;
     border: 1px solid $gray-color;
     border-radius: 20px;
-    padding: 0 $space_s;
+    padding: $space_s;
     @include mq() {
       font-size: $font-size_xs;
       padding: 2px $space_s;
