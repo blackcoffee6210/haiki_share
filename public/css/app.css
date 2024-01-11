@@ -1780,7 +1780,7 @@ body {
   text-align: center;
 }
 
-.p-mypage__section {
+.p-mypage__card-container {
   width: 100%;
   display: grid;
   grid-template-columns: 20% 20% 20% 20% 20%;
@@ -1790,20 +1790,20 @@ body {
 }
 
 @media screen and (max-width: 450px) {
-  .p-mypage__section {
+  .p-mypage__card-container {
     grid-template-columns: 50% 50%;
     padding-right: 10px;
   }
 }
 
 @media screen and (min-width: 451px) and (max-width:820px) {
-  .p-mypage__section {
+  .p-mypage__card-container {
     grid-template-columns: 50% 50%;
     gap: 20px;
   }
 }
 
-.p-mypage__section--review {
+.p-mypage__card-container--review {
   width: 80%;
   display: grid;
   grid-template-columns: 50% 50%;
@@ -1812,13 +1812,13 @@ body {
 }
 
 @media screen and (max-width: 450px) {
-  .p-mypage__section--review {
+  .p-mypage__card-container--review {
     width: 100%;
   }
 }
 
 @media screen and (min-width: 451px) and (max-width:820px) {
-  .p-mypage__section--review {
+  .p-mypage__card-container--review {
     width: 100%;
     gap: 20px;
     padding-right: 40px;
@@ -2824,6 +2824,8 @@ body {
 
 .p-sidebar-index {
   width: 100%;
+  background: #fff;
+  padding: 20px;
 }
 
 @media screen and (max-width: 450px) {
@@ -2852,6 +2854,10 @@ body {
     margin-top: 60px;
     margin-bottom: 25px;
   }
+}
+
+.p-sidebar-index__card-container {
+  margin-bottom: 40px;
 }
 
 .p-sidebar-index__card {
@@ -3127,6 +3133,10 @@ body {
 
 .u-mb30 {
   margin-bottom: 30px;
+}
+
+.u-mb40 {
+  margin-bottom: 40px;
 }
 
 .u-mt0 {

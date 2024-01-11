@@ -51,7 +51,6 @@
 						
 						<!-- レビュータイトル -->
 						<div class="p-list__review-title">{{ review.title }}</div>
-						
 						<!-- レビューの内容 -->
 						<div class="p-list__detail">{{ review.detail }}</div>
 						

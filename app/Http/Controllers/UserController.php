@@ -81,8 +81,10 @@ class UserController extends Controller
 
 	public function wasPurchased(string $id) //購入された商品一覧(コンビニ)
 	{
-		$products = Product::with(['user', 'category', 'likes', 'histories'])->where('user_id', $id)->get();
-		return response($products, 200);
+		return Product::with(['user', 'category', 'likes', 'histories'])->where('user_id', $id)->get();
+
+//		$products = Product::with(['user', 'category', 'likes', 'histories'])->where('user_id', $id)->get();
+//		return response($products, 200);
 	}
 
 	public function liked(string $id) //いいねした商品一覧(利用者)

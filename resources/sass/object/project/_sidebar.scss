@@ -42,6 +42,8 @@
 
 .p-sidebar-index {
   width: 100%;
+  background: $white;
+  padding: $space_xl;
   @include mq() {
     padding-left: $space_m;
     padding-right: $space_m;
@@ -59,6 +61,9 @@
       margin-top: 60px;
       margin-bottom: 25px;
     }
+  }
+  &__card-container {
+    margin-bottom: 40px;
   }
   &__card {
     height: 85px;

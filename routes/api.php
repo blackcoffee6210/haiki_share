@@ -44,6 +44,16 @@ Route::get('/users/{id}/reviewed',        'UserController@reviewed');       //�
 Route::get('/users/{id}/wasReviewed',     'UserController@wasReviewed');    //レビューされたユーザー一覧
 
 //=================================================================
+// MyPage
+//=================================================================
+Route::get('/mypage/{id}/liked',            'MyPageController@liked');            //お気に入りした商品5件取得(利用者)
+Route::get('/mypage/{id}/purchased',        'MyPageController@purchased');        //購入した商品5件取得(利用者)
+Route::get('/mypage/{id}/canceled',         'MyPageController@canceled');         //キャンセルした商品5件取得(利用者)
+Route::get('/mypage/{id}/reviewedShopUser', 'MyPageController@reviewedShopUser'); //レビューしたコンビニユーザーを5件取得(利用者)
+Route::get('/mypage/{id}/posted',           'MyPageController@posted');           //投稿した商品を5件取得(コンビニユーザー)
+Route::get('/mypage/{id}/wasPurchased',     'MyPageController@wasPurchased');           //投稿した商品を5件取得(コンビニユーザー)
+
+//=================================================================
 // Review
 //=================================================================
 Route::post('/reviews',                 'ReviewController@store');   //レビュー登録
