@@ -23,9 +23,9 @@ class ReviewController extends Controller
 	public function show(string $s_id, string $r_id) //レビュー取得
 	{
 		$review = Review::with(['sender', 'receiver', 'recommendation'])
-			->where('sender_id', $s_id)
-			->where('receiver_id', $r_id)
-			->get();
+						->where('sender_id', $s_id)
+						->where('receiver_id', $r_id)
+						->get();
 		return $review;
 	}
 

@@ -83,9 +83,4 @@ class User extends Authenticatable
 	{
 		return $this->hasMany('App\Review', 'sender_id');
 	}
-
-	public function receiverReviews() //レビューテーブル(出品者)
-	{
-		return $this->hasMany('App\Review', 'receiver_id');
-	}
 }

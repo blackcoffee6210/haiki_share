@@ -24,10 +24,16 @@
   &__card-container {
     width: 100%;
     display: grid;
-    grid-template-columns: 20% 20% 20% 20% 20%;
-    gap: $space_m;
+    grid-template-columns: 33.3% 33.3% 33.3%;
+    gap: $space_xl;
     margin-bottom: $space_3xl;
     padding-right: $space_3xl;
+    //width: 100%;
+    //display: grid;
+    //grid-template-columns: 20% 20% 20% 20% 20%;
+    //gap: $space_m;
+    //margin-bottom: $space_3xl;
+    //padding-right: $space_3xl;
     @include mq() {
       grid-template-columns: 50% 50%;
       padding-right: $space_m;
