@@ -191,6 +191,8 @@ export default {
 			}
 			
 			this.product = response.data; //responseデータをproductプロパティに代入
+			console.log('getProductの中身');
+			console.log(response.data);
 			if(this.product.liked_by_user) { //ログインユーザーが既に「いいね」を押していたらtrueをセット
 				this.isLike = true;
 			}

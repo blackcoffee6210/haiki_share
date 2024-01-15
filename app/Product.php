@@ -21,9 +21,14 @@ class Product extends Model
 	//アクセサとは、DBから取得したデータを自動的に加工することができる機能
 	//ユーザー定義のアクセサをJSONに含めるには、明示的に$appendプロパティに登録する
 	protected $appends = [
-		'user_image', 'user_name', 'email', 'branch', 'category_name', 'is_my_product',
-		'likes_count', 'liked_by_user', 'purchased_by_user', 'is_purchased',
-		'canceled_by_user', 'is_canceled', 'cancels_count'
+		'user_image', 'user_name', 'email', 'branch', 'category_name',
+		'likes_count', 'liked_by_user',
+		'is_my_product',
+		'purchased_by_user',
+        'is_purchased',
+//		'canceled_by_user',
+//      'is_canceled',
+//      'cancels_count'
 	];
 
 	//$visibleはJSONに含める属性を定義する
@@ -31,9 +36,14 @@ class Product extends Model
 	protected $visible = [
 		'id', 'user_id', 'category_id', 'image', 'name', 'detail', 'price',
 		'expire', 'deleted_at', 'created_at', 'updated_at',
-		'user_image', 'user_name', 'email', 'branch', 'category_name', 'is_my_product',
-		'likes_count', 'liked_by_user', 'purchased_by_user', 'is_purchased',
-		'canceled_by_user', 'is_canceled', 'cancels_count'
+		'user_image', 'user_name', 'email', 'branch', 'category_name',
+		'likes_count', 'liked_by_user',
+		'is_my_product',
+		'purchased_by_user',
+		'is_purchased',
+//		'canceled_by_user',
+//       'is_canceled',
+//       'cancels_count'
 	];
 
 	//=====================================================
@@ -120,9 +130,6 @@ class Product extends Model
 		if(Auth::guest()) { //ユーザーがゲストの場合(ログインしていなければ)falseを返す
 			return false;
 		}
-		return $this->histories->contains(function($user) { //historiesテーブルのuser_idとログインユーザーidが合致するか調べる
-			return $user->id === Auth::user()->id; //idが一致したらtrueを返す
-		});
 	}
 	/**
 	 * アクセサ - is_purchased
@@ -130,37 +137,37 @@ class Product extends Model
 	 */
 	public function getIsPurchasedAttribute() //商品が購入されているかどうかを真偽値で返すアクセサ
 	{
-		return ($this->histories->count()) ? true : false; //historiesテーブルにカウントがある(=購入されている)のでtrueを返す
+		return ($this->history()->count()) ? true : false; //historiesテーブルにカウントがある(=購入されている)のでtrueを返す
 	}
-	/**
-	 * アクセサ - canceled_by_user
-	 * @return boolean
-	 */
-	public function getCanceledByUserAttribute() //リクエストしたユーザーがキャンセルしたかどうかを取得するアクセサ
-	{
-		if(Auth::guest() ) { //ユーザーがゲストの場合(ログインしていなければ)falseを返す
-			return false;
-		}
-		return $this->cancels->contains(function($user) { //LaravelのコレクションメソッドでログインユーザーのIDと合致する商品キャンセルが含まれるか調べる
-			return $user->id === Auth::user()->id; //一致したらtrueを返す
-		});
-	}
-	/**
-	 * アクセサ - is_canceled
-	 * @return boolean
-	 */
-	public function getIsCanceledAttribute() //商品がキャンセルされているかどうかを真偽値で返すアクセサ
-	{
-		return ($this->cancels->count()) ? true : false; //historiesテーブルにカウントがある(=購入されている)のでtrueを返す
-	}
-	/**
-	 * アクセサ - cancels_count
-	 * @return int
-	 */
-	public function getCancelsCountAttribute() //キャンセル数を取得するアクセサ
-	{
-		return $this->cancels->count();
-	}
+//	/**
+//	 * アクセサ - canceled_by_user
+//	 * @return boolean
+//	 */
+//	public function getCanceledByUserAttribute() //リクエストしたユーザーがキャンセルしたかどうかを取得するアクセサ
+//	{
+//		if(Auth::guest() ) { //ユーザーがゲストの場合(ログインしていなければ)falseを返す
+//			return false;
+//		}
+//		return $this->cancels->contains(function($user) { //LaravelのコレクションメソッドでログインユーザーのIDと合致する商品キャンセルが含まれるか調べる
+//			return $user->id === Auth::user()->id; //一致したらtrueを返す
+//		});
+//	}
+//	/**
+//	 * アクセサ - is_canceled
+//	 * @return boolean
+//	 */
+//	public function getIsCanceledAttribute() //商品がキャンセルされているかどうかを真偽値で返すアクセサ
+//	{
+//		return ($this->cancels->count()) ? true : false; //historiesテーブルにカウントがある(=購入されている)のでtrueを返す
+//	}
+//	/**
+//	 * アクセサ - cancels_count
+//	 * @return int
+//	 */
+//	public function getCancelsCountAttribute() //キャンセル数を取得するアクセサ
+//	{
+//		return $this->cancels->count();
+//	}
 
 	//======================================================
 	//リレーション
@@ -187,14 +194,14 @@ class Product extends Model
 		//created_atおよびupdated_atカラムを更新させるための指定の仕方
 	}
 
-	public function histories() //購入履歴テーブル
+
+	public function history() //購入履歴テーブル
 	{
-		return $this->belongsToMany('App\User', 'histories')
-					->withTimestamps();
+		return $this->hasOne('App\History');
 	}
 
 	public function cancels() //購入キャンセルテーブル
 	{
-		return $this->belongsToMany('App\User', 'cancels')->withTimestamps();
+		return $this->hasMany('App\User', 'cancels');
 	}
 }

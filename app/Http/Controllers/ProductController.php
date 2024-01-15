@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\History;
 use App\Http\Requests\StoreProduct;
 use App\Http\Requests\UpdateProduct;
 use App\Mail\CanceledBuyerNotification;
@@ -9,6 +10,7 @@ use App\Mail\CanceledSellerNotification;
 use App\Mail\PurchasedBuyerNotification;
 use App\Mail\PurchasedSellerNotification;
 use App\Product;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,12 +22,12 @@ class ProductController extends Controller
 	public function __construct()
 	{
 		$this->middleware('auth')
-			 ->except(['index', 'show']); //認証なしでアクセスしたいAPIはexceptに書く
+			 ->except(['index', 'show', 'ranking']); //認証なしでアクセスしたいAPIはexceptに書く
 	}
 
 	public function index() //商品一覧取得
 	{
-		$products = Product::with(['user', 'category', 'likes', 'histories', 'cancels'])
+		$products = Product::with(['user', 'category', 'likes', 'history'])
 						   ->orderByDesc('created_at')
 						   ->paginate(); //get()の代わりにpaginateを使うとtotalやcurrent_pageが自動的に追加される
 		return $products;
@@ -44,7 +46,7 @@ class ProductController extends Controller
 	 */
 	public function show(string $id) //商品情報取得
 	{
-		$product = Product::with(['user', 'category', 'likes', 'histories'])
+		$product = Product::with(['user', 'category', 'likes', 'history'])
 						  ->find($id);
 		return $product ?? abort(404); //商品が見つからなかったら404を返す
 	}
@@ -135,20 +137,26 @@ class ProductController extends Controller
 
 	public function purchase(Request $request, string $id) //商品購入
 	{
-		$product      = Product::with('histories')->find($id); //購入する商品の情報をDBから取得
-		$buyer_email  = Auth::user()->email;                           //買い手のメールアドレス
-		$seller_email = $product->email;                               //売り手のメールアドレス
+		$buyer        = Auth::user();
+		$seller       = User::find($request->user_id);
+		$buyer_email  = $buyer->email;
+		$seller_email = $seller->email;
 
-		if(!$product || !$buyer_email || !$seller_email) { //変数が一つでも空だったら
+		if(!$buyer_email || !$seller_email) { //変数が一つでも空だったら
 			abort(404);
 		}
 
-		$product->histories()->attach(Auth::user()->id); //historiesテーブルにデータを追加する
+		$history = new History;
+
+		$history->buyer_id   = $buyer->id;
+		$history->seller_id  = $seller->id;
+		$history->product_id = $id;
+		$history->save();
 
 		$params = [ //メール送信に必要な情報を用意
 			'product_id'   => $request->id,
-			'user_name'    => Auth::user()->name,
-			'shop_name'    => $product->user_name,
+			'user_name'    => $buyer->name,
+			'shop_name'    => $seller->name,
 			'product_name' => $request->name,
 			'detail'       => $request->detail,
 			'price'        => $request->price,
@@ -158,8 +166,36 @@ class ProductController extends Controller
 		Mail::to($buyer_email)->send(new PurchasedBuyerNotification($params));   //買い手にメールを送信
 		Mail::to($seller_email)->send(new PurchasedSellerNotification($params)); //売り手にメールを送信
 
-		return response($product, 200);
+		return response(['product_id' => $id], 200);
 	}
+
+//	public function purchase(Request $request, string $id) //商品購入
+//	{
+//		$product      = Product::with('histories')->find($id); //購入する商品の情報をDBから取得
+//		$buyer_email  = Auth::user()->email;                           //買い手のメールアドレス
+//		$seller_email = $product->email;                               //売り手のメールアドレス
+//
+//		if(!$product || !$buyer_email || !$seller_email) { //変数が一つでも空だったら
+//			abort(404);
+//		}
+//
+//		$product->histories()->attach(Auth::user()->id); //historiesテーブルにデータを追加する
+//
+//		$params = [ //メール送信に必要な情報を用意
+//			'product_id'   => $request->id,
+//			'user_name'    => Auth::user()->name,
+//			'shop_name'    => $product->user_name,
+//			'product_name' => $request->name,
+//			'detail'       => $request->detail,
+//			'price'        => $request->price,
+//			'expire'       => $request->expire,
+//			'purchased_at' => Carbon::now(),
+//		];
+//		Mail::to($buyer_email)->send(new PurchasedBuyerNotification($params));   //買い手にメールを送信
+//		Mail::to($seller_email)->send(new PurchasedSellerNotification($params)); //売り手にメールを送信
+//
+//		return response($product, 200);
+//	}
 
 	public function cancel(Request $request, string $id) //購入キャンセル
 	{

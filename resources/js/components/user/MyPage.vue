@@ -312,11 +312,11 @@ export default {
 			loading: false,           //ローディング
 			likedProducts: {},        //お気に入りした商品
 			purchasedProducts: {},    //購入した商品
+			wasPurchasedProducts: {}, //購入された商品
 			canceledProducts: {},     //キャンセルした商品
+			wasCanceledProducts: {},  //キャンセルされた商品
 			reviewedShopUsers: {},    //出品者へのレビュー（利用者）
 			postedProducts: {},       //出品した商品
-			wasPurchasedProducts: {}, //購入された商品
-			wasCanceledProducts: {},  //キャンセルされた商品
 			reviewedUsers: {}         //購入者へのレビュー（コンビニ）
 		}
 	},
@@ -330,44 +330,50 @@ export default {
 			this.loading   = true; //ローディングを表示する
 			const response = await axios.get(`/api/mypage/${this.id}/liked`);
 			this.loading   = false; //API通信が終わったらローディングを非表示にする
-			
+		
 			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
 				this.$store.commit('error/setCode', response.status);
 				return false; //後続の処理を抜ける
 			}
 			this.likedProducts = response.data; //responseデータをプロパティに代入
+			console.log('お気に入りした商品一覧');
+			console.log(response.data);
 		},
 		async getPurchasedProducts() { //購入した商品(利用者)
 			this.loading   = true; //ローディングを表示する
 			const response = await axios.get(`/api/mypage/${this.id}/purchased`);
 			this.loading   = false; //API通信が終わったらローディングを非表示にする
 			
-			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
-				this.$store.commit('error/setCode', response.status);
-				return false; //後続の処理を抜ける
-			}
+			// if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
+			// 	this.$store.commit('error/setCode', response.status);
+			// 	return false; //後続の処理を抜ける
+			// }
 			this.purchasedProducts = response.data; //responseデータをプロパティに代入
+			console.log('購入した商品一覧');
+			console.log(response.data);
 		},
 		async getCanceledProducts() { //キャンセルした商品(利用者)
 			this.loading   = true; //ローディングを表示する
 			const response = await axios.get(`/api/mypage/${this.id}/canceled`);
 			this.loading   = false; //API通信が終わったらローディングを非表示にする
 			
-			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
-				this.$store.commit('error/setCode', response.status);
-				return false; //後続の処理を抜ける
-			}
+			// if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
+			// 	this.$store.commit('error/setCode', response.status);
+			// 	return false; //後続の処理を抜ける
+			// }
 			this.canceledProducts = response.data; //responseデータをプロパティに代入
+			console.log('キャンセルした商品');
+			console.log(response.data);
 		},
 		async getReviewedShopUsers() { //レビューした出品者(利用者)
 			this.loading   = true; //ローディングを表示する
 			const response = await axios.get(`/api/mypage/${this.id}/reviewedShopUser`);
 			this.loading   = false; //API通信が終わったらローディングを非表示にする
 			
-			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
-				this.$store.commit('error/setCode', response.status);
-				return false; //後続の処理を抜ける
-			}
+			// if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
+			// 	this.$store.commit('error/setCode', response.status);
+			// 	return false; //後続の処理を抜ける
+			// }
 			this.reviewedShopUsers = response.data; //responseデータをプロパティに代入
 		},
 		async getPostedProducts() { //投稿した商品(コンビニユーザー)
@@ -375,10 +381,10 @@ export default {
 			const response = await axios.get(`/api/mypage/${this.id}/posted`);
 			this.loading   = false; //API通信が終わったらローディングを非表示にする
 			
-			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
-				this.$store.commit('error/setCode', response.status);
-				return false; //後続の処理を抜ける
-			}
+			// if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
+			// 	this.$store.commit('error/setCode', response.status);
+			// 	return false; //後続の処理を抜ける
+			// }
 			this.postedProducts = response.data; //responseデータをプロパティに代入
 		},
 		async getWasPurchasedProducts() { //購入された商品(コンビニユーザー)
@@ -386,23 +392,30 @@ export default {
 			const response = await axios.get(`/api/mypage/${this.id}/wasPurchased`);
 			this.loading   = false; //API通信が終わったらローディングを非表示にする
 			
-			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
-				this.$store.commit('error/setCode', response.status);
-				return false; //後続の処理を抜ける
-			}
+			// if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
+			// 	this.$store.commit('error/setCode', response.status);
+			// 	return false; //後続の処理を抜ける
+			// }
 			this.wasPurchasedProducts = response.data; //responseデータをプロパティに代入
+			console.log('購入された記事');
 			console.log(this.wasPurchasedProducts);
 		},
 	},
 	watch: {
 		$route: { //$routerを監視してページが変わったときにメソッドが実行されるようにする
 			async handler() {
-				await this.getLikedProducts();
-				await this.getPurchasedProducts();
+				this.isShopUser ? await this.getWasPurchasedProducts() : await this.getPurchasedProducts();
+				if(!this.isShopUser) await this.getLikedProducts();
 				await this.getCanceledProducts();
 				await this.getReviewedShopUsers();
 				await this.getPostedProducts();
-				await this.getWasPurchasedProducts();
+				
+				// await this.getLikedProducts();
+				// await this.getPurchasedProducts();
+				// await this.getCanceledProducts();
+				// await this.getReviewedShopUsers();
+				// await this.getPostedProducts();
+				// await this.getWasPurchasedProducts();
 			},
 			immediate: true //immediateをtrueにすると、コンポーネントが生成されたタイミングでも実行する
 		}

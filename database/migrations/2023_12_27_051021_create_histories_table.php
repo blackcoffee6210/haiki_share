@@ -15,11 +15,13 @@ class CreateHistoriesTable extends Migration
     {
         Schema::create('histories', function (Blueprint $table) {
 	        $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id');    //ユーザーid
+            $table->unsignedBigInteger('buyer_id');   //購入したユーザーid（利用者）
+            $table->unsignedBigInteger('seller_id');  //出品ユーザーid（コンビニ）
             $table->unsignedBigInteger('product_id'); //商品id
             $table->timestamps();
 
-	        $table->foreign('user_id')->references('id')->on('users');       //外部キー
+	        $table->foreign('buyer_id')->references('id')->on('users');      //外部キー
+	        $table->foreign('seller_id')->references('id')->on('users');     //外部キー
 	        $table->foreign('product_id')->references('id')->on('products'); //外部キー
         });
     }

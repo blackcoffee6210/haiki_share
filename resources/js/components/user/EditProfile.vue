@@ -18,7 +18,7 @@
 							<label class="p-edit-profile__label-img"
 										 :class="{ 'p-edit-profile__label-img__err': errors.image }">
 								<input type="file"
-											 class="p-edit-profile__img u-d-none"
+											 class="p-edit-profile__img"
 											 @change="onFileChange">
 								<output class="p-edit-profile__output"
 												v-if="preview">
@@ -29,7 +29,8 @@
 								<img :src="user.image"
 										 v-if="!preview"
 										 alt=""
-										 class="p-edit-profile__img">
+										 class="p-edit-profile__img"
+										 :class="{ 'p-edit-profile__hasImg': user.image }">
 							</label>
 							<div class="p-edit-profile__img-text"
 									 v-if="!preview">プロフィール画像を設定する
@@ -62,6 +63,9 @@
 									 class="p-error">{{ msg }}
 							</div>
 						</div>
+						
+						<!-- 都道府県が変わることは考えにくいので、プロフィール編集画面には含めない -->
+						<!-- 都道府県が変わるコンビニユーザーは再登録する -->
 						
 						<!-- 支店名	-->
 						<div v-if="isShopUser">
@@ -262,18 +266,18 @@ export default {
 			
 			this.loading = false; //API通信が終わったらローディングを非表示にする
 			
-			if(response.status === UNPROCESSABLE_ENTITY) {　//responseステータスがバリデーションエラーならエラーメッセージをセット
-				this.errors = response.data.errors;　//レスポンスのエラーメッセージを格納する
+			if(response.status === UNPROCESSABLE_ENTITY) { //responseステータスがバリデーションエラーならエラーメッセージをセット
+				this.errors = response.data.errors; //レスポンスのエラーメッセージを格納する
 				return false;
 			}
 			this.reset(); //送信が完了したら入力値をクリアする
 			
-			if(response.status !== OK) {　//responseステータスがOKじゃなかったらエラーコードをセット
+			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
 				this.$store.commit('error/setCode', response.status);
 				return false;
 			}
 			
-			this.$store.commit('message/setContent', {　//メッセージ登録
+			this.$store.commit('message/setContent', { //メッセージ登録
 				content: 'プロフィールを更新しました！',
 			})
 			

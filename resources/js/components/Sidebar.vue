@@ -9,6 +9,18 @@
 									  			params: { id: id.toString() }}">マイページ
 			</router-link>
 			
+			<!-- プロフィール編集	-->
+			<router-link class="p-sidebar__link"
+									 :to="{ name: 'user.editProfile',
+									  			params: { id: id.toString() }}" >プロフィール編集
+			</router-link>
+			
+			<!-- パスワード変更 -->
+			<router-link class="p-sidebar__link"
+									 :to="{ name: 'user.editPassword',
+									  			params: { id: id.toString() }}" >パスワード変更
+			</router-link>
+			
 			<!-- 出品する	-->
 			<router-link class="p-sidebar__link"
 									 v-if="isShopUser"
@@ -21,18 +33,6 @@
 									 v-if="isShopUser"
 									 :to="{ name: 'user.posted',
 									  			params: { id: id.toString() }}" >出品した商品一覧
-			</router-link>
-			
-			<!-- プロフィール編集	-->
-			<router-link class="p-sidebar__link"
-									 :to="{ name: 'user.editProfile',
-									  			params: { id: id.toString() }}" >プロフィール編集
-			</router-link>
-			
-			<!-- パスワード変更 -->
-			<router-link class="p-sidebar__link"
-									 :to="{ name: 'user.editPassword',
-									  			params: { id: id.toString() }}" >パスワード変更
 			</router-link>
 			
 			<!-- いいねした商品一覧 -->
@@ -66,9 +66,11 @@
 				<span v-show="!isShopUser">レビューしたユーザー一覧</span>
 			</router-link>
 
+			<!-- ログアウト -->
 			<button class="p-sidebar__link"
 							@click="logout">ログアウト
 			</button>
+			
 			<!-- 退会 -->
 			<!--todo: 退会処理実装-->
 			<a class="p-sidebar__link" href="">退会する</a>

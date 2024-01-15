@@ -109,17 +109,11 @@
 					<!--			 class="c-input p-product-form__input"-->
 					<!--			 :class="{ 'c-input__err': errors.expire }"-->
 					<!--			 id="expire_date"-->
+					<!--			 readonly-->
 					<!--			 :min="tomorrow"-->
 					<!--			 :max="maxDate"-->
 					<!--			 placeholder="本日以降の日付を選択してください"-->
 					<!--			 v-model="product.expire">-->
-					<!--&lt;!&ndash; エラーメッセージ	&ndash;&gt;-->
-					<!--<div v-if="errors">-->
-					<!--	<div v-for="msg in errors.expire"-->
-					<!--			 :key="msg"-->
-					<!--			 class="p-error">{{ msg }}-->
-					<!--	</div>-->
-					<!--</div>-->
 					
 					<!-- 金額	-->
 					<label for="price"
@@ -284,11 +278,6 @@ export default {
 													params: { id: this.id.toString() }}); //商品詳細ページへ移動する
 		},
 		async deleteProduct() { //商品の削除
-			if(this.product.is_purchased) { //この記事が購入されていたらボタンを押せなくする
-				alert('ユーザーに購入された記事は削除できません');
-				return false;
-			}
-			
 			if(confirm('商品を削除しますか?')) {
 				this.loading = true; //ローティングを表示する
 				

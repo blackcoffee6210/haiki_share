@@ -57,8 +57,8 @@ class RegisterController extends Controller
 				    'name'                  => ['required', 'string', 'max:255'],
 				    'email'                 => ['required', 'string', 'email:filter', 'max:255',
 					                             Rule::unique('users', 'email')->whereNull('deleted_at')],
-				    'password'              => ['required', 'string', 'min:8', 'confirmed'],
-				    'password_confirmation' => ['required', 'string', 'min:8'],
+				    'password'              => ['required', 'string', 'min:8', 'max:255', 'confirmed'],
+				    'password_confirmation' => ['required', 'string', 'min:8', 'max:255'],
 			    ]);
 		    case 2: //groupが2であれば「コンビニの人」なので、以下のバリデーションを実行
 			    return Validator::make($data, [
@@ -69,8 +69,8 @@ class RegisterController extends Controller
 				    'prefecture_id'         => ['required', 'integer'],
 				    'email'                 => ['required',  'string', 'email:filter', 'max:255',
 					                             Rule::unique('users', 'email')->whereNull('deleted_at')],
-				    'password'              => ['required', 'string', 'min:8', 'confirmed'],
-				    'password_confirmation' => ['required', 'string', 'min:8']
+				    'password'              => ['required', 'string', 'min:8', 'max:255', 'confirmed'],
+				    'password_confirmation' => ['required', 'string', 'min:8', 'max:255']
 			    ]);
 	    }
     }

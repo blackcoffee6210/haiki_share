@@ -2,7 +2,7 @@
 	<div class="l-main">
 		<main class="l-main__2column">
 			<div class="p-list">
-				<h2 class="c-title p-list__title">お気に入り一覧</h2>
+				<h2 class="c-title p-list__title">お気に入りした商品一覧</h2>
 				
 				<!-- ローディング -->
 				<Loading v-show="loading" />

@@ -17426,34 +17426,26 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         return _regeneratorRuntime().wrap(function _callee4$(_context4) {
           while (1) switch (_context4.prev = _context4.next) {
             case 0:
-              if (!_this5.product.is_purchased) {
-                _context4.next = 3;
-                break;
-              }
-              //この記事が購入されていたらボタンを押せなくする
-              alert('ユーザーに購入された記事は削除できません');
-              return _context4.abrupt("return", false);
-            case 3:
               if (!confirm('商品を削除しますか?')) {
-                _context4.next = 14;
+                _context4.next = 11;
                 break;
               }
               _this5.loading = true; //ローティングを表示する
-              _context4.next = 7;
+              _context4.next = 4;
               return axios["delete"]("/api/products/".concat(_this5.id));
-            case 7:
+            case 4:
               response = _context4.sent;
               //API通信
 
               _this5.loading = false; //API通信が終わったらローディングを非表示にする
               if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_2__["OK"])) {
-                _context4.next = 12;
+                _context4.next = 9;
                 break;
               }
               //responseステータスがOKじゃなかったらエラーコードをセット
               _this5.$store.commit('error/setCode', response.status);
               return _context4.abrupt("return", false);
-            case 12:
+            case 9:
               _this5.$store.commit('message/setContent', {
                 //メッセージ登録
                 content: '商品を削除しました'
@@ -17464,7 +17456,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
                   id: _this5.userId.toString()
                 }
               }); //マイページに移動する
-            case 14:
+            case 11:
             case "end":
               return _context4.stop();
           }
@@ -17611,16 +17603,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               return axios.get('/api/products/ranking');
             case 2:
               response = _context.sent;
-              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_3__["OK"])) {
-                _context.next = 6;
-                break;
-              }
-              _this.$store.commit('error/setCode', response.status);
-              return _context.abrupt("return", false);
-            case 6:
+              // todo: コメントアウト直す
+              // if(response.status !== OK) {
+              // 	this.$store.commit('error/setCode', response.status);
+              // 	return false;
+              // }
               _this.recommendProducts = response.data;
+              console.log('getRecommendの中身');
               console.log(response.data);
-            case 8:
+            case 6:
             case "end":
               return _context.stop();
           }
@@ -17647,7 +17638,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               return _context2.abrupt("return", false);
             case 6:
               _this2.categories = response.data; //プロパティにresponseデータを代入
-            case 7:
+              console.log('getCategoriesの中身');
+              console.log(response.data);
+            case 9:
             case "end":
               return _context2.stop();
           }
@@ -17670,21 +17663,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               //API接続
 
               _this3.loading = false; //API通信が終わったらローディングを非表示にする
-              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_3__["OK"])) {
-                _context3.next = 8;
-                break;
-              }
-              //responseステータスがOKじゃなかったらエラーコードをセットする
-              _this3.$store.commit('error/setCode', response.status);
-              return _context3.abrupt("return", false);
-            case 8:
+
+              // todo: コメントアウト直す
+              // if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
+              // 	this.$store.commit('error/setCode', response.status);
+              // 	return false;
+              // }
               //response.dataだとレスポンスのJSONの取得になる
               //productはresponse.data.dataの中になるので、下記のような書き方になる
               _this3.products = response.data.data; //商品情報
               _this3.currentPage = response.data.current_page; //現在のページ
               _this3.lastPage = response.data.last_page; //最後のページ
               _this3.total = response.data.total; //商品の数
-            case 12:
+              console.log('getProductsの中身');
+              console.log(response.data.data);
+            case 11:
             case "end":
               return _context3.stop();
           }
@@ -17828,11 +17821,13 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               return _context.abrupt("return", false);
             case 6:
               _this.product = response.data; //responseデータをproductプロパティに代入
+              console.log('getProductの中身');
+              console.log(response.data);
               if (_this.product.liked_by_user) {
                 //ログインユーザーが既に「いいね」を押していたらtrueをセット
                 _this.isLike = true;
               }
-            case 8:
+            case 10:
             case "end":
               return _context.stop();
           }
@@ -19434,16 +19429,16 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       //お気に入りした商品
       purchasedProducts: {},
       //購入した商品
+      wasPurchasedProducts: {},
+      //購入された商品
       canceledProducts: {},
       //キャンセルした商品
+      wasCanceledProducts: {},
+      //キャンセルされた商品
       reviewedShopUsers: {},
       //出品者へのレビュー（利用者）
       postedProducts: {},
       //出品した商品
-      wasPurchasedProducts: {},
-      //購入された商品
-      wasCanceledProducts: {},
-      //キャンセルされた商品
       reviewedUsers: {} //購入者へのレビュー（コンビニ）
     };
   },
@@ -19474,7 +19469,9 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               return _context.abrupt("return", false);
             case 8:
               _this.likedProducts = response.data; //responseデータをプロパティに代入
-            case 9:
+              console.log('お気に入りした商品一覧');
+              console.log(response.data);
+            case 11:
             case "end":
               return _context.stop();
           }
@@ -19495,16 +19492,15 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
             case 3:
               response = _context2.sent;
               _this2.loading = false; //API通信が終わったらローディングを非表示にする
-              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_4__["OK"])) {
-                _context2.next = 8;
-                break;
-              }
-              //responseステータスがOKじゃなかったらエラーコードをセットする
-              _this2.$store.commit('error/setCode', response.status);
-              return _context2.abrupt("return", false);
-            case 8:
+
+              // if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
+              // 	this.$store.commit('error/setCode', response.status);
+              // 	return false; //後続の処理を抜ける
+              // }
               _this2.purchasedProducts = response.data; //responseデータをプロパティに代入
-            case 9:
+              console.log('購入した商品一覧');
+              console.log(response.data);
+            case 8:
             case "end":
               return _context2.stop();
           }
@@ -19525,16 +19521,15 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
             case 3:
               response = _context3.sent;
               _this3.loading = false; //API通信が終わったらローディングを非表示にする
-              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_4__["OK"])) {
-                _context3.next = 8;
-                break;
-              }
-              //responseステータスがOKじゃなかったらエラーコードをセットする
-              _this3.$store.commit('error/setCode', response.status);
-              return _context3.abrupt("return", false);
-            case 8:
+
+              // if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
+              // 	this.$store.commit('error/setCode', response.status);
+              // 	return false; //後続の処理を抜ける
+              // }
               _this3.canceledProducts = response.data; //responseデータをプロパティに代入
-            case 9:
+              console.log('キャンセルした商品');
+              console.log(response.data);
+            case 8:
             case "end":
               return _context3.stop();
           }
@@ -19555,16 +19550,13 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
             case 3:
               response = _context4.sent;
               _this4.loading = false; //API通信が終わったらローディングを非表示にする
-              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_4__["OK"])) {
-                _context4.next = 8;
-                break;
-              }
-              //responseステータスがOKじゃなかったらエラーコードをセットする
-              _this4.$store.commit('error/setCode', response.status);
-              return _context4.abrupt("return", false);
-            case 8:
+
+              // if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
+              // 	this.$store.commit('error/setCode', response.status);
+              // 	return false; //後続の処理を抜ける
+              // }
               _this4.reviewedShopUsers = response.data; //responseデータをプロパティに代入
-            case 9:
+            case 6:
             case "end":
               return _context4.stop();
           }
@@ -19585,16 +19577,13 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
             case 3:
               response = _context5.sent;
               _this5.loading = false; //API通信が終わったらローディングを非表示にする
-              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_4__["OK"])) {
-                _context5.next = 8;
-                break;
-              }
-              //responseステータスがOKじゃなかったらエラーコードをセットする
-              _this5.$store.commit('error/setCode', response.status);
-              return _context5.abrupt("return", false);
-            case 8:
+
+              // if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
+              // 	this.$store.commit('error/setCode', response.status);
+              // 	return false; //後続の処理を抜ける
+              // }
               _this5.postedProducts = response.data; //responseデータをプロパティに代入
-            case 9:
+            case 6:
             case "end":
               return _context5.stop();
           }
@@ -19615,17 +19604,15 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
             case 3:
               response = _context6.sent;
               _this6.loading = false; //API通信が終わったらローディングを非表示にする
-              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_4__["OK"])) {
-                _context6.next = 8;
-                break;
-              }
-              //responseステータスがOKじゃなかったらエラーコードをセットする
-              _this6.$store.commit('error/setCode', response.status);
-              return _context6.abrupt("return", false);
-            case 8:
+
+              // if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
+              // 	this.$store.commit('error/setCode', response.status);
+              // 	return false; //後続の処理を抜ける
+              // }
               _this6.wasPurchasedProducts = response.data; //responseデータをプロパティに代入
+              console.log('購入された記事');
               console.log(_this6.wasPurchasedProducts);
-            case 10:
+            case 8:
             case "end":
               return _context6.stop();
           }
@@ -19642,24 +19629,35 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           return _regeneratorRuntime().wrap(function _callee7$(_context7) {
             while (1) switch (_context7.prev = _context7.next) {
               case 0:
-                _context7.next = 2;
-                return _this7.getLikedProducts();
-              case 2:
-                _context7.next = 4;
+                if (!_this7.isShopUser) {
+                  _context7.next = 5;
+                  break;
+                }
+                _context7.next = 3;
+                return _this7.getWasPurchasedProducts();
+              case 3:
+                _context7.next = 7;
+                break;
+              case 5:
+                _context7.next = 7;
                 return _this7.getPurchasedProducts();
-              case 4:
-                _context7.next = 6;
-                return _this7.getCanceledProducts();
-              case 6:
-                _context7.next = 8;
-                return _this7.getReviewedShopUsers();
-              case 8:
+              case 7:
+                if (_this7.isShopUser) {
+                  _context7.next = 10;
+                  break;
+                }
                 _context7.next = 10;
-                return _this7.getPostedProducts();
+                return _this7.getLikedProducts();
               case 10:
                 _context7.next = 12;
-                return _this7.getWasPurchasedProducts();
+                return _this7.getCanceledProducts();
               case 12:
+                _context7.next = 14;
+                return _this7.getReviewedShopUsers();
+              case 14:
+                _context7.next = 16;
+                return _this7.getPostedProducts();
+              case 16:
               case "end":
                 return _context7.stop();
             }
@@ -20398,27 +20396,7 @@ var render = function render() {
         }
       }
     }
-  }, [_vm._v("マイページ\n\t\t")]), _vm._v(" "), _vm.isShopUser ? _c("router-link", {
-    staticClass: "p-sidebar__link",
-    attrs: {
-      to: {
-        name: "product.register",
-        params: {
-          id: _vm.id.toString()
-        }
-      }
-    }
-  }, [_vm._v("出品する\n\t\t")]) : _vm._e(), _vm._v(" "), _vm.isShopUser ? _c("router-link", {
-    staticClass: "p-sidebar__link",
-    attrs: {
-      to: {
-        name: "user.posted",
-        params: {
-          id: _vm.id.toString()
-        }
-      }
-    }
-  }, [_vm._v("出品した商品一覧\n\t\t")]) : _vm._e(), _vm._v(" "), _c("router-link", {
+  }, [_vm._v("マイページ\n\t\t")]), _vm._v(" "), _c("router-link", {
     staticClass: "p-sidebar__link",
     attrs: {
       to: {
@@ -20438,7 +20416,27 @@ var render = function render() {
         }
       }
     }
-  }, [_vm._v("パスワード変更\n\t\t")]), _vm._v(" "), !_vm.isShopUser ? _c("router-link", {
+  }, [_vm._v("パスワード変更\n\t\t")]), _vm._v(" "), _vm.isShopUser ? _c("router-link", {
+    staticClass: "p-sidebar__link",
+    attrs: {
+      to: {
+        name: "product.register",
+        params: {
+          id: _vm.id.toString()
+        }
+      }
+    }
+  }, [_vm._v("出品する\n\t\t")]) : _vm._e(), _vm._v(" "), _vm.isShopUser ? _c("router-link", {
+    staticClass: "p-sidebar__link",
+    attrs: {
+      to: {
+        name: "user.posted",
+        params: {
+          id: _vm.id.toString()
+        }
+      }
+    }
+  }, [_vm._v("出品した商品一覧\n\t\t")]) : _vm._e(), _vm._v(" "), !_vm.isShopUser ? _c("router-link", {
     staticClass: "p-sidebar__link",
     attrs: {
       to: {
@@ -23904,7 +23902,7 @@ var render = function render() {
       "p-edit-profile__label-img__err": _vm.errors.image
     }
   }, [_c("input", {
-    staticClass: "p-edit-profile__img u-d-none",
+    staticClass: "p-edit-profile__img",
     attrs: {
       type: "file"
     },
@@ -23921,6 +23919,9 @@ var render = function render() {
     }
   })]) : _vm._e(), _vm._v(" "), !_vm.preview ? _c("img", {
     staticClass: "p-edit-profile__img",
+    "class": {
+      "p-edit-profile__hasImg": _vm.user.image
+    },
     attrs: {
       src: _vm.user.image,
       alt: ""
@@ -24169,7 +24170,7 @@ var render = function render() {
     staticClass: "p-list"
   }, [_c("h2", {
     staticClass: "c-title p-list__title"
-  }, [_vm._v("お気に入り一覧")]), _vm._v(" "), _c("Loading", {
+  }, [_vm._v("お気に入りした商品一覧")]), _vm._v(" "), _c("Loading", {
     directives: [{
       name: "show",
       rawName: "v-show",
@@ -72635,15 +72636,14 @@ __webpack_require__.r(__webpack_exports__);
 /*!***************************************************!*\
   !*** ./resources/js/components/user/Reviewed.vue ***!
   \***************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Reviewed_vue_vue_type_template_id_23441bc0__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Reviewed.vue?vue&type=template&id=23441bc0 */ "./resources/js/components/user/Reviewed.vue?vue&type=template&id=23441bc0");
 /* harmony import */ var _Reviewed_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Reviewed.vue?vue&type=script&lang=js */ "./resources/js/components/user/Reviewed.vue?vue&type=script&lang=js");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _Reviewed_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _Reviewed_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -72673,7 +72673,7 @@ component.options.__file = "resources/js/components/user/Reviewed.vue"
 /*!***************************************************************************!*\
   !*** ./resources/js/components/user/Reviewed.vue?vue&type=script&lang=js ***!
   \***************************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

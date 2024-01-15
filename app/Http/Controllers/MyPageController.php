@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\History;
 use App\Product;
 use App\User;
 use Illuminate\Http\Request;
@@ -25,11 +26,17 @@ class MyPageController extends Controller
 
 	public function purchased(string $id) //購入した商品を5件取得
 	{
-		return User::find($id)
-				   ->histories()
-				   ->orderByDesc('histories.created_at')
-				   ->take(3)
-				   ->get();
+		$user = User::find($id)
+					->buyerHistories()
+					->orderByDesc('histories.created_at')
+					->take(5)
+					->get();
+		return $user;
+	}
+
+	public function wasPurchased(string $id) //購入された商品を5件取得
+	{
+
 	}
 
 	public function canceled(string $id) //キャンセルした商品を5件取得
@@ -59,22 +66,7 @@ class MyPageController extends Controller
 				   ->get();
 	}
 
-	public function wasPurchased(string $id) //購入された商品を5件取得
-	{
-		//todo: 取得できるんだけどアクセサがおかしい
-		//todo: hasManyThroughかな？
-		$products = Product::with(['user', 'category', 'likes', 'histories', 'cancels'])
-						   ->where('user_id', $id)
-						   ->where('histories.product_id', '=', 'products.id')
-						   ->take(5)
-						   ->get();
 
-//		$products = Product::with(['user', 'category', 'likes', 'histories', 'cancels'])
-//						   ->where('user_id', $id)
-//						   ->get();
-//		dd($products);
-		return $products;
-	}
 
 
 

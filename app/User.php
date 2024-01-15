@@ -69,9 +69,14 @@ class User extends Authenticatable
 		return $this->belongsToMany('App\Product', 'likes')->withTimestamps();
 	}
 
-	public function histories() //購入履歴テーブル
+	public function buyerHistories() //購入履歴テーブル（利用者）
 	{
-		return $this->belongsToMany('App\Product', 'histories')->withTimestamps();
+		return $this->hasMany('App\History', 'buyer_id');
+	}
+
+	public function sellerHistories() //購入履歴テーブル（出品者）
+	{
+		return $this->hasMany('App\History', 'seller_id');
 	}
 
 	public function cancels() //購入キャンセルテーブル
