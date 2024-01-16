@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\History;
 use App\Http\Requests\UpdatePassword;
 use App\Http\Requests\UpdateUser;
 use App\Product;
@@ -79,10 +80,13 @@ class UserController extends Controller
 
 	public function purchased(string $id) //購入した商品一覧(利用者)
 	{
-		return User::find($id)
-				   ->histories()
-				   ->orderByDesc('histories.created_at')
-				   ->get();
+//		return History::with('product')
+//					  ->where('buyer_id', $id)
+//					  ->get();
+		$products = Product::whereHas('history', function($q) {
+						$q->where('buyer_id', Auth::id());
+					})->get();
+		return $products;
 	}
 
 	public function wasPurchased(string $id) //購入された商品一覧(コンビニ)

@@ -71,7 +71,6 @@ export default {
 		return {
 			loading: false,
 			products: {},
-			// product: {}
 		}
 	},
 	computed: {
@@ -85,11 +84,13 @@ export default {
 			const response = await axios.get(`/api/users/${this.id}/purchased`); //API通信
 			this.loading   = false; //API通信が終わったらローディングを非表示にする
 			
-			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
-				this.$store.commit('error/setCode', response.status);
-				return false;
-			}
+			// if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
+			// 	this.$store.commit('error/setCode', response.status);
+			// 	return false;
+			// }
 			this.products = response.data; //プロパティにデータをセット
+			console.log('getProductsの中身');
+			console.log(this.products);
 		},
 		async getWasPurchased() { //購入された商品一覧
 			this.loading   = true;  //ローディングを表示する

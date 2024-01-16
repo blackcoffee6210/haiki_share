@@ -90,7 +90,7 @@
 						<!-- todo: 購入後にコンビニユーザーにレビューを投稿できるようにする -->
 						<button class="c-btn p-product-detail__btn--purchase"
 										@click="purchase"
-										v-show="!isShopUser && !product.is_my_product && !product.purchased_by_user"
+										v-show="!isShopUser && !product.is_my_product && !purchasedByUser"
 										:disabled="isShopUser || product.is_my_product || product.is_purchased">
 							<span v-if="product.is_purchased">購入済み</span>
 							<span v-else>購入</span>
@@ -99,14 +99,14 @@
 						<!-- レビュー投稿ボタン -->
 						<!-- 購入したユーザーかつレビューを投稿していないときに表示 -->
 						<router-link class="c-btn p-product-detail__btn"
-												 v-show="product.purchased_by_user && !isReviewed"
+												 v-show="purchasedByUser && !isReviewed"
 												 :to="{ name: 'review.register', params: {id: id.toString() } }">レビュー投稿
 						</router-link>
 						
 						<!-- 購入キャンセルボタン	-->
 						<!-- 自分が購入した商品のときに表示 -->
 						<!--todo: 購入から3日以内または賞味期限1日前まではキャンセル可能-->
-						<button v-show="product.purchased_by_user"
+						<button v-show="purchasedByUser"
 										@click="cancel"
 										class="c-btn c-btn--white p-product-detail__btn">購入キャンセル
 						</button>
@@ -121,7 +121,8 @@
 				
 				<!-- twitterシェアボタン -->
 				<!-- 自分の商品のときは表示しない -->
-				<div class="p-product-detail__twitter-container" v-show="!product.is_my_product">
+				<div class="p-product-detail__twitter-container"
+						 v-show="!product.is_my_product">
 					<social-sharing url="http://127.0.0.1:8001/products/48"
 													title="vue-social-sharingのテスト"
 													quote="Vue is a progressive framework for building user interfaces."
@@ -171,7 +172,8 @@ export default {
 			buttonActive: false, //TOPボタンを表示する
 			scroll: 0,           //scroll
 			loading: false,      //ローディングを表示するかどうかを判定するプロパティ
-			isReviewed: false
+			isReviewed: false,
+			purchasedByUser: false
 		}
 	},
 	computed: {
@@ -182,6 +184,10 @@ export default {
 		})
 	},
 	methods: {
+		async getPurchasedByUser() {
+			const response = await axios.get(`/api/products/${this.id}/purchasedByUser`);
+			(response.data[0]) ? this.purchasedByUser = true : this.purchasedByUser = false;
+		},
 		async getProduct() { //商品詳細情報取得
 			const response = await axios.get(`/api/products/${this.id}`);
 			
@@ -270,10 +276,10 @@ export default {
 			}
 		},
 		async cancel() { //購入キャンセル
-			if(confirm('購入をキャンセルしますか？')) {
+			if(confirm('購入をキャンセルしますか？(キャンセルした商品は再度購入できません)')) {
 				this.loading = true; //ローディングを表示する
 				
-				const response = await axios.post(`/api/products/${this.product.id}/cancel`, this.product); //API通信
+				const response = await axios.post(`/api/products/${this.id}/cancel`, this.product); //API通信
 				
 				this.loading = false; //API通信が終わったらローディングを非表示にする
 				
@@ -322,6 +328,7 @@ export default {
 	watch: {
 		$route: {
 			async handler() {
+				await this.getPurchasedByUser();
 				await this.getProduct();
 				await this.getMyReview();
 			},

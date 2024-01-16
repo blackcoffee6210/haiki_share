@@ -81,6 +81,7 @@ export default {
 				return false;
 			}
 			this.products = response.data; //プロパティにデータをセット
+			console.log(response.data);
 		},
 		async unlike(product) { //お気に入りを削除する
 			this.product = product; //引数の値をプロパティにセット

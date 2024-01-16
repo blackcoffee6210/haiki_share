@@ -11,7 +11,7 @@ class Product extends Model
 	use SoftDeletes; //ソフトデリート
 
 	protected $fillable = [
-		'user_id', 'category_id', 'image', 'name', 'detail',
+		'id', 'user_id', 'category_id', 'image', 'name', 'detail',
 		'price', 'expire', 'deleted_at'
 	];
 
@@ -123,13 +123,17 @@ class Product extends Model
 	}
 	/**
 	 * アクセサ - purchased_by_user
-	 * @return boolean
+//	 * @return boolean
 	 */
 	public function getPurchasedByUserAttribute() //リクエストしたユーザーが商品を購入済みかどうかを取得する
 	{
 		if(Auth::guest()) { //ユーザーがゲストの場合(ログインしていなければ)falseを返す
 			return false;
 		}
+//		$product = Product::whereHas('history', function ($q) {
+//						$q->where('buyer_id', '=', Auth::id());
+//					})->get();
+//		return $product;
 	}
 	/**
 	 * アクセサ - is_purchased

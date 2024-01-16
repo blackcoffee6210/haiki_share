@@ -6,6 +6,7 @@ use App\History;
 use App\Product;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class MyPageController extends Controller
@@ -26,12 +27,10 @@ class MyPageController extends Controller
 
 	public function purchased(string $id) //購入した商品を5件取得
 	{
-		$user = User::find($id)
-					->buyerHistories()
-					->orderByDesc('histories.created_at')
-					->take(5)
-					->get();
-		return $user;
+		$products = Product::whereHas('history', function($q) {
+						$q->where('buyer_id', '=', Auth::id());
+					})->take(3)->get();
+		return $products;
 	}
 
 	public function wasPurchased(string $id) //購入された商品を5件取得

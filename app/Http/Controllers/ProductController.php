@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Cancel;
 use App\History;
 use App\Http\Requests\StoreProduct;
 use App\Http\Requests\UpdateProduct;
@@ -169,51 +170,36 @@ class ProductController extends Controller
 		return response(['product_id' => $id], 200);
 	}
 
-//	public function purchase(Request $request, string $id) //商品購入
-//	{
-//		$product      = Product::with('histories')->find($id); //購入する商品の情報をDBから取得
-//		$buyer_email  = Auth::user()->email;                           //買い手のメールアドレス
-//		$seller_email = $product->email;                               //売り手のメールアドレス
-//
-//		if(!$product || !$buyer_email || !$seller_email) { //変数が一つでも空だったら
-//			abort(404);
-//		}
-//
-//		$product->histories()->attach(Auth::user()->id); //historiesテーブルにデータを追加する
-//
-//		$params = [ //メール送信に必要な情報を用意
-//			'product_id'   => $request->id,
-//			'user_name'    => Auth::user()->name,
-//			'shop_name'    => $product->user_name,
-//			'product_name' => $request->name,
-//			'detail'       => $request->detail,
-//			'price'        => $request->price,
-//			'expire'       => $request->expire,
-//			'purchased_at' => Carbon::now(),
-//		];
-//		Mail::to($buyer_email)->send(new PurchasedBuyerNotification($params));   //買い手にメールを送信
-//		Mail::to($seller_email)->send(new PurchasedSellerNotification($params)); //売り手にメールを送信
-//
-//		return response($product, 200);
-//	}
+	public function purchasedByUser(string $id)
+	{
+		$product = History::where('product_id', $id)
+			->where('buyer_id', Auth::id())
+			->get();
+		return $product;
+	}
 
 	public function cancel(Request $request, string $id) //購入キャンセル
 	{
-		$product      = Product::with('histories')->find($id); //テーブルから情報を取得する
 		$buyer_email  = Auth::user()->email;                           //買い手のメールアドレス
-		$seller_email = $product->email;                               //売り手のメールアドレス
+		$seller_email = $request->email;                               //売り手のメールアドレス
 
-		if(!$product || !$buyer_email || !$seller_email) { //変数が一つでも空だったら以下の処理を行う
+		if(!$buyer_email || !$seller_email) { //変数が一つでも空だったら以下の処理を行う
 			abort(404);
 		}
 
-		$product->histories()->detach(Auth::user()->id); //historiesテーブルのデータを削除する
-		$product->cancels()->attach(Auth::user()->id);   //cancelsテーブルにデータを追加する
+		History::where('product_id', $id)->delete(); //購入した商品を取得して削除
+
+
+		$cancel = new Cancel; //インスタンス生成
+		$cancel->cancel_user_id = Auth::id();
+		$cancel->post_user_id   = $request->user_id;
+		$cancel->product_id     = $id;
+		$cancel->save();
 
 		$params = [ //メール送信に必要な情報を用意
 			'product_id'   => $request->id,
 			'user_name'    => Auth::user()->name,
-			'shop_name'    => $product->user_name,
+			'shop_name'    => $request->user_name,
 			'product_name' => $request->name,
 			'detail'       => $request->detail,
 			'price'        => $request->price,
@@ -223,8 +209,36 @@ class ProductController extends Controller
 		Mail::to($buyer_email)->send(new CanceledBuyerNotification($params));   //買い手にメールを送信
 		Mail::to($seller_email)->send(new CanceledSellerNotification($params)); //売り手にメールを送信
 
-		return response($product, 200);
+		return response(['product_id', $id], 200);
 	}
+//	public function cancel(Request $request, string $id) //購入キャンセル
+//	{
+//		$product      = Product::with('histories')->find($id); //テーブルから情報を取得する
+//		$buyer_email  = Auth::user()->email;                           //買い手のメールアドレス
+//		$seller_email = $product->email;                               //売り手のメールアドレス
+//
+//		if(!$product || !$buyer_email || !$seller_email) { //変数が一つでも空だったら以下の処理を行う
+//			abort(404);
+//		}
+//
+//		$product->histories()->detach(Auth::user()->id); //historiesテーブルのデータを削除する
+//		$product->cancels()->attach(Auth::user()->id);   //cancelsテーブルにデータを追加する
+//
+//		$params = [ //メール送信に必要な情報を用意
+//			'product_id'   => $request->id,
+//			'user_name'    => Auth::user()->name,
+//			'shop_name'    => $product->user_name,
+//			'product_name' => $request->name,
+//			'detail'       => $request->detail,
+//			'price'        => $request->price,
+//			'expire'       => $request->expire,
+//			'canceled_at'  => Carbon::now()
+//		];
+//		Mail::to($buyer_email)->send(new CanceledBuyerNotification($params));   //買い手にメールを送信
+//		Mail::to($seller_email)->send(new CanceledSellerNotification($params)); //売り手にメールを送信
+//
+//		return response($product, 200);
+//	}
 
 	public function isReviewed(string $id) {
 		$review = DB::table('reviews')
