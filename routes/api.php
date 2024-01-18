@@ -15,18 +15,20 @@ Route::post('/password/reset', 'Auth\ResetPasswordController@reset')->name('pass
 //=================================================================
 // Product
 //=================================================================
-Route::get('/products',                      'ProductController@index')->name('index');      //商品一覧取得
-Route::get('/products/ranking',              'ProductController@ranking');    //お気に入りが多い５件を取得
-Route::get('/products/{id}',                 'ProductController@show')->name('product.show');       //商品情報取得
-Route::post('/products',                     'ProductController@store');      //商品登録
-Route::post('/products/{id}',                'ProductController@update');     //商品更新
-Route::delete('/products/{id}',              'ProductController@destroy');    //商品削除
-Route::post('/products/{id}/purchase',       'ProductController@purchase');   //商品購入
-Route::get('/products/{id}/purchasedByUser', 'ProductController@purchasedByUser');
-Route::post('/products/{id}/like',           'ProductController@like')->name('product.like');       //お気に入り登録 todo: LikeController作成後、切り出す
-Route::delete('/products/{id}/unlike',       'ProductController@unlike');     //お気に入り解除 todo: LikeController作成後、切り出す
-Route::post('/products/{id}/cancel',         'ProductController@cancel');     //商品キャンセル
-Route::get('/products/{id}/isReviewed',      'ProductController@isReviewed'); //レビュー投稿済みかどうか
+Route::get('/products',                      'ProductController@index')->name('index');       //商品一覧取得
+Route::get('/products/ranking',              'ProductController@ranking');                    //お気に入りが多い５件を取得
+Route::get('/products/{id}',                 'ProductController@show')->name('product.show'); //商品情報取得
+Route::post('/products',                     'ProductController@store');                      //商品登録
+Route::post('/products/{id}',                'ProductController@update');                     //商品更新
+Route::delete('/products/{id}',              'ProductController@destroy');                    //商品削除
+Route::post('/products/{id}/purchase',       'ProductController@purchase');                   //商品購入
+Route::get('/products/{id}/purchasedByUser', 'ProductController@purchasedByUser');            //商品を購入したかを返す
+Route::get('/products/{id}/canceledByUser',  'ProductController@canceledByUser');             //商品をキャンセルしたかを返す
+Route::get('/products/{u_id}/{p_id}/other',  'ProductController@otherProducts');             //出品者の他の商品を返す
+Route::post('/products/{id}/like',           'ProductController@like')->name('product.like'); //お気に入り登録 todo: LikeController作成後、切り出す
+Route::delete('/products/{id}/unlike',       'ProductController@unlike');                     //お気に入り解除 todo: LikeController作成後、切り出す
+Route::post('/products/{id}/cancel',         'ProductController@cancel');                     //商品キャンセル
+Route::get('/products/{id}/isReviewed',      'ProductController@isReviewed');                 //レビュー投稿済みかどうか
 
 //=================================================================
 // User
@@ -47,21 +49,22 @@ Route::get('/users/{id}/wasReviewed',     'UserController@wasReviewed');    //�
 //=================================================================
 // MyPage
 //=================================================================
-Route::get('/mypage/{id}/liked',            'MyPageController@liked');            //お気に入りした商品5件取得(利用者)
-Route::get('/mypage/{id}/purchased',        'MyPageController@purchased');        //購入した商品5件取得(利用者)
-Route::get('/mypage/{id}/canceled',         'MyPageController@canceled');         //キャンセルした商品5件取得(利用者)
-Route::get('/mypage/{id}/reviewedShopUser', 'MyPageController@reviewedShopUser'); //レビューしたコンビニユーザーを5件取得(利用者)
-Route::get('/mypage/{id}/posted',           'MyPageController@posted');           //投稿した商品を5件取得(コンビニユーザー)
-Route::get('/mypage/{id}/wasPurchased',     'MyPageController@wasPurchased');           //投稿した商品を5件取得(コンビニユーザー)
+Route::get('/mypage/liked',        'MyPageController@liked');        //お気に入りした商品5件取得(利用者)
+Route::get('/mypage/posted',       'MyPageController@posted');       //投稿した商品を5件取得(コンビニユーザー)
+Route::get('/mypage/purchased',    'MyPageController@purchased');    //購入した商品5件取得(利用者)
+Route::get('/mypage/wasPurchased', 'MyPageController@wasPurchased'); //購入された商品を5件取得(コンビニユーザー)
+Route::get('/mypage/canceled',     'MyPageController@canceled');     //キャンセルした商品5件取得(利用者)
+Route::get('/mypage/wasCanceled',  'MyPageController@wasCanceled');  //キャンセルされた商品5件取得(コンビニユーザー)
+Route::get('/mypage/reviewed',     'MyPageController@reviewed');     //投稿したレビューを5件取得(利用者)
+Route::get('/mypage/wasReviewed',  'MyPageController@wasReviewed');  //投稿されたレビューを5件取得(コンビニユーザー)
 
 //=================================================================
 // Review
 //=================================================================
 Route::post('/reviews',                 'ReviewController@store');   //レビュー登録
 Route::get('/reviews/{s_id}/{r_id}',    'ReviewController@show');;   //レビュー取得
-Route::post('/reviews/update',          'ReviewController@update');  //レビュー編集 todo: 処理実装
-Route::delete('/reviews/{s_id}/{r_id}', 'ReviewController@destroy'); //レビュー削除 todo: 処理実装
-
+Route::post('/reviews/update',          'ReviewController@update');  //レビュー編集
+Route::delete('/reviews/{s_id}/{r_id}', 'ReviewController@destroy'); //レビュー削除
 
 //=================================================================
 // Other

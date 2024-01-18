@@ -3,8 +3,8 @@
 		<main class="l-main__2column">
 			<div class="p-list">
 				<h2 class="c-title p-list__title">
-					<span v-show="isShopUser">レビューされたユーザー一覧</span>
-					<span v-show="!isShopUser">レビューしたユーザー一覧</span>
+					<span v-show="isShopUser">投稿されたレビュー一覧</span>
+					<span v-show="!isShopUser">投稿したレビュー一覧</span>
 				</h2>
 				
 				<!-- ローディング -->
@@ -13,8 +13,8 @@
 				<!-- レビューがなければ表示する -->
 				<div v-if="!reviews.length"
 						 class="p-list__no-review">
-					<span v-show="isShopUser">ユーザーからのレビューはありません</span>
-					<span v-show="!isShopUser">レビューしたユーザーはいません</span>
+					<span v-show="isShopUser">投稿されたレビューはありません</span>
+					<span v-show="!isShopUser">投稿したレビューはありません</span>
 				</div>
 				
 				<div class="p-list__card-container" v-show="!loading">
@@ -114,7 +114,7 @@ export default {
 		})
 	},
 	methods: {
-		async getReviews() { //レビュー一覧取得
+		async getReviewed() { //レビュー一覧取得
 			this.loading = true; //ローディングを表示する
 			
 			const response = await axios.get(`/api/users/${this.id}/reviewed`); //API通信
@@ -147,7 +147,7 @@ export default {
 	watch: {
 		$route: {
 			async handler() {
-				this.isShopUser ? await this.getWasReviewed() : await this.getReviews();
+				this.isShopUser ? await this.getWasReviewed() : await this.getReviewed();
 			},
 			immediate: true //immediateをtrueにすると、コンポーネントが生成されたタイミングでも実行する
 		}

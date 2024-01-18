@@ -35,11 +35,11 @@
 									  			params: { id: id.toString() }}" >出品した商品一覧
 			</router-link>
 			
-			<!-- いいねした商品一覧 -->
+			<!-- お気に入りした商品一覧 -->
 			<router-link class="p-sidebar__link"
 									 v-if="!isShopUser"
 									 :to="{ name: 'user.liked',
-									  			params: { id: id.toString() }}" >いいねした商品一覧
+									  			params: { id: id.toString() }}" >お気に入りした商品一覧
 			</router-link>
 			
 			<!-- 購入した(された)商品一覧 -->
@@ -58,12 +58,12 @@
 				<span v-show="!isShopUser">キャンセルした商品一覧</span>
 			</router-link>
 
-			<!-- レビューした(された)商品一覧 -->
+			<!-- 投稿した(された)レビュー一覧 -->
 			<router-link class="p-sidebar__link"
 									 :to="{ name: 'user.reviewed',
 									  		  params: { id: id.toString() }}" >
-				<span v-show="isShopUser">レビューされたユーザー一覧</span>
-				<span v-show="!isShopUser">レビューしたユーザー一覧</span>
+				<span v-show="isShopUser">投稿されたレビュー一覧</span>
+				<span v-show="!isShopUser">投稿したレビュー一覧</span>
 			</router-link>
 
 			<!-- ログアウト -->
@@ -102,6 +102,9 @@ export default {
 			await this.$store.dispatch('auth/logout');
 			
 			if(this.apiStatus) { //通信成功ならloginページへ移動する
+				this.$store.commit('message/setContent', { //「ログアウト」メッセージ登録
+					content: 'ログアウトしました'
+				});
 				this.$router.push({name: 'index'});
 			}
 		}

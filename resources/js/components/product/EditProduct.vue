@@ -98,7 +98,7 @@
 						</div>
 					</div>
 					
-					<!--todo: 賞味期限は変更できないようにする(不正防止)-->
+					<!-- 賞味期限は変更できないようにする(不正防止)-->
 					<!--&lt;!&ndash; 賞味期限 &ndash;&gt;-->
 					<!--<label for="expire_date"-->
 					<!--			 class="c-label p-product-form__label">賞味期限-->

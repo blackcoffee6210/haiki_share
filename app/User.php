@@ -81,7 +81,7 @@ class User extends Authenticatable
 
 	public function cancels() //購入キャンセルテーブル
 	{
-		return $this->belongsToMany('App\Product', 'cancels')->withTimestamps();
+		return $this->hasMany('App\Cancel', 'cancel_user_id');
 	}
 
 	public function senderReviews() //レビューテーブル(利用者)

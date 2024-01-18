@@ -27,11 +27,17 @@
 						<!-- btnスロット -->
 						<div class="p-product__btn-container"
 								 slot="btn">
-							<!-- 詳細を見るボタン -->
-							<router-link class="c-btn p-product__btn"
-													 :to="{ name: 'product.detail',
-													  			params: { id: product.id.toString() }}">詳細を見る
+							<!-- 編集ボタン -->
+							<router-link class="c-btn c-btn--white p-list__btn"
+													 v-show="!product.is_purchased"
+													 :to="{ name: 'product.edit',
+																	params: { id: product.id.toString() }}">編集する
 							</router-link>
+							<!--&lt;!&ndash; 詳細を見るボタン &ndash;&gt;-->
+							<!--<router-link class="c-btn p-product__btn"-->
+							<!--						 :to="{ name: 'product.detail',-->
+							<!--						  			params: { id: product.id.toString() }}">詳細を見る-->
+							<!--</router-link>-->
 						</div>
 						<!-- キャンセルスロット -->
 						<!-- キャンセルされた数をカウントして表示（「いいね」みたいに） -->

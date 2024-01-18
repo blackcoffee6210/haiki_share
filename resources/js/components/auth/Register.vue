@@ -139,7 +139,26 @@
 					<div v-for="msg in registerErrors.password_confirmation" :key="msg" class="p-error">{{ msg }}</div>
 				</div>
 				
-				<button class="c-btn p-auth-form__btn" type="submit">登録する（無料）</button>
+				<!-- 利用規約 -->
+				<div class="p-auth-form__check-container">
+					<input type="checkbox"
+								 id="agreement"
+								 v-model="checkAgree"
+								 class="p-auth-form__check">
+					<router-link class="p-auth-form__agreement"
+											 target="_blank"
+											 :to="{ name: 'agreement'}">利用規約
+					</router-link>
+					<label for="agreement">に同意する</label>
+				</div>
+				
+				<div class="u-p-relative">
+					<button class="c-btn p-auth-form__btn"
+									:disabled="!checkAgree"
+									type="submit">登録する（無料）
+					</button>
+					<!--<div class="p-auth-form__btn&#45;&#45;mask">利用規約にチェックしてください</div>-->
+				</div>
 			</form>
 			<hr class="p-auth-form__u-line">
 			<!-- ログイン画面へ遷移	-->
@@ -167,7 +186,8 @@ export default {
 				email: '',
 				password: '',
 				password_confirmation: ''
-			}
+			},
+			checkAgree: false
 		}
 	},
 	computed: {

@@ -18,12 +18,16 @@
 									 v-if="isLike"
 									 :key="product.id"
 									 :product="product">
-						<div class="p-product__btn-container">
-							<!-- 詳細を見るボタン -->
-							<router-link class="c-btn p-product__btn"
-													 :to="{ name: 'product.detail',
-													  			params: { id: product.id.toString() }}">詳細を見る
-							</router-link>
+						<div class="p-product__btn-container" slot="btn">
+							<!--&lt;!&ndash; 詳細を見るボタン &ndash;&gt;-->
+							<!--<router-link class="c-btn p-product__btn"-->
+							<!--						 :to="{ name: 'product.detail',-->
+							<!--						  			params: { id: product.id.toString() }}">詳細を見る-->
+							<!--</router-link>-->
+							<!-- いいね解除ボタン -->
+							<button class="c-btn c-btn--white p-product__btn"
+											@click="unlike(product)">お気に入り解除
+							</button>
 						</div>
 					</Product>
 				</div>

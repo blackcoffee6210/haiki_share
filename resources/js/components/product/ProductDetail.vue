@@ -71,7 +71,7 @@
 											'border-color': [isLike ? '#ff3c53' : 'lightgray'],
 											'background'  : [isLike ? '#ffd5da' : 'white']
 										}"
-										:disabled="product.is_my_product || product.is_purchased"
+										:disabled="product.is_my_product || product.is_purchased || purchasedByUser"
 										@click="onLikeClick">
 							<span v-if="isLike">お気に入り済み</span>
 							<span v-else>気になる！</span>
@@ -87,7 +87,6 @@
 						<!-- 商品購入ボタン	-->
 						<!-- 利用者ユーザー、かつ自分の商品じゃない、かつ自分が購入してないときに出す -->
 						<!-- コンビニユーザー、または自分の商品、または購入されている商品は押せない -->
-						<!-- todo: 購入後にコンビニユーザーにレビューを投稿できるようにする -->
 						<button class="c-btn p-product-detail__btn--purchase"
 										@click="purchase"
 										v-show="!isShopUser && !product.is_my_product && !purchasedByUser"
@@ -123,7 +122,8 @@
 				<!-- 自分の商品のときは表示しない -->
 				<div class="p-product-detail__twitter-container"
 						 v-show="!product.is_my_product">
-					<social-sharing url="http://127.0.0.1:8001/products/48"
+					<social-sharing url="http://127.0.0.1:8000/products/48"
+													v-show="isLogin"
 													title="vue-social-sharingのテスト"
 													quote="Vue is a progressive framework for building user interfaces."
 													hashtags="haiki_share"
@@ -132,6 +132,29 @@
 							<font-awesome-icon :icon="['fab', 'twitter']" /> Twitter
 						</network>
 					</social-sharing>
+				</div>
+				
+				<!-- 出品者の他の商品-->
+				<div class="c-title p-product-detail__title">この出品者の他の商品</div>
+				<div class="p-product-detail__other-container">
+					<!-- Productコンポーネント -->
+					<Product v-show="!loading"
+									 v-for="product in otherProducts"
+									 v-if="!product.is_purchased"
+									 :key="product.id"
+									 :product="product" />
+				</div>
+				
+				<!-- この商品に似た商品-->
+				<!-- todo: 実装 -->
+				<div class="c-title p-product-detail__title">この出品者の他の商品</div>
+				<div class="p-product-detail__other-container">
+					<!-- Productコンポーネント -->
+					<Product v-show="!loading"
+									 v-for="product in otherProducts"
+									 v-if="!product.is_purchased"
+									 :key="product.id"
+									 :product="product" />
 				</div>
 				
 				<!-- TOPへ	-->
@@ -147,10 +170,10 @@
 </template>
 
 <script>
-import { OK } from "../../util";
+import { OK }         from "../../util";
 import { mapGetters } from 'vuex';
-import Loading from "../Loading";
-import StarRating from 'vue-star-rating';
+import Loading        from "../Loading";
+import Product        from "./Product";
 
 export default {
 	name: "ProductDetail",
@@ -162,18 +185,20 @@ export default {
 	},
 	components: {
 		Loading,
-		StarRating
+		Product
 	},
 	data() {
 		return {
-			product: {},         //商品情報
-			isLike: false,       //「いいね」しているかどうか
-			errors: null,        //エラーメッセージを格納するプロパティ
-			buttonActive: false, //TOPボタンを表示する
-			scroll: 0,           //scroll
-			loading: false,      //ローディングを表示するかどうかを判定するプロパティ
-			isReviewed: false,
-			purchasedByUser: false
+			product: {},            //商品情報
+			isLike: false,          //「いいね」しているかどうか
+			errors: null,           //エラーメッセージを格納するプロパティ
+			buttonActive: false,    //TOPボタンを表示する
+			scroll: 0,              //scroll
+			loading: false,         //ローディングを表示するかどうかを判定するプロパティ
+			isReviewed: false,      //ログインした利用者がレビューしたかどうか
+			purchasedByUser: false, //ログインした利用者が購入したかどうか
+			canceledByUser: false,  //ログインした利用者がキャンセルしたかどうか
+			otherProducts: {}       //出品者の他の商品
 		}
 	},
 	computed: {
@@ -186,7 +211,21 @@ export default {
 	methods: {
 		async getPurchasedByUser() {
 			const response = await axios.get(`/api/products/${this.id}/purchasedByUser`);
-			(response.data[0]) ? this.purchasedByUser = true : this.purchasedByUser = false;
+			
+			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
+				this.$store.commit('error/setCode', response.status);
+				return false;
+			}
+			response.data[0] ? this.purchasedByUser = true : this.purchasedByUser = false;
+		},
+		async getCanceledByUser() {
+			const response = await axios.get(`/api/products/${this.id}/canceledByUser`);
+			
+			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
+				this.$store.commit('error/setCode', response.status);
+				return false;
+			}
+			response.data[0] ? this.canceledByUser = true : this.canceledByUser = false;
 		},
 		async getProduct() { //商品詳細情報取得
 			const response = await axios.get(`/api/products/${this.id}`);
@@ -195,13 +234,23 @@ export default {
 				this.$store.commit('error/setCode', response.status);
 				return false;
 			}
-			
 			this.product = response.data; //responseデータをproductプロパティに代入
-			console.log('getProductの中身');
-			console.log(response.data);
+			
 			if(this.product.liked_by_user) { //ログインユーザーが既に「いいね」を押していたらtrueをセット
 				this.isLike = true;
 			}
+		},
+		async getOtherProducts() {
+			const response = await axios.get(`/api/products/${this.product.user_id}/${this.id}/other`); //API接続
+			
+			// if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
+			// 	this.$store.commit('error/setCode', response.status);
+			// 	return false; //後続の処理を抜ける
+			// }
+			this.otherProducts = response.data; //responseデータをプロパティに代入
+			console.log('otherProductsの中身');
+			console.log(response.data);
+			console.log(this.id);
 		},
 		async onLikeClick() { //「お気に入りボタン」を押したときの処理を行うメソッド
 			if(!this.isLogin) { //ログインしていなかったらアレートを出す
@@ -246,7 +295,7 @@ export default {
 				}
 				return false;
 			}
-			if(this.product.canceled_by_user) { //商品をキャンセルしたユーザーは再度購入できない
+			if(this.canceledByUser) { //商品をキャンセルしたユーザーは再度購入できない
 				alert('一度キャンセルした商品は購入できません');
 				return false;
 			}
@@ -262,7 +311,8 @@ export default {
 					return false; //後続の処理を抜ける
 				}
 				
-				this.product.purchased_by_user = true; //ログインユーザーが商品を購入したのでtrueをセット(購入済み)にする
+				this.purchasedByUser = true;
+				// this.product.purchased_by_user = true; //ログインユーザーが商品を購入したのでtrueをセット(購入済み)にする
 				
 				if(this.product.liked_by_user) { //商品を購入したため、「いいね」をしていたら外す
 					this.unlike();
@@ -288,8 +338,8 @@ export default {
 					return false;
 				}
 				
-				this.product.purchased_by_user = false; //購入キャンセルをしたのでpurchased_by_userにfalseをセット
-				this.product.canceled_by_user  = true; //canceled_by_userにtrueをセット
+				// this.product.purchased_by_user = false; //購入キャンセルをしたのでpurchased_by_userにfalseをセット
+				// this.product.canceled_by_user  = true; //canceled_by_userにtrueをセット
 				
 				this.$store.commit('message/setContent', { //メッセージ登録
 					content: '購入をキャンセルしました'
@@ -329,7 +379,9 @@ export default {
 		$route: {
 			async handler() {
 				await this.getPurchasedByUser();
+				await this.getCanceledByUser();
 				await this.getProduct();
+				await this.getOtherProducts();
 				await this.getMyReview();
 			},
 			immediate: true

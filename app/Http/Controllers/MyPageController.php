@@ -16,54 +16,66 @@ class MyPageController extends Controller
 		$this->middleware('auth'); //認証
 	}
 
-    public function liked(string $id) //お気に入りした商品を5件取得
+    public function liked() //お気に入りした商品を5件取得
     {
-    	return User::find($id)
+    	return User::find(Auth::id())
 		           ->likes()
 		           ->orderByDesc('likes.created_at')
-		           ->take(3)
+		           ->take(5)
 		           ->get();
     }
 
-	public function purchased(string $id) //購入した商品を5件取得
+	public function posted() //投稿した商品を5件取得
+	{
+		return User::find(Auth::id())
+				   ->products()
+				   ->orderByDesc('products.created_at')
+				   ->take(5)
+				   ->get();
+	}
+
+	public function purchased() //購入した商品を5件取得
 	{
 		$products = Product::whereHas('history', function($q) {
 						$q->where('buyer_id', '=', Auth::id());
-					})->take(3)->get();
+					})->take(5)->get();
 		return $products;
 	}
 
-	public function wasPurchased(string $id) //購入された商品を5件取得
+	public function wasPurchased() //購入された商品を5件取得
 	{
-
+		$products = Product::whereHas('history', function($q) {
+						$q->where('seller_id', Auth::id());
+					})->take(5)->get();
+		return $products;
 	}
 
-	public function canceled(string $id) //キャンセルした商品を5件取得
+	public function canceled() //キャンセルした商品を5件取得
 	{
-		return User::find($id)
-				   ->cancels()
-				   ->orderByDesc('cancels.created_at')
-				   ->take(3)
-				   ->get();
+		$products = Product::whereHas('cancels', function($q) {
+						$q->where('cancel_user_id', Auth::id());
+					})->take(5)->get();
+		return $products;
 	}
 
-	public function reviewedShopUser(string $id) //レビューしたコンビニユーザーを5件取得
+	public function wasCanceled() //キャンセルされた商品を5件取得
 	{
-		return User::find($id)
+		$products = Product::whereHas('cancels', function($q) {
+						$q->where('post_user_id', Auth::id());
+					})->take(5)->get();
+		return $products;
+	}
+
+	public function reviewed() //レビューしたコンビニユーザーを5件取得
+	{
+		return User::find(Auth::id())
 				   ->senderReviews()
 				   ->orderByDesc('reviews.created_at')
-				   ->take(3)
+				   ->take(5)
 				   ->get();
 	}
 
-	public function posted(string $id) //投稿した商品を5件取得
-	{
-		return User::find($id)
-				   ->products()
-				   ->orderByDesc('products.created_at')
-				   ->take(3)
-				   ->get();
-	}
+
 
 
 

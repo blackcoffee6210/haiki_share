@@ -912,6 +912,12 @@ body {
   margin-right: 5px;
 }
 
+.p-auth-form__agreement {
+  color: #1b94e0;
+  border-bottom: 1px solid #1b94e0;
+  padding-bottom: 1px;
+}
+
 .p-auth-form__btn {
   width: 100%;
   margin-top: 30px;
@@ -2446,6 +2452,34 @@ body {
 .p-product-detail__twitter-container {
   text-align: right;
   margin: 15px 0;
+}
+
+.p-product-detail__title {
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+.p-product-detail__other-container {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 33.3% 33.3% 33.3%;
+  gap: 15px;
+  padding-right: 30px;
+  position: relative;
+}
+
+@media screen and (max-width: 450px) {
+  .p-product-detail__other-container {
+    grid-template-columns: 50% 50%;
+    padding-left: 10px;
+    gap: 10px;
+  }
+}
+
+@media screen and (min-width: 451px) and (max-width:820px) {
+  .p-product-detail__other-container {
+    grid-template-columns: 50% 50%;
+  }
 }
 
 .p-product-detail__go-top {

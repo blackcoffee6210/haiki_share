@@ -24,11 +24,9 @@ class Product extends Model
 		'user_image', 'user_name', 'email', 'branch', 'category_name',
 		'likes_count', 'liked_by_user',
 		'is_my_product',
-		'purchased_by_user',
         'is_purchased',
-//		'canceled_by_user',
-//      'is_canceled',
-//      'cancels_count'
+		'is_canceled',
+	    'cancels_count'
 	];
 
 	//$visibleはJSONに含める属性を定義する
@@ -39,11 +37,9 @@ class Product extends Model
 		'user_image', 'user_name', 'email', 'branch', 'category_name',
 		'likes_count', 'liked_by_user',
 		'is_my_product',
-		'purchased_by_user',
 		'is_purchased',
-//		'canceled_by_user',
-//       'is_canceled',
-//       'cancels_count'
+		'is_canceled',
+		'cancels_count'
 	];
 
 	//=====================================================
@@ -122,56 +118,29 @@ class Product extends Model
 		});
 	}
 	/**
-	 * アクセサ - purchased_by_user
-//	 * @return boolean
-	 */
-	public function getPurchasedByUserAttribute() //リクエストしたユーザーが商品を購入済みかどうかを取得する
-	{
-		if(Auth::guest()) { //ユーザーがゲストの場合(ログインしていなければ)falseを返す
-			return false;
-		}
-//		$product = Product::whereHas('history', function ($q) {
-//						$q->where('buyer_id', '=', Auth::id());
-//					})->get();
-//		return $product;
-	}
-	/**
 	 * アクセサ - is_purchased
 	 * @return boolean
 	 */
 	public function getIsPurchasedAttribute() //商品が購入されているかどうかを真偽値で返すアクセサ
 	{
-		return ($this->history()->count()) ? true : false; //historiesテーブルにカウントがある(=購入されている)のでtrueを返す
+		return ($this->history()->count() ) ? true : false; //historiesテーブルにカウントがある(=購入されている)のでtrueを返す
 	}
-//	/**
-//	 * アクセサ - canceled_by_user
-//	 * @return boolean
-//	 */
-//	public function getCanceledByUserAttribute() //リクエストしたユーザーがキャンセルしたかどうかを取得するアクセサ
-//	{
-//		if(Auth::guest() ) { //ユーザーがゲストの場合(ログインしていなければ)falseを返す
-//			return false;
-//		}
-//		return $this->cancels->contains(function($user) { //LaravelのコレクションメソッドでログインユーザーのIDと合致する商品キャンセルが含まれるか調べる
-//			return $user->id === Auth::user()->id; //一致したらtrueを返す
-//		});
-//	}
-//	/**
-//	 * アクセサ - is_canceled
-//	 * @return boolean
-//	 */
-//	public function getIsCanceledAttribute() //商品がキャンセルされているかどうかを真偽値で返すアクセサ
-//	{
-//		return ($this->cancels->count()) ? true : false; //historiesテーブルにカウントがある(=購入されている)のでtrueを返す
-//	}
-//	/**
-//	 * アクセサ - cancels_count
-//	 * @return int
-//	 */
-//	public function getCancelsCountAttribute() //キャンセル数を取得するアクセサ
-//	{
-//		return $this->cancels->count();
-//	}
+	/**
+	 * アクセサ - is_canceled
+	 * @return boolean
+	 */
+	public function getIsCanceledAttribute() //商品がキャンセルされているかどうかを真偽値で返すアクセサ
+	{
+		return ($this->cancels->count()) ? true : false; //historiesテーブルにカウントがある(=購入されている)のでtrueを返す
+	}
+	/**
+	 * アクセサ - cancels_count
+	 * @return int
+	 */
+	public function getCancelsCountAttribute() //キャンセル数を取得するアクセサ
+	{
+		return $this->cancels->count();
+	}
 
 	//======================================================
 	//リレーション
@@ -206,6 +175,6 @@ class Product extends Model
 
 	public function cancels() //購入キャンセルテーブル
 	{
-		return $this->hasMany('App\User', 'cancels');
+		return $this->hasMany('App\Cancel');
 	}
 }

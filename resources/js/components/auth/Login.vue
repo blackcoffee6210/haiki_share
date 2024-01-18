@@ -60,9 +60,10 @@
 								 id="remember"
 								 class="p-auth-form__check"
 								 v-model="loginForm.remember">
-					<label for="remember"
-								 class="p-auth-form__label--check">ログイン保持
-					</label>
+					<!--<label for="remember"-->
+					<!--			 class="p-auth-form__label&#45;&#45;check">ログイン保持-->
+					<!--</label>-->
+					<label for="remember">ログイン保持</label>
 				</div>
 				
 				<!-- ログインボタン -->

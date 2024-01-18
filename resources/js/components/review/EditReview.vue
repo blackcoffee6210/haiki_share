@@ -121,9 +121,9 @@
 									type="button">削除する
 					</button>
 					
-					<!-- 投稿ボタン -->
+					<!-- 更新ボタン -->
 					<button class="c-btn p-review-form__btn--update"
-									type="submit">投稿する
+									type="submit">更新する
 					</button>
 				</div>
 			</form>

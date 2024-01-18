@@ -49,7 +49,7 @@ export default {
 				this.$store.commit('message/setContent', { //メッセージを登録
 					content: 'ログアウトしました'
 				});
-				this.$router.push({ name: 'index' }).catch(() => {}); //記事一覧画面へ移動する
+				this.$router.push({ name: 'index' }).catch(() => {}); //商品一覧画面へ移動する
 			}
 		}
 	}

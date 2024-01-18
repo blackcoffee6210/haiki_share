@@ -80,9 +80,6 @@ class UserController extends Controller
 
 	public function purchased(string $id) //購入した商品一覧(利用者)
 	{
-//		return History::with('product')
-//					  ->where('buyer_id', $id)
-//					  ->get();
 		$products = Product::whereHas('history', function($q) {
 						$q->where('buyer_id', Auth::id());
 					})->get();
@@ -91,9 +88,14 @@ class UserController extends Controller
 
 	public function wasPurchased(string $id) //購入された商品一覧(コンビニ)
 	{
-		return Product::with(['user', 'category', 'likes', 'histories'])
-					  ->where('user_id', $id)
-					  ->get();
+		$products = Product::whereHas('history', function($q) {
+						$q->where('seller_id', Auth::id());
+					})->get();
+		return $products;
+
+//		return Product::with(['user', 'category', 'likes', 'histories'])
+//					  ->where('user_id', $id)
+//					  ->get();
 	}
 
 	public function liked(string $id) //いいねした商品一覧(利用者)
@@ -104,27 +106,28 @@ class UserController extends Controller
 				   ->get();
 	}
 
-	public function canceled(string $id) //キャンセルした商品一覧(利用者)
+	public function canceled() //キャンセルした商品一覧(利用者)
 	{
-		return User::find($id)
-				   ->cancels()
-				   ->orderByDesc('cancels.created_at')
-				   ->get();
+		$products = Product::whereHas('cancels', function($q) {
+						$q->where('cancel_user_id', Auth::id());
+					})->get();
+		return $products;
 	}
 
-	public function wasCanceled(string $id) //キャンセルされた商品一覧（コンビニ）
+	public function wasCanceled() //キャンセルされた商品一覧（コンビニ）
 	{
-		$products = Product::with(['user', 'category', 'likes', 'histories', 'cancels'])
-						   ->where('user_id', $id)
-						   ->get();
-		return response($products, 200);
+		$products = Product::whereHas('cancels', function($q) {
+			$q->where('post_user_id', Auth::id());
+		})->get();
+		return $products;
 	}
 
 	public function reviewed(string $id) //レビュー一覧(利用者)
 	{
-		return Review::where('sender_id', $id)
-					 ->orderByDesc('reviews.created_at')
-					 ->get();
+		return User::find(Auth::id())
+			->senderReviews()
+			->orderByDesc('reviews.created_at')
+			->get();
 	}
 
 	public function wasReviewed(string $id) //レビュー一覧(コンビニ)

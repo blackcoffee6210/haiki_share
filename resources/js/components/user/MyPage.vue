@@ -20,7 +20,6 @@
 													 v-if="likedProducts.length">全件表示
 							</router-link>
 						</div>
-						
 						<!-- 商品がなければ表示する -->
 						<div v-if="!likedProducts.length"
 								 class="p-mypage__no-Product">お気に入りした商品はありません
@@ -46,7 +45,6 @@
 													 v-if="postedProducts.length">全件表示
 							</router-link>
 						</div>
-						
 						<!-- 商品がなければ表示する -->
 						<div v-if="!postedProducts.length"
 								 class="p-mypage__no-Product">出品した商品はありません
@@ -71,7 +69,6 @@
 													 v-if="purchasedProducts.length">全件表示
 							</router-link>
 						</div>
-						
 						<!-- 購入した商品がなければ表示する -->
 						<div v-if="!purchasedProducts.length"
 								 class="p-mypage__no-Product">購入した商品はありません
@@ -91,18 +88,15 @@
 						<div class="p-mypage__title-container">
 							<h2 class="c-title p-mypage__title">購入された商品</h2>
 							<!-- 全件表示のリンク -->
-							<!--<a class="p-mypage__link">全件表示</a>-->
 							<router-link class="p-mypage__link"
 													 :to="{ name: 'user.purchased', params: { id: id.toString() }}"
 													 v-if="wasPurchasedProducts.length">全件表示
 							</router-link>
 						</div>
-						
 						<!-- 購入された商品がなければ表示する -->
 						<div v-if="!wasPurchasedProducts.length"
 								 class="p-mypage__no-Product">購入された商品はありません
 						</div>
-						
 						<div v-else class="p-mypage__card-container">
 							<!-- Productコンポーネント -->
 							<Product v-show="!loading"
@@ -124,12 +118,10 @@
 													 v-if="canceledProducts.length">全件表示
 							</router-link>
 						</div>
-						
 						<!-- 商品がなければ表示する -->
 						<div v-if="!canceledProducts.length"
 								 class="p-mypage__no-Product">キャンセルした商品はありません
 						</div>
-						
 						<div v-else class="p-mypage__card-container">
 							<!-- Productコンポーネント -->
 							<Product v-show="!loading"
@@ -145,27 +137,29 @@
 						<div class="p-mypage__title-container">
 							<h2 class="c-title p-mypage__title">キャンセルされた商品一覧</h2>
 							<!-- 全件表示のリンク -->
-							<!--todo: RouterLinkに変更-->
-							<a class="p-mypage__link"
-								 v-if="wasCanceledProducts.length">全件表示</a>
-							<!--<router-link class="p-mypage__link"-->
-							<!--						 :to="{ name: 'user.reviewed',-->
-							<!--										params: { id: id.toString() }}"-->
-							<!--						 v-if="reviewedProducts.length">全件表示-->
-							<!--</router-link>-->
+							<router-link class="p-mypage__link"
+													 :to="{ name: 'user.canceled',
+																	params: { id: id.toString() }}"
+													 v-if="wasCanceledProducts.length">全件表示
+							</router-link>
 						</div>
-						
 						<!-- 商品がなければ表示する -->
-						<div v-if="!canceledProducts.length"
+						<div v-if="!wasCanceledProducts.length"
 								 class="p-mypage__no-Product">キャンセルされた商品はありません
 						</div>
-						
 						<div v-else class="p-mypage__card-container">
 							<!-- Productコンポーネント -->
 							<Product v-show="!loading"
-											 v-for="product in canceledProducts"
+											 v-for="product in wasCanceledProducts"
 											 :key="product.id"
-											 :product="product" />
+											 :product="product" >
+								<!-- キャンセルスロット -->
+								<!-- キャンセルされた数をカウントして表示（「いいね」みたいに） -->
+								<div class="p-product__cancel"
+										 slot="cancel_count"
+										 v-show="isShopUser">{{ product.cancels_count }}回
+								</div>
+							</Product>
 						</div>
 					</section>
 					
@@ -310,25 +304,26 @@ export default {
 	data() {
 		return {
 			loading: false,           //ローディング
-			likedProducts: {},        //お気に入りした商品
-			purchasedProducts: {},    //購入した商品
-			wasPurchasedProducts: {}, //購入された商品
-			canceledProducts: {},     //キャンセルした商品
-			wasCanceledProducts: {},  //キャンセルされた商品
-			reviewedShopUsers: {},    //出品者へのレビュー（利用者）
-			postedProducts: {},       //出品した商品
+			likedProducts: {},        //お気に入りした商品(利用者)
+			postedProducts: {},       //出品した商品（コンビニ）
+			purchasedProducts: {},    //購入した商品（利用者）
+			wasPurchasedProducts: {}, //購入された商品（コンビニ）
+			canceledProducts: {},     //キャンセルした商品（利用者）
+			wasCanceledProducts: {},  //キャンセルされた商品（コンビニ）
+			reviewedShopUsers: {},    //投稿したレビュー（利用者）
+			wasReviewedShopUsers: {}, //投稿されたレビュー（コンビニ）
 			reviewedUsers: {}         //購入者へのレビュー（コンビニ）
 		}
 	},
 	computed: {
 		...mapGetters({
 			isShopUser: 'auth/isShopUser',
-		})
+		}),
 	},
 	methods: {
 		async getLikedProducts() { //お気に入りした商品(利用者)
 			this.loading   = true; //ローディングを表示する
-			const response = await axios.get(`/api/mypage/${this.id}/liked`);
+			const response = await axios.get('/api/mypage/liked');
 			this.loading   = false; //API通信が終わったらローディングを非表示にする
 		
 			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
@@ -339,83 +334,103 @@ export default {
 			console.log('お気に入りした商品一覧');
 			console.log(response.data);
 		},
-		async getPurchasedProducts() { //購入した商品(利用者)
+		async getPostedProducts() { //出品した商品(コンビニユーザー)
 			this.loading   = true; //ローディングを表示する
-			const response = await axios.get(`/api/mypage/${this.id}/purchased`);
+			const response = await axios.get('/api/mypage/posted');
 			this.loading   = false; //API通信が終わったらローディングを非表示にする
 			
-			// if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
-			// 	this.$store.commit('error/setCode', response.status);
-			// 	return false; //後続の処理を抜ける
-			// }
+			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
+				this.$store.commit('error/setCode', response.status);
+				return false; //後続の処理を抜ける
+			}
+			this.postedProducts = response.data; //responseデータをプロパティに代入
+		},
+		async getPurchasedProducts() { //購入した商品(利用者)
+			this.loading   = true; //ローディングを表示する
+			const response = await axios.get('/api/mypage/purchased');
+			this.loading   = false; //API通信が終わったらローディングを非表示にする
+			
+			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
+				this.$store.commit('error/setCode', response.status);
+				return false; //後続の処理を抜ける
+			}
 			this.purchasedProducts = response.data; //responseデータをプロパティに代入
 			console.log('購入した商品一覧');
 			console.log(response.data);
 		},
-		async getCanceledProducts() { //キャンセルした商品(利用者)
+		async getWasPurchasedProducts() { //購入された商品(コンビニユーザー)
 			this.loading   = true; //ローディングを表示する
-			const response = await axios.get(`/api/mypage/${this.id}/canceled`);
+			const response = await axios.get('/api/mypage/wasPurchased');
 			this.loading   = false; //API通信が終わったらローディングを非表示にする
 			
-			// if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
-			// 	this.$store.commit('error/setCode', response.status);
-			// 	return false; //後続の処理を抜ける
-			// }
+			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
+				this.$store.commit('error/setCode', response.status);
+				return false; //後続の処理を抜ける
+			}
+			this.wasPurchasedProducts = response.data; //responseデータをプロパティに代入
+			console.log('購入された商品一覧');
+			console.log(this.wasPurchasedProducts);
+		},
+		async getCanceledProducts() { //キャンセルした商品(利用者)
+			this.loading   = true; //ローディングを表示する
+			const response = await axios.get('/api/mypage/canceled');
+			this.loading   = false; //API通信が終わったらローディングを非表示にする
+			
+			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
+				this.$store.commit('error/setCode', response.status);
+				return false; //後続の処理を抜ける
+			}
 			this.canceledProducts = response.data; //responseデータをプロパティに代入
 			console.log('キャンセルした商品');
 			console.log(response.data);
 		},
-		async getReviewedShopUsers() { //レビューした出品者(利用者)
+		async getWasCanceledProducts() { //キャンセルされた商品(コンビニユーザー)
 			this.loading   = true; //ローディングを表示する
-			const response = await axios.get(`/api/mypage/${this.id}/reviewedShopUser`);
+			const response = await axios.get('/api/mypage/wasCanceled');
 			this.loading   = false; //API通信が終わったらローディングを非表示にする
 			
-			// if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
-			// 	this.$store.commit('error/setCode', response.status);
-			// 	return false; //後続の処理を抜ける
-			// }
-			this.reviewedShopUsers = response.data; //responseデータをプロパティに代入
-		},
-		async getPostedProducts() { //投稿した商品(コンビニユーザー)
-			this.loading   = true; //ローディングを表示する
-			const response = await axios.get(`/api/mypage/${this.id}/posted`);
-			this.loading   = false; //API通信が終わったらローディングを非表示にする
-			
-			// if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
-			// 	this.$store.commit('error/setCode', response.status);
-			// 	return false; //後続の処理を抜ける
-			// }
-			this.postedProducts = response.data; //responseデータをプロパティに代入
-		},
-		async getWasPurchasedProducts() { //購入された商品(コンビニユーザー)
-			this.loading   = true; //ローディングを表示する
-			const response = await axios.get(`/api/mypage/${this.id}/wasPurchased`);
-			this.loading   = false; //API通信が終わったらローディングを非表示にする
-			
-			// if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
-			// 	this.$store.commit('error/setCode', response.status);
-			// 	return false; //後続の処理を抜ける
-			// }
-			this.wasPurchasedProducts = response.data; //responseデータをプロパティに代入
-			console.log('購入された記事');
+			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
+				this.$store.commit('error/setCode', response.status);
+				return false; //後続の処理を抜ける
+			}
+			this.wasCanceledProducts = response.data; //responseデータをプロパティに代入
+			console.log('キャンセルされた商品');
 			console.log(this.wasPurchasedProducts);
 		},
+		async getReviewed() { //レビューした出品者(利用者)
+			this.loading   = true; //ローディングを表示する
+			const response = await axios.get('/api/mypage/reviewed');
+			this.loading   = false; //API通信が終わったらローディングを非表示にする
+			
+			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
+				this.$store.commit('error/setCode', response.status);
+				return false; //後続の処理を抜ける
+			}
+			this.reviewedShopUsers = response.data; //responseデータをプロパティに代入
+			console.log('投稿したレビュー');
+			console.log(this.reviewedShopUsers);
+		},
+
+
 	},
 	watch: {
 		$route: { //$routerを監視してページが変わったときにメソッドが実行されるようにする
 			async handler() {
-				this.isShopUser ? await this.getWasPurchasedProducts() : await this.getPurchasedProducts();
-				if(!this.isShopUser) await this.getLikedProducts();
-				await this.getCanceledProducts();
-				await this.getReviewedShopUsers();
-				await this.getPostedProducts();
-				
-				// await this.getLikedProducts();
-				// await this.getPurchasedProducts();
+				// this.isShopUser ? await this.getWasPurchasedProducts() : await this.getPurchasedProducts();
+				// if(!this.isShopUser) await this.getLikedProducts();
 				// await this.getCanceledProducts();
-				// await this.getReviewedShopUsers();
+				// await this.getReviewed();
 				// await this.getPostedProducts();
-				// await this.getWasPurchasedProducts();
+				if(this.isShopUser) { //コンビニユーザーの場合
+					await this.getPostedProducts();
+					await this.getWasPurchasedProducts();
+					await this.getWasCanceledProducts();
+				}else { //利用者の場合
+					await this.getLikedProducts();
+					await this.getPurchasedProducts();
+					await this.getCanceledProducts();
+					await this.getReviewed();
+				}
 			},
 			immediate: true //immediateをtrueにすると、コンポーネントが生成されたタイミングでも実行する
 		}

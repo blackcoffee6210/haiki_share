@@ -106,7 +106,7 @@ export default {
 		async cancel(product) {   //購入キャンセル処理
 			this.product = product; //プロパティに値をセット
 			
-			if(confirm('購入をキャンセルしますか？')) {
+			if(confirm('購入をキャンセルしますか？(キャンセルした商品は再度購入できません)')) {
 				this.loading = true; //ローディングを表示する
 				
 				const response = await axios.post(`/api/products/${this.product.id}/cancel`, this.product); //API通信

@@ -221,11 +221,11 @@ export default {
 	methods: {
 		async getRecommend() { //おすすめの商品を5件取得
 			const response = await axios.get('/api/products/ranking');
-			// todo: コメントアウト直す
-			// if(response.status !== OK) {
-			// 	this.$store.commit('error/setCode', response.status);
-			// 	return false;
-			// }
+			
+			if(response.status !== OK) {
+				this.$store.commit('error/setCode', response.status);
+				return false;
+			}
 			this.recommendProducts = response.data;
 			console.log('getRecommendの中身');
 			console.log(response.data);
@@ -238,29 +238,22 @@ export default {
 				return false;
 			}
 			this.categories = response.data; //プロパティにresponseデータを代入
-			console.log('getCategoriesの中身');
-			console.log(response.data);
 		},
 		async getProducts() { //商品取得メソッド
-			this.loading = true; //ローディングを表示する
-			
+			this.loading   = true; //ローディングを表示する
 			const response = await axios.get(`/api/products?page=${this.page}`); //API接続
+			this.loading   = false; //API通信が終わったらローディングを非表示にする
 			
-			this.loading = false; //API通信が終わったらローディングを非表示にする
-			
-			// todo: コメントアウト直す
-			// if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
-			// 	this.$store.commit('error/setCode', response.status);
-			// 	return false;
-			// }
+			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
+				this.$store.commit('error/setCode', response.status);
+				return false;
+			}
 			//response.dataだとレスポンスのJSONの取得になる
 			//productはresponse.data.dataの中になるので、下記のような書き方になる
 			this.products    = response.data.data;         //商品情報
 			this.currentPage = response.data.current_page; //現在のページ
 			this.lastPage    = response.data.last_page;    //最後のページ
 			this.total       = response.data.total;        //商品の数
-			console.log('getProductsの中身');
-			console.log(response.data.data);
 		}
 	},
 	watch: {

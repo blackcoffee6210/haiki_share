@@ -16577,6 +16577,10 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
             case 2:
               if (_this.apiStatus) {
                 //通信成功ならloginページへ移動する
+                _this.$store.commit('message/setContent', {
+                  //「ログアウト」メッセージ登録
+                  content: 'ログアウトしました'
+                });
                 _this.$router.push({
                   name: 'index'
                 });
@@ -16710,7 +16714,8 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         email: '',
         password: '',
         password_confirmation: ''
-      }
+      },
+      checkAgree: false
     };
   },
   computed: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapState"])({
@@ -17092,7 +17097,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
                 });
                 _this.$router.push({
                   name: 'index'
-                })["catch"](function () {}); //記事一覧画面へ移動する
+                })["catch"](function () {}); //商品一覧画面へ移動する
               }
             case 3:
             case "end":
@@ -17603,15 +17608,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               return axios.get('/api/products/ranking');
             case 2:
               response = _context.sent;
-              // todo: コメントアウト直す
-              // if(response.status !== OK) {
-              // 	this.$store.commit('error/setCode', response.status);
-              // 	return false;
-              // }
+              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_3__["OK"])) {
+                _context.next = 6;
+                break;
+              }
+              _this.$store.commit('error/setCode', response.status);
+              return _context.abrupt("return", false);
+            case 6:
               _this.recommendProducts = response.data;
               console.log('getRecommendの中身');
               console.log(response.data);
-            case 6:
+            case 9:
             case "end":
               return _context.stop();
           }
@@ -17638,9 +17645,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               return _context2.abrupt("return", false);
             case 6:
               _this2.categories = response.data; //プロパティにresponseデータを代入
-              console.log('getCategoriesの中身');
-              console.log(response.data);
-            case 9:
+            case 7:
             case "end":
               return _context2.stop();
           }
@@ -17661,23 +17666,22 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             case 3:
               response = _context3.sent;
               //API接続
-
               _this3.loading = false; //API通信が終わったらローディングを非表示にする
-
-              // todo: コメントアウト直す
-              // if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
-              // 	this.$store.commit('error/setCode', response.status);
-              // 	return false;
-              // }
+              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_3__["OK"])) {
+                _context3.next = 8;
+                break;
+              }
+              //responseステータスがOKじゃなかったらエラーコードをセットする
+              _this3.$store.commit('error/setCode', response.status);
+              return _context3.abrupt("return", false);
+            case 8:
               //response.dataだとレスポンスのJSONの取得になる
               //productはresponse.data.dataの中になるので、下記のような書き方になる
               _this3.products = response.data.data; //商品情報
               _this3.currentPage = response.data.current_page; //現在のページ
               _this3.lastPage = response.data.last_page; //最後のページ
               _this3.total = response.data.total; //商品の数
-              console.log('getProductsの中身');
-              console.log(response.data.data);
-            case 11:
+            case 12:
             case "end":
               return _context3.stop();
           }
@@ -17748,8 +17752,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../util */ "./resources/js/util.js");
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _Loading__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Loading */ "./resources/js/components/Loading.vue");
-/* harmony import */ var vue_star_rating__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-star-rating */ "./node_modules/vue-star-rating/dist/VueStarRating.common.js");
-/* harmony import */ var vue_star_rating__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(vue_star_rating__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _Product__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Product */ "./resources/js/components/product/Product.vue");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw new Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw new Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -17774,7 +17777,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
   },
   components: {
     Loading: _Loading__WEBPACK_IMPORTED_MODULE_2__["default"],
-    StarRating: vue_star_rating__WEBPACK_IMPORTED_MODULE_3___default.a
+    Product: _Product__WEBPACK_IMPORTED_MODULE_3__["default"]
   },
   data: function data() {
     return {
@@ -17791,7 +17794,12 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       loading: false,
       //ローディングを表示するかどうかを判定するプロパティ
       isReviewed: false,
-      purchasedByUser: false
+      //ログインした利用者がレビューしたかどうか
+      purchasedByUser: false,
+      //ログインした利用者が購入したかどうか
+      canceledByUser: false,
+      //ログインした利用者がキャンセルしたかどうか
+      otherProducts: {} //出品者の他の商品
     };
   },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])({
@@ -17813,15 +17821,23 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               return axios.get("/api/products/".concat(_this.id, "/purchasedByUser"));
             case 2:
               response = _context.sent;
+              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_0__["OK"])) {
+                _context.next = 6;
+                break;
+              }
+              //responseステータスがOKじゃなかったらエラーコードをセット
+              _this.$store.commit('error/setCode', response.status);
+              return _context.abrupt("return", false);
+            case 6:
               response.data[0] ? _this.purchasedByUser = true : _this.purchasedByUser = false;
-            case 4:
+            case 7:
             case "end":
               return _context.stop();
           }
         }, _callee);
       }))();
     },
-    getProduct: function getProduct() {
+    getCanceledByUser: function getCanceledByUser() {
       var _this2 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
         var response;
@@ -17829,7 +17845,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           while (1) switch (_context2.prev = _context2.next) {
             case 0:
               _context2.next = 2;
-              return axios.get("/api/products/".concat(_this2.id));
+              return axios.get("/api/products/".concat(_this2.id, "/canceledByUser"));
             case 2:
               response = _context2.sent;
               if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_0__["OK"])) {
@@ -17840,54 +17856,47 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               _this2.$store.commit('error/setCode', response.status);
               return _context2.abrupt("return", false);
             case 6:
-              _this2.product = response.data; //responseデータをproductプロパティに代入
-              console.log('getProductの中身');
-              console.log(response.data);
-              if (_this2.product.liked_by_user) {
-                //ログインユーザーが既に「いいね」を押していたらtrueをセット
-                _this2.isLike = true;
-              }
-            case 10:
+              response.data[0] ? _this2.canceledByUser = true : _this2.canceledByUser = false;
+            case 7:
             case "end":
               return _context2.stop();
           }
         }, _callee2);
       }))();
     },
-    onLikeClick: function onLikeClick() {
+    getProduct: function getProduct() {
       var _this3 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+        var response;
         return _regeneratorRuntime().wrap(function _callee3$(_context3) {
           while (1) switch (_context3.prev = _context3.next) {
             case 0:
-              if (_this3.isLogin) {
-                _context3.next = 4;
+              _context3.next = 2;
+              return axios.get("/api/products/".concat(_this3.id));
+            case 2:
+              response = _context3.sent;
+              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_0__["OK"])) {
+                _context3.next = 6;
                 break;
               }
-              if (!confirm('いいね機能を使うにはログインしてください')) {
-                _context3.next = 4;
-                break;
-              }
-              _this3.$router.push({
-                name: 'login'
-              }); //ログインページに遷移
+              //responseステータスがOKじゃなかったらエラーコードをセット
+              _this3.$store.commit('error/setCode', response.status);
               return _context3.abrupt("return", false);
-            case 4:
+            case 6:
+              _this3.product = response.data; //responseデータをproductプロパティに代入
+
               if (_this3.product.liked_by_user) {
-                //すでにいいねを押していたらいいねを外す
-                _this3.unlike();
-              } else {
-                //いいねしていなかったらいいねをつける
-                _this3.like();
+                //ログインユーザーが既に「いいね」を押していたらtrueをセット
+                _this3.isLike = true;
               }
-            case 5:
+            case 8:
             case "end":
               return _context3.stop();
           }
         }, _callee3);
       }))();
     },
-    like: function like() {
+    getOtherProducts: function getOtherProducts() {
       var _this4 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
         var response;
@@ -17895,196 +17904,258 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           while (1) switch (_context4.prev = _context4.next) {
             case 0:
               _context4.next = 2;
-              return axios.post("/api/products/".concat(_this4.id, "/like"));
+              return axios.get("/api/products/".concat(_this4.product.user_id, "/").concat(_this4.id, "/other"));
             case 2:
               response = _context4.sent;
-              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_0__["OK"])) {
-                _context4.next = 6;
-                break;
-              }
-              //responseステータスがOKじゃなかったらエラーコードをセット
-              _this4.$store.commit('error/setCode', response.status);
-              return _context4.abrupt("return", false);
-            case 6:
-              _this4.product.likes_count += 1; //トータルのいいね数を1増やす
-              _this4.product.liked_by_user = true; //ログインユーザーが「いいね」をしたのでtrueをセット
-              _this4.isLike = true;
-            case 9:
+              //API接続
+
+              // if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
+              // 	this.$store.commit('error/setCode', response.status);
+              // 	return false; //後続の処理を抜ける
+              // }
+              _this4.otherProducts = response.data; //responseデータをプロパティに代入
+              console.log('otherProductsの中身');
+              console.log(response.data);
+              console.log(_this4.id);
+            case 7:
             case "end":
               return _context4.stop();
           }
         }, _callee4);
       }))();
     },
-    unlike: function unlike() {
+    onLikeClick: function onLikeClick() {
       var _this5 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
-        var response;
         return _regeneratorRuntime().wrap(function _callee5$(_context5) {
           while (1) switch (_context5.prev = _context5.next) {
             case 0:
-              _context5.next = 2;
-              return axios["delete"]("/api/products/".concat(_this5.id, "/unlike"));
-            case 2:
-              response = _context5.sent;
-              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_0__["OK"])) {
-                _context5.next = 6;
+              if (_this5.isLogin) {
+                _context5.next = 4;
                 break;
               }
-              //responseステータスがOKじゃなかったらエラーコードをセット
-              _this5.$store.commit('error/setCode', response.status);
+              if (!confirm('いいね機能を使うにはログインしてください')) {
+                _context5.next = 4;
+                break;
+              }
+              _this5.$router.push({
+                name: 'login'
+              }); //ログインページに遷移
               return _context5.abrupt("return", false);
-            case 6:
-              _this5.product.likes_count -= 1; //トータルのいいね数を1減らす
-              _this5.product.liked_by_user = false; //ログインユーザーが「いいね解除」したのでfalseをセット
-              _this5.isLike = false;
-            case 9:
+            case 4:
+              if (_this5.product.liked_by_user) {
+                //すでにいいねを押していたらいいねを外す
+                _this5.unlike();
+              } else {
+                //いいねしていなかったらいいねをつける
+                _this5.like();
+              }
+            case 5:
             case "end":
               return _context5.stop();
           }
         }, _callee5);
       }))();
     },
-    purchase: function purchase() {
+    like: function like() {
       var _this6 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
         var response;
         return _regeneratorRuntime().wrap(function _callee6$(_context6) {
           while (1) switch (_context6.prev = _context6.next) {
             case 0:
-              if (_this6.isLogin) {
-                _context6.next = 3;
-                break;
-              }
-              //ユーザーがログインしているかチェック
-              if (confirm('商品を購入するにはログインしてください')) {
-                _this6.$router.push({
-                  name: 'login'
-                }); //ログインページに遷移
-              }
-              return _context6.abrupt("return", false);
-            case 3:
-              if (!_this6.product.canceled_by_user) {
+              _context6.next = 2;
+              return axios.post("/api/products/".concat(_this6.id, "/like"));
+            case 2:
+              response = _context6.sent;
+              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_0__["OK"])) {
                 _context6.next = 6;
                 break;
               }
-              //商品をキャンセルしたユーザーは再度購入できない
-              alert('一度キャンセルした商品は購入できません');
-              return _context6.abrupt("return", false);
-            case 6:
-              if (!confirm('購入しますか？')) {
-                _context6.next = 19;
-                break;
-              }
-              //アレートで「購入しますか?」と表示し、「はい」を押すと以下の処理を実行
-              _this6.loading = true; //ローディングを表示する
-              _context6.next = 10;
-              return axios.post("/api/products/".concat(_this6.id, "/purchase"), _this6.product);
-            case 10:
-              response = _context6.sent;
-              //商品購入APIに接続
-
-              _this6.loading = false; //API通信が終わったらローディングを非表示にする
-              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_0__["OK"])) {
-                _context6.next = 15;
-                break;
-              }
-              //responseステータスがOKじゃなかったらエラーコードをセットする
+              //responseステータスがOKじゃなかったらエラーコードをセット
               _this6.$store.commit('error/setCode', response.status);
               return _context6.abrupt("return", false);
-            case 15:
-              _this6.product.purchased_by_user = true; //ログインユーザーが商品を購入したのでtrueをセット(購入済み)にする
-
-              if (_this6.product.liked_by_user) {
-                //商品を購入したため、「いいね」をしていたら外す
-                _this6.unlike();
-              }
-              _this6.$store.commit('message/setContent', {
-                //メッセージ登録
-                content: '商品を購入しました！'
-              });
-              _this6.$router.push({
-                name: 'product.detail',
-                params: {
-                  id: _this6.id
-                }
-              })["catch"](function () {}); //自画面(商品詳細)に遷移する
-            case 19:
+            case 6:
+              _this6.product.likes_count += 1; //トータルのいいね数を1増やす
+              _this6.product.liked_by_user = true; //ログインユーザーが「いいね」をしたのでtrueをセット
+              _this6.isLike = true;
+            case 9:
             case "end":
               return _context6.stop();
           }
         }, _callee6);
       }))();
     },
-    cancel: function cancel() {
+    unlike: function unlike() {
       var _this7 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
         var response;
         return _regeneratorRuntime().wrap(function _callee7$(_context7) {
           while (1) switch (_context7.prev = _context7.next) {
             case 0:
-              if (!confirm('購入をキャンセルしますか？(キャンセルした商品は再度購入できません)')) {
-                _context7.next = 13;
-                break;
-              }
-              _this7.loading = true; //ローディングを表示する
-              _context7.next = 4;
-              return axios.post("/api/products/".concat(_this7.id, "/cancel"), _this7.product);
-            case 4:
+              _context7.next = 2;
+              return axios["delete"]("/api/products/".concat(_this7.id, "/unlike"));
+            case 2:
               response = _context7.sent;
-              //API通信
-
-              _this7.loading = false; //API通信が終わったらローディングを非表示にする
               if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_0__["OK"])) {
-                _context7.next = 9;
+                _context7.next = 6;
                 break;
               }
               //responseステータスがOKじゃなかったらエラーコードをセット
               _this7.$store.commit('error/setCode', response.status);
               return _context7.abrupt("return", false);
+            case 6:
+              _this7.product.likes_count -= 1; //トータルのいいね数を1減らす
+              _this7.product.liked_by_user = false; //ログインユーザーが「いいね解除」したのでfalseをセット
+              _this7.isLike = false;
             case 9:
-              _this7.product.purchased_by_user = false; //購入キャンセルをしたのでpurchased_by_userにfalseをセット
-              _this7.product.canceled_by_user = true; //canceled_by_userにtrueをセット
-
-              _this7.$store.commit('message/setContent', {
-                //メッセージ登録
-                content: '購入をキャンセルしました'
-              });
-              _this7.$router.push({
-                name: 'index'
-              }); //インデックス画面に遷移する
-            case 13:
             case "end":
               return _context7.stop();
           }
         }, _callee7);
       }))();
     },
-    getMyReview: function getMyReview() {
+    purchase: function purchase() {
       var _this8 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
         var response;
         return _regeneratorRuntime().wrap(function _callee8$(_context8) {
           while (1) switch (_context8.prev = _context8.next) {
             case 0:
-              _context8.next = 2;
-              return axios.get("/api/products/".concat(_this8.product.user_id, "/isReviewed"));
-            case 2:
-              response = _context8.sent;
-              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_0__["OK"])) {
+              if (_this8.isLogin) {
+                _context8.next = 3;
+                break;
+              }
+              //ユーザーがログインしているかチェック
+              if (confirm('商品を購入するにはログインしてください')) {
+                _this8.$router.push({
+                  name: 'login'
+                }); //ログインページに遷移
+              }
+              return _context8.abrupt("return", false);
+            case 3:
+              if (!_this8.canceledByUser) {
                 _context8.next = 6;
                 break;
               }
-              //responseステータスがOKじゃなかったらエラーコードをセット
-              _this8.$store.commit('error/setCode', response.status);
+              //商品をキャンセルしたユーザーは再度購入できない
+              alert('一度キャンセルした商品は購入できません');
               return _context8.abrupt("return", false);
             case 6:
-              response.data[0] ? _this8.isReviewed = true : _this8.isReviewed = false; //レビュー投稿済みならtrue、なければfalseをセット
-            case 7:
+              if (!confirm('購入しますか？')) {
+                _context8.next = 19;
+                break;
+              }
+              //アレートで「購入しますか?」と表示し、「はい」を押すと以下の処理を実行
+              _this8.loading = true; //ローディングを表示する
+              _context8.next = 10;
+              return axios.post("/api/products/".concat(_this8.id, "/purchase"), _this8.product);
+            case 10:
+              response = _context8.sent;
+              //商品購入APIに接続
+
+              _this8.loading = false; //API通信が終わったらローディングを非表示にする
+              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_0__["OK"])) {
+                _context8.next = 15;
+                break;
+              }
+              //responseステータスがOKじゃなかったらエラーコードをセットする
+              _this8.$store.commit('error/setCode', response.status);
+              return _context8.abrupt("return", false);
+            case 15:
+              _this8.purchasedByUser = true;
+              // this.product.purchased_by_user = true; //ログインユーザーが商品を購入したのでtrueをセット(購入済み)にする
+
+              if (_this8.product.liked_by_user) {
+                //商品を購入したため、「いいね」をしていたら外す
+                _this8.unlike();
+              }
+              _this8.$store.commit('message/setContent', {
+                //メッセージ登録
+                content: '商品を購入しました！'
+              });
+              _this8.$router.push({
+                name: 'product.detail',
+                params: {
+                  id: _this8.id
+                }
+              })["catch"](function () {}); //自画面(商品詳細)に遷移する
+            case 19:
             case "end":
               return _context8.stop();
           }
         }, _callee8);
+      }))();
+    },
+    cancel: function cancel() {
+      var _this9 = this;
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9() {
+        var response;
+        return _regeneratorRuntime().wrap(function _callee9$(_context9) {
+          while (1) switch (_context9.prev = _context9.next) {
+            case 0:
+              if (!confirm('購入をキャンセルしますか？(キャンセルした商品は再度購入できません)')) {
+                _context9.next = 11;
+                break;
+              }
+              _this9.loading = true; //ローディングを表示する
+              _context9.next = 4;
+              return axios.post("/api/products/".concat(_this9.id, "/cancel"), _this9.product);
+            case 4:
+              response = _context9.sent;
+              //API通信
+
+              _this9.loading = false; //API通信が終わったらローディングを非表示にする
+              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_0__["OK"])) {
+                _context9.next = 9;
+                break;
+              }
+              //responseステータスがOKじゃなかったらエラーコードをセット
+              _this9.$store.commit('error/setCode', response.status);
+              return _context9.abrupt("return", false);
+            case 9:
+              // this.product.purchased_by_user = false; //購入キャンセルをしたのでpurchased_by_userにfalseをセット
+              // this.product.canceled_by_user  = true; //canceled_by_userにtrueをセット
+
+              _this9.$store.commit('message/setContent', {
+                //メッセージ登録
+                content: '購入をキャンセルしました'
+              });
+              _this9.$router.push({
+                name: 'index'
+              }); //インデックス画面に遷移する
+            case 11:
+            case "end":
+              return _context9.stop();
+          }
+        }, _callee9);
+      }))();
+    },
+    getMyReview: function getMyReview() {
+      var _this10 = this;
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10() {
+        var response;
+        return _regeneratorRuntime().wrap(function _callee10$(_context10) {
+          while (1) switch (_context10.prev = _context10.next) {
+            case 0:
+              _context10.next = 2;
+              return axios.get("/api/products/".concat(_this10.product.user_id, "/isReviewed"));
+            case 2:
+              response = _context10.sent;
+              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_0__["OK"])) {
+                _context10.next = 6;
+                break;
+              }
+              //responseステータスがOKじゃなかったらエラーコードをセット
+              _this10.$store.commit('error/setCode', response.status);
+              return _context10.abrupt("return", false);
+            case 6:
+              response.data[0] ? _this10.isReviewed = true : _this10.isReviewed = false; //レビュー投稿済みならtrue、なければfalseをセット
+            case 7:
+            case "end":
+              return _context10.stop();
+          }
+        }, _callee10);
       }))();
     },
     returnTop: function returnTop() {
@@ -18108,24 +18179,30 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
   watch: {
     $route: {
       handler: function handler() {
-        var _this9 = this;
-        return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9() {
-          return _regeneratorRuntime().wrap(function _callee9$(_context9) {
-            while (1) switch (_context9.prev = _context9.next) {
+        var _this11 = this;
+        return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11() {
+          return _regeneratorRuntime().wrap(function _callee11$(_context11) {
+            while (1) switch (_context11.prev = _context11.next) {
               case 0:
-                _context9.next = 2;
-                return _this9.getPurchasedByUser();
+                _context11.next = 2;
+                return _this11.getPurchasedByUser();
               case 2:
-                _context9.next = 4;
-                return _this9.getProduct();
+                _context11.next = 4;
+                return _this11.getCanceledByUser();
               case 4:
-                _context9.next = 6;
-                return _this9.getMyReview();
+                _context11.next = 6;
+                return _this11.getProduct();
               case 6:
+                _context11.next = 8;
+                return _this11.getOtherProducts();
+              case 8:
+                _context11.next = 10;
+                return _this11.getMyReview();
+              case 10:
               case "end":
-                return _context9.stop();
+                return _context11.stop();
             }
-          }, _callee9);
+          }, _callee11);
         }))();
       },
       immediate: true
@@ -19450,19 +19527,21 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       loading: false,
       //ローディング
       likedProducts: {},
-      //お気に入りした商品
-      purchasedProducts: {},
-      //購入した商品
-      wasPurchasedProducts: {},
-      //購入された商品
-      canceledProducts: {},
-      //キャンセルした商品
-      wasCanceledProducts: {},
-      //キャンセルされた商品
-      reviewedShopUsers: {},
-      //出品者へのレビュー（利用者）
+      //お気に入りした商品(利用者)
       postedProducts: {},
-      //出品した商品
+      //出品した商品（コンビニ）
+      purchasedProducts: {},
+      //購入した商品（利用者）
+      wasPurchasedProducts: {},
+      //購入された商品（コンビニ）
+      canceledProducts: {},
+      //キャンセルした商品（利用者）
+      wasCanceledProducts: {},
+      //キャンセルされた商品（コンビニ）
+      reviewedShopUsers: {},
+      //投稿したレビュー（利用者）
+      wasReviewedShopUsers: {},
+      //投稿されたレビュー（コンビニ）
       reviewedUsers: {} //購入者へのレビュー（コンビニ）
     };
   },
@@ -19480,7 +19559,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               //お気に入りした商品(利用者)
               _this.loading = true; //ローディングを表示する
               _context.next = 3;
-              return axios.get("/api/mypage/".concat(_this.id, "/liked"));
+              return axios.get('/api/mypage/liked');
             case 3:
               response = _context.sent;
               _this.loading = false; //API通信が終わったらローディングを非表示にする
@@ -19502,145 +19581,194 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         }, _callee);
       }))();
     },
-    getPurchasedProducts: function getPurchasedProducts() {
+    getPostedProducts: function getPostedProducts() {
       var _this2 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
         var response;
         return _regeneratorRuntime().wrap(function _callee2$(_context2) {
           while (1) switch (_context2.prev = _context2.next) {
             case 0:
-              //購入した商品(利用者)
+              //出品した商品(コンビニユーザー)
               _this2.loading = true; //ローディングを表示する
               _context2.next = 3;
-              return axios.get("/api/mypage/".concat(_this2.id, "/purchased"));
+              return axios.get('/api/mypage/posted');
             case 3:
               response = _context2.sent;
               _this2.loading = false; //API通信が終わったらローディングを非表示にする
-
-              // if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
-              // 	this.$store.commit('error/setCode', response.status);
-              // 	return false; //後続の処理を抜ける
-              // }
-              _this2.purchasedProducts = response.data; //responseデータをプロパティに代入
-              console.log('購入した商品一覧');
-              console.log(response.data);
+              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_4__["OK"])) {
+                _context2.next = 8;
+                break;
+              }
+              //responseステータスがOKじゃなかったらエラーコードをセットする
+              _this2.$store.commit('error/setCode', response.status);
+              return _context2.abrupt("return", false);
             case 8:
+              _this2.postedProducts = response.data; //responseデータをプロパティに代入
+            case 9:
             case "end":
               return _context2.stop();
           }
         }, _callee2);
       }))();
     },
-    getCanceledProducts: function getCanceledProducts() {
+    getPurchasedProducts: function getPurchasedProducts() {
       var _this3 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
         var response;
         return _regeneratorRuntime().wrap(function _callee3$(_context3) {
           while (1) switch (_context3.prev = _context3.next) {
             case 0:
-              //キャンセルした商品(利用者)
+              //購入した商品(利用者)
               _this3.loading = true; //ローディングを表示する
               _context3.next = 3;
-              return axios.get("/api/mypage/".concat(_this3.id, "/canceled"));
+              return axios.get('/api/mypage/purchased');
             case 3:
               response = _context3.sent;
               _this3.loading = false; //API通信が終わったらローディングを非表示にする
-
-              // if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
-              // 	this.$store.commit('error/setCode', response.status);
-              // 	return false; //後続の処理を抜ける
-              // }
-              _this3.canceledProducts = response.data; //responseデータをプロパティに代入
-              console.log('キャンセルした商品');
-              console.log(response.data);
+              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_4__["OK"])) {
+                _context3.next = 8;
+                break;
+              }
+              //responseステータスがOKじゃなかったらエラーコードをセットする
+              _this3.$store.commit('error/setCode', response.status);
+              return _context3.abrupt("return", false);
             case 8:
+              _this3.purchasedProducts = response.data; //responseデータをプロパティに代入
+              console.log('購入した商品一覧');
+              console.log(response.data);
+            case 11:
             case "end":
               return _context3.stop();
           }
         }, _callee3);
       }))();
     },
-    getReviewedShopUsers: function getReviewedShopUsers() {
+    getWasPurchasedProducts: function getWasPurchasedProducts() {
       var _this4 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
         var response;
         return _regeneratorRuntime().wrap(function _callee4$(_context4) {
           while (1) switch (_context4.prev = _context4.next) {
             case 0:
-              //レビューした出品者(利用者)
+              //購入された商品(コンビニユーザー)
               _this4.loading = true; //ローディングを表示する
               _context4.next = 3;
-              return axios.get("/api/mypage/".concat(_this4.id, "/reviewedShopUser"));
+              return axios.get('/api/mypage/wasPurchased');
             case 3:
               response = _context4.sent;
               _this4.loading = false; //API通信が終わったらローディングを非表示にする
-
-              // if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
-              // 	this.$store.commit('error/setCode', response.status);
-              // 	return false; //後続の処理を抜ける
-              // }
-              _this4.reviewedShopUsers = response.data; //responseデータをプロパティに代入
-            case 6:
+              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_4__["OK"])) {
+                _context4.next = 8;
+                break;
+              }
+              //responseステータスがOKじゃなかったらエラーコードをセットする
+              _this4.$store.commit('error/setCode', response.status);
+              return _context4.abrupt("return", false);
+            case 8:
+              _this4.wasPurchasedProducts = response.data; //responseデータをプロパティに代入
+              console.log('購入された商品一覧');
+              console.log(_this4.wasPurchasedProducts);
+            case 11:
             case "end":
               return _context4.stop();
           }
         }, _callee4);
       }))();
     },
-    getPostedProducts: function getPostedProducts() {
+    getCanceledProducts: function getCanceledProducts() {
       var _this5 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
         var response;
         return _regeneratorRuntime().wrap(function _callee5$(_context5) {
           while (1) switch (_context5.prev = _context5.next) {
             case 0:
-              //投稿した商品(コンビニユーザー)
+              //キャンセルした商品(利用者)
               _this5.loading = true; //ローディングを表示する
               _context5.next = 3;
-              return axios.get("/api/mypage/".concat(_this5.id, "/posted"));
+              return axios.get('/api/mypage/canceled');
             case 3:
               response = _context5.sent;
               _this5.loading = false; //API通信が終わったらローディングを非表示にする
-
-              // if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
-              // 	this.$store.commit('error/setCode', response.status);
-              // 	return false; //後続の処理を抜ける
-              // }
-              _this5.postedProducts = response.data; //responseデータをプロパティに代入
-            case 6:
+              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_4__["OK"])) {
+                _context5.next = 8;
+                break;
+              }
+              //responseステータスがOKじゃなかったらエラーコードをセットする
+              _this5.$store.commit('error/setCode', response.status);
+              return _context5.abrupt("return", false);
+            case 8:
+              _this5.canceledProducts = response.data; //responseデータをプロパティに代入
+              console.log('キャンセルした商品');
+              console.log(response.data);
+            case 11:
             case "end":
               return _context5.stop();
           }
         }, _callee5);
       }))();
     },
-    getWasPurchasedProducts: function getWasPurchasedProducts() {
+    getWasCanceledProducts: function getWasCanceledProducts() {
       var _this6 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
         var response;
         return _regeneratorRuntime().wrap(function _callee6$(_context6) {
           while (1) switch (_context6.prev = _context6.next) {
             case 0:
-              //購入された商品(コンビニユーザー)
+              //キャンセルされた商品(コンビニユーザー)
               _this6.loading = true; //ローディングを表示する
               _context6.next = 3;
-              return axios.get("/api/mypage/".concat(_this6.id, "/wasPurchased"));
+              return axios.get('/api/mypage/wasCanceled');
             case 3:
               response = _context6.sent;
               _this6.loading = false; //API通信が終わったらローディングを非表示にする
-
-              // if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
-              // 	this.$store.commit('error/setCode', response.status);
-              // 	return false; //後続の処理を抜ける
-              // }
-              _this6.wasPurchasedProducts = response.data; //responseデータをプロパティに代入
-              console.log('購入された記事');
-              console.log(_this6.wasPurchasedProducts);
+              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_4__["OK"])) {
+                _context6.next = 8;
+                break;
+              }
+              //responseステータスがOKじゃなかったらエラーコードをセットする
+              _this6.$store.commit('error/setCode', response.status);
+              return _context6.abrupt("return", false);
             case 8:
+              _this6.wasCanceledProducts = response.data; //responseデータをプロパティに代入
+              console.log('キャンセルされた商品');
+              console.log(_this6.wasPurchasedProducts);
+            case 11:
             case "end":
               return _context6.stop();
           }
         }, _callee6);
+      }))();
+    },
+    getReviewed: function getReviewed() {
+      var _this7 = this;
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
+        var response;
+        return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+          while (1) switch (_context7.prev = _context7.next) {
+            case 0:
+              //レビューした出品者(利用者)
+              _this7.loading = true; //ローディングを表示する
+              _context7.next = 3;
+              return axios.get('/api/mypage/reviewed');
+            case 3:
+              response = _context7.sent;
+              _this7.loading = false; //API通信が終わったらローディングを非表示にする
+              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_4__["OK"])) {
+                _context7.next = 8;
+                break;
+              }
+              //responseステータスがOKじゃなかったらエラーコードをセットする
+              _this7.$store.commit('error/setCode', response.status);
+              return _context7.abrupt("return", false);
+            case 8:
+              _this7.reviewedShopUsers = response.data; //responseデータをプロパティに代入
+              console.log('投稿したレビュー');
+              console.log(_this7.reviewedShopUsers);
+            case 11:
+            case "end":
+              return _context7.stop();
+          }
+        }, _callee7);
       }))();
     }
   },
@@ -19648,44 +19776,43 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     $route: {
       //$routerを監視してページが変わったときにメソッドが実行されるようにする
       handler: function handler() {
-        var _this7 = this;
-        return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
-          return _regeneratorRuntime().wrap(function _callee7$(_context7) {
-            while (1) switch (_context7.prev = _context7.next) {
+        var _this8 = this;
+        return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
+          return _regeneratorRuntime().wrap(function _callee8$(_context8) {
+            while (1) switch (_context8.prev = _context8.next) {
               case 0:
-                if (!_this7.isShopUser) {
-                  _context7.next = 5;
+                if (!_this8.isShopUser) {
+                  _context8.next = 9;
                   break;
                 }
-                _context7.next = 3;
-                return _this7.getWasPurchasedProducts();
+                _context8.next = 3;
+                return _this8.getPostedProducts();
               case 3:
-                _context7.next = 7;
-                break;
+                _context8.next = 5;
+                return _this8.getWasPurchasedProducts();
               case 5:
-                _context7.next = 7;
-                return _this7.getPurchasedProducts();
+                _context8.next = 7;
+                return _this8.getWasCanceledProducts();
               case 7:
-                if (_this7.isShopUser) {
-                  _context7.next = 10;
-                  break;
-                }
-                _context7.next = 10;
-                return _this7.getLikedProducts();
-              case 10:
-                _context7.next = 12;
-                return _this7.getCanceledProducts();
-              case 12:
-                _context7.next = 14;
-                return _this7.getReviewedShopUsers();
-              case 14:
-                _context7.next = 16;
-                return _this7.getPostedProducts();
-              case 16:
+                _context8.next = 17;
+                break;
+              case 9:
+                _context8.next = 11;
+                return _this8.getLikedProducts();
+              case 11:
+                _context8.next = 13;
+                return _this8.getPurchasedProducts();
+              case 13:
+                _context8.next = 15;
+                return _this8.getCanceledProducts();
+              case 15:
+                _context8.next = 17;
+                return _this8.getReviewed();
+              case 17:
               case "end":
-                return _context7.stop();
+                return _context8.stop();
             }
-          }, _callee7);
+          }, _callee8);
         }))();
       },
       immediate: true //immediateをtrueにすると、コンポーネントが生成されたタイミングでも実行する
@@ -19915,7 +20042,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
             case 0:
               //購入キャンセル処理
               _this3.product = product; //プロパティに値をセット
-              if (!confirm('購入をキャンセルしますか？')) {
+              if (!confirm('購入をキャンセルしますか？(キャンセルした商品は再度購入できません)')) {
                 _context3.next = 14;
                 break;
               }
@@ -20038,7 +20165,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     isShopUser: 'auth/isShopUser'
   })),
   methods: {
-    getReviews: function getReviews() {
+    getReviewed: function getReviewed() {
       var _this = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
         var response;
@@ -20125,7 +20252,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
                 break;
               case 5:
                 _context3.next = 7;
-                return _this3.getReviews();
+                return _this3.getReviewed();
               case 7:
               case "end":
                 return _context3.stop();
@@ -20468,7 +20595,7 @@ var render = function render() {
         }
       }
     }
-  }, [_vm._v("いいねした商品一覧\n\t\t")]) : _vm._e(), _vm._v(" "), _c("router-link", {
+  }, [_vm._v("お気に入りした商品一覧\n\t\t")]) : _vm._e(), _vm._v(" "), _c("router-link", {
     staticClass: "p-sidebar__link",
     attrs: {
       to: {
@@ -20533,14 +20660,14 @@ var render = function render() {
       value: _vm.isShopUser,
       expression: "isShopUser"
     }]
-  }, [_vm._v("レビューされたユーザー一覧")]), _vm._v(" "), _c("span", {
+  }, [_vm._v("投稿されたレビュー一覧")]), _vm._v(" "), _c("span", {
     directives: [{
       name: "show",
       rawName: "v-show",
       value: !_vm.isShopUser,
       expression: "!isShopUser"
     }]
-  }, [_vm._v("レビューしたユーザー一覧")])]), _vm._v(" "), _c("button", {
+  }, [_vm._v("投稿したレビュー一覧")])]), _vm._v(" "), _c("button", {
     staticClass: "p-sidebar__link",
     on: {
       click: _vm.logout
@@ -20728,11 +20855,10 @@ var render = function render() {
       }
     }
   }), _vm._v(" "), _c("label", {
-    staticClass: "p-auth-form__label--check",
     attrs: {
       "for": "remember"
     }
-  }, [_vm._v("ログイン保持\n\t\t\t\t")])]), _vm._v(" "), _c("button", {
+  }, [_vm._v("ログイン保持")])]), _vm._v(" "), _c("button", {
     staticClass: "c-btn p-auth-form__btn",
     attrs: {
       type: "submit"
@@ -21117,12 +21243,62 @@ var render = function render() {
       key: msg,
       staticClass: "p-error"
     }, [_vm._v(_vm._s(msg))]);
-  }), 0) : _vm._e(), _vm._v(" "), _c("button", {
+  }), 0) : _vm._e(), _vm._v(" "), _c("div", {
+    staticClass: "p-auth-form__check-container"
+  }, [_c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.checkAgree,
+      expression: "checkAgree"
+    }],
+    staticClass: "p-auth-form__check",
+    attrs: {
+      type: "checkbox",
+      id: "agreement"
+    },
+    domProps: {
+      checked: Array.isArray(_vm.checkAgree) ? _vm._i(_vm.checkAgree, null) > -1 : _vm.checkAgree
+    },
+    on: {
+      change: function change($event) {
+        var $$a = _vm.checkAgree,
+          $$el = $event.target,
+          $$c = $$el.checked ? true : false;
+        if (Array.isArray($$a)) {
+          var $$v = null,
+            $$i = _vm._i($$a, $$v);
+          if ($$el.checked) {
+            $$i < 0 && (_vm.checkAgree = $$a.concat([$$v]));
+          } else {
+            $$i > -1 && (_vm.checkAgree = $$a.slice(0, $$i).concat($$a.slice($$i + 1)));
+          }
+        } else {
+          _vm.checkAgree = $$c;
+        }
+      }
+    }
+  }), _vm._v(" "), _c("router-link", {
+    staticClass: "p-auth-form__agreement",
+    attrs: {
+      target: "_blank",
+      to: {
+        name: "agreement"
+      }
+    }
+  }, [_vm._v("利用規約\n\t\t\t\t")]), _vm._v(" "), _c("label", {
+    attrs: {
+      "for": "agreement"
+    }
+  }, [_vm._v("に同意する")])], 1), _vm._v(" "), _c("div", {
+    staticClass: "u-p-relative"
+  }, [_c("button", {
     staticClass: "c-btn p-auth-form__btn",
     attrs: {
+      disabled: !_vm.checkAgree,
       type: "submit"
     }
-  }, [_vm._v("登録する（無料）")])]), _vm._v(" "), _c("hr", {
+  }, [_vm._v("登録する（無料）\n\t\t\t\t")])])]), _vm._v(" "), _c("hr", {
     staticClass: "p-auth-form__u-line"
   }), _vm._v(" "), _c("router-link", {
     staticClass: "c-link",
@@ -21469,7 +21645,7 @@ var render = function render() {
     staticClass: "p-agreement"
   }, [_c("h1", {
     staticClass: "p-agreement__title"
-  }, [_vm._v("利用規約")]), _vm._v(" "), _c("p", [_vm._v("\n\t\t利用者のみなさまには、本規約に従って" + _vm._s(_vm.name) + "及び" + _vm._s(_vm.name) + "\n\t\t(以下、当サイトと言います。)内のサービス（以下、サービスと言います。）をご利用いただきます。\n\t\tサービスを利用することによって、本規約の内容を承諾いただいたものとみなします。"), _c("br"), _vm._v(" "), _c("br"), _vm._v(" "), _vm._m(0), _vm._v("\n\t\t1．" + _vm._s(_vm.name) + "（以下、当方と言います。）の定める「利用者」とは、本規約を承諾のうえ、規定の入会手続きを完了し当方が登録を承認した「会員（会員登録者）」と、本規約を承諾のうえ、会員登録せずに一時的にサービスを利用する「一時利用者（未会員登録者）」を言います。一時利用者は、当サイトを閲覧することはできますが、当サイトで利用できる機能が制限されております。"), _c("br"), _vm._v("\n\t\t2．当方が、「利用者」として承認することを不適切と判断した場合、ご利用をお断りする場合があります。また会員の承認後であっても、第１１条にもとづき、会員資格を取り消すことがあります。"), _c("br"), _vm._v(" "), _c("br"), _vm._v(" "), _vm._m(1), _vm._v("\n\t\t本規約は、当サイトにおける、第１条が定める利用者との間のあらゆる関係において適用されます。"), _c("br"), _vm._v(" "), _c("br"), _vm._v(" "), _vm._m(2), _vm._v("\n\t\t1．当方は、規約等（本規約および当サイトに掲載するサービスに関するルール、諸規定等を含みます。以下本規約において同じ。）の内容を事前の予告無しに自由に変更できるものとします。"), _c("br"), _vm._v("\n\t\t2．当方は、規約等またはサービスの内容を変更した場合には、利用者に当該変更内容を当サイト上で公表するものとし、当該変更内容の公表後、利用者がサービスを利用した場合または当方の定める期間内に登録取消の手続をとらなかった場合には、利用者は、本規約の内容の変更に同意したものとみなします。"), _c("br"), _vm._v(" "), _c("br"), _vm._v(" "), _vm._m(3), _vm._v("\n\t\t利用者は、規約等（前条により変更された場合は、変更後の規約等も含む。）を理解し遵守する義務があります。"), _c("br"), _vm._v(" "), _c("br"), _vm._v(" "), _vm._m(4), _vm._v("\n\t\t利用者がサービス利用にあたり提供した情報は当方の所有となり、当方が責任をもって管理・保護いたします。また、利用者の個人情報については、当方が別途定めるプライバシーポリシーに従って取扱うこと、特に利用者の個人情報が当方と契約する加盟店に対して提供されることについて利用者はあらかじめ同意するものとします。また、かかるプライバシーポリシーが変更された場合は、変更後のプライバシーポリシーが適用されることに同意するものとします。"), _c("br"), _vm._v(" "), _c("br"), _vm._v(" "), _vm._m(5), _vm._v("\n\t\t1．会員IDまたは登録メールアドレス、パスワードの利用により発生した全ての責任や債務は、会員の責任によって解決するものとし、当方は一切責任を負いません。"), _c("br"), _vm._v("\n\t\t2．会員IDまたは登録メールアドレス、パスワードの管理は、会員の責任において行われるものとします。会員IDまたは登録メールアドレス、パスワードが第三者によって使用され、会員に不利益、損害が発生した場合、当方は一切その責任を負いません。"), _c("br"), _vm._v("\n\t\t3．会員IDまたは登録メールアドレス、パスワードの喪失、もしくは盗難の場合、会員はただちに当方に報告するものとし、その報告があった場合、当方がその事態に気づいた場合には、会員IDまたは登録メールアドレス、パスワードの使用を中止することがあります。"), _c("br"), _vm._v("\n\t\t4．会員ID（アカウント）を第三者へ転売、譲渡、貸与することは出来ません。その事実が発覚した場合、アカウント１つにつき30万円の違約金をご請求いたします。"), _c("br"), _vm._v("\n\t\t5．メールアドレスの登録は、会員が自らの責任により行うものとし、メールアドレスの入力間違いにより、第三者に会員情報等が送信され、不正に利用された場合であっても、当方は一切その責任を負いません。また、メールアドレスの入力間違いにより、第三者に対して損害や損失を与えた場合、会員は自己の責任と費用負担によってその損害・損失を処理・解決するものとし、当方は、かかる損害・損失に対して如何なる責任も負いません。"), _c("br"), _vm._v(" "), _c("br"), _vm._v(" "), _vm._m(6), _vm._v("\n\t\t1．会員は、会員として当方にメールを送信する場合、事前に登録したメールアドレスを使用するものとします。"), _c("br"), _vm._v("\n\t\t2．会員は、登録されているメールアドレスと異なるメールアドレスにて送受信を行い、当該メンバーに不利益、損害が発生した場合、当方は一切その責任を負いません。"), _c("br"), _vm._v("\n\t\t3．会員は、当方が会員へ送信するメールのうち、サーバーのメンテナンスに伴うサービス停止情報などサービス提供のために重要であると当方が判断する情報を「重要なお知らせ」として提供することに関しては、配信を停止することが出来ないことを予め了承するものとします。"), _c("br"), _vm._v("\n\t\t4．当方は会員に対して、登録住所に新規店舗が出店した場合、ご利用後の感想を伺う場合や、会員向け企画などのお得な情報を、メールにて配信することがあり、これについて会員はあらかじめ同意するものとします。ただし、会員がメール内に記載の配信停止方法に従ってこのメールの配信停止を希望する場合、当方は可能な限り迅速に対応いたします。"), _c("br"), _vm._v(" "), _c("br"), _vm._v(" "), _vm._m(7), _vm._v("\n\t\t1．「★評価＆コメント」コーナー(以下、当コーナーと言います。)は、利用者間の情報の交換、利用者の当サイト利用の実体験に基づくクチコミ情報の収集のために、当方により開設、運営されています。利用者はこの趣旨をご理解のうえ、当コーナーを閲覧し、記事の投稿を行うものとします。利用者の投稿記事は、ニックネーム、タイトル等とともに投稿内容の対象加盟店またはチェーン本部に対して提供されます。また、投稿内容の対象加盟店またはチェーン本部からの返信が当コーナーに掲載されることがあります。なお、" + _vm._s(_vm.name) + "の加盟店、および" + _vm._s(_vm.name) + "関連サイトによっては、「★評価＆コメント」が行えない場合もございます。"), _c("br"), _vm._v("\n\t\t2．利用者が投稿すると、「★評価＆コメント」として当コーナーに掲載され、他の利用者が店舗・メニュー選択の参考にされます。"), _c("br"), _vm._v("\n\t\t3．利用者は、投稿にあたっては、記事の内容に責任を負い、また以下に掲げる行為を行わないものとします。"), _c("br"), _vm._v("\n\t\t（1）当方の提供する関連情報から逸脱した内容を投稿する行為。"), _c("br"), _vm._v("\n\t\t（2）利用者自身の体験や、当サイトを利用しての経験に基づいていない投稿をする行為。"), _c("br"), _vm._v("\n\t\t（3）営利目的の内容を投稿すること。宣伝行為。"), _c("br"), _vm._v("\n\t\t（4）事実と反する内容・虚偽の内容を投稿する行為。"), _c("br"), _vm._v("\n\t\t（5）同一内容を意図的に多数投稿する行為。"), _c("br"), _vm._v("\n\t\t（6）当サイトのサービス・機能に関するお問合せやクレーム。"), _c("br"), _vm._v("\n\t\t（7）当サイトが提供する情報の掲載間違いに関するお問合せやクレーム。"), _c("br"), _vm._v("\n\t\t（8）有害なプログラム・スクリプト等を含む内容を書き込む行為。"), _c("br"), _vm._v("\n\t\t（9）当コーナーの他の利用者又は第三者の知的財産権、肖像権、プライバシーの権利、名誉、その他の権利又は利益の侵害に該当することとなる情報を当コーナーに送信する行為。"), _c("br"), _vm._v("\n\t\t（10）当コーナーにおいて利用しうる情報を改ざんする行為。"), _c("br"), _vm._v("\n\t\t（11）当方が定める一定のデータ容量以上のデータを当コーナーに対して送信する行為。"), _c("br"), _vm._v("\n\t\t（12）当方による当コーナーの運営を妨害するおそれのある行為。"), _c("br"), _vm._v("\n\t\t（13）当方の信用を毀損するおそれのある行為。"), _c("br"), _vm._v("\n\t\t（14）下記4.投稿内容に関する制限の各号に該当するものを投稿する行為。"), _c("br"), _vm._v("\n\t\t（15）その他、当方が不適切と判断する行為。"), _c("br"), _vm._v("\n\t\t4．利用者は、以下に掲げる事項を含む記事を投稿してはならないものとします。"), _c("br"), _vm._v("\n\t\t（1）著作権、商標権、プライバシー権、名誉等、他者（当方や他の利用者も含みます）の権利を侵害する内容を含むもの。"), _c("br"), _vm._v("\n\t\t（2）本来公開されていない他人の名前・メールアドレス・住所・電話番号その他の連絡先が使用（利用者名や投稿内容において使用される場合を含みますが、これらに限りません。）されているもの。"), _c("br"), _vm._v("\n\t\t（3）他人を威圧・脅迫する旨が看取される内容を含むもの。"), _c("br"), _vm._v("\n\t\t（4）児童や青少年に対し著しく粗暴性、残虐性又は犯罪を誘発助長し、その健全な育成を阻害する内容を含むもの。"), _c("br"), _vm._v("\n\t\t（5）法令、公序良俗に反する内容を含むもの。"), _c("br"), _vm._v("\n\t\t（6）閲覧者を不快にするような内容。"), _c("br"), _vm._v("\n\t\t（7）その他、当コーナーに掲示することが不適切な内容であると当方が判断した内容。"), _c("br"), _vm._v("\n\t\t5．当コーナーの運営に当たり、当方は以下の権利を有し、利用者はかかる権利の行使につき一切意異議を唱えないものとします。尚、本条項はあくまでも当方の権利を定めるものであり、義務を課すものではありません。"), _c("br"), _vm._v("\n\t\t(1)本条項3および4に記載された各事項に該当する投稿記事の存在が判明した場合（以下併せて「違反行為」と言います。）、当該投稿記事を利用者の同意を得ることなく掲載しない権利、内容を訂正する権利、及び当該利用者に対する、アクセス拒否、会員資格の取り消し、その他必要と思われる措置を講じることができる権利。"), _c("br"), _vm._v("\n\t\t以下に該当する表現（または近しい表現）が含まれるものまたは含まれている可能性があるものは、利用者に通知することなく、当方の判断により投稿記事を削除・訂正・掲載しない場合があります。"), _c("br"), _vm._v("\n\t\t・具体的な事象に基づかない記述。"), _c("br"), _vm._v("\n\t\t・事実と反することが判明したもの。"), _c("br"), _vm._v("\n\t\t・必要以上に感情的と判断される表現。"), _c("br"), _vm._v("\n\t\t・「利用しない方が良い」「絶対に止めるべき」「最悪」「最低」等の独断的・断定的表現と当方が判断したもの。"), _c("br"), _vm._v("\n\t\tまた、上記に該当・類似していない場合でも、当コーナー及び当サイトの管理運営の都合上、やむを得ず書き込みを削除・訂正・掲載しない場合もありますので、予めご了承下さい。尚、非掲載・削除・訂正理由に関するお問い合せには、一切お答えできません。"), _c("br"), _vm._v("\n\t\t(2)前項の措置の他、違反行為により被害を被った第三者のために、捜査機関への通報その他必要と思われる措置を講じることができる権利。"), _c("br"), _vm._v("\n\t\t6．"), _c("br"), _vm._v("\n\t\t（1）利用者は、画面の案内に従い、自由に投稿内容を閲覧することができます。ただし、利用者は、投稿内容は利用者の責任で掲示されたものであり、投稿内容の真実性、合法性、安全性、適切性、速報性、有用性等について、当方は何ら保証しない（明示的であるか黙示的であるかを問いません。以下同じとします。）ことを了承の上、自己の責任において利用するものとします。また、当方は、投稿記事において、間違った情報、不快な発言、品位のないメッセージ等のいかなる内容・表現についても、その不存在を保証しません。当コーナーに掲載された内容によって生じた損害や、利用者間のトラブル等に対し、当方は一切の補償および関与をいたしません。"), _c("br"), _vm._v("\n\t\t（2）当方は、１．当サイトのシステムに不具合やエラーや障害が生じないこと、２．当コーナーから得られる情報が正確なものであること、３．当コーナーおよび当コーナーを通じて入手できる情報などが利用者の期待を満たすものであることのいずれについても保証するものではありません。"), _c("br"), _vm._v("\n\t\t（3）その他、当方は、当コーナーの利用又は利用不能から生じるいかなる種類の損害（精神的苦痛、又はその他の金銭的損失を含む一切の不利益）に対しても一切責任を負いません。"), _c("br"), _vm._v(" "), _c("br"), _vm._v(" "), _vm._m(8), _vm._v("\n\t\t会員は、ログイン後に当サイト上のコチラより手続きをいただくことで、任意で「会員情報を削除」（退部）することが出来ます。\n\t\t一度会員情報を削除すると、今までご利用いただいていた会員ID、履歴も削除され、元に戻すことは出来ません。"), _c("br"), _vm._v(" "), _c("br"), _vm._v(" "), _vm._m(9), _vm._v("\n\t\t利用者による以下の行為は禁止いたします。また、該当する事実が発覚した場合、当方は何ら通知を行わず、会員登録の削除、今後の利用を停止できるものとします。その場合、今までご利用いただいていた会員ID、履歴も削除され、元に戻すことは出来ません。なお、これにより利用者が何らかの損害を被ったとしても当方は一切責任を負うものではありません。"), _c("br"), _vm._v("\n\t\t1．会員登録時およびサービス利用時の虚偽情報の記載"), _c("br"), _vm._v("\n\t\t2．スパム・メールや誹謗・中傷メールの配信、他社掲示板への書込みなど、当方、他の会員、もしくは第三者を不快にしたり、あるいは不利益をもたらすような行為"), _c("br"), _vm._v("\n\t\t3．システムへの侵入行為（ハッキング）、その他当サイトに対する攻撃行為等、当サイトの運営を妨害する行為"), _c("br"), _vm._v("\n\t\t4．会員資格の営利目的での不正使用"), _c("br"), _vm._v("\n\t\t5．公序良俗に反する行為"), _c("br"), _vm._v("\n\t\t6．法令に違反する行為"), _c("br"), _vm._v("\n\t\t7．当方の記事、企画、投稿内容その他の無断転載・再配布"), _c("br"), _vm._v("\n\t\t8．本人もしくは第三者のメールアドレスまたは会員ID、パスワードの不正使用"), _c("br"), _vm._v("\n\t\t9．加盟店または当方の営業を妨害する行為"), _c("br"), _vm._v("\n\t\t10．登録いただいたメールアドレスもしくは電話番号が不通または、無効になっている場合"), _c("br"), _vm._v("\n\t\t11. 本サイトと関係のない団体、企業、サービス、活動等への勧誘を目的とする行為（宗教活動を目的とするものを含む）"), _c("br"), _vm._v("\n\t\t12. 会員に対し、取次対象の利用契約をするよう斡旋する行為"), _c("br"), _vm._v("\n\t\t13. 反社会的勢力等（暴力団、暴力団員、右翼団体、反社会的勢力、その他これに準ずる者を意味します。以下同じ。）である、または資金提供その他を通じて反社会的勢力等の維持、運営もしくは経営に協力もしくは関与する等反社会的勢力等との何らかの交流もしくは関与を行っていると当方が判断した場合"), _c("br"), _vm._v(" "), _c("br"), _vm._v(" "), _vm._m(10), _vm._v("\n\t\t1．利用者が当サイトの利用によって第三者に対して損害や損失を与えた場合、利用者は自己の責任と金銭負担によってその損害・損失を処理・解決するものとし、当方は、かかる損害・損失に対して如何なる責任も負いません。"), _c("br"), _vm._v("\n\t\t2．利用者が本規約に違反した行為、あるいは不正、または違法な行為により当サイトおよび他の利用者に損害を与えた場合、当方は、当該利用者に対して相応の損害賠償請求を行う権利をも有します。"), _c("br"), _vm._v("\n\t\t3．当方と利用者との利用契約が消費者契約法第2条第3項に定める消費者契約に該当する場合、本規約のうち、当方の損害賠償責任を完全に免責する規定は適用されないものとし、当方はかかる規定に定める利用者に発生した損害が当方の債務不履行もしくは不法行為または瑕疵担保責任に基づく場合には、それによる直接かつ通常の損害に限り、損害賠償責任を負うものとします。"), _c("br"), _vm._v(" "), _c("br"), _vm._v(" "), _vm._m(11), _vm._v("\n\t\t利用者は、当方が事前に承認した場合を除き、当サイトを通じて入手した如何なる情報についても、利用者個人としての私的使用以外の目的に使用しないものとします。"), _c("br"), _vm._v(" "), _c("br"), _vm._v(" "), _vm._m(12), _vm._v("\n\t\t1．当サイトの著作権（著作権法第27条及び第28条の権利を含む。以下同じ。）は、当方に所属します。この著作権の対象には、サイトの構成、デザイン、イラスト・写真等のグラフィクス、文章など、すべてを含みます。（但し、各加盟店ページ等に掲載する店舗情報・メニュー情報・写真データ等の著作権は、各加盟店に所属し、当方がその使用許諾を受けているものとします。）事前に当方からの書面による同意を受けずに、内容を転載・再配布することは著作権の侵害となり、当方は罰金、および著作権侵害により発生した損害の賠償を求める権利を有します。"), _c("br"), _vm._v("\n\t\t2．当サイトに掲載された投稿やサンプルソースコード、その他の著作物の著作権は、当方に属するものとし、掲載されている投稿その他の著作物のすべて、あるいは一部を投稿者以外の第三者が当方、および投稿者に無断で転載・再配布することを禁止いたします。 また、利用者は、当サイトに掲載された著作物について、著作者人格権を一切行使しないものとします。"), _c("br"), _vm._v("\n\t\t3. 法人または個人事業主にて利用される場合及び弊社からのご請求・領収書発行先が法人または個人事業主の場合、利用者からの要求がない限り、利用者又はご請求・領収書発行先の法人名や屋号、会社HPに掲載されたロゴ画像を当方は運営するサイト内にて使用出来るものといたします。"), _c("br"), _vm._v(" "), _c("br"), _vm._v(" "), _vm._m(13), _vm._v("\n\t\t1．当方は、利用者の承認を受けることなく、サイトおよびサービス内容を変更、中止する場合があります。"), _c("br"), _vm._v("\n\t\t2．このような事態に伴い、利用者に不利益、損害が発生した場合でも、当方はその責任を一切負いません。"), _c("br"), _vm._v(" "), _c("br"), _vm._v(" "), _vm._m(14), _vm._v("\n\t\t当方では以下に該当する場合、利用者の承諾なしにサービスの一部、もしくはすべてを一時中断、または停止する場合があります。"), _c("br"), _vm._v("\n\t\t1．当サイト、ネットワークのシステム保守、更新、ならびに緊急の場合"), _c("br"), _vm._v("\n\t\t2．火災、停電、天災などの不可抗力により、サービスの提供が困難な場合"), _c("br"), _vm._v("\n\t\t3．その他不測の事態により、当サイトのサービス提供が困難であると判断された場合"), _c("br"), _vm._v(" "), _c("br"), _vm._v(" "), _vm._m(15), _vm._v("\n\t\t当方は、サービスにかかる事業を第三者に譲渡した場合には、利用者の書面による事前の承諾なく、当該事業譲渡に伴い、本規約に基づく権利もしくは義務につき、第三者に対し、譲渡、移転、担保設定、その他の本規約に基づく権利及び義務並びに利用者の登録事項その他の顧客情報を当該事業譲渡の譲受人に譲渡することができるものとし、利用者は、かかる譲渡につき本条において予め同意したものとします。なお、本条に定める事業譲渡には、通常の事業譲渡のみならず会社分割その他事業が移転するあらゆる場合を含むものとします。"), _c("br"), _vm._v(" "), _c("br"), _vm._v(" "), _vm._m(16), _vm._v("\n\t\t1．当方は利用者に対して通知義務を負う場合は、利用者があらかじめ登録した電話番号またはメールアドレスへ通知を発信することにより、その義務を果たしたものとします。利用者は、登録メールアドレスへのメール送信は、理由の如何を問わず、送信失敗、遅延、未着が発生する場合がある旨を予め了承するものとし、当方は、これにより発生した一切の損害について、如何なる責任も負わないものとします。"), _c("br"), _vm._v("\n\t\t2．当方は、利用者がサービスをご利用になれなかったことにより発生した一切の損害について、如何なる責任も負わないものとします。"), _c("br"), _vm._v("\n\t\t3．当方が利用者に対し、サービスを受け付けた旨告知した後、加盟店もしくは、当方の都合でサービスを承れない事由が発生した場合、加盟店もしくは、当方より利用者へ当該サービスのキャンセルを通知する場合があります。"), _c("br"), _vm._v("\n\t\t4．利用者の当サイトでの加盟店との取引は、全て利用者と、加盟店との間で行っていただくものです。したがって、万一取引に関してトラブルが生じた際には、利用者と加盟店との間で解決していただくことになります。"), _c("br"), _vm._v("\n\t\t5．当方は、当方によるサービスの提供の中断、停止、利用不能または変更、利用者のメッセージまたは情報の削除または消失､利用者の会員登録の取消、サービスの利用によるデータの消失または機器の故障もしくは損傷、その他サービスに関連して利用者が被った損害につき、賠償する責任を一切負わないものとします。"), _c("br"), _vm._v("\n\t\t6．当サイトから他のサイトへのリンクまたは他のサイトから当サイトへのリンクが提供されている場合でも、当方は、当サイト以外のサイト及びそこから得られる情報に関して如何なる理由に基づいても一切の責任を負わないものとします。"), _c("br"), _vm._v("\n\t\t7．コンピューター・ウィルスその他の有害なコンピューター・プログラムを含む情報の送受信が行われたことに基づく利用者の損害については、当方は一切の責任を負わないものとします。"), _c("br"), _vm._v("\n\t\t8．店舗情報・料金などの各種掲載情報につきまして、当方はその正確性、正当性、有用性など如何なる保証もいたしません。"), _c("br"), _vm._v(" "), _c("br"), _vm._v(" "), _vm._m(17), _vm._v("\n\t\t本規約の準拠法は日本法とし、本規約に起因しまたは関連する一切の紛争については、千葉県地方裁判所を第一審の専属的合意管轄裁判所とします。"), _c("br")]), _vm._v(" "), _c("transition", {
+  }, [_vm._v("利用規約")]), _vm._v(" "), _c("p", [_vm._v("\n\t\t利用者のみなさまには、本規約に従って" + _vm._s(_vm.name) + "及び" + _vm._s(_vm.name) + "\n\t\t(以下、当サイトと言います。)内のサービス（以下、サービスと言います。）をご利用いただきます。\n\t\tサービスを利用することによって、本規約の内容を承諾いただいたものとみなします。"), _c("br"), _vm._v(" "), _c("br"), _vm._v(" "), _vm._m(0), _vm._v("\n\t\t1．" + _vm._s(_vm.name) + "（以下、当方と言います。）の定める「利用者」とは、本規約を承諾のうえ、規定の入会手続きを完了し当方が登録を承認した「会員（会員登録者）」と、本規約を承諾のうえ、会員登録せずに一時的にサービスを利用する「一時利用者（未会員登録者）」を言います。一時利用者は、当サイトを閲覧することはできますが、当サイトで利用できる機能が制限されております。"), _c("br"), _vm._v("\n\t\t2．当方が、「利用者」として承認することを不適切と判断した場合、ご利用をお断りする場合があります。また会員の承認後であっても、第１１条にもとづき、会員資格を取り消すことがあります。"), _c("br"), _vm._v(" "), _c("br"), _vm._v(" "), _vm._m(1), _vm._v("\n\t\t本規約は、当サイトにおける、第１条が定める利用者との間のあらゆる関係において適用されます。"), _c("br"), _vm._v(" "), _c("br"), _vm._v(" "), _vm._m(2), _vm._v("\n\t\t1．当方は、規約等（本規約および当サイトに掲載するサービスに関するルール、諸規定等を含みます。以下本規約において同じ。）の内容を事前の予告無しに自由に変更できるものとします。"), _c("br"), _vm._v("\n\t\t2．当方は、規約等またはサービスの内容を変更した場合には、利用者に当該変更内容を当サイト上で公表するものとし、当該変更内容の公表後、利用者がサービスを利用した場合または当方の定める期間内に登録取消の手続をとらなかった場合には、利用者は、本規約の内容の変更に同意したものとみなします。"), _c("br"), _vm._v(" "), _c("br"), _vm._v(" "), _vm._m(3), _vm._v("\n\t\t利用者は、規約等（前条により変更された場合は、変更後の規約等も含む。）を理解し遵守する義務があります。"), _c("br"), _vm._v(" "), _c("br"), _vm._v(" "), _vm._m(4), _vm._v("\n\t\t利用者がサービス利用にあたり提供した情報は当方の所有となり、当方が責任をもって管理・保護いたします。また、利用者の個人情報については、当方が別途定めるプライバシーポリシーに従って取扱うこと、特に利用者の個人情報が当方と契約する加盟店に対して提供されることについて利用者はあらかじめ同意するものとします。また、かかるプライバシーポリシーが変更された場合は、変更後のプライバシーポリシーが適用されることに同意するものとします。"), _c("br"), _vm._v(" "), _c("br"), _vm._v(" "), _vm._m(5), _vm._v("\n\t\t1．会員IDまたは登録メールアドレス、パスワードの利用により発生した全ての責任や債務は、会員の責任によって解決するものとし、当方は一切責任を負いません。"), _c("br"), _vm._v("\n\t\t2．会員IDまたは登録メールアドレス、パスワードの管理は、会員の責任において行われるものとします。会員IDまたは登録メールアドレス、パスワードが第三者によって使用され、会員に不利益、損害が発生した場合、当方は一切その責任を負いません。"), _c("br"), _vm._v("\n\t\t3．会員IDまたは登録メールアドレス、パスワードの喪失、もしくは盗難の場合、会員はただちに当方に報告するものとし、その報告があった場合、当方がその事態に気づいた場合には、会員IDまたは登録メールアドレス、パスワードの使用を中止することがあります。"), _c("br"), _vm._v("\n\t\t4．会員ID（アカウント）を第三者へ転売、譲渡、貸与することは出来ません。その事実が発覚した場合、アカウント１つにつき30万円の違約金をご請求いたします。"), _c("br"), _vm._v("\n\t\t5．メールアドレスの登録は、会員が自らの責任により行うものとし、メールアドレスの入力間違いにより、第三者に会員情報等が送信され、不正に利用された場合であっても、当方は一切その責任を負いません。また、メールアドレスの入力間違いにより、第三者に対して損害や損失を与えた場合、会員は自己の責任と費用負担によってその損害・損失を処理・解決するものとし、当方は、かかる損害・損失に対して如何なる責任も負いません。"), _c("br"), _vm._v(" "), _c("br"), _vm._v(" "), _vm._m(6), _vm._v("\n\t\t1．会員は、会員として当方にメールを送信する場合、事前に登録したメールアドレスを使用するものとします。"), _c("br"), _vm._v("\n\t\t2．会員は、登録されているメールアドレスと異なるメールアドレスにて送受信を行い、当該メンバーに不利益、損害が発生した場合、当方は一切その責任を負いません。"), _c("br"), _vm._v("\n\t\t3．会員は、当方が会員へ送信するメールのうち、サーバーのメンテナンスに伴うサービス停止情報などサービス提供のために重要であると当方が判断する情報を「重要なお知らせ」として提供することに関しては、配信を停止することが出来ないことを予め了承するものとします。"), _c("br"), _vm._v("\n\t\t4．当方は会員に対して、登録住所に新規店舗が出店した場合、ご利用後の感想を伺う場合や、会員向け企画などのお得な情報を、メールにて配信することがあり、これについて会員はあらかじめ同意するものとします。ただし、会員がメール内に記載の配信停止方法に従ってこのメールの配信停止を希望する場合、当方は可能な限り迅速に対応いたします。"), _c("br"), _vm._v(" "), _c("br"), _vm._v(" "), _vm._m(7), _vm._v("\n\t\t1．「★評価＆コメント」コーナー(以下、当コーナーと言います。)は、利用者間の情報の交換、利用者の当サイト利用の実体験に基づくクチコミ情報の収集のために、当方により開設、運営されています。利用者はこの趣旨をご理解のうえ、当コーナーを閲覧し、商品の投稿を行うものとします。利用者の投稿商品は、ニックネーム、タイトル等とともに投稿内容の対象加盟店またはチェーン本部に対して提供されます。また、投稿内容の対象加盟店またはチェーン本部からの返信が当コーナーに掲載されることがあります。なお、" + _vm._s(_vm.name) + "の加盟店、および" + _vm._s(_vm.name) + "関連サイトによっては、「★評価＆コメント」が行えない場合もございます。"), _c("br"), _vm._v("\n\t\t2．利用者が投稿すると、「★評価＆コメント」として当コーナーに掲載され、他の利用者が店舗・メニュー選択の参考にされます。"), _c("br"), _vm._v("\n\t\t3．利用者は、投稿にあたっては、商品の内容に責任を負い、また以下に掲げる行為を行わないものとします。"), _c("br"), _vm._v("\n\t\t（1）当方の提供する関連情報から逸脱した内容を投稿する行為。"), _c("br"), _vm._v("\n\t\t（2）利用者自身の体験や、当サイトを利用しての経験に基づいていない投稿をする行為。"), _c("br"), _vm._v("\n\t\t（3）営利目的の内容を投稿すること。宣伝行為。"), _c("br"), _vm._v("\n\t\t（4）事実と反する内容・虚偽の内容を投稿する行為。"), _c("br"), _vm._v("\n\t\t（5）同一内容を意図的に多数投稿する行為。"), _c("br"), _vm._v("\n\t\t（6）当サイトのサービス・機能に関するお問合せやクレーム。"), _c("br"), _vm._v("\n\t\t（7）当サイトが提供する情報の掲載間違いに関するお問合せやクレーム。"), _c("br"), _vm._v("\n\t\t（8）有害なプログラム・スクリプト等を含む内容を書き込む行為。"), _c("br"), _vm._v("\n\t\t（9）当コーナーの他の利用者又は第三者の知的財産権、肖像権、プライバシーの権利、名誉、その他の権利又は利益の侵害に該当することとなる情報を当コーナーに送信する行為。"), _c("br"), _vm._v("\n\t\t（10）当コーナーにおいて利用しうる情報を改ざんする行為。"), _c("br"), _vm._v("\n\t\t（11）当方が定める一定のデータ容量以上のデータを当コーナーに対して送信する行為。"), _c("br"), _vm._v("\n\t\t（12）当方による当コーナーの運営を妨害するおそれのある行為。"), _c("br"), _vm._v("\n\t\t（13）当方の信用を毀損するおそれのある行為。"), _c("br"), _vm._v("\n\t\t（14）下記4.投稿内容に関する制限の各号に該当するものを投稿する行為。"), _c("br"), _vm._v("\n\t\t（15）その他、当方が不適切と判断する行為。"), _c("br"), _vm._v("\n\t\t4．利用者は、以下に掲げる事項を含む商品を投稿してはならないものとします。"), _c("br"), _vm._v("\n\t\t（1）著作権、商標権、プライバシー権、名誉等、他者（当方や他の利用者も含みます）の権利を侵害する内容を含むもの。"), _c("br"), _vm._v("\n\t\t（2）本来公開されていない他人の名前・メールアドレス・住所・電話番号その他の連絡先が使用（利用者名や投稿内容において使用される場合を含みますが、これらに限りません。）されているもの。"), _c("br"), _vm._v("\n\t\t（3）他人を威圧・脅迫する旨が看取される内容を含むもの。"), _c("br"), _vm._v("\n\t\t（4）児童や青少年に対し著しく粗暴性、残虐性又は犯罪を誘発助長し、その健全な育成を阻害する内容を含むもの。"), _c("br"), _vm._v("\n\t\t（5）法令、公序良俗に反する内容を含むもの。"), _c("br"), _vm._v("\n\t\t（6）閲覧者を不快にするような内容。"), _c("br"), _vm._v("\n\t\t（7）その他、当コーナーに掲示することが不適切な内容であると当方が判断した内容。"), _c("br"), _vm._v("\n\t\t5．当コーナーの運営に当たり、当方は以下の権利を有し、利用者はかかる権利の行使につき一切意異議を唱えないものとします。尚、本条項はあくまでも当方の権利を定めるものであり、義務を課すものではありません。"), _c("br"), _vm._v("\n\t\t(1)本条項3および4に記載された各事項に該当する投稿商品の存在が判明した場合（以下併せて「違反行為」と言います。）、当該投稿商品を利用者の同意を得ることなく掲載しない権利、内容を訂正する権利、及び当該利用者に対する、アクセス拒否、会員資格の取り消し、その他必要と思われる措置を講じることができる権利。"), _c("br"), _vm._v("\n\t\t以下に該当する表現（または近しい表現）が含まれるものまたは含まれている可能性があるものは、利用者に通知することなく、当方の判断により投稿商品を削除・訂正・掲載しない場合があります。"), _c("br"), _vm._v("\n\t\t・具体的な事象に基づかない記述。"), _c("br"), _vm._v("\n\t\t・事実と反することが判明したもの。"), _c("br"), _vm._v("\n\t\t・必要以上に感情的と判断される表現。"), _c("br"), _vm._v("\n\t\t・「利用しない方が良い」「絶対に止めるべき」「最悪」「最低」等の独断的・断定的表現と当方が判断したもの。"), _c("br"), _vm._v("\n\t\tまた、上記に該当・類似していない場合でも、当コーナー及び当サイトの管理運営の都合上、やむを得ず書き込みを削除・訂正・掲載しない場合もありますので、予めご了承下さい。尚、非掲載・削除・訂正理由に関するお問い合せには、一切お答えできません。"), _c("br"), _vm._v("\n\t\t(2)前項の措置の他、違反行為により被害を被った第三者のために、捜査機関への通報その他必要と思われる措置を講じることができる権利。"), _c("br"), _vm._v("\n\t\t6．"), _c("br"), _vm._v("\n\t\t（1）利用者は、画面の案内に従い、自由に投稿内容を閲覧することができます。ただし、利用者は、投稿内容は利用者の責任で掲示されたものであり、投稿内容の真実性、合法性、安全性、適切性、速報性、有用性等について、当方は何ら保証しない（明示的であるか黙示的であるかを問いません。以下同じとします。）ことを了承の上、自己の責任において利用するものとします。また、当方は、投稿商品において、間違った情報、不快な発言、品位のないメッセージ等のいかなる内容・表現についても、その不存在を保証しません。当コーナーに掲載された内容によって生じた損害や、利用者間のトラブル等に対し、当方は一切の補償および関与をいたしません。"), _c("br"), _vm._v("\n\t\t（2）当方は、１．当サイトのシステムに不具合やエラーや障害が生じないこと、２．当コーナーから得られる情報が正確なものであること、３．当コーナーおよび当コーナーを通じて入手できる情報などが利用者の期待を満たすものであることのいずれについても保証するものではありません。"), _c("br"), _vm._v("\n\t\t（3）その他、当方は、当コーナーの利用又は利用不能から生じるいかなる種類の損害（精神的苦痛、又はその他の金銭的損失を含む一切の不利益）に対しても一切責任を負いません。"), _c("br"), _vm._v(" "), _c("br"), _vm._v(" "), _vm._m(8), _vm._v("\n\t\t会員は、ログイン後に当サイト上のコチラより手続きをいただくことで、任意で「会員情報を削除」（退部）することが出来ます。\n\t\t一度会員情報を削除すると、今までご利用いただいていた会員ID、履歴も削除され、元に戻すことは出来ません。"), _c("br"), _vm._v(" "), _c("br"), _vm._v(" "), _vm._m(9), _vm._v("\n\t\t利用者による以下の行為は禁止いたします。また、該当する事実が発覚した場合、当方は何ら通知を行わず、会員登録の削除、今後の利用を停止できるものとします。その場合、今までご利用いただいていた会員ID、履歴も削除され、元に戻すことは出来ません。なお、これにより利用者が何らかの損害を被ったとしても当方は一切責任を負うものではありません。"), _c("br"), _vm._v("\n\t\t1．会員登録時およびサービス利用時の虚偽情報の記載"), _c("br"), _vm._v("\n\t\t2．スパム・メールや誹謗・中傷メールの配信、他社掲示板への書込みなど、当方、他の会員、もしくは第三者を不快にしたり、あるいは不利益をもたらすような行為"), _c("br"), _vm._v("\n\t\t3．システムへの侵入行為（ハッキング）、その他当サイトに対する攻撃行為等、当サイトの運営を妨害する行為"), _c("br"), _vm._v("\n\t\t4．会員資格の営利目的での不正使用"), _c("br"), _vm._v("\n\t\t5．公序良俗に反する行為"), _c("br"), _vm._v("\n\t\t6．法令に違反する行為"), _c("br"), _vm._v("\n\t\t7．当方の商品、企画、投稿内容その他の無断転載・再配布"), _c("br"), _vm._v("\n\t\t8．本人もしくは第三者のメールアドレスまたは会員ID、パスワードの不正使用"), _c("br"), _vm._v("\n\t\t9．加盟店または当方の営業を妨害する行為"), _c("br"), _vm._v("\n\t\t10．登録いただいたメールアドレスもしくは電話番号が不通または、無効になっている場合"), _c("br"), _vm._v("\n\t\t11. 本サイトと関係のない団体、企業、サービス、活動等への勧誘を目的とする行為（宗教活動を目的とするものを含む）"), _c("br"), _vm._v("\n\t\t12. 会員に対し、取次対象の利用契約をするよう斡旋する行為"), _c("br"), _vm._v("\n\t\t13. 反社会的勢力等（暴力団、暴力団員、右翼団体、反社会的勢力、その他これに準ずる者を意味します。以下同じ。）である、または資金提供その他を通じて反社会的勢力等の維持、運営もしくは経営に協力もしくは関与する等反社会的勢力等との何らかの交流もしくは関与を行っていると当方が判断した場合"), _c("br"), _vm._v(" "), _c("br"), _vm._v(" "), _vm._m(10), _vm._v("\n\t\t1．利用者が当サイトの利用によって第三者に対して損害や損失を与えた場合、利用者は自己の責任と金銭負担によってその損害・損失を処理・解決するものとし、当方は、かかる損害・損失に対して如何なる責任も負いません。"), _c("br"), _vm._v("\n\t\t2．利用者が本規約に違反した行為、あるいは不正、または違法な行為により当サイトおよび他の利用者に損害を与えた場合、当方は、当該利用者に対して相応の損害賠償請求を行う権利をも有します。"), _c("br"), _vm._v("\n\t\t3．当方と利用者との利用契約が消費者契約法第2条第3項に定める消費者契約に該当する場合、本規約のうち、当方の損害賠償責任を完全に免責する規定は適用されないものとし、当方はかかる規定に定める利用者に発生した損害が当方の債務不履行もしくは不法行為または瑕疵担保責任に基づく場合には、それによる直接かつ通常の損害に限り、損害賠償責任を負うものとします。"), _c("br"), _vm._v(" "), _c("br"), _vm._v(" "), _vm._m(11), _vm._v("\n\t\t利用者は、当方が事前に承認した場合を除き、当サイトを通じて入手した如何なる情報についても、利用者個人としての私的使用以外の目的に使用しないものとします。"), _c("br"), _vm._v(" "), _c("br"), _vm._v(" "), _vm._m(12), _vm._v("\n\t\t1．当サイトの著作権（著作権法第27条及び第28条の権利を含む。以下同じ。）は、当方に所属します。この著作権の対象には、サイトの構成、デザイン、イラスト・写真等のグラフィクス、文章など、すべてを含みます。（但し、各加盟店ページ等に掲載する店舗情報・メニュー情報・写真データ等の著作権は、各加盟店に所属し、当方がその使用許諾を受けているものとします。）事前に当方からの書面による同意を受けずに、内容を転載・再配布することは著作権の侵害となり、当方は罰金、および著作権侵害により発生した損害の賠償を求める権利を有します。"), _c("br"), _vm._v("\n\t\t2．当サイトに掲載された投稿やサンプルソースコード、その他の著作物の著作権は、当方に属するものとし、掲載されている投稿その他の著作物のすべて、あるいは一部を投稿者以外の第三者が当方、および投稿者に無断で転載・再配布することを禁止いたします。 また、利用者は、当サイトに掲載された著作物について、著作者人格権を一切行使しないものとします。"), _c("br"), _vm._v("\n\t\t3. 法人または個人事業主にて利用される場合及び弊社からのご請求・領収書発行先が法人または個人事業主の場合、利用者からの要求がない限り、利用者又はご請求・領収書発行先の法人名や屋号、会社HPに掲載されたロゴ画像を当方は運営するサイト内にて使用出来るものといたします。"), _c("br"), _vm._v(" "), _c("br"), _vm._v(" "), _vm._m(13), _vm._v("\n\t\t1．当方は、利用者の承認を受けることなく、サイトおよびサービス内容を変更、中止する場合があります。"), _c("br"), _vm._v("\n\t\t2．このような事態に伴い、利用者に不利益、損害が発生した場合でも、当方はその責任を一切負いません。"), _c("br"), _vm._v(" "), _c("br"), _vm._v(" "), _vm._m(14), _vm._v("\n\t\t当方では以下に該当する場合、利用者の承諾なしにサービスの一部、もしくはすべてを一時中断、または停止する場合があります。"), _c("br"), _vm._v("\n\t\t1．当サイト、ネットワークのシステム保守、更新、ならびに緊急の場合"), _c("br"), _vm._v("\n\t\t2．火災、停電、天災などの不可抗力により、サービスの提供が困難な場合"), _c("br"), _vm._v("\n\t\t3．その他不測の事態により、当サイトのサービス提供が困難であると判断された場合"), _c("br"), _vm._v(" "), _c("br"), _vm._v(" "), _vm._m(15), _vm._v("\n\t\t当方は、サービスにかかる事業を第三者に譲渡した場合には、利用者の書面による事前の承諾なく、当該事業譲渡に伴い、本規約に基づく権利もしくは義務につき、第三者に対し、譲渡、移転、担保設定、その他の本規約に基づく権利及び義務並びに利用者の登録事項その他の顧客情報を当該事業譲渡の譲受人に譲渡することができるものとし、利用者は、かかる譲渡につき本条において予め同意したものとします。なお、本条に定める事業譲渡には、通常の事業譲渡のみならず会社分割その他事業が移転するあらゆる場合を含むものとします。"), _c("br"), _vm._v(" "), _c("br"), _vm._v(" "), _vm._m(16), _vm._v("\n\t\t1．当方は利用者に対して通知義務を負う場合は、利用者があらかじめ登録した電話番号またはメールアドレスへ通知を発信することにより、その義務を果たしたものとします。利用者は、登録メールアドレスへのメール送信は、理由の如何を問わず、送信失敗、遅延、未着が発生する場合がある旨を予め了承するものとし、当方は、これにより発生した一切の損害について、如何なる責任も負わないものとします。"), _c("br"), _vm._v("\n\t\t2．当方は、利用者がサービスをご利用になれなかったことにより発生した一切の損害について、如何なる責任も負わないものとします。"), _c("br"), _vm._v("\n\t\t3．当方が利用者に対し、サービスを受け付けた旨告知した後、加盟店もしくは、当方の都合でサービスを承れない事由が発生した場合、加盟店もしくは、当方より利用者へ当該サービスのキャンセルを通知する場合があります。"), _c("br"), _vm._v("\n\t\t4．利用者の当サイトでの加盟店との取引は、全て利用者と、加盟店との間で行っていただくものです。したがって、万一取引に関してトラブルが生じた際には、利用者と加盟店との間で解決していただくことになります。"), _c("br"), _vm._v("\n\t\t5．当方は、当方によるサービスの提供の中断、停止、利用不能または変更、利用者のメッセージまたは情報の削除または消失､利用者の会員登録の取消、サービスの利用によるデータの消失または機器の故障もしくは損傷、その他サービスに関連して利用者が被った損害につき、賠償する責任を一切負わないものとします。"), _c("br"), _vm._v("\n\t\t6．当サイトから他のサイトへのリンクまたは他のサイトから当サイトへのリンクが提供されている場合でも、当方は、当サイト以外のサイト及びそこから得られる情報に関して如何なる理由に基づいても一切の責任を負わないものとします。"), _c("br"), _vm._v("\n\t\t7．コンピューター・ウィルスその他の有害なコンピューター・プログラムを含む情報の送受信が行われたことに基づく利用者の損害については、当方は一切の責任を負わないものとします。"), _c("br"), _vm._v("\n\t\t8．店舗情報・料金などの各種掲載情報につきまして、当方はその正確性、正当性、有用性など如何なる保証もいたしません。"), _c("br"), _vm._v(" "), _c("br"), _vm._v(" "), _vm._m(17), _vm._v("\n\t\t本規約の準拠法は日本法とし、本規約に起因しまたは関連する一切の紛争については、千葉県地方裁判所を第一審の専属的合意管轄裁判所とします。"), _c("br")]), _vm._v(" "), _c("transition", {
     attrs: {
       name: "top"
     }
@@ -22624,7 +22800,7 @@ var render = function render() {
       background: [_vm.isLike ? "#ffd5da" : "white"]
     },
     attrs: {
-      disabled: _vm.product.is_my_product || _vm.product.is_purchased
+      disabled: _vm.product.is_my_product || _vm.product.is_purchased || _vm.purchasedByUser
     },
     on: {
       click: _vm.onLikeClick
@@ -22691,9 +22867,15 @@ var render = function render() {
     }],
     staticClass: "p-product-detail__twitter-container"
   }, [_c("social-sharing", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: _vm.isLogin,
+      expression: "isLogin"
+    }],
     staticClass: "c-btn c-btn--twitter",
     attrs: {
-      url: "http://127.0.0.1:8001/products/48",
+      url: "http://127.0.0.1:8000/products/48",
       title: "vue-social-sharingのテスト",
       quote: "Vue is a progressive framework for building user interfaces.",
       hashtags: "haiki_share"
@@ -22714,7 +22896,41 @@ var render = function render() {
       },
       staticRenderFns: []
     }
-  })], 1), _vm._v(" "), _c("transition", {
+  })], 1), _vm._v(" "), _c("div", {
+    staticClass: "c-title p-product-detail__title"
+  }, [_vm._v("この出品者の他の商品")]), _vm._v(" "), _c("div", {
+    staticClass: "p-product-detail__other-container"
+  }, _vm._l(_vm.otherProducts, function (product) {
+    return !product.is_purchased ? _c("Product", {
+      directives: [{
+        name: "show",
+        rawName: "v-show",
+        value: !_vm.loading,
+        expression: "!loading"
+      }],
+      key: product.id,
+      attrs: {
+        product: product
+      }
+    }) : _vm._e();
+  }), 1), _vm._v(" "), _c("div", {
+    staticClass: "c-title p-product-detail__title"
+  }, [_vm._v("この出品者の他の商品")]), _vm._v(" "), _c("div", {
+    staticClass: "p-product-detail__other-container"
+  }, _vm._l(_vm.otherProducts, function (product) {
+    return !product.is_purchased ? _c("Product", {
+      directives: [{
+        name: "show",
+        rawName: "v-show",
+        value: !_vm.loading,
+        expression: "!loading"
+      }],
+      key: product.id,
+      attrs: {
+        product: product
+      }
+    }) : _vm._e();
+  }), 1), _vm._v(" "), _c("transition", {
     attrs: {
       name: "top"
     }
@@ -23304,7 +23520,7 @@ var render = function render() {
     attrs: {
       type: "submit"
     }
-  }, [_vm._v("投稿する\n\t\t\t\t")])])])], 1)]);
+  }, [_vm._v("更新する\n\t\t\t\t")])])])], 1)]);
 };
 var staticRenderFns = [];
 render._withStripped = true;
@@ -23661,16 +23877,22 @@ var render = function render() {
       },
       slot: "btn"
     }, [_c("router-link", {
-      staticClass: "c-btn p-product__btn",
+      directives: [{
+        name: "show",
+        rawName: "v-show",
+        value: !product.is_purchased,
+        expression: "!product.is_purchased"
+      }],
+      staticClass: "c-btn c-btn--white p-list__btn",
       attrs: {
         to: {
-          name: "product.detail",
+          name: "product.edit",
           params: {
             id: product.id.toString()
           }
         }
       }
-    }, [_vm._v("詳細を見る\n\t\t\t\t\t\t")])], 1), _vm._v(" "), _c("div", {
+    }, [_vm._v("編集する\n\t\t\t\t\t\t")])], 1), _vm._v(" "), _c("div", {
       directives: [{
         name: "show",
         rawName: "v-show",
@@ -24216,18 +24438,19 @@ var render = function render() {
         product: product
       }
     }, [_c("div", {
-      staticClass: "p-product__btn-container"
-    }, [_c("router-link", {
-      staticClass: "c-btn p-product__btn",
+      staticClass: "p-product__btn-container",
       attrs: {
-        to: {
-          name: "product.detail",
-          params: {
-            id: product.id.toString()
-          }
+        slot: "btn"
+      },
+      slot: "btn"
+    }, [_c("button", {
+      staticClass: "c-btn c-btn--white p-product__btn",
+      on: {
+        click: function click($event) {
+          return _vm.unlike(product);
         }
       }
-    }, [_vm._v("詳細を見る\n\t\t\t\t\t\t")])], 1)]) : _vm._e();
+    }, [_vm._v("お気に入り解除\n\t\t\t\t\t\t")])])]) : _vm._e();
   }), 1)], 1)]), _vm._v(" "), _c("Sidebar", {
     attrs: {
       id: _vm.id
@@ -24481,13 +24704,21 @@ var render = function render() {
     staticClass: "p-mypage__title-container"
   }, [_c("h2", {
     staticClass: "c-title p-mypage__title"
-  }, [_vm._v("キャンセルされた商品一覧")]), _vm._v(" "), _vm.wasCanceledProducts.length ? _c("a", {
-    staticClass: "p-mypage__link"
-  }, [_vm._v("全件表示")]) : _vm._e()]), _vm._v(" "), !_vm.canceledProducts.length ? _c("div", {
+  }, [_vm._v("キャンセルされた商品一覧")]), _vm._v(" "), _vm.wasCanceledProducts.length ? _c("router-link", {
+    staticClass: "p-mypage__link",
+    attrs: {
+      to: {
+        name: "user.canceled",
+        params: {
+          id: _vm.id.toString()
+        }
+      }
+    }
+  }, [_vm._v("全件表示\n\t\t\t\t\t\t")]) : _vm._e()], 1), _vm._v(" "), !_vm.wasCanceledProducts.length ? _c("div", {
     staticClass: "p-mypage__no-Product"
   }, [_vm._v("キャンセルされた商品はありません\n\t\t\t\t\t")]) : _c("div", {
     staticClass: "p-mypage__card-container"
-  }, _vm._l(_vm.canceledProducts, function (product) {
+  }, _vm._l(_vm.wasCanceledProducts, function (product) {
     return _c("Product", {
       directives: [{
         name: "show",
@@ -24499,7 +24730,19 @@ var render = function render() {
       attrs: {
         product: product
       }
-    });
+    }, [_c("div", {
+      directives: [{
+        name: "show",
+        rawName: "v-show",
+        value: _vm.isShopUser,
+        expression: "isShopUser"
+      }],
+      staticClass: "p-product__cancel",
+      attrs: {
+        slot: "cancel_count"
+      },
+      slot: "cancel_count"
+    }, [_vm._v(_vm._s(product.cancels_count) + "回\n\t\t\t\t\t\t\t")])]);
   }), 1)]), _vm._v(" "), _c("section", {
     directives: [{
       name: "show",
@@ -24690,7 +24933,7 @@ var render = function render() {
         value: !product.is_purchased,
         expression: "!product.is_purchased"
       }],
-      staticClass: "c-btn p-list__btn p-list__btn--edit",
+      staticClass: "c-btn c-btn--white p-list__btn",
       attrs: {
         to: {
           name: "product.edit",
@@ -24706,7 +24949,7 @@ var render = function render() {
         value: product.is_purchased,
         expression: "product.is_purchased"
       }],
-      staticClass: "c-btn p-list__btn p-list__btn--detail",
+      staticClass: "c-btn p-list__btn",
       attrs: {
         to: {
           name: "product.detail",
@@ -24884,14 +25127,14 @@ var render = function render() {
       value: _vm.isShopUser,
       expression: "isShopUser"
     }]
-  }, [_vm._v("レビューされたユーザー一覧")]), _vm._v(" "), _c("span", {
+  }, [_vm._v("投稿されたレビュー一覧")]), _vm._v(" "), _c("span", {
     directives: [{
       name: "show",
       rawName: "v-show",
       value: !_vm.isShopUser,
       expression: "!isShopUser"
     }]
-  }, [_vm._v("レビューしたユーザー一覧")])]), _vm._v(" "), _c("Loading", {
+  }, [_vm._v("投稿したレビュー一覧")])]), _vm._v(" "), _c("Loading", {
     directives: [{
       name: "show",
       rawName: "v-show",
@@ -24907,14 +25150,14 @@ var render = function render() {
       value: _vm.isShopUser,
       expression: "isShopUser"
     }]
-  }, [_vm._v("ユーザーからのレビューはありません")]), _vm._v(" "), _c("span", {
+  }, [_vm._v("投稿されたレビューはありません")]), _vm._v(" "), _c("span", {
     directives: [{
       name: "show",
       rawName: "v-show",
       value: !_vm.isShopUser,
       expression: "!isShopUser"
     }]
-  }, [_vm._v("レビューしたユーザーはいません")])]) : _vm._e(), _vm._v(" "), _c("div", {
+  }, [_vm._v("投稿したレビューはありません")])]) : _vm._e(), _vm._v(" "), _c("div", {
     directives: [{
       name: "show",
       rawName: "v-show",
@@ -72857,16 +73100,10 @@ var routes = [
   name: 'product.register',
   component: _components_product_RegisterProduct__WEBPACK_IMPORTED_MODULE_15__["default"],
   beforeEnter: function beforeEnter(to, from, next) {
-    // todo: 挙動がおかしいので要編集
-    if (_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/check'] && _store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/isShopUser']) {
-      //ログインユーザーかつお店の人がアクセスしたらそのまま移動させる
-      next();
-    } else {
-      //利用者だったらインデックス画面に移動する
-      next({
-        name: 'index'
-      });
-    }
+    //ログインしている、かつコンビニユーザーの場合はページを表示、それ以外は商品一覧画面に遷移する
+    _store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/check'] && _store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/isShopUser'] ? next() : next({
+      name: 'index'
+    });
   }
 }, {
   path: '/products/:id/edit',

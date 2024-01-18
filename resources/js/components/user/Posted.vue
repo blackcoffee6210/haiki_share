@@ -22,13 +22,13 @@
 						<div class="p-product__btn-container"
 								 slot="btn">
 							<!-- 編集ボタン -->
-							<router-link class="c-btn p-list__btn p-list__btn--edit"
+							<router-link class="c-btn c-btn--white p-list__btn"
 													 v-show="!product.is_purchased"
 													 :to="{ name: 'product.edit',
 																	params: { id: product.id.toString() }}">編集する
 							</router-link>
 							<!-- 商品が購入されていたら詳細ボタンを表示 -->
-							<router-link class="c-btn p-list__btn p-list__btn--detail"
+							<router-link class="c-btn p-list__btn"
 													 v-show="product.is_purchased"
 													 :to="{ name: 'product.detail',
 																	params: { id: product.id.toString() }}">詳細を見る

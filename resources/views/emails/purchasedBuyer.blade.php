@@ -1,6 +1,7 @@
 {{ $params['user_name'] }} さん<br>
 平素よりhaiki_share(ハイキシェア)をご利用いただき、ありがとうございます。<br>
-ご購入の詳細は以下のとおりです。<br>
+ご購入したの詳細は以下のとおりです。<br>
+商品を用意してお待ちしております。<br>
 <br>
 商品名: {{ $params['product_name'] }}<br>
 内容: {{ $params['detail'] }}<br>
