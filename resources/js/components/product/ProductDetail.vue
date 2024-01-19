@@ -135,7 +135,9 @@
 				</div>
 				
 				<!-- 出品者の他の商品-->
-				<div class="c-title p-product-detail__title">この出品者の他の商品</div>
+				<div class="c-title p-product-detail__title"
+						 v-show="otherProducts.length > 0">この出品者の他の商品
+				</div>
 				<div class="p-product-detail__other-container">
 					<!-- Productコンポーネント -->
 					<Product v-show="!loading"
@@ -146,12 +148,13 @@
 				</div>
 				
 				<!-- この商品に似た商品-->
-				<!-- todo: 実装 -->
-				<div class="c-title p-product-detail__title">この出品者の他の商品</div>
+				<div class="c-title p-product-detail__title"
+						 v-show="similarProducts.length > 0">同じカテゴリーの商品
+				</div>
 				<div class="p-product-detail__other-container">
 					<!-- Productコンポーネント -->
 					<Product v-show="!loading"
-									 v-for="product in otherProducts"
+									 v-for="product in similarProducts"
 									 v-if="!product.is_purchased"
 									 :key="product.id"
 									 :product="product" />
@@ -198,7 +201,8 @@ export default {
 			isReviewed: false,      //ログインした利用者がレビューしたかどうか
 			purchasedByUser: false, //ログインした利用者が購入したかどうか
 			canceledByUser: false,  //ログインした利用者がキャンセルしたかどうか
-			otherProducts: {}       //出品者の他の商品
+			otherProducts: {},      //出品者の他の商品
+			similarProducts: {}     //出品した商品に似た商品
 		}
 	},
 	computed: {
@@ -235,6 +239,8 @@ export default {
 				return false;
 			}
 			this.product = response.data; //responseデータをproductプロパティに代入
+			console.log('productの中身');
+			console.log(response.data);
 			
 			if(this.product.liked_by_user) { //ログインユーザーが既に「いいね」を押していたらtrueをセット
 				this.isLike = true;
@@ -243,14 +249,24 @@ export default {
 		async getOtherProducts() {
 			const response = await axios.get(`/api/products/${this.product.user_id}/${this.id}/other`); //API接続
 			
-			// if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
-			// 	this.$store.commit('error/setCode', response.status);
-			// 	return false; //後続の処理を抜ける
-			// }
+			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
+				this.$store.commit('error/setCode', response.status);
+				return false; //後続の処理を抜ける
+			}
 			this.otherProducts = response.data; //responseデータをプロパティに代入
 			console.log('otherProductsの中身');
 			console.log(response.data);
-			console.log(this.id);
+		},
+		async getSimilarProducts() {
+			const response = await axios.get(`/api/products/${this.product.category_id}/${this.id}/similar`); //API接続
+			
+			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
+				this.$store.commit('error/setCode', response.status);
+				return false; //後続の処理を抜ける
+			}
+			this.similarProducts = response.data; //responseデータをプロパティに代入
+			console.log('similarProductsの中身');
+			console.log(response.data);
 		},
 		async onLikeClick() { //「お気に入りボタン」を押したときの処理を行うメソッド
 			if(!this.isLogin) { //ログインしていなかったらアレートを出す
@@ -382,6 +398,7 @@ export default {
 				await this.getCanceledByUser();
 				await this.getProduct();
 				await this.getOtherProducts();
+				await this.getSimilarProducts();
 				await this.getMyReview();
 			},
 			immediate: true

@@ -55,10 +55,18 @@ class ProductController extends Controller
 	public function otherProducts(string $u_id, string $p_id) //出品者が投稿した商品を取得
 	{
 		return User::find($u_id)
-			->products()
-			->where('products.id', '!=', $p_id)  //詳細画面で表示している商品以外を取得
-			->orderByDesc('products.created_at')
-			->get();
+					->products()
+					->where('products.id', '!=', $p_id)  //詳細画面で表示している商品以外を取得
+					->orderByDesc('products.created_at')
+					->get();
+	}
+
+	public function similarProducts(string $c_id, string $p_id) //出品した商品に似た商品を取得
+	{
+		return Product::where('category_id', $c_id)
+					  ->where('id', '!=', $p_id)    //詳細画面で表示している商品以外を取得
+					  ->orderByDesc('created_at')
+					  ->get();
 	}
 
 	public function store(StoreProduct $request) //商品登録
