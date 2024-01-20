@@ -78,17 +78,6 @@ class ReviewController extends Controller
 		return response($review, 200);
 	}
 
-	public function otherProducts(string $r_id) //出品した商品を取得
-	{
-		return Product::where('user_id', $r_id)
-			->orderByDesc('created_at')
-			->get();
-//		$products = Product::where('user_id', $r_id)
-//						   ->orderByDesc('created_at')
-//						   ->get();
-//		return $products;
-	}
-
 	public function destroy(string $s_id, string $r_id) //レビュー削除
 	{
 		$review = Review::where('sender_id', $s_id)
@@ -97,7 +86,12 @@ class ReviewController extends Controller
 		return response($review, 200);
 	}
 
-
+	public function otherProducts(string $r_id) //出品した商品を取得
+	{
+		return Product::where('user_id', $r_id)
+			->orderByDesc('created_at')
+			->get();
+	}
 }
 
 

@@ -24094,8 +24094,27 @@ var render = function render() {
   }, [_vm._v("\n\t\t\t\t\t" + _vm._s(_vm._f("moment")(_vm.review.created_at)) + "\n\t\t\t\t")])])]), _vm._v(" "), _c("div", {
     staticClass: "p-review-detail__recommend"
   }, [_vm._v(_vm._s(_vm.review.recommend))]), _vm._v(" "), _c("div", {
+    staticClass: "p-review-detail__container"
+  }, [_c("div", {
     staticClass: "p-review-detail__review-title"
-  }, [_vm._v(_vm._s(_vm.review.title))]), _vm._v(" "), _c("div", {
+  }, [_vm._v(_vm._s(_vm.review.title))]), _vm._v(" "), _c("router-link", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: !_vm.isShopUser,
+      expression: "!isShopUser"
+    }],
+    staticClass: "c-btn p-review-detail__btn",
+    attrs: {
+      to: {
+        name: "review.edit",
+        params: {
+          s_id: _vm.review.sender_id.toString(),
+          r_id: _vm.review.receiver_id.toString()
+        }
+      }
+    }
+  }, [_vm._v("編集する\n\t\t\t")])], 1), _vm._v(" "), _c("div", {
     staticClass: "p-review-detail__detail"
   }, [_vm._v(_vm._s(_vm.review.detail))]), _vm._v(" "), _c("div", {
     directives: [{

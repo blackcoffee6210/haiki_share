@@ -3,6 +3,7 @@
 		<div class="p-review-detail">
 			<h2 class="c-title p-review-detail__title">レビュー詳細</h2>
 			
+			
 			<div class="p-review-detail__user-info">
 				<img class="c-icon p-review-detail__image"
 						 v-show="isShopUser"
@@ -25,8 +26,19 @@
 			
 			<!-- ユーザーの評価	-->
 			<div class="p-review-detail__recommend">{{ review.recommend }}</div>
-			<!-- レビュータイトル	-->
-			<div class="p-review-detail__review-title">{{ review.title }}</div>
+			<div class="p-review-detail__container">
+				<!-- レビュータイトル	-->
+				<div class="p-review-detail__review-title">{{ review.title }}</div>
+				<!-- 編集ボタン(利用者) -->
+				<router-link class="c-btn p-review-detail__btn"
+										 v-show="!isShopUser"
+										 :to="{ name: 'review.edit',
+													params: {
+														s_id: review.sender_id.toString(),
+														r_id: review.receiver_id.toString()
+												}}">編集する
+				</router-link>
+			</div>
 			<!-- レビューの内容	-->
 			<div class="p-review-detail__detail">{{ review.detail }}</div>
 			

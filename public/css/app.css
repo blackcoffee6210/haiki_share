@@ -2713,9 +2713,15 @@ body {
   padding: 5px 10px;
 }
 
+.p-review-detail__container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
 .p-review-detail__review-title {
   font-weight: bold;
-  margin-bottom: 10px;
 }
 
 .p-review-detail__other-container {

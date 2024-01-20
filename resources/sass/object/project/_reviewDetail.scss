@@ -4,6 +4,11 @@
   background: $white;
   padding: $space_xl;
   position: relative;
+  &__btn {
+    //position: absolute;
+    //top: 130px;
+    //right: 20px;
+  }
   &__user-info {
     display: flex;
     align-items: center;
@@ -24,9 +29,14 @@
     right: 20px;
     padding: $space_s $space_m;
   }
+  &__container {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: $space_m;
+  }
   &__review-title {
     font-weight: bold;
-    margin-bottom: $space_m;
   }
   &__other-container {
     width: 100%;
