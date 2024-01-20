@@ -1,4 +1,3 @@
-
 <template>
 	<main class="l-main">
 		<div class="p-product-detail">
@@ -139,7 +138,6 @@
 						 v-show="otherProducts.length > 0">この出品者の他の商品
 				</div>
 				<div class="p-product-detail__other-container">
-					<!-- Productコンポーネント -->
 					<Product v-show="!loading"
 									 v-for="product in otherProducts"
 									 v-if="!product.is_purchased"
@@ -152,7 +150,6 @@
 						 v-show="similarProducts.length > 0">同じカテゴリーの商品
 				</div>
 				<div class="p-product-detail__other-container">
-					<!-- Productコンポーネント -->
 					<Product v-show="!loading"
 									 v-for="product in similarProducts"
 									 v-if="!product.is_purchased"
@@ -177,6 +174,7 @@ import { OK }         from "../../util";
 import { mapGetters } from 'vuex';
 import Loading        from "../Loading";
 import Product        from "./Product";
+import { Carousel, Slide } from 'vue-carousel';
 
 export default {
 	name: "ProductDetail",
@@ -188,7 +186,9 @@ export default {
 	},
 	components: {
 		Loading,
-		Product
+		Product,
+		Carousel,
+		Slide
 	},
 	data() {
 		return {
@@ -202,7 +202,7 @@ export default {
 			purchasedByUser: false, //ログインした利用者が購入したかどうか
 			canceledByUser: false,  //ログインした利用者がキャンセルしたかどうか
 			otherProducts: {},      //出品者の他の商品
-			similarProducts: {}     //出品した商品に似た商品
+			similarProducts: {},    //出品した商品に似た商品
 		}
 	},
 	computed: {

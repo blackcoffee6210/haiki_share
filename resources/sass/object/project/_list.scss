@@ -49,6 +49,7 @@
     }
     &__review {
       width: 100%;
+      min-height: 277px;
       padding: $space_m;
     }
   }
@@ -88,13 +89,17 @@
     font-weight: bold;
     padding: 0 $space_s;
     border-radius: 3px;
-    background: #fdbf99;
+    background: $sub-color;
     color: $white;
   }
   &__detail {
-    min-height: 120px;
-    max-height: 120px;
+    word-wrap: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 6; //1行に丸める
+    -webkit-box-orient: vertical;
+    overflow: hidden;
     margin-bottom: $space_m;
+    min-height: 153px;
   }
   &__price {
     font-weight: bold;

@@ -9,6 +9,9 @@ import VueSocialSharing from 'vue-social-sharing'; //twitterシェア
 import StarRating       from 'vue-star-rating';    //レビューの星
 import ReadMore         from 'vue-read-more';      //「もっと見る」表示
 
+import VueCarousel      from 'vue-carousel';
+Vue.use(VueCarousel);
+
 //======================
 //FontAwesome
 //======================

@@ -20,13 +20,17 @@
 				<div class="p-list__card-container" v-show="!loading">
 					
 					<!-- カード -->
+					<!-- todo: レビュー投稿日を実装 -->
 					<div class="c-card p-list__card__review"
 							 v-for="review in reviews"
 							 :key="review.id">
 						 <!--レビュー詳細画面のリンク-->
 						<router-link class="c-card__link"
 												 :to="{ name: 'review.detail',
-												 				params: { id: review.id.toString() }}" />
+																params: {
+																	s_id: review.sender_id.toString(),
+																	r_id: review.receiver_id.toString()
+															}}" />
 					
 						<div class="p-list__user-info__review">
 							<!-- ユーザーの画像	-->
@@ -60,15 +64,18 @@
 							<router-link class="c-btn p-list__btn p-list__btn--detail"
 													 v-show="isShopUser"
 													 :to="{ name: 'review.detail',
-																	params: { id: review.id.toString() }}">詳細を見る
+																	params: {
+													 					s_id: review.sender_id.toString(),
+																		r_id: review.receiver_id.toString()
+													 			  }}">詳細を見る
 							</router-link>
 							<!-- 編集ボタン(利用者) -->
 							<router-link class="c-btn p-list__btn p-list__btn--detail"
 													 v-show="!isShopUser"
 													 :to="{ name: 'review.edit',
 																	params: {
-													 					s_id: review.sender_id,
-													 					r_id: review.receiver_id
+													 					s_id: review.sender_id.toString(),
+													 					r_id: review.receiver_id.toString()
 																	}
 													 			}">編集する
 							</router-link>

@@ -66,13 +66,22 @@ class MyPageController extends Controller
 		return $products;
 	}
 
-	public function reviewed() //レビューしたコンビニユーザーを5件取得
+	public function reviewed() //投稿したレビューを5件取得（利用者）
 	{
 		return User::find(Auth::id())
 				   ->senderReviews()
 				   ->orderByDesc('reviews.created_at')
 				   ->take(5)
 				   ->get();
+	}
+
+	public function wasReviewed() //投稿されたレビューを5件取得（コンビニ）
+	{
+		return User::find(Auth::id())
+					->receiverReviews()
+					->orderByDesc('reviews.created_at')
+					->take(5)
+					->get();
 	}
 
 

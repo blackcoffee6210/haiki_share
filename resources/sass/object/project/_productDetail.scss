@@ -1,6 +1,7 @@
 .p-product-detail {
   width: 680px;
   margin: 0 auto;
+
   @include mq() {
     width: 100%;
     padding-left: $space_m;

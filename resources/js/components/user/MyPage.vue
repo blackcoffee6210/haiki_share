@@ -172,25 +172,29 @@
 							<router-link class="p-mypage__link"
 													 :to="{ name: 'user.reviewed',
 																	params: { id: id.toString() }}"
-													 v-if="reviewedShopUsers.length">全件表示
+													 v-if="reviewedUsers.length">全件表示
 							</router-link>
 						</div>
 						
-						<!-- 商品がなければ表示する -->
-						<div v-if="!reviewedShopUsers.length"
+						<!-- 投稿したレビューがなければ表示する -->
+						<div v-if="!reviewedUsers.length"
 								 class="p-mypage__no-Product">投稿したレビューはありません
 						</div>
 						
 						<div v-else class="p-mypage__card-container">
 							<!-- todo: コンポーネントにまとめる	-->
+							<!-- todo: レビュー投稿日を実装 -->
 							<!-- カード -->
 							<div class="c-card p-list__card__review"
-									 v-for="review in reviewedShopUsers"
+									 v-for="review in reviewedUsers"
 									 :key="review.id">
 								<!--レビュー詳細画面のリンク-->
 								<router-link class="c-card__link"
 														 :to="{ name: 'review.detail',
-												 						params: { id: review.id.toString() }}" />
+												 						params: {
+														 					s_id: review.sender_id.toString(),
+														 					r_id: review.receiver_id.toString()
+												 						}}" />
 								
 								<div class="p-list__user-info__review">
 									<!-- ユーザーの画像	-->
@@ -217,58 +221,69 @@
 								<div class="p-list__review-title">{{ review.title }}</div>
 								<!-- レビューの内容 -->
 								<div class="p-list__detail">{{ review.detail }}</div>
-								
-								<!--&lt;!&ndash; ボタン	&ndash;&gt;-->
-								<!--<div class="p-list__btn-container">-->
-								<!--	&lt;!&ndash; 詳細を見るボタン(コンビニユーザー) &ndash;&gt;-->
-								<!--	<router-link class="c-btn p-list__btn p-list__btn&#45;&#45;detail"-->
-								<!--							 v-show="isShopUser"-->
-								<!--							 :to="{ name: 'review.detail',-->
-								<!--									params: { id: review.id.toString() }}">詳細を見る-->
-								<!--	</router-link>-->
-								<!--	&lt;!&ndash; 編集ボタン(利用者) &ndash;&gt;-->
-								<!--	<router-link class="c-btn p-list__btn p-list__btn&#45;&#45;detail"-->
-								<!--							 v-show="!isShopUser"-->
-								<!--							 :to="{ name: 'review.edit',-->
-								<!--											params: {-->
-								<!--												s_id: review.sender_id,-->
-								<!--												r_id: review.receiver_id-->
-								<!--											}-->
-								<!--					 			}">編集する-->
-								<!--	</router-link>-->
-								<!--</div>-->
-								
 							</div>
 						</div>
 					</section>
 					
 					
-					<!-- 購入者からのレビュー一覧 -->
+					<!-- 投稿されたレビュー一覧 -->
 					<section class="p-mypge__section" v-show="isShopUser">
 						<div class="p-mypage__title-container">
-							<h2 class="c-title p-mypage__title">購入者からのレビュー一覧</h2>
+							<h2 class="c-title p-mypage__title">投稿されたレビュー一覧</h2>
 							<!-- 全件表示のリンク -->
-							<!--todo: RouterLinkに変更-->
-							<a class="p-mypage__link"
-								 v-if="reviewedUsers.length">全件表示</a>
-							<!--<router-link class="p-mypage__link"-->
-							<!--						 :to="{ name: 'user.reviewed',-->
-							<!--										params: { id: id.toString() }}"-->
-							<!--						 v-if="reviewedProducts.length">全件表示-->
-							<!--</router-link>-->
+							<router-link class="p-mypage__link"
+													 :to="{ name: 'user.reviewed',
+																	params: { id: id.toString() }}"
+													 v-if="wasReviewedUsers.length">全件表示
+							</router-link>
 						</div>
 						
-						<!-- 商品がなければ表示する -->
-						<div v-if="!reviewedUsers.length"
-								 class="p-mypage__no-Product">購入者からのレビューはありません
+						<!-- 投稿されたレビューがなければ表示する -->
+						<div v-if="!wasReviewedUsers.length"
+								 class="p-mypage__no-Product">投稿されたレビューはありません
 						</div>
 						
 						<div v-else class="p-mypage__card-container">
-							<!-- Productコンポーネント -->
-							<Product v-show="!loading"
-											 v-for="review in reviewedUsers"
-											 :key="review.id"
-											 :product="review" />
+							<!-- todo: コンポーネントにまとめる	-->
+							<!-- todo: レビュー投稿日を実装 -->
+							<!-- カード -->
+							<div class="c-card p-list__card__review"
+									 v-for="review in wasReviewedUsers"
+									 :key="review.id">
+								<!--レビュー詳細画面のリンク-->
+								<router-link class="c-card__link"
+														 :to="{ name: 'review.detail',
+												 						params: {
+														 					s_id: review.sender_id.toString(),
+														 					r_id: review.receiver_id.toString()
+												 						}}" />
+								
+								<div class="p-list__user-info__review">
+									<!-- ユーザーの画像	-->
+									<img class="c-icon p-list__review-icon"
+											 :src="review.sender_image"
+											 v-show="isShopUser"
+											 alt="">
+									<img class="c-icon p-list__review-icon"
+											 :src="review.receiver_image"
+											 v-show="!isShopUser"
+											 alt="">
+									<div>
+										<!-- レビュー相手の名前	-->
+										<div class="p-list__name">
+											<span v-show="isShopUser">{{ review.sender_name }}</span>
+											<span v-show="!isShopUser">{{ review.receiver_name }}</span>
+										</div>
+										<!-- ユーザーの評価 -->
+										<div class="p-list__recommendation">{{ review.recommend }}</div>
+									</div>
+								</div>
+								
+								<!-- レビュータイトル -->
+								<div class="p-list__review-title">{{ review.title }}</div>
+								<!-- レビューの内容 -->
+								<div class="p-list__detail">{{ review.detail }}</div>
+							</div>
 						</div>
 					</section>
 				
@@ -287,7 +302,7 @@ import Loading from "../Loading";
 import Product from "../product/Product";
 import Sidebar from "../Sidebar";
 import { mapGetters } from 'vuex';
-import {OK} from "../../util";
+import { OK } from "../../util";
 export default {
 	name: "MyPage",
 	props: {
@@ -310,9 +325,9 @@ export default {
 			wasPurchasedProducts: {}, //購入された商品（コンビニ）
 			canceledProducts: {},     //キャンセルした商品（利用者）
 			wasCanceledProducts: {},  //キャンセルされた商品（コンビニ）
-			reviewedShopUsers: {},    //投稿したレビュー（利用者）
-			wasReviewedShopUsers: {}, //投稿されたレビュー（コンビニ）
-			reviewedUsers: {}         //購入者へのレビュー（コンビニ）
+			reviewedUsers: {},        //投稿したレビュー（利用者）
+			wasReviewedUsers: {},     //投稿されたレビュー（コンビニ）
+			
 		}
 	},
 	computed: {
@@ -344,6 +359,8 @@ export default {
 				return false; //後続の処理を抜ける
 			}
 			this.postedProducts = response.data; //responseデータをプロパティに代入
+			console.log('出品した商品');
+			console.log(response.data);
 		},
 		async getPurchasedProducts() { //購入した商品(利用者)
 			this.loading   = true; //ローディングを表示する
@@ -397,7 +414,7 @@ export default {
 			console.log('キャンセルされた商品');
 			console.log(this.wasPurchasedProducts);
 		},
-		async getReviewed() { //レビューした出品者(利用者)
+		async getReviewed() { //投稿したレビュー(利用者)
 			this.loading   = true; //ローディングを表示する
 			const response = await axios.get('/api/mypage/reviewed');
 			this.loading   = false; //API通信が終わったらローディングを非表示にする
@@ -406,25 +423,32 @@ export default {
 				this.$store.commit('error/setCode', response.status);
 				return false; //後続の処理を抜ける
 			}
-			this.reviewedShopUsers = response.data; //responseデータをプロパティに代入
+			this.reviewedUsers = response.data; //responseデータをプロパティに代入
 			console.log('投稿したレビュー');
-			console.log(this.reviewedShopUsers);
+			console.log(this.reviewedUsers);
 		},
-
-
+		async getWasReviewed() { //投稿されたレビュー（コンビニユーザー）
+			this.loading   = true; //ローディングを表示する
+			const response = await axios.get('/api/mypage/wasReviewed');
+			this.loading   = false; //API通信が終わったらローディングを非表示にする
+			
+			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
+				this.$store.commit('error/setCode', response.status);
+				return false; //後続の処理を抜ける
+			}
+			this.wasReviewedUsers = response.data; //responseデータをプロパティに代入
+			console.log('投稿されたレビュー');
+			console.log(this.wasReviewedUsers);
+		}
 	},
 	watch: {
 		$route: { //$routerを監視してページが変わったときにメソッドが実行されるようにする
 			async handler() {
-				// this.isShopUser ? await this.getWasPurchasedProducts() : await this.getPurchasedProducts();
-				// if(!this.isShopUser) await this.getLikedProducts();
-				// await this.getCanceledProducts();
-				// await this.getReviewed();
-				// await this.getPostedProducts();
 				if(this.isShopUser) { //コンビニユーザーの場合
 					await this.getPostedProducts();
 					await this.getWasPurchasedProducts();
 					await this.getWasCanceledProducts();
+					await this.getWasReviewed();
 				}else { //利用者の場合
 					await this.getLikedProducts();
 					await this.getPurchasedProducts();

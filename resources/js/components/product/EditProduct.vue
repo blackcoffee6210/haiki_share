@@ -180,7 +180,8 @@ export default {
 				name: null,
 				detail: null,
 				price: null
-			}
+			},
+			// percent: null
 		}
 	},
 	computed: {
@@ -269,6 +270,10 @@ export default {
 				this.$store.commit('error/setCode', response.status);
 				return false;
 			}
+			
+			// this.percent = response.data;
+			// console.log('%');
+			// console.log(this.percent);
 			
 			this.$store.commit('message/setContent', { //メッセージ登録
 				content: '商品が更新されました！'

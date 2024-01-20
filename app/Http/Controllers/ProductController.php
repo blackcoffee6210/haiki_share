@@ -98,6 +98,15 @@ class ProductController extends Controller
 	{
 		$product = Product::find($request->id); //商品情報取得
 
+//		$original_price = $product->price; //元値
+//		$new_price      = $request->price; //新しい金額
+//
+//		if($original_price !== $new_price) {
+//			$percent = ($original_price - $new_price) / $original_price * 100;
+//		}else {
+//			$percent = 0;
+//		}
+
 		if($request->file('image')) { //画像が送信されたらバリデーションを行う
 			$request->validate([           //画像のバリデーション
 				'image' => 'required|file|mimes:jpg,jpeg,png'
@@ -121,6 +130,7 @@ class ProductController extends Controller
 		$product->save();
 
 		return response($product, 200); //商品情報とstatusを返す
+//		return response($product, 200); //商品情報とstatusを返す
 	}
 
 	public function destroy(string $id) //商品削除

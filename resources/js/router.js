@@ -16,6 +16,7 @@ import ProductDetail   from "./components/product/ProductDetail";
 import RegisterProduct from "./components/product/RegisterProduct";
 import EditReview      from "./components/review/EditReview";
 import RegisterReview  from "./components/review/RegisterReview";
+import ReviewDetail    from "./components/review/ReviewDetail";
 import Canceled        from "./components/user/Canceled";
 import EditPassword    from "./components/user/EditPassword";
 import EditProfile     from "./components/user/EditProfile";
@@ -80,6 +81,7 @@ const routes = [ //パスとコンポーネントのマッピング
     path: '/products/register', //商品登録
     name: 'product.register',
     component: RegisterProduct,
+    props: true,
     beforeEnter(to, from, next) { //ログインしている、かつコンビニユーザーの場合はページを表示、それ以外は商品一覧画面に遷移する
       (store.getters['auth/check'] && store.getters['auth/isShopUser']) ? next() : next({name: 'index'});
     }
@@ -110,6 +112,14 @@ const routes = [ //パスとコンポーネントのマッピング
     beforeEnter(to, from, next) { //ログイン状態かつ利用者ユーザーがページにアクセスした場合(true)、そのまま移動させる
       (store.getters['auth/check'] && !store.getters['auth/isShopUser']) ? next() : next({name: 'index'} );
     }
+  },  {
+    path: '/reviews/:s_id/:r_id', //レビュー詳細
+    name: 'review.detail',
+    component: ReviewDetail,
+    props: true,
+    // beforeEnter(to, from, next) { //ログイン状態かつ利用者ユーザーがページにアクセスした場合(true)、そのまま移動させる
+    //   (store.getters['auth/check'] && !store.getters['auth/isShopUser']) ? next() : next({name: 'index'} );
+    // }
   },
   {
     path: '/users/:id/my-page', //マイページ
