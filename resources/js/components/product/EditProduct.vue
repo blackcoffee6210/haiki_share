@@ -181,7 +181,6 @@ export default {
 				detail: null,
 				price: null
 			},
-			// percent: null
 		}
 	},
 	computed: {

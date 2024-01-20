@@ -6,7 +6,6 @@ export function getCookieValue(searchKey) { //クッキーの値を取得する
   if(typeof searchKey === 'undefined') {
     return '';
   }
-
   let val = '';
 
   document.cookie.split(';').forEach(cookie => { // document.cookie によってクッキーは以下の形式で参照できる
@@ -15,7 +14,6 @@ export function getCookieValue(searchKey) { //クッキーの値を取得する
       return val = value;
     }
   })
-
   return val;
 }
 

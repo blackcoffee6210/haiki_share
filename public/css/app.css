@@ -793,7 +793,7 @@ body {
 }
 
 .p-agreement {
-  width: 70%;
+  width: 100%;
   margin: 0 auto;
 }
 
@@ -951,7 +951,7 @@ body {
 
 .p-edit-password__form {
   width: 50%;
-  height: 530px;
+  height: 472px;
   margin-left: auto;
   margin-right: auto;
   padding: 20px;
@@ -2034,7 +2034,7 @@ body {
 }
 
 .p-policy {
-  width: 70%;
+  width: 100%;
   margin: 0 auto;
 }
 
@@ -3063,7 +3063,7 @@ body {
 }
 
 .p-tokutei {
-  width: 70%;
+  width: 100%;
   margin: 0 auto;
 }
 
@@ -3137,6 +3137,58 @@ body {
 
 .p-tokutei__withdraw:hover {
   color: #444;
+}
+
+.p-withdrawal {
+  width: 100%;
+}
+
+@media screen and (min-width: 451px) and (max-width:820px) {
+  .p-withdrawal {
+    padding-right: 20px;
+  }
+}
+
+.p-withdrawal__title {
+  background: #f8fafc;
+  padding-bottom: 5px;
+}
+
+.p-withdrawal__background {
+  background: #fff;
+}
+
+.p-withdrawal__form {
+  width: 50%;
+  height: 472px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px;
+}
+
+@media screen and (max-width: 450px) {
+  .p-withdrawal__form {
+    width: 100%;
+    height: initial;
+    padding: 10px;
+  }
+}
+
+@media screen and (min-width: 451px) and (max-width:820px) {
+  .p-withdrawal__form {
+    width: 80%;
+    height: 445px;
+  }
+}
+
+.p-withdrawal__btn-container {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.p-withdrawal__btn--back {
+  margin-right: 10px;
 }
 
 .u-b-radius {

@@ -70,7 +70,7 @@
 													 			  }}">詳細を見る
 							</router-link>
 							<!-- 編集ボタン(利用者) -->
-							<router-link class="c-btn p-list__btn p-list__btn--detail"
+							<router-link class="c-btn c-btn--white p-list__btn"
 													 v-show="!isShopUser"
 													 :to="{ name: 'review.edit',
 																	params: {

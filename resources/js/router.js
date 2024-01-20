@@ -24,7 +24,8 @@ import Liked           from "./components/user/Liked";
 import MyPage          from "./components/user/MyPage";
 import Posted          from "./components/user/Posted";
 import Purchased       from "./components/user/Purchased";
-import Reviewed        from "./components/user/Reviewed";                 // ↑ここまで
+import Reviewed        from "./components/user/Reviewed";
+import Withdrawal      from "./components/user/Withdrawal";              // ↑ここまで
 
 
 Vue.use(VueRouter); //VueRouterプラグインを利用する(<router-view>コンポーネントなどを使うことができる)
@@ -193,6 +194,23 @@ const routes = [ //パスとコンポーネントのマッピング
       (store.getters['auth/check']) ? next() : next({name: 'index'});
     }
   },
+  {
+    path: '/users/withdrawal',
+    name: 'user.withdrawal',
+    component: Withdrawal,
+    beforeEnter(to, from ,next) { //ログイン状態でページにアクセスした場合(true)、そのまま移動させる
+      store.getters['auth/check'] ? next() : next({name: 'login'});
+    }
+  },
+  // {
+  //   path: '/users/:id/withdrawal',
+  //   name: 'user.withdrawal',
+  //   component: Withdrawal,
+  //   props: true,
+  //   beforeEnter(to, from ,next) { //ログイン状態でページにアクセスした場合(true)、そのまま移動させる
+  //     store.getters['auth/check'] ? next({name: 'login'}) : next();
+  //   }
+  // },
   {
     path: '/agreement', //利用規約
     name: 'agreement',
