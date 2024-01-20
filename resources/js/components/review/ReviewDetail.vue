@@ -29,26 +29,48 @@
 			<div class="p-review-detail__review-title">{{ review.title }}</div>
 			<!-- レビューの内容	-->
 			<div class="p-review-detail__detail">{{ review.detail }}</div>
+			
+			<!-- 出品者の購入されていない商品を表示 -->
+			<div class="c-title p-product-detail__title"
+					 v-show="otherProducts.length > 0">この出品者の商品
+			</div>
+			<div class="p-review-detail__other-container">
+				<Product v-for="product in otherProducts"
+								 :key="product.id"
+								 v-if="!product.is_purchased"
+								 :product="product" />
+			</div>
 		</div>
 	</main>
 </template>
 
 <script>
-import { OK } from "../../util";
+import { OK }         from "../../util";
+import Loading        from "../Loading";
+import Product        from "../product/Product";
 import { mapGetters } from 'vuex';
 
 export default {
 	name: "ReviewDetail",
 	props: {
-		s_id: String, //利用者のユーザーid
-		r_id: String, //コンビニユーザーid
-		required: true
+		s_id: {
+			type: String,
+			required: true
+		},
+		r_id: {
+			type: String,
+			required: true
+		}
+	},
+	components: {
+		Loading,
+		Product
 	},
 	data() {
 		return {
-			review: {}
+			review: {},
+			otherProducts: []
 		}
-		
 	},
 	computed: {
 		...mapGetters({
@@ -64,13 +86,28 @@ export default {
 				return false;
 			}
 			this.review = response.data[0];
+			console.log('getReviewの中身');
 			console.log(response.data[0]);
+			console.log('r_idの中身');
+			console.log(this.r_id);
 		},
+		async getOtherProducts() {
+			const response = await axios.get(`/api/reviews/${this.r_id}/otherProducts`);
+			
+			if(response.status !== OK) {
+				this.$store.commit('error/setCode', response.status);
+				return false;
+			}
+			this.otherProducts = response.data;
+			console.log('otherProductsの中身');
+			console.log(response.data);
+		}
 	},
 	watch: {
 		$route: {
 			async handler() {
-				this.getReview();
+				await this.getReview();
+				if(!this.isShopUser) await this.getOtherProducts();
 			},
 			immediate: true
 		}

@@ -12,7 +12,7 @@ class Product extends Model
 
 	protected $fillable = [
 		'user_id', 'category_id', 'image', 'name', 'detail',
-		'price', 'expire', 'deleted_at'
+		'price', 'expire', 'deleted_at', 'created_at', 'updated_at'
 	];
 
 	protected $perPage = 12; //$perPageは、paginate()のデフォルト件数を変更するプロパティ

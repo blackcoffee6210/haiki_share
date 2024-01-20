@@ -201,8 +201,8 @@ export default {
 			isReviewed: false,      //ログインした利用者がレビューしたかどうか
 			purchasedByUser: false, //ログインした利用者が購入したかどうか
 			canceledByUser: false,  //ログインした利用者がキャンセルしたかどうか
-			otherProducts: {},      //出品者の他の商品
-			similarProducts: {},    //出品した商品に似た商品
+			otherProducts: [],      //出品者の他の商品
+			similarProducts: [],    //出品した商品に似た商品
 		}
 	},
 	computed: {

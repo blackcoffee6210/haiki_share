@@ -2718,6 +2718,15 @@ body {
   margin-bottom: 10px;
 }
 
+.p-review-detail__other-container {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 33.3% 33.3% 33.3%;
+  gap: 15px;
+  padding-right: 30px;
+  position: relative;
+}
+
 .p-review-form {
   width: 500px;
   margin: 0 auto;

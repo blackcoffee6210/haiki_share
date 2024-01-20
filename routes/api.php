@@ -62,10 +62,11 @@ Route::get('/mypage/wasReviewed',  'MyPageController@wasReviewed');  //投稿さ
 //=================================================================
 // Review
 //=================================================================
-Route::post('/reviews',                 'ReviewController@store');   //レビュー登録
-Route::get('/reviews/{s_id}/{r_id}',    'ReviewController@show');;   //レビュー取得
-Route::post('/reviews/update',          'ReviewController@update');  //レビュー編集
-Route::delete('/reviews/{s_id}/{r_id}', 'ReviewController@destroy'); //レビュー削除
+Route::post('/reviews',                     'ReviewController@store');
+Route::get('/reviews/{r_id}/otherProducts', 'ReviewController@otherProducts');
+Route::get('/reviews/{s_id}/{r_id}',        'ReviewController@show');
+Route::post('/reviews/update',              'ReviewController@update');
+Route::delete('/reviews/{s_id}/{r_id}',     'ReviewController@destroy');
 
 //=================================================================
 // Other

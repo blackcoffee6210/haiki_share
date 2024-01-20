@@ -28,4 +28,12 @@
     font-weight: bold;
     margin-bottom: $space_m;
   }
+  &__other-container {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 33.3% 33.3% 33.3%;
+    gap: $space_l;
+    padding-right: $space_2xl;
+    position: relative;
+  }
 }
