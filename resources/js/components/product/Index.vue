@@ -13,36 +13,49 @@
 						<span>{{ count }}件 / {{ total }}件中</span>
 					</div>
 					
-					<!-- todo: 賞味期限でソートできる機能を追加 -->
-					<!-- todo: 出品している都道府県でソートできる機能を追加 -->
-					<!-- 金額ソート -->
-					<div class="p-index__sort">
-						<label for="sort_price" class="p-index__label">並び替え</label>
-						<select id="sort_price"
-										class="p-index__select"
-										v-model.number="sortPrice">
-							<option value="1">標準</option>
-							<option value="2">価格が安い順</option>
-							<option value="3">価格が高い順</option>
-						</select>
+					<div>
+						<!-- todo: 賞味期限切れかどうかを絞り込む処理を実装 -->
+						<label for="expire" class="p-index__label">
+							<input type="checkbox" id="expire">
+							賞味期限切れのみ表示
+						</label>
+						
+						<!-- todo: 販売中を絞り込む処理を実装 -->
+						<label for="sale" class="p-index__label">
+							<input type="checkbox" id="sale">
+							販売中のみ表示
+						</label>
 					</div>
 					
-					<!-- カテゴリー -->
-					<div class="p-index__select-category">
-						<label for="sort_category" class="p-index__label">
-							カテゴリー
-						</label>
-						<select id="sort_category"
-										class="p-index__select"
-										v-model.number="sortCategory">
-							<option value="0">選択してください</option>
-							<option v-for="category in categories"
-											:value="category.id"
-											:key="category.id">
-								{{ category.name }}
-							</option>
-						</select>
-					</div>
+					<!--&lt;!&ndash; 金額ソート &ndash;&gt;-->
+					<!--<div class="p-index__sort">-->
+					<!--	<label for="sort_price" class="p-index__label">並び替え</label>-->
+					<!--	<select id="sort_price"-->
+					<!--					class="p-index__select"-->
+					<!--					v-model.number="sortPrice">-->
+					<!--		<option value="1">標準</option>-->
+					<!--		<option value="2">価格が安い順</option>-->
+					<!--		<option value="3">価格が高い順</option>-->
+					<!--	</select>-->
+					<!--</div>-->
+					
+					<!--&lt;!&ndash; カテゴリー &ndash;&gt;-->
+					<!--<div class="p-index__select-category">-->
+					<!--	<label for="sort_category" class="p-index__label">-->
+					<!--		カテゴリー-->
+					<!--	</label>-->
+					<!--	<select id="sort_category"-->
+					<!--					class="p-index__select"-->
+					<!--					v-model.number="sortCategory">-->
+					<!--		<option value="0">選択してください</option>-->
+					<!--		<option v-for="category in categories"-->
+					<!--						:value="category.id"-->
+					<!--						:key="category.id">-->
+					<!--			{{ category.name }}-->
+					<!--		</option>-->
+					<!--	</select>-->
+					<!--</div>-->
+					
 				</div>
 				
 				<div class="p-index__product-container">
@@ -52,6 +65,16 @@
 									 v-if="sortCategory !== 0 || sortCategory !== product.category_id"
 									 :key="product.id"
 									 :product="product" />
+					<!--<Product v-show="!loading"-->
+					<!--				 v-for="product in filteredProducts"-->
+					<!--				 v-if="sortCategory !== 0 || sortCategory !== product.category_id"-->
+					<!--				 :key="product.id"-->
+					<!--				 :product="product" />-->
+					<!--<Product v-show="!loading"-->
+					<!--				 v-for="product in filteredProducts"-->
+					<!--				 v-if="sortCategory !== 0 || sortCategory !== product.category_id"-->
+					<!--				 :key="product.id"-->
+					<!--				 :product="product" />-->
 				</div>
 			</div>
 			
@@ -65,6 +88,68 @@
 		<!-- サイドバー	-->
 		<aside class="l-sidebar" v-show="!loading">
 			<div class="p-sidebar-index">
+				
+				<!-- 金額ソート -->
+				<div class="p-sidebar-index__sort">
+					<label for="sort_price" class="p-sidebar-index__label">
+						金額
+					</label>
+					<select id="sort_price"
+									class="p-sidebar-index__select"
+									v-model.number="sortPrice">
+						<option value="1">標準</option>
+						<option value="2">価格が安い順</option>
+						<option value="3">価格が高い順</option>
+					</select>
+				</div>
+				
+				<!-- カテゴリー -->
+				<div class="p-sidebar-index__sort">
+					<label for="sort_category" class="p-sidebar-index__label">
+						カテゴリー
+					</label>
+					<select id="sort_category"
+									class="p-sidebar-index__select"
+									v-model.number="sortCategory">
+						<option value="0">選択してください</option>
+						<option v-for="category in categories"
+										:value="category.id"
+										:key="category.id">
+							{{ category.name }}
+						</option>
+					</select>
+				</div>
+				
+				<!-- 出品したコンビニのある都道府県 -->
+				<div class="p-sidebar-index__sort">
+					<label for="sort_prefecture" class="p-sidebar-index__label">
+						出品したコンビニのある都道府県
+					</label>
+					<select id="sort_prefecture"
+									class="p-sidebar-index__select"
+									v-model.number="sortPrefecture">
+						<option value="0">選択してください</option>
+						<option v-for="prefecture in prefectures"
+										:value="prefecture.id"
+										:key="prefecture.id">
+							{{ prefecture.name }}
+						</option>
+					</select>
+				</div>
+				
+				<!-- 賞味期限の切れた商品 -->
+				<!--<div class="p-sidebar-index__sort">-->
+				<!--	<label for="sort_expire" class="p-sidebar-index__label">-->
+				<!--		賞味期限-->
+				<!--	</label>-->
+				<!--	<select id="sort_expire"-->
+				<!--					class="p-sidebar-index__select"-->
+				<!--					v-model.number="sortExpire">-->
+				<!--		<option value="0">選択してください</option>-->
+				<!--		<option value="1">賞味期限の切れた商品</option>-->
+				<!--		<option value="2">賞味期限の切れてない商品</option>-->
+				<!--	</select>-->
+				<!--</div>-->
 				
 				<!-- おすすめの商品 -->
 				<h2 class="c-title p-sidebar-index__title">おすすめの商品</h2>
@@ -173,7 +258,10 @@ export default {
 			keyword: '', 					//リアルタイム検索をするための検索ボックス
 			sortPrice: 1,					//金額「並び替え」の選択値
 			sortCategory: 0, 			//「カテゴリー」絞り込みの初期値
+			sortPrefecture: 0, 		//「都道府県」絞り込みの初期値
+			sortExpire: 0,    	  //「賞味期限」絞り込みの初期値
 			categories: {},       //カテゴリー
+			prefectures: {},      //都道府県
 			products: {}, 				//商品リスト
 			currentPage: 0,			  //現在のページ
 			lastPage: 0, 					//最後のページ
@@ -240,6 +328,17 @@ export default {
 			}
 			this.categories = response.data; //プロパティにresponseデータを代入
 		},
+		async getPrefectures() {
+			const response = await axios.get('/api/products/prefecture'); //API接続
+			
+			// if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
+			// 	this.$store.commit('error/setCode', response.status);
+			// 	return false;
+			// }
+			this.prefectures = response.data;
+			console.log('都道府県セレクトボックス');
+			console.log(response.data);
+		},
 		async getProducts() { //商品取得メソッド
 			this.loading   = true; //ローディングを表示する
 			const response = await axios.get(`/api/products?page=${this.page}`); //API接続
@@ -262,6 +361,7 @@ export default {
 			async handler() {
 				await this.getRecommend();
 				await this.getCategories();
+				await this.getPrefectures();
 				await this.getProducts();
 			},
 			immediate: true //immediateをtrueにすると、コンポーネントが生成されたタイミングでも実行する

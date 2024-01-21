@@ -21,17 +21,29 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'group', 'name', 'branch', 'prefecture_id', 'address',
-	    'email', 'password', 'image', 'introduce', 'deleted_at'
+	    'email', 'password', 'image', 'introduce', 'deleted_at',
+	    'created_at', 'updated_at'
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
+//    protected $appends = [
+//    	'prefecture_name'
+//    ];
+
+	protected $visible = [
+		'id', 'group', 'name', 'branch', 'prefecture_id', 'address',
+		'email', 'email_verified_at', 'image', 'introduce', 'deleted_at',
+		'created_at', 'updated_at',
+		
+	];
+
+//    /**
+//     * The attributes that should be hidden for arrays.
+//     *
+//     * @var array
+//     */
+//    protected $hidden = [
+//        'password', 'remember_token',
+//    ];
 
     /**
      * The attributes that should be cast to native types.
@@ -51,6 +63,20 @@ class User extends Authenticatable
 		$this->notify(new PasswordResetNotification($token));
 	}
 
+	/*
+	 * --------------------------------------------------
+	 * アクセサ
+	 * --------------------------------------------------
+	 */
+//	/**
+//	 * アクセサ - prefecture_name
+//	 * @return string
+//	 */
+//	public function getPrefectureNameAttribute()
+//	{
+//		return $this->prefecture->name;
+//	}
+
 	//====================================================
     //リレーション
 	//====================================================
@@ -66,7 +92,8 @@ class User extends Authenticatable
 
 	public function likes() //お気に入りテーブル
 	{
-		return $this->belongsToMany('App\Product', 'likes')->withTimestamps();
+		return $this->belongsToMany('App\Product', 'likes')
+					->withTimestamps();
 	}
 
 	public function buyerHistories() //購入履歴テーブル（利用者）

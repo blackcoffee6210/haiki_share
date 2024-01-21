@@ -44,9 +44,26 @@
   width: 100%;
   background: $white;
   padding: $space_xl;
+  margin-top: 47px;
   @include mq() {
     padding-left: $space_m;
     padding-right: $space_m;
+  }
+  &__sort {
+    margin-bottom: $space_xl;
+  }
+  &__label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: $space_m;
+  }
+  &__select {
+    width: 100%;
+    border: 1px solid $gray-color;
+    outline: none;
+    border-radius: 3px;
+    background: $white;
+    padding: $space_s;
   }
   &__title {
     font-size: $font-size_l;

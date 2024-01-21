@@ -53,6 +53,9 @@
   }
   &__label {
     font-weight: bold;
+    &:last-child {
+      margin-left: $space_m;
+    }
     @include mq() {
       display: block;
       margin-bottom: $space_s;

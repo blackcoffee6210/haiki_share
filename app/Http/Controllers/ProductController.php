@@ -10,20 +10,49 @@ use App\Mail\CanceledBuyerNotification;
 use App\Mail\CanceledSellerNotification;
 use App\Mail\PurchasedBuyerNotification;
 use App\Mail\PurchasedSellerNotification;
+use App\Prefecture;
 use App\Product;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use function foo\func;
 
 class ProductController extends Controller
 {
-	public function __construct()
+	public function __construct() //認証なしでアクセスしたいAPIはexceptに書く
 	{
 		$this->middleware('auth')
-			 ->except(['index', 'show', 'ranking']); //認証なしでアクセスしたいAPIはexceptに書く
+			 ->except(['index', 'show', 'ranking', 'expire', 'prefecture', 'otherProducts', 'similarProducts']);
+	}
+
+	public function expire() //賞味期限切れの商品のみ取得
+	{
+		$now = Carbon::now()->format('Y-m-d H:i:s');
+		$expireProducts = Product::where('expire', '<',  $now)->get();
+		return $expireProducts;
+	}
+
+	public function prefecture()
+	{
+//		$prefectures = Prefecture::get();
+//		$postUser    = Product::with(['user'])->get();
+//		Log::debug('$postUserの値');
+//		Log::debug($postUser);
+
+//		$postUser = User::select('prefecture_id')->get();
+//		$postUser = Product::with(['user'])->get();
+		$postUser = User::with('products')->get();
+//		return $postUser;
+
+//		dd($postUser->toArray());
+
+//		$products = Product::whereHas('user', function ($q) {
+//
+//		})
 	}
 
 	public function index() //商品一覧取得

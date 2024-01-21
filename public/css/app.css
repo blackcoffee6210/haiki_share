@@ -1457,6 +1457,10 @@ body {
   font-weight: bold;
 }
 
+.p-index__label:last-child {
+  margin-left: 10px;
+}
+
 @media screen and (max-width: 450px) {
   .p-index__label {
     display: block;
@@ -2918,6 +2922,7 @@ body {
   width: 100%;
   background: #fff;
   padding: 20px;
+  margin-top: 47px;
 }
 
 @media screen and (max-width: 450px) {
@@ -2925,6 +2930,25 @@ body {
     padding-left: 10px;
     padding-right: 10px;
   }
+}
+
+.p-sidebar-index__sort {
+  margin-bottom: 20px;
+}
+
+.p-sidebar-index__label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.p-sidebar-index__select {
+  width: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  outline: none;
+  border-radius: 3px;
+  background: #fff;
+  padding: 5px;
 }
 
 .p-sidebar-index__title {

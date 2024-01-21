@@ -15,6 +15,8 @@ Route::post('/password/reset', 'Auth\ResetPasswordController@reset')->name('pass
 //=================================================================
 // Product
 //=================================================================
+Route::get('/products/prefecture',            'ProductController@prefecture');
+Route::get('/products/expire',                'ProductController@expire');
 Route::get('/products',                       'ProductController@index')->name('index');       //商品一覧取得
 Route::get('/products/ranking',               'ProductController@ranking');                    //お気に入りが多い５件を取得
 Route::get('/products/{id}',                  'ProductController@show')->name('product.show'); //商品情報取得

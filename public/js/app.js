@@ -17547,8 +17547,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       //金額「並び替え」の選択値
       sortCategory: 0,
       //「カテゴリー」絞り込みの初期値
+      sortPrefecture: 0,
+      //「都道府県」絞り込みの初期値
+      sortExpire: 0,
+      //「賞味期限」絞り込みの初期値
       categories: {},
       //カテゴリー
+      prefectures: {},
+      //都道府県
       products: {},
       //商品リスト
       currentPage: 0,
@@ -17657,64 +17663,94 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee2);
       }))();
     },
-    getProducts: function getProducts() {
+    getPrefectures: function getPrefectures() {
       var _this3 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
         var response;
         return _regeneratorRuntime().wrap(function _callee3$(_context3) {
           while (1) switch (_context3.prev = _context3.next) {
             case 0:
-              //商品取得メソッド
-              _this3.loading = true; //ローディングを表示する
-              _context3.next = 3;
-              return axios.get("/api/products?page=".concat(_this3.page));
-            case 3:
+              _context3.next = 2;
+              return axios.get('/api/products/prefecture');
+            case 2:
               response = _context3.sent;
               //API接続
-              _this3.loading = false; //API通信が終わったらローディングを非表示にする
-              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_3__["OK"])) {
-                _context3.next = 8;
-                break;
-              }
-              //responseステータスがOKじゃなかったらエラーコードをセットする
-              _this3.$store.commit('error/setCode', response.status);
-              return _context3.abrupt("return", false);
-            case 8:
-              //response.dataだとレスポンスのJSONの取得になる
-              //productはresponse.data.dataの中になるので、下記のような書き方になる
-              _this3.products = response.data.data; //商品情報
-              _this3.currentPage = response.data.current_page; //現在のページ
-              _this3.lastPage = response.data.last_page; //最後のページ
-              _this3.total = response.data.total; //商品の数
-            case 12:
+
+              // if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
+              // 	this.$store.commit('error/setCode', response.status);
+              // 	return false;
+              // }
+              _this3.prefectures = response.data;
+              console.log('都道府県セレクトボックス');
+              console.log(response.data);
+            case 6:
             case "end":
               return _context3.stop();
           }
         }, _callee3);
+      }))();
+    },
+    getProducts: function getProducts() {
+      var _this4 = this;
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+        var response;
+        return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+          while (1) switch (_context4.prev = _context4.next) {
+            case 0:
+              //商品取得メソッド
+              _this4.loading = true; //ローディングを表示する
+              _context4.next = 3;
+              return axios.get("/api/products?page=".concat(_this4.page));
+            case 3:
+              response = _context4.sent;
+              //API接続
+              _this4.loading = false; //API通信が終わったらローディングを非表示にする
+              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_3__["OK"])) {
+                _context4.next = 8;
+                break;
+              }
+              //responseステータスがOKじゃなかったらエラーコードをセットする
+              _this4.$store.commit('error/setCode', response.status);
+              return _context4.abrupt("return", false);
+            case 8:
+              //response.dataだとレスポンスのJSONの取得になる
+              //productはresponse.data.dataの中になるので、下記のような書き方になる
+              _this4.products = response.data.data; //商品情報
+              _this4.currentPage = response.data.current_page; //現在のページ
+              _this4.lastPage = response.data.last_page; //最後のページ
+              _this4.total = response.data.total; //商品の数
+            case 12:
+            case "end":
+              return _context4.stop();
+          }
+        }, _callee4);
       }))();
     }
   },
   watch: {
     $route: {
       handler: function handler() {
-        var _this4 = this;
-        return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
-          return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-            while (1) switch (_context4.prev = _context4.next) {
+        var _this5 = this;
+        return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+          return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+            while (1) switch (_context5.prev = _context5.next) {
               case 0:
-                _context4.next = 2;
-                return _this4.getRecommend();
+                _context5.next = 2;
+                return _this5.getRecommend();
               case 2:
-                _context4.next = 4;
-                return _this4.getCategories();
+                _context5.next = 4;
+                return _this5.getCategories();
               case 4:
-                _context4.next = 6;
-                return _this4.getProducts();
+                _context5.next = 6;
+                return _this5.getPrefectures();
               case 6:
+                _context5.next = 8;
+                return _this5.getProducts();
+              case 8:
               case "end":
-                return _context4.stop();
+                return _context5.stop();
             }
-          }, _callee4);
+          }, _callee5);
         }))();
       },
       immediate: true //immediateをtrueにすると、コンポーネントが生成されたタイミングでも実行する
@@ -22641,94 +22677,7 @@ var render = function render() {
     staticClass: "p-index__search"
   }, [_c("span", {
     staticClass: "u-font-bold"
-  }, [_vm._v("検索結果")]), _vm._v(" "), _c("span", [_vm._v(_vm._s(_vm.count) + "件 / " + _vm._s(_vm.total) + "件中")])]), _vm._v(" "), _c("div", {
-    staticClass: "p-index__sort"
-  }, [_c("label", {
-    staticClass: "p-index__label",
-    attrs: {
-      "for": "sort_price"
-    }
-  }, [_vm._v("並び替え")]), _vm._v(" "), _c("select", {
-    directives: [{
-      name: "model",
-      rawName: "v-model.number",
-      value: _vm.sortPrice,
-      expression: "sortPrice",
-      modifiers: {
-        number: true
-      }
-    }],
-    staticClass: "p-index__select",
-    attrs: {
-      id: "sort_price"
-    },
-    on: {
-      change: function change($event) {
-        var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
-          return o.selected;
-        }).map(function (o) {
-          var val = "_value" in o ? o._value : o.value;
-          return _vm._n(val);
-        });
-        _vm.sortPrice = $event.target.multiple ? $$selectedVal : $$selectedVal[0];
-      }
-    }
-  }, [_c("option", {
-    attrs: {
-      value: "1"
-    }
-  }, [_vm._v("標準")]), _vm._v(" "), _c("option", {
-    attrs: {
-      value: "2"
-    }
-  }, [_vm._v("価格が安い順")]), _vm._v(" "), _c("option", {
-    attrs: {
-      value: "3"
-    }
-  }, [_vm._v("価格が高い順")])])]), _vm._v(" "), _c("div", {
-    staticClass: "p-index__select-category"
-  }, [_c("label", {
-    staticClass: "p-index__label",
-    attrs: {
-      "for": "sort_category"
-    }
-  }, [_vm._v("\n\t\t\t\t\t\tカテゴリー\n\t\t\t\t\t")]), _vm._v(" "), _c("select", {
-    directives: [{
-      name: "model",
-      rawName: "v-model.number",
-      value: _vm.sortCategory,
-      expression: "sortCategory",
-      modifiers: {
-        number: true
-      }
-    }],
-    staticClass: "p-index__select",
-    attrs: {
-      id: "sort_category"
-    },
-    on: {
-      change: function change($event) {
-        var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
-          return o.selected;
-        }).map(function (o) {
-          var val = "_value" in o ? o._value : o.value;
-          return _vm._n(val);
-        });
-        _vm.sortCategory = $event.target.multiple ? $$selectedVal : $$selectedVal[0];
-      }
-    }
-  }, [_c("option", {
-    attrs: {
-      value: "0"
-    }
-  }, [_vm._v("選択してください")]), _vm._v(" "), _vm._l(_vm.categories, function (category) {
-    return _c("option", {
-      key: category.id,
-      domProps: {
-        value: category.id
-      }
-    }, [_vm._v("\n\t\t\t\t\t\t\t" + _vm._s(category.name) + "\n\t\t\t\t\t\t")]);
-  })], 2)])]), _vm._v(" "), _c("div", {
+  }, [_vm._v("検索結果")]), _vm._v(" "), _c("span", [_vm._v(_vm._s(_vm.count) + "件 / " + _vm._s(_vm.total) + "件中")])]), _vm._v(" "), _vm._m(0)]), _vm._v(" "), _c("div", {
     staticClass: "p-index__product-container"
   }, _vm._l(_vm.filteredProducts, function (product) {
     return _vm.sortCategory !== 0 || _vm.sortCategory !== product.category_id ? _c("Product", {
@@ -22765,7 +22714,137 @@ var render = function render() {
     staticClass: "l-sidebar"
   }, [_c("div", {
     staticClass: "p-sidebar-index"
-  }, [_c("h2", {
+  }, [_c("div", {
+    staticClass: "p-sidebar-index__sort"
+  }, [_c("label", {
+    staticClass: "p-sidebar-index__label",
+    attrs: {
+      "for": "sort_price"
+    }
+  }, [_vm._v("\n\t\t\t\t\t金額\n\t\t\t\t")]), _vm._v(" "), _c("select", {
+    directives: [{
+      name: "model",
+      rawName: "v-model.number",
+      value: _vm.sortPrice,
+      expression: "sortPrice",
+      modifiers: {
+        number: true
+      }
+    }],
+    staticClass: "p-sidebar-index__select",
+    attrs: {
+      id: "sort_price"
+    },
+    on: {
+      change: function change($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
+          return o.selected;
+        }).map(function (o) {
+          var val = "_value" in o ? o._value : o.value;
+          return _vm._n(val);
+        });
+        _vm.sortPrice = $event.target.multiple ? $$selectedVal : $$selectedVal[0];
+      }
+    }
+  }, [_c("option", {
+    attrs: {
+      value: "1"
+    }
+  }, [_vm._v("標準")]), _vm._v(" "), _c("option", {
+    attrs: {
+      value: "2"
+    }
+  }, [_vm._v("価格が安い順")]), _vm._v(" "), _c("option", {
+    attrs: {
+      value: "3"
+    }
+  }, [_vm._v("価格が高い順")])])]), _vm._v(" "), _c("div", {
+    staticClass: "p-sidebar-index__sort"
+  }, [_c("label", {
+    staticClass: "p-sidebar-index__label",
+    attrs: {
+      "for": "sort_category"
+    }
+  }, [_vm._v("\n\t\t\t\t\tカテゴリー\n\t\t\t\t")]), _vm._v(" "), _c("select", {
+    directives: [{
+      name: "model",
+      rawName: "v-model.number",
+      value: _vm.sortCategory,
+      expression: "sortCategory",
+      modifiers: {
+        number: true
+      }
+    }],
+    staticClass: "p-sidebar-index__select",
+    attrs: {
+      id: "sort_category"
+    },
+    on: {
+      change: function change($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
+          return o.selected;
+        }).map(function (o) {
+          var val = "_value" in o ? o._value : o.value;
+          return _vm._n(val);
+        });
+        _vm.sortCategory = $event.target.multiple ? $$selectedVal : $$selectedVal[0];
+      }
+    }
+  }, [_c("option", {
+    attrs: {
+      value: "0"
+    }
+  }, [_vm._v("選択してください")]), _vm._v(" "), _vm._l(_vm.categories, function (category) {
+    return _c("option", {
+      key: category.id,
+      domProps: {
+        value: category.id
+      }
+    }, [_vm._v("\n\t\t\t\t\t\t" + _vm._s(category.name) + "\n\t\t\t\t\t")]);
+  })], 2)]), _vm._v(" "), _c("div", {
+    staticClass: "p-sidebar-index__sort"
+  }, [_c("label", {
+    staticClass: "p-sidebar-index__label",
+    attrs: {
+      "for": "sort_prefecture"
+    }
+  }, [_vm._v("\n\t\t\t\t\t出品したコンビニのある都道府県\n\t\t\t\t")]), _vm._v(" "), _c("select", {
+    directives: [{
+      name: "model",
+      rawName: "v-model.number",
+      value: _vm.sortPrefecture,
+      expression: "sortPrefecture",
+      modifiers: {
+        number: true
+      }
+    }],
+    staticClass: "p-sidebar-index__select",
+    attrs: {
+      id: "sort_prefecture"
+    },
+    on: {
+      change: function change($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
+          return o.selected;
+        }).map(function (o) {
+          var val = "_value" in o ? o._value : o.value;
+          return _vm._n(val);
+        });
+        _vm.sortPrefecture = $event.target.multiple ? $$selectedVal : $$selectedVal[0];
+      }
+    }
+  }, [_c("option", {
+    attrs: {
+      value: "0"
+    }
+  }, [_vm._v("選択してください")]), _vm._v(" "), _vm._l(_vm.prefectures, function (prefecture) {
+    return _c("option", {
+      key: prefecture.id,
+      domProps: {
+        value: prefecture.id
+      }
+    }, [_vm._v("\n\t\t\t\t\t\t" + _vm._s(prefecture.name) + "\n\t\t\t\t\t")]);
+  })], 2)]), _vm._v(" "), _c("h2", {
     staticClass: "c-title p-sidebar-index__title"
   }, [_vm._v("おすすめの商品")]), _vm._v(" "), _c("div", {
     staticClass: "p-sidebar-index__card-container"
@@ -22896,7 +22975,31 @@ var render = function render() {
     }
   })])])]);
 };
-var staticRenderFns = [];
+var staticRenderFns = [function () {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("div", [_c("label", {
+    staticClass: "p-index__label",
+    attrs: {
+      "for": "expire"
+    }
+  }, [_c("input", {
+    attrs: {
+      type: "checkbox",
+      id: "expire"
+    }
+  }), _vm._v("\n\t\t\t\t\t\t賞味期限切れのみ表示\n\t\t\t\t\t")]), _vm._v(" "), _c("label", {
+    staticClass: "p-index__label",
+    attrs: {
+      "for": "sale"
+    }
+  }, [_c("input", {
+    attrs: {
+      type: "checkbox",
+      id: "sale"
+    }
+  }), _vm._v("\n\t\t\t\t\t\t販売中のみ表示\n\t\t\t\t\t")])]);
+}];
 render._withStripped = true;
 
 
