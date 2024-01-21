@@ -44,32 +44,25 @@
   width: 100%;
   background: $white;
   padding: $space_xl;
-  margin-top: 47px;
   @include mq() {
     padding-left: $space_m;
     padding-right: $space_m;
   }
+  &__search {
+    margin-bottom: $space_xl;
+  }
   &__sort {
     margin-bottom: $space_xl;
   }
-  &__label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: $space_m;
-  }
   &__select {
     width: 100%;
-    border: 1px solid $gray-color;
-    outline: none;
-    border-radius: 3px;
-    background: $white;
-    padding: $space_s;
   }
   &__title {
+    display: block;
+    font-weight: bold;
     font-size: $font-size_l;
     text-align: left;
-    margin-top: 3px;
-    margin-bottom: $space_xl;
+    margin-bottom: $space_s;
     @include mq() {
       margin-top: $space_m;
       margin-bottom: $space_m;
@@ -81,6 +74,9 @@
   }
   &__card-container {
     margin-bottom: 40px;
+    &:last-child {
+      margin-bottom: initial;
+    }
   }
   &__card {
     height: 85px;
@@ -147,7 +143,7 @@
   &__price {
     font-weight: bold;
   }
-  &__search {
+  &__input {
     width: 100%;
     &::placeholder {
       color: $sub-color;

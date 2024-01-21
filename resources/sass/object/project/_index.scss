@@ -4,6 +4,7 @@
     padding-right: initial;
   }
   &__sort-container {
+    font-size: $font-size_l;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -21,7 +22,7 @@
       flex-wrap: wrap;
     }
   }
-  &__search {
+  &__total {
     @include mq() {
       width: 100%;
       margin-bottom: $space_s;
@@ -64,6 +65,11 @@
       display: block;
       margin-bottom: $space_s;
     }
+  }
+  &__check {
+    width: 18px;
+    height: 18px;
+    margin-bottom: 3px;
   }
   &__select {
     border: 1px solid $gray-color;

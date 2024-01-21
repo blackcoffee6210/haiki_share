@@ -8,7 +8,7 @@
 				
 				<div class="p-index__sort-container">
 					<!-- 検索件数 -->
-					<div class="p-index__search">
+					<div class="p-index__total">
 						<span class="u-font-bold">検索結果</span>
 						<span>{{ count }}件 / {{ total }}件中</span>
 					</div>
@@ -16,48 +16,23 @@
 					<div>
 						<!-- todo: 賞味期限切れかどうかを絞り込む処理を実装 -->
 						<label for="expire" class="p-index__label">
-							<input type="checkbox" id="expire">
+							<input type="checkbox"
+										 id="expire"
+										 class="p-index__check">
 							賞味期限切れのみ表示
 						</label>
 						
 						<!-- todo: 販売中を絞り込む処理を実装 -->
 						<label for="sale" class="p-index__label">
-							<input type="checkbox" id="sale">
+							<input type="checkbox"
+										 id="sale"
+										 class="p-index__check">
 							販売中のみ表示
 						</label>
 					</div>
-					
-					<!--&lt;!&ndash; 金額ソート &ndash;&gt;-->
-					<!--<div class="p-index__sort">-->
-					<!--	<label for="sort_price" class="p-index__label">並び替え</label>-->
-					<!--	<select id="sort_price"-->
-					<!--					class="p-index__select"-->
-					<!--					v-model.number="sortPrice">-->
-					<!--		<option value="1">標準</option>-->
-					<!--		<option value="2">価格が安い順</option>-->
-					<!--		<option value="3">価格が高い順</option>-->
-					<!--	</select>-->
-					<!--</div>-->
-					
-					<!--&lt;!&ndash; カテゴリー &ndash;&gt;-->
-					<!--<div class="p-index__select-category">-->
-					<!--	<label for="sort_category" class="p-index__label">-->
-					<!--		カテゴリー-->
-					<!--	</label>-->
-					<!--	<select id="sort_category"-->
-					<!--					class="p-index__select"-->
-					<!--					v-model.number="sortCategory">-->
-					<!--		<option value="0">選択してください</option>-->
-					<!--		<option v-for="category in categories"-->
-					<!--						:value="category.id"-->
-					<!--						:key="category.id">-->
-					<!--			{{ category.name }}-->
-					<!--		</option>-->
-					<!--	</select>-->
-					<!--</div>-->
-					
 				</div>
 				
+				<!-- 商品コンテナ -->
 				<div class="p-index__product-container">
 					<!-- Productコンポーネント -->
 					<Product v-show="!loading"
@@ -79,13 +54,25 @@
 		<aside class="l-sidebar" v-show="!loading">
 			<div class="p-sidebar-index">
 				
+				<!-- 検索ボックス -->
+				<div class="p-sidebar-index__search">
+					<label class="p-sidebar-index__title"
+								 for="search">商品検索
+					</label>
+					<input type="text"
+								 placeholder="SEARCH"
+								 v-model="keyword"
+								 id="search"
+								 class="c-input p-sidebar-index__input">
+				</div>
+				
 				<!-- 金額ソート -->
 				<div class="p-sidebar-index__sort">
-					<label for="sort_price" class="p-sidebar-index__label">
+					<label for="sort_price" class="p-sidebar-index__title">
 						金額
 					</label>
 					<select id="sort_price"
-									class="p-sidebar-index__select"
+									class="c-select p-sidebar-index__select"
 									v-model.number="sortPrice">
 						<option value="1">標準</option>
 						<option value="2">価格が安い順</option>
@@ -95,11 +82,11 @@
 				
 				<!-- カテゴリー -->
 				<div class="p-sidebar-index__sort">
-					<label for="sort_category" class="p-sidebar-index__label">
+					<label for="sort_category" class="p-sidebar-index__title">
 						カテゴリー
 					</label>
 					<select id="sort_category"
-									class="p-sidebar-index__select"
+									class="c-select p-sidebar-index__select"
 									v-model.number="sortCategory">
 						<option value="0">選択してください</option>
 						<option v-for="category in categories"
@@ -112,11 +99,11 @@
 				
 				<!-- 出品したコンビニのある都道府県 -->
 				<div class="p-sidebar-index__sort">
-					<label for="sort_prefecture" class="p-sidebar-index__label">
+					<label for="sort_prefecture" class="p-sidebar-index__title">
 						出品したコンビニのある都道府県
 					</label>
 					<select id="sort_prefecture"
-									class="p-sidebar-index__select"
+									class="c-select p-sidebar-index__select"
 									v-model.number="sortPrefecture">
 						<option value="0">選択してください</option>
 						<option v-for="prefecture in prefectures"
@@ -126,20 +113,6 @@
 						</option>
 					</select>
 				</div>
-				
-				<!-- 賞味期限の切れた商品 -->
-				<!--<div class="p-sidebar-index__sort">-->
-				<!--	<label for="sort_expire" class="p-sidebar-index__label">-->
-				<!--		賞味期限-->
-				<!--	</label>-->
-				<!--	<select id="sort_expire"-->
-				<!--					class="p-sidebar-index__select"-->
-				<!--					v-model.number="sortExpire">-->
-				<!--		<option value="0">選択してください</option>-->
-				<!--		<option value="1">賞味期限の切れた商品</option>-->
-				<!--		<option value="2">賞味期限の切れてない商品</option>-->
-				<!--	</select>-->
-				<!--</div>-->
 				
 				<!-- おすすめの商品 -->
 				<h2 class="c-title p-sidebar-index__title">おすすめの商品</h2>
@@ -207,15 +180,7 @@
 					</div>
 				</div>
 				
-				<!-- 検索ボックス -->
-				<label class="c-label p-sidebar-index__title u-font-bold"
-							 for="search">商品検索
-				</label>
-				<input type="text"
-							 placeholder="SEARCH"
-							 v-model="keyword"
-							 id="search"
-							 class="c-input p-sidebar-index__search">
+				
 			</div>
 		</aside>
 	

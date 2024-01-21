@@ -2,10 +2,10 @@
   position: absolute;
   //background: $red;
   color: $white;
-  border-top: 40px solid $red;
+  border-top: 40px solid $main-color;
   border-right: 40px solid transparent;
   border-bottom: 40px solid transparent;
-  border-left: 40px solid $red;
+  border-left: 40px solid $main-color;
   z-index: 1;
   &__sold {
     position: absolute;

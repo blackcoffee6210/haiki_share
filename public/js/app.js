@@ -22676,7 +22676,7 @@ var render = function render() {
   }), _vm._v(" "), _c("div", {
     staticClass: "p-index__sort-container"
   }, [_c("div", {
-    staticClass: "p-index__search"
+    staticClass: "p-index__total"
   }, [_c("span", {
     staticClass: "u-font-bold"
   }, [_vm._v("検索結果")]), _vm._v(" "), _c("span", [_vm._v(_vm._s(_vm.count) + "件 / " + _vm._s(_vm.total) + "件中")])]), _vm._v(" "), _vm._m(0)]), _vm._v(" "), _c("div", {
@@ -22717,9 +22717,38 @@ var render = function render() {
   }, [_c("div", {
     staticClass: "p-sidebar-index"
   }, [_c("div", {
+    staticClass: "p-sidebar-index__search"
+  }, [_c("label", {
+    staticClass: "p-sidebar-index__title",
+    attrs: {
+      "for": "search"
+    }
+  }, [_vm._v("商品検索\n\t\t\t\t")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.keyword,
+      expression: "keyword"
+    }],
+    staticClass: "c-input p-sidebar-index__input",
+    attrs: {
+      type: "text",
+      placeholder: "SEARCH",
+      id: "search"
+    },
+    domProps: {
+      value: _vm.keyword
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.keyword = $event.target.value;
+      }
+    }
+  })]), _vm._v(" "), _c("div", {
     staticClass: "p-sidebar-index__sort"
   }, [_c("label", {
-    staticClass: "p-sidebar-index__label",
+    staticClass: "p-sidebar-index__title",
     attrs: {
       "for": "sort_price"
     }
@@ -22733,7 +22762,7 @@ var render = function render() {
         number: true
       }
     }],
-    staticClass: "p-sidebar-index__select",
+    staticClass: "c-select p-sidebar-index__select",
     attrs: {
       id: "sort_price"
     },
@@ -22763,7 +22792,7 @@ var render = function render() {
   }, [_vm._v("価格が高い順")])])]), _vm._v(" "), _c("div", {
     staticClass: "p-sidebar-index__sort"
   }, [_c("label", {
-    staticClass: "p-sidebar-index__label",
+    staticClass: "p-sidebar-index__title",
     attrs: {
       "for": "sort_category"
     }
@@ -22777,7 +22806,7 @@ var render = function render() {
         number: true
       }
     }],
-    staticClass: "p-sidebar-index__select",
+    staticClass: "c-select p-sidebar-index__select",
     attrs: {
       id: "sort_category"
     },
@@ -22806,7 +22835,7 @@ var render = function render() {
   })], 2)]), _vm._v(" "), _c("div", {
     staticClass: "p-sidebar-index__sort"
   }, [_c("label", {
-    staticClass: "p-sidebar-index__label",
+    staticClass: "p-sidebar-index__title",
     attrs: {
       "for": "sort_prefecture"
     }
@@ -22820,7 +22849,7 @@ var render = function render() {
         number: true
       }
     }],
-    staticClass: "p-sidebar-index__select",
+    staticClass: "c-select p-sidebar-index__select",
     attrs: {
       id: "sort_prefecture"
     },
@@ -22948,34 +22977,7 @@ var render = function render() {
     }), _vm._v(" "), _c("div", {
       staticClass: "p-sidebar-index__name"
     }, [_vm._v(_vm._s(product.user_name))])])])], 1);
-  }), 0), _vm._v(" "), _c("label", {
-    staticClass: "c-label p-sidebar-index__title u-font-bold",
-    attrs: {
-      "for": "search"
-    }
-  }, [_vm._v("商品検索\n\t\t\t")]), _vm._v(" "), _c("input", {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: _vm.keyword,
-      expression: "keyword"
-    }],
-    staticClass: "c-input p-sidebar-index__search",
-    attrs: {
-      type: "text",
-      placeholder: "SEARCH",
-      id: "search"
-    },
-    domProps: {
-      value: _vm.keyword
-    },
-    on: {
-      input: function input($event) {
-        if ($event.target.composing) return;
-        _vm.keyword = $event.target.value;
-      }
-    }
-  })])])]);
+  }), 0)])])]);
 };
 var staticRenderFns = [function () {
   var _vm = this,
@@ -22986,6 +22988,7 @@ var staticRenderFns = [function () {
       "for": "expire"
     }
   }, [_c("input", {
+    staticClass: "p-index__check",
     attrs: {
       type: "checkbox",
       id: "expire"
@@ -22996,6 +22999,7 @@ var staticRenderFns = [function () {
       "for": "sale"
     }
   }, [_c("input", {
+    staticClass: "p-index__check",
     attrs: {
       type: "checkbox",
       id: "sale"
