@@ -25,15 +25,13 @@ class User extends Authenticatable
 	    'created_at', 'updated_at'
     ];
 
-//    protected $appends = [
-//    	'prefecture_name'
-//    ];
+    protected $appends = ['prefecture_name'];
 
 	protected $visible = [
 		'id', 'group', 'name', 'branch', 'prefecture_id', 'address',
 		'email', 'email_verified_at', 'image', 'introduce', 'deleted_at',
 		'created_at', 'updated_at',
-		
+		'prefecture_name'
 	];
 
 //    /**
@@ -42,7 +40,8 @@ class User extends Authenticatable
 //     * @var array
 //     */
 //    protected $hidden = [
-//        'password', 'remember_token',
+//        'password',
+//	    'remember_token',
 //    ];
 
     /**
@@ -68,14 +67,17 @@ class User extends Authenticatable
 	 * アクセサ
 	 * --------------------------------------------------
 	 */
-//	/**
-//	 * アクセサ - prefecture_name
-//	 * @return string
-//	 */
-//	public function getPrefectureNameAttribute()
-//	{
-//		return $this->prefecture->name;
-//	}
+	/**
+	 * アクセサ - prefecture_name
+	 * @return string
+	 */
+	public function getPrefectureNameAttribute()
+	{
+		if($this->group === 1) {
+			return false;
+		}
+		return $this->prefecture->name;
+	}
 
 	//====================================================
     //リレーション

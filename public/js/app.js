@@ -17551,11 +17551,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       //「都道府県」絞り込みの初期値
       sortExpire: 0,
       //「賞味期限」絞り込みの初期値
-      categories: {},
+      categories: [],
       //カテゴリー
-      prefectures: {},
-      //都道府県
-      products: {},
+      prefectures: [],
+      //出品したコンビニのある都道府県
+      products: [],
       //商品リスト
       currentPage: 0,
       //現在のページ
@@ -17563,7 +17563,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       //最後のページ
       total: 0,
       //商品の合計数
-      recommendProducts: {} //おすすめ商品
+      recommendProducts: [] //おすすめ商品
     };
   },
   computed: {
@@ -17674,16 +17674,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               return axios.get('/api/products/prefecture');
             case 2:
               response = _context3.sent;
-              //API接続
-
-              // if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
-              // 	this.$store.commit('error/setCode', response.status);
-              // 	return false;
-              // }
+              if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_3__["OK"])) {
+                _context3.next = 6;
+                break;
+              }
+              //responseステータスがOKじゃなかったらエラーコードをセット
+              _this3.$store.commit('error/setCode', response.status);
+              return _context3.abrupt("return", false);
+            case 6:
               _this3.prefectures = response.data;
               console.log('都道府県セレクトボックス');
               console.log(response.data);
-            case 6:
+            case 9:
             case "end":
               return _context3.stop();
           }
@@ -22843,7 +22845,7 @@ var render = function render() {
       domProps: {
         value: prefecture.id
       }
-    }, [_vm._v("\n\t\t\t\t\t\t" + _vm._s(prefecture.name) + "\n\t\t\t\t\t")]);
+    }, [_vm._v("\n\t\t\t\t\t\t" + _vm._s(prefecture.prefecture_name) + "\n\t\t\t\t\t")]);
   })], 2)]), _vm._v(" "), _c("h2", {
     staticClass: "c-title p-sidebar-index__title"
   }, [_vm._v("おすすめの商品")]), _vm._v(" "), _c("div", {

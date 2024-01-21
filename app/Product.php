@@ -56,7 +56,7 @@ class Product extends Model
 	/**
 	 * アクセサ - email
 	 * @return string
-	 */
+    */
 	public function getEmailAttribute() //ユーザーのEmailを取得する
 	{
 		return $this->user->email;

@@ -65,16 +65,6 @@
 									 v-if="sortCategory !== 0 || sortCategory !== product.category_id"
 									 :key="product.id"
 									 :product="product" />
-					<!--<Product v-show="!loading"-->
-					<!--				 v-for="product in filteredProducts"-->
-					<!--				 v-if="sortCategory !== 0 || sortCategory !== product.category_id"-->
-					<!--				 :key="product.id"-->
-					<!--				 :product="product" />-->
-					<!--<Product v-show="!loading"-->
-					<!--				 v-for="product in filteredProducts"-->
-					<!--				 v-if="sortCategory !== 0 || sortCategory !== product.category_id"-->
-					<!--				 :key="product.id"-->
-					<!--				 :product="product" />-->
 				</div>
 			</div>
 			
@@ -132,7 +122,7 @@
 						<option v-for="prefecture in prefectures"
 										:value="prefecture.id"
 										:key="prefecture.id">
-							{{ prefecture.name }}
+							{{ prefecture.prefecture_name }}
 						</option>
 					</select>
 				</div>
@@ -260,13 +250,13 @@ export default {
 			sortCategory: 0, 			//「カテゴリー」絞り込みの初期値
 			sortPrefecture: 0, 		//「都道府県」絞り込みの初期値
 			sortExpire: 0,    	  //「賞味期限」絞り込みの初期値
-			categories: {},       //カテゴリー
-			prefectures: {},      //都道府県
-			products: {}, 				//商品リスト
+			categories: [],       //カテゴリー
+			prefectures: [],      //出品したコンビニのある都道府県
+			products: [], 				//商品リスト
 			currentPage: 0,			  //現在のページ
 			lastPage: 0, 					//最後のページ
 			total: 0, 						//商品の合計数
-			recommendProducts: {} //おすすめ商品
+			recommendProducts: [] //おすすめ商品
 		}
 	},
 	computed: {
@@ -328,13 +318,13 @@ export default {
 			}
 			this.categories = response.data; //プロパティにresponseデータを代入
 		},
-		async getPrefectures() {
+		async getPrefectures() { //出品したコンビニのある都道府県を取得
 			const response = await axios.get('/api/products/prefecture'); //API接続
 			
-			// if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
-			// 	this.$store.commit('error/setCode', response.status);
-			// 	return false;
-			// }
+			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
+				this.$store.commit('error/setCode', response.status);
+				return false;
+			}
 			this.prefectures = response.data;
 			console.log('都道府県セレクトボックス');
 			console.log(response.data);

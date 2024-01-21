@@ -26,7 +26,10 @@ class ProductController extends Controller
 	public function __construct() //認証なしでアクセスしたいAPIはexceptに書く
 	{
 		$this->middleware('auth')
-			 ->except(['index', 'show', 'ranking', 'expire', 'prefecture', 'otherProducts', 'similarProducts']);
+			 ->except([
+			 	'index', 'show', 'ranking', 'expire', 'prefecture',
+			    'otherProducts', 'similarProducts'
+			 ]);
 	}
 
 	public function expire() //賞味期限切れの商品のみ取得
@@ -38,21 +41,13 @@ class ProductController extends Controller
 
 	public function prefecture()
 	{
-//		$prefectures = Prefecture::get();
-//		$postUser    = Product::with(['user'])->get();
-//		Log::debug('$postUserの値');
-//		Log::debug($postUser);
-
-//		$postUser = User::select('prefecture_id')->get();
-//		$postUser = Product::with(['user'])->get();
-		$postUser = User::with('products')->get();
-//		return $postUser;
-
-//		dd($postUser->toArray());
-
-//		$products = Product::whereHas('user', function ($q) {
-//
-//		})
+		$prefectures = User::with(['products'])
+						   ->groupBy('prefecture_id')
+						   ->select('prefecture_id')
+						   ->where('group', 2)
+						   ->orderBy('prefecture_id', 'asc')
+						   ->get();
+		return $prefectures;
 	}
 
 	public function index() //商品一覧取得
