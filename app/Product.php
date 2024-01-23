@@ -22,7 +22,7 @@ class Product extends Model
 	//ユーザー定義のアクセサをJSONに含めるには、明示的に$appendプロパティに登録する
 	protected $appends = [
 		'user_image', 'user_name', 'email', 'branch', 'category_name',
-		'likes_count', 'liked_by_user',
+		'prefecture_id', 'likes_count', 'liked_by_user',
 		'is_my_product',
         'is_purchased',
 		'is_canceled',
@@ -35,7 +35,7 @@ class Product extends Model
 		'id','user_id', 'category_id', 'image', 'name', 'detail', 'price',
 		'expire', 'deleted_at', 'created_at', 'updated_at',
 		'user_image', 'user_name', 'email', 'branch', 'category_name',
-		'likes_count', 'liked_by_user',
+		'prefecture_id', 'likes_count', 'liked_by_user',
 		'is_my_product',
 		'is_purchased',
 		'is_canceled',
@@ -71,7 +71,7 @@ class Product extends Model
 	}
 	/**
 	 * アクセサ - user_image
-	 * @string
+	 * @return string
 	 */
 	public function getUserImageAttribute() //ユーザー画像を取得する
 	{
@@ -84,6 +84,17 @@ class Product extends Model
 	public function getCategoryNameAttribute() //商品カテゴリー名を取得する
 	{
 		return $this->category->name;
+	}
+	/**
+	 * アクセサ - prefecture_id
+	 * @return int
+	 */
+	public function getPrefectureIdAttribute() //ユーザーの都道府県IDを取得する
+	{
+//		if($this->user->group === 1) {
+//			return false;
+//		}
+		return $this->user->prefecture_id;
 	}
 	/**
 	 * アクセサ - is_my_product

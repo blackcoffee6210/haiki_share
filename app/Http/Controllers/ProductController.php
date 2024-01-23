@@ -42,8 +42,8 @@ class ProductController extends Controller
 	public function prefecture()
 	{
 		$prefectures = User::with(['products'])
-						   ->groupBy('prefecture_id')
 						   ->select('prefecture_id')
+						   ->groupBy('prefecture_id')
 						   ->where('group', 2)
 						   ->orderBy('prefecture_id', 'asc')
 						   ->get();

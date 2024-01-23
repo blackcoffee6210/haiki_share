@@ -17541,6 +17541,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     return {
       loading: false,
       //ローディングを表示するかどうかを判定するプロパティ
+      showExpired: false,
+      //賞味期限切れかどうかを判定
+      showSale: false,
+      //販売中かどうかを判定
       keyword: '',
       //リアルタイム検索をするための検索ボックス
       sortPrice: 1,
@@ -17549,7 +17553,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       //「カテゴリー」絞り込みの初期値
       sortPrefecture: 0,
       //「都道府県」絞り込みの初期値
-      sortExpire: 0,
+      sortExpired: 0,
       //「賞味期限」絞り込みの初期値
       categories: [],
       //カテゴリー
@@ -17572,30 +17576,49 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var newProducts = []; //絞り込み後の商品を格納する新しい配列
 
       for (var i = 0; i < this.products.length; i++) {
-        //カテゴリーが追加されたら、カテゴリーIDが一致する商品だけを表示する
+        //カテゴリーが選択されたら、カテゴリーIDが一致する商品だけを表示する
         var isShow = true; //表示対象かどうかを判定するフラグ
 
+        //todo: 動作しない。YYYY-MM-DD 00:00:00 の形式で本日の日付を取得する!
+        if (this.showExpired && this.products[i].expire < new Date()) {
+          //「賞味期限切れのみ表示」チェックありで賞味期限が本日の日付より大きい場合は非表示にする
+          isShow = false;
+        }
+        if (this.showSale && this.products[i].is_purchased) {
+          //「販売中のみ未表示」チェックあり、かつ購入済み商品は非表示にする
+          isShow = false;
+        }
         if (this.sortCategory !== 0 && this.sortCategory !== this.products[i].category_id) {
           //i番目の商品が表示可能かどうかを判定する
-          isShow = false; //カテゴリーが選択されていて(0じゃない) かつカテゴリーと商品カテゴリーIDが一致しないものは非表示にする
+          isShow = false; //カテゴリーが選択されていて(0じゃない) かつカテゴリーIDと商品カテゴリーIDが一致しない商品は非表示にする
+        }
+        if (this.sortPrefecture !== 0 && this.sortPrefecture !== this.products[i].prefecture_id) {
+          //i番目の商品が表示可能かどうかを判定する
+          isShow = false; //都道府県が選択されていて(0じゃない)、かつ都道府県IDと商品の都道府県IDが一致しない商品は非表示にする
         }
         if (isShow && this.products[i].name.indexOf(this.keyword) !== -1) {
           //リアルタイム検索をするための処理
           newProducts.push(this.products[i]);
         }
       }
-      if (this.sortPrice === 1) {//新しい配列を並び替える
+      switch (this.sortPrice) {
+        //新しい配列を並び替える
+        case 1:
+          //金額ソート選択なし（デフォルト）
+          break;
         //元の順番にsortしているので並び替えはなし
-      } else if (this.sortPrice === 2) {
-        //価格が安い順に並び替える
-        newProducts.sort(function (a, b) {
-          return a.price - b.price;
-        });
-      } else if (this.sortPrice === 3) {
-        //価格が高い順に並び替える
-        newProducts.sort(function (a, b) {
-          return b.price - a.price;
-        });
+        case 2:
+          //価格が安い順に並び替える
+          newProducts.sort(function (a, b) {
+            return a.price - b.price;
+          });
+          break;
+        case 3:
+          //価格が高い順に並び替える
+          newProducts.sort(function (a, b) {
+            return b.price - a.price;
+          });
+          break;
       }
 
       //todo: ここに賞味期限でソートする処理を実装する
@@ -17685,7 +17708,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               _this3.prefectures = response.data;
               console.log('都道府県セレクトボックス');
               console.log(response.data);
-            case 9:
+              console.log(new Date());
+            case 10:
             case "end":
               return _context3.stop();
           }
@@ -17721,7 +17745,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               _this4.currentPage = response.data.current_page; //現在のページ
               _this4.lastPage = response.data.last_page; //最後のページ
               _this4.total = response.data.total; //商品の数
-            case 12:
+              console.log('productsの中身');
+              console.log(_this4.products);
+            case 14:
             case "end":
               return _context4.stop();
           }
@@ -22679,7 +22705,83 @@ var render = function render() {
     staticClass: "p-index__total"
   }, [_c("span", {
     staticClass: "u-font-bold"
-  }, [_vm._v("検索結果")]), _vm._v(" "), _c("span", [_vm._v(_vm._s(_vm.count) + "件 / " + _vm._s(_vm.total) + "件中")])]), _vm._v(" "), _vm._m(0)]), _vm._v(" "), _c("div", {
+  }, [_vm._v("検索結果")]), _vm._v(" "), _c("span", [_vm._v(_vm._s(_vm.count) + "件 / " + _vm._s(_vm.total) + "件中")])]), _vm._v(" "), _c("div", [_c("label", {
+    staticClass: "p-index__label",
+    attrs: {
+      "for": "expire"
+    }
+  }, [_c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.showExpired,
+      expression: "showExpired"
+    }],
+    staticClass: "p-index__check",
+    attrs: {
+      type: "checkbox",
+      id: "expire"
+    },
+    domProps: {
+      checked: Array.isArray(_vm.showExpired) ? _vm._i(_vm.showExpired, null) > -1 : _vm.showExpired
+    },
+    on: {
+      change: function change($event) {
+        var $$a = _vm.showExpired,
+          $$el = $event.target,
+          $$c = $$el.checked ? true : false;
+        if (Array.isArray($$a)) {
+          var $$v = null,
+            $$i = _vm._i($$a, $$v);
+          if ($$el.checked) {
+            $$i < 0 && (_vm.showExpired = $$a.concat([$$v]));
+          } else {
+            $$i > -1 && (_vm.showExpired = $$a.slice(0, $$i).concat($$a.slice($$i + 1)));
+          }
+        } else {
+          _vm.showExpired = $$c;
+        }
+      }
+    }
+  }), _vm._v("\n\t\t\t\t\t\t賞味期限切れのみ表示\n\t\t\t\t\t")]), _vm._v(" "), _c("label", {
+    staticClass: "p-index__label",
+    attrs: {
+      "for": "sale"
+    }
+  }, [_c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.showSale,
+      expression: "showSale"
+    }],
+    staticClass: "p-index__check",
+    attrs: {
+      type: "checkbox",
+      id: "sale"
+    },
+    domProps: {
+      checked: Array.isArray(_vm.showSale) ? _vm._i(_vm.showSale, null) > -1 : _vm.showSale
+    },
+    on: {
+      change: function change($event) {
+        var $$a = _vm.showSale,
+          $$el = $event.target,
+          $$c = $$el.checked ? true : false;
+        if (Array.isArray($$a)) {
+          var $$v = null,
+            $$i = _vm._i($$a, $$v);
+          if ($$el.checked) {
+            $$i < 0 && (_vm.showSale = $$a.concat([$$v]));
+          } else {
+            $$i > -1 && (_vm.showSale = $$a.slice(0, $$i).concat($$a.slice($$i + 1)));
+          }
+        } else {
+          _vm.showSale = $$c;
+        }
+      }
+    }
+  }), _vm._v("\n\t\t\t\t\t\t販売中のみ表示\n\t\t\t\t\t")])])]), _vm._v(" "), _c("div", {
     staticClass: "p-index__product-container"
   }, _vm._l(_vm.filteredProducts, function (product) {
     return _vm.sortCategory !== 0 || _vm.sortCategory !== product.category_id ? _c("Product", {
@@ -22870,9 +22972,9 @@ var render = function render() {
     }
   }, [_vm._v("選択してください")]), _vm._v(" "), _vm._l(_vm.prefectures, function (prefecture) {
     return _c("option", {
-      key: prefecture.id,
+      key: prefecture.prefecture_id,
       domProps: {
-        value: prefecture.id
+        value: prefecture.prefecture_id
       }
     }, [_vm._v("\n\t\t\t\t\t\t" + _vm._s(prefecture.prefecture_name) + "\n\t\t\t\t\t")]);
   })], 2)]), _vm._v(" "), _c("h2", {
@@ -22979,33 +23081,7 @@ var render = function render() {
     }, [_vm._v(_vm._s(product.user_name))])])])], 1);
   }), 0)])])]);
 };
-var staticRenderFns = [function () {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("div", [_c("label", {
-    staticClass: "p-index__label",
-    attrs: {
-      "for": "expire"
-    }
-  }, [_c("input", {
-    staticClass: "p-index__check",
-    attrs: {
-      type: "checkbox",
-      id: "expire"
-    }
-  }), _vm._v("\n\t\t\t\t\t\t賞味期限切れのみ表示\n\t\t\t\t\t")]), _vm._v(" "), _c("label", {
-    staticClass: "p-index__label",
-    attrs: {
-      "for": "sale"
-    }
-  }, [_c("input", {
-    staticClass: "p-index__check",
-    attrs: {
-      type: "checkbox",
-      id: "sale"
-    }
-  }), _vm._v("\n\t\t\t\t\t\t販売中のみ表示\n\t\t\t\t\t")])]);
-}];
+var staticRenderFns = [];
 render._withStripped = true;
 
 
