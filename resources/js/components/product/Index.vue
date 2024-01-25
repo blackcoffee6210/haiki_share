@@ -272,9 +272,6 @@ export default {
 					});
 					break;
 			}
-			
-			//todo: ここに賞味期限でソートする処理を実装する
-			
 			return newProducts; //絞り込み後の商品を返す
 		},
 		count() { //絞り込み後の商品数のカウント

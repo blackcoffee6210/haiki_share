@@ -3,6 +3,7 @@
 		<div class="p-product-form">
 			
 			<h2 class="c-title p-product-form__title">商品出品</h2>
+			<!--todo: リロードがおかしい-->
 			
 			<div class="p-product-form__background">
 				<!-- ローディング -->

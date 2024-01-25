@@ -16,7 +16,8 @@
     display: inline-block;
     color: $main-color;
   }
-  &__no-product {
+  &__no-product,
+  &__no-review {
     margin-top: $space_3xl;
     margin-bottom: $space_3xl;
     text-align: center;

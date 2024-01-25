@@ -188,12 +188,11 @@ export default {
 				this.errors = response.data.errors;
 				return false;
 			}
+			
 			if (response.status !== OK) { //responseステータスがOKじゃなかったら後続の処理を行う
 				this.$store.commit('error/setCode', response.status);
 				return false;
 			}
-			
-			//todo: 商品詳細画面の「レビュー投稿ボタン」を非表示にする処理を実装
 			
 			this.$store.commit('message/setContent', { //メッセージ登録
 				content: 'レビューを更新しました！',

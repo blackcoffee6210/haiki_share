@@ -53,7 +53,7 @@
 		</main>
 		
 		<!-- サイドバー	-->
-		<Sidebar :id="id" />
+		<Sidebar :id="id.toString()" />
 	</div>
 </template>
 

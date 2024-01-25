@@ -19,7 +19,8 @@ class ReviewController extends Controller
 {
 	public function __construct()
 	{
-		$this->middleware('auth'); //認証
+		$this->middleware('auth')
+			 ->except(['show', 'otherProducts']); //認証なしでアクセスしたいAPIはexceptに書く
 	}
 
 	public function show(string $s_id, string $r_id) //レビュー取得

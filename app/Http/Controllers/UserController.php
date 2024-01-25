@@ -16,7 +16,8 @@ class UserController extends Controller
 {
     public function __construct()
     {
-	    $this->middleware('auth'); //認証
+	    $this->middleware('auth') //認証なしでアクセスしたいAPIはexceptに書く
+		     ->except(['index', 'posted', 'wasReviewed']);
     }
 
 	public function index(string $id) { //ユーザー情報取得

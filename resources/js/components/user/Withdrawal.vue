@@ -75,9 +75,6 @@ export default {
 					this.$store.commit('message/setContent', { //メッセージ登録
 						content: '退会しました'
 					});
-					this.$router.push({name: 'index'});
-					
-					await this.$store.dispatch('auth/logout');
 			}
 		}
 	},

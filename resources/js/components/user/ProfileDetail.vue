@@ -51,7 +51,10 @@
 							 class="c-checkbox u-mb2"
 							 v-show="products.length > 0"
 							 v-model="showSale">
-				<label for="sale" class="p-profile-detail__label">販売中のみ表示</label>
+				<label for="sale"
+							 v-show="products.length > 0"
+							 class="p-profile-detail__label">販売中のみ表示
+				</label>
 				<div class="p-profile-detail__product-container">
 					<Product v-show="!loading"
 									 v-for="product in filteredProducts"
@@ -62,7 +65,7 @@
 			
 			<!-- 投稿されたレビュー	-->
 			<div v-show="shopUser">
-				<div class="u-font-bold u-mt30">投稿されたレビュー</div>
+				<div class="u-font-bold u-mt30" v-show="reviews.length > 0">投稿されたレビュー</div>
 				<div class="p-profile-detail__review-container">
 					<Review v-show="!loading"
 									v-for="review in reviews"
