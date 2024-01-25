@@ -9,15 +9,15 @@
 				<div>
 					<div class="p-profile-detail__name">
 						{{ user.name }}
-						<span v-show="isShopUser">{{ user.branch }}</span>
+						<span v-show="shopUser">{{ user.branch }}</span>
 					</div>
 					<!-- 住所（コンビニユーザーのみ表示） -->
-					<div class="p-profile-detail__address" v-show="isShopUser">
+					<div class="p-profile-detail__address" v-show="shopUser">
 						{{ user.prefecture_name }}
 						{{ user.address }}
 					</div>
 					<!-- todo: ユーザー評価取得 -->
-					<div class="p-profile-detail__recommend" v-show="isShopUser">
+					<div class="p-profile-detail__recommend" v-show="shopUser">
 						{{ user.recommend }}
 					</div>
 				</div>
@@ -27,16 +27,16 @@
 			<div class="p-profile-detail__container u-space-between">
 				<div>
 					<span class="p-profile-detail__count">{{ products.length }}</span>
-					<span v-show="isShopUser">出品数</span>
-					<span v-show="!isShopUser">購入数</span>
+					<span v-show="shopUser">出品数</span>
+					<span v-show="!shopUser">購入数</span>
 					
 					<span class="p-profile-detail__count u-ml15">{{ reviews.length }}</span>
-					<span v-show="isShopUser">レビューされた数</span>
-					<span v-show="!isShopUser">レビューした数</span>
+					<span v-show="shopUser">レビューされた数</span>
+					<span v-show="!shopUser">レビューした数</span>
 				</div>
 				<!-- プロフィール編集	-->
 				<router-link class="c-btn p-profile-detail__btn"
-										 v-show="userId == id"
+										 v-show="isMyProfile"
 										 :to="{ name: 'user.editProfile',
 									  			params: { id: id.toString() }}" >プロフィール編集
 				</router-link>
@@ -45,7 +45,7 @@
 			<div class="p-profile-detail__introduce">{{ user.introduce }}</div>
 			
 			<!-- コンビニユーザーの出品した商品 -->
-			<div v-show="isShopUser">
+			<div v-show="shopUser">
 				<input type="checkbox"
 							 id="sale"
 							 class="c-checkbox u-mb2"
@@ -61,7 +61,7 @@
 			</div>
 			
 			<!-- 投稿されたレビュー	-->
-			<div v-show="isShopUser">
+			<div v-show="shopUser">
 				<div class="u-font-bold u-mt30">投稿されたレビュー</div>
 				<div class="p-profile-detail__review-container">
 					<Review v-show="!loading"
@@ -72,7 +72,7 @@
 			</div>
 			
 			<!-- 利用者の購入した商品 -->
-			<div v-show="!isShopUser">
+			<div v-show="!shopUser">
 				<div class="u-font-bold">購入した商品</div>
 				<div class="p-profile-detail__product-container">
 					<Product v-show="!loading"
@@ -83,7 +83,7 @@
 			</div>
 			
 			<!-- 投稿したレビュー	-->
-			<div v-show="!isShopUser">
+			<div v-show="!shopUser">
 				<div class="u-font-bold u-mt30">投稿したレビュー</div>
 				<div class="p-profile-detail__review-container">
 					<Review v-show="!loading"
@@ -125,9 +125,14 @@ export default {
 	},
 	computed: {
 		...mapGetters({
-			isShopUser: 'auth/isShopUser',
 			userId: 'auth/userId'
 		}),
+		shopUser () {
+			return this.user.group === 2;
+		},
+		isMyProfile () {
+			return this.id == this.userId;
+		},
 		filteredProducts() { //絞り込んだ商品を返す
 			let newProducts = []; //絞り込み後の商品を格納する新しい配列
 			
@@ -157,58 +162,74 @@ export default {
 			console.log('getUserの中身')
 			console.log(response.data);
 		},
-		async getReviews(){ //投稿したレビューを取得する
-			const response = await axios.get(`/api/users/${this.id}/reviewed`); //API接続
-			
-			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
-				this.$store.commit('error/setCode', response.status);
-				return false; //後続の処理を抜ける
-			}
-			this.reviews = response.data;
-		},
-		async getWasReviews(){ //投稿されたレビューを取得する
-			const response = await axios.get(`/api/users/${this.id}/wasReviewed`); //API接続
-			
-			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
-				this.$store.commit('error/setCode', response.status);
-				return false; //後続の処理を抜ける
-			}
-			this.reviews = response.data;
-			console.log('getWasReviews');
-			console.log(response.data);
-		},
 		async getPurchasedProducts() { //利用者ユーザーの購入した商品を取得
-			const response = await axios.get(`/api/users/${this.id}/purchased`); //API接続
+			const response = await axios.get(`/api/users/${this.user.id}/purchased`); //API接続
 			
 			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
 				this.$store.commit('error/setCode', response.status);
 				return false; //後続の処理を抜ける
 			}
 			this.products = response.data; //responseデータをプロパティに代入
+			console.log('getPurchasedProductの中身')
+			console.log(response.data);
+		},
+		async getReviews(){ //利用者が投稿したレビューを取得する
+			const response = await axios.get(`/api/users/${this.user.id}/reviewed`); //API接続
+			
+			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
+				this.$store.commit('error/setCode', response.status);
+				return false; //後続の処理を抜ける
+			}
+			this.reviews = response.data;
+			console.log('getReviewの中身')
+			console.log(response.data);
 		},
 		async getPostedProducts() { //コンビニユーザーの出品した商品を取得
-			const response = await axios.get(`/api/users/${this.id}/posted`); //API接続
+			const response = await axios.get(`/api/users/${this.user.id}/posted`); //API接続
 			
 			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
 				this.$store.commit('error/setCode', response.status);
 				return false; //後続の処理を抜ける
 			}
 			this.products = response.data; //responseデータをプロパティに代入
-			console.log('getProductsの中身')
+			console.log('getPostedProductsの中身')
 			console.log(response.data);
 		},
+		async getWasReviews(){ //投稿されたレビューを取得する
+			const response = await axios.get(`/api/users/${this.user.id}/wasReviewed`); //API接続
+			
+			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
+				this.$store.commit('error/setCode', response.status);
+				return false; //後続の処理を抜ける
+			}
+			this.reviews = response.data;
+			console.log('getWasReviewsの中身');
+			console.log(response.data);
+		}
 	},
 	watch: {
 		$route: {
 			async handler() {
 				await this.getUser();
-				if(this.isShopUser) {
-					await this.getWasReviews();
-					await this.getPostedProducts();
-				} else {
-					await this.getReviews();
-					await this.getPurchasedProducts();
+				switch(this.user.group) {
+					case 1: //取得したユーザーが利用者なら
+						await this.getReviews();
+						await this.getPurchasedProducts();
+						break;
+					case 2: //取得したユーザーがコンビニユーザーなら
+						await this.getWasReviews();
+						await this.getPostedProducts();
+						break;
 				}
+				
+				// if(this.user.group === 1) { //取得したユーザーが利用者なら
+				// 	await this.getReviews();
+				// 	await this.getPurchasedProducts();
+				// } else if(this.user.group === 2) { //取得したユーザーがコンビニユーザーなら
+				// 	await this.getWasReviews();
+				// 	await this.getPostedProducts();
+				// }
+				
 			},
 			immediate: true
 		}

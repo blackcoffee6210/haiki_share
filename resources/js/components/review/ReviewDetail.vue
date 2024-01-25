@@ -31,7 +31,7 @@
 				<div class="p-review-detail__review-title">{{ review.title }}</div>
 				<!-- 編集ボタン(利用者) -->
 				<router-link class="c-btn p-review-detail__btn"
-										 v-show="!isShopUser"
+										 v-show="isMyReview"
 										 :to="{ name: 'review.edit',
 													params: {
 														s_id: review.sender_id.toString(),
@@ -87,7 +87,11 @@ export default {
 	computed: {
 		...mapGetters({
 			isShopUser: 'auth/isShopUser',
+			userId: 'auth/userId',
 		}),
+		isMyReview() {
+			return this.s_id == this.userId;
+		}
 	},
 	methods: {
 		async getReview() { //レビュー取得
