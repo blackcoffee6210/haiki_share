@@ -9,7 +9,6 @@
 		<div class="c-badge" v-show="product.is_purchased">
 			<div class="c-badge__sold">SOLD</div>
 		</div>
-		
 		<!-- 商品の画像	-->
 		<div class="p-product__img-container">
 			<img :src="product.image"

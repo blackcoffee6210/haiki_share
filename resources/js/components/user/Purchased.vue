@@ -23,8 +23,7 @@
 									 v-show="product.is_purchased"
 									 :key="product.id"
 									 :product="product">
-						<div class="p-product__btn-container"
-								 slot="btn">
+						<div class="p-product__btn-container" slot="btn">
 							<!-- 購入キャンセルボタン --> <!-- 利用者の場合 -->
 							<button class="c-btn c-btn--white p-product__btn"
 											v-show="!isShopUser"
@@ -84,10 +83,10 @@ export default {
 			const response = await axios.get(`/api/users/${this.id}/purchased`); //API通信
 			this.loading   = false; //API通信が終わったらローディングを非表示にする
 			
-			// if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
-			// 	this.$store.commit('error/setCode', response.status);
-			// 	return false;
-			// }
+			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
+				this.$store.commit('error/setCode', response.status);
+				return false;
+			}
 			this.products = response.data; //プロパティにデータをセット
 			console.log('getProductsの中身');
 			console.log(this.products);

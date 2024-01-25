@@ -21,66 +21,32 @@
 					
 					<!-- カード -->
 					<!-- todo: レビュー投稿日を実装 -->
-					<div class="c-card p-list__card__review"
-							 v-for="review in reviews"
-							 :key="review.id">
-						 <!--レビュー詳細画面のリンク-->
-						<router-link class="c-card__link"
-												 :to="{ name: 'review.detail',
-																params: {
-																	s_id: review.sender_id.toString(),
-																	r_id: review.receiver_id.toString()
-															}}" />
-					
-						<div class="p-list__user-info__review">
-							<!-- ユーザーの画像	-->
-							<img class="c-icon p-list__review-icon"
-									 :src="review.sender_image"
-									 v-show="isShopUser"
-									 alt="">
-							<img class="c-icon p-list__review-icon"
-									 :src="review.receiver_image"
-									 v-show="!isShopUser"
-									 alt="">
-							<div>
-								<!-- レビュー相手の名前	-->
-								<div class="p-list__name">
-									<span v-show="isShopUser">{{ review.sender_name }}</span>
-									<span v-show="!isShopUser">{{ review.receiver_name }}</span>
-								</div>
-								<!-- ユーザーの評価 -->
-								<div class="p-list__recommendation">{{ review.recommend }}</div>
-							</div>
+					<!-- Reviewコンポーネント -->
+					<Review v-show="!loading"
+									v-for="review in reviews"
+									:key="review.id"
+									:review="review" >
+						<div class="p-product__btn-container" slot="btn">
+									<!-- 詳細を見るボタン(コンビニユーザー) -->
+									<router-link class="c-btn p-list__btn p-list__btn--detail"
+															 v-show="isShopUser"
+															 :to="{ name: 'review.detail',
+																			params: {
+															 					s_id: review.sender_id.toString(),
+																				r_id: review.receiver_id.toString()
+															 			  }}">詳細を見る
+									</router-link>
+									<!-- 編集ボタン(利用者) -->
+									<router-link class="c-btn c-btn--white p-list__btn"
+															 v-show="!isShopUser"
+															 :to="{ name: 'review.edit',
+																			params: {
+																				s_id: review.sender_id.toString(),
+																				r_id: review.receiver_id.toString()
+																			}}">編集する
+									</router-link>
 						</div>
-						
-						<!-- レビュータイトル -->
-						<div class="p-list__review-title">{{ review.title }}</div>
-						<!-- レビューの内容 -->
-						<div class="p-list__detail">{{ review.detail }}</div>
-						
-						<!-- ボタン	-->
-						<div class="p-list__btn-container">
-							<!-- 詳細を見るボタン(コンビニユーザー) -->
-							<router-link class="c-btn p-list__btn p-list__btn--detail"
-													 v-show="isShopUser"
-													 :to="{ name: 'review.detail',
-																	params: {
-													 					s_id: review.sender_id.toString(),
-																		r_id: review.receiver_id.toString()
-													 			  }}">詳細を見る
-							</router-link>
-							<!-- 編集ボタン(利用者) -->
-							<router-link class="c-btn c-btn--white p-list__btn"
-													 v-show="!isShopUser"
-													 :to="{ name: 'review.edit',
-																	params: {
-													 					s_id: review.sender_id.toString(),
-													 					r_id: review.receiver_id.toString()
-																	}
-													 			}">編集する
-							</router-link>
-						</div>
-					</div>
+					</Review>
 					
 				</div>
 			</div>
@@ -93,6 +59,7 @@
 
 <script>
 import Loading        from "../Loading";
+import Review         from "../review/Review";
 import Sidebar        from "../Sidebar";
 import { OK }         from "../../util";
 import { mapGetters } from 'vuex';
@@ -107,6 +74,7 @@ export default {
 	},
 	components: {
 		Loading,
+		Review,
 		Sidebar
 	},
 	data() {

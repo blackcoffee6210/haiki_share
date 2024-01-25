@@ -14,23 +14,19 @@
 					</div>
 					
 					<div>
-						<!-- todo: 賞味期限切れかどうかを絞り込む処理を実装 -->
-						<label for="expire" class="p-index__label">
-							<input type="checkbox"
-										 id="expire"
-										 class="p-index__check"
-										 v-model="showExpired">
-							賞味期限切れのみ表示
-						</label>
+						<!-- 賞味期限切れの商品のみ表示 -->
+						<input type="checkbox"
+									 id="expire"
+									 class="c-checkbox p-index__checkbox"
+									 v-model="showExpired">
+						<label for="expire" class="p-index__label">賞味期限切れのみ表示</label>
 						
-						<!-- todo: 販売中を絞り込む処理を実装 -->
-						<label for="sale" class="p-index__label">
-							<input type="checkbox"
-										 id="sale"
-										 class="p-index__check"
-										 v-model="showSale">
-							販売中のみ表示
-						</label>
+						<!-- 販売中の商品のみ表示 -->
+						<input type="checkbox"
+									 id="sale"
+									 class="c-checkbox p-index__checkbox u-ml15"
+									 v-model="showSale">
+						<label for="sale" class="p-index__label">販売中のみ表示</label>
 					</div>
 				</div>
 				
@@ -149,8 +145,9 @@
 					</div>
 				</div>
 				
-				<!--賞味期限の近い商品 -->
-				<h2 class="c-title p-sidebar-index__title">賞味期限の近い商品</h2>
+				<!-- おすすめの出品者 -->
+				<!-- todo: 実装する！ -->
+				<h2 class="c-title p-sidebar-index__title">おすすめの出品者</h2>
 				<div class="p-sidebar-index__card-container">
 					<div class="c-card p-sidebar-index__card"
 							 v-for="product in recommendProducts"
@@ -182,7 +179,6 @@
 					</div>
 				</div>
 				
-				
 			</div>
 		</aside>
 	
@@ -194,6 +190,7 @@ import Loading    from "../Loading";
 import Product    from "./Product";
 import Pagination from "../Pagination";
 import { OK }     from "../../util";
+import moment     from "moment";
 
 export default {
 	name: "Index",
@@ -231,17 +228,18 @@ export default {
 	computed: {
 		filteredProducts() { //絞り込んだ商品を返す
 			let newProducts = []; //絞り込み後の商品を格納する新しい配列
+			const today = moment(new Date).format('YYYY-MM-DD hh:mm:ss'); //今日の日付を用意
 			
 			for(let i = 0; i < this.products.length; i++) { //カテゴリーが選択されたら、カテゴリーIDが一致する商品だけを表示する
 				let isShow = true; //表示対象かどうかを判定するフラグ
 				
-				//todo: 動作しない。YYYY-MM-DD 00:00:00 の形式で本日の日付を取得する!
 				if(this.showExpired &&
-					 this.products[i].expire < new Date() ) { //「賞味期限切れのみ表示」チェックありで賞味期限が本日の日付より大きい場合は非表示にする
+					 this.products[i].expire > today) { //「賞味期限切れのみ表示」チェックありで賞味期限が本日の日付より大きい（賞味期限内）場合は非表示にする
 					isShow = false;
 				}
 				
-				if(this.showSale && this.products[i].is_purchased) { //「販売中のみ未表示」チェックあり、かつ購入済み商品は非表示にする
+				if(this.showSale &&
+					 this.products[i].is_purchased) { //「販売中のみ未表示」チェックあり、かつ購入済み商品は非表示にする
 					isShow = false;
 				}
 				
@@ -251,7 +249,7 @@ export default {
 				}
 				
 				if(this.sortPrefecture !== 0 &&
-						this.sortPrefecture !== this.products[i].prefecture_id) { //i番目の商品が表示可能かどうかを判定する
+					 this.sortPrefecture !== this.products[i].prefecture_id) { //i番目の商品が表示可能かどうかを判定する
 					isShow = false; //都道府県が選択されていて(0じゃない)、かつ都道府県IDと商品の都道府県IDが一致しない商品は非表示にする
 				}
 				
@@ -279,7 +277,7 @@ export default {
 			
 			return newProducts; //絞り込み後の商品を返す
 		},
-		count() { //商品数のカウント
+		count() { //絞り込み後の商品数のカウント
 			return this.filteredProducts.length;
 		}
 	},
@@ -292,8 +290,6 @@ export default {
 				return false;
 			}
 			this.recommendProducts = response.data;
-			console.log('getRecommendの中身');
-			console.log(response.data);
 		},
 		async getCategories() { //カテゴリー取得メソッド
 			const response = await axios.get('/api/categories'); //API接続
@@ -312,9 +308,6 @@ export default {
 				return false;
 			}
 			this.prefectures = response.data;
-			console.log('都道府県セレクトボックス');
-			console.log(response.data);
-			console.log(new Date());
 		},
 		async getProducts() { //商品取得メソッド
 			this.loading   = true; //ローディングを表示する
@@ -331,8 +324,6 @@ export default {
 			this.currentPage = response.data.current_page; //現在のページ
 			this.lastPage    = response.data.last_page;    //最後のページ
 			this.total       = response.data.total;        //商品の数
-			console.log('productsの中身');
-			console.log(this.products);
 		}
 	},
 	watch: {

@@ -27,27 +27,8 @@ class ProductController extends Controller
 	{
 		$this->middleware('auth')
 			 ->except([
-			 	'index', 'show', 'ranking', 'expire', 'prefecture',
-			    'otherProducts', 'similarProducts'
+			 	'index', 'show', 'ranking', 'prefecture', 'otherProducts', 'similarProducts'
 			 ]);
-	}
-
-	public function expire() //賞味期限切れの商品のみ取得
-	{
-		$now = Carbon::now()->format('Y-m-d H:i:s');
-		$expireProducts = Product::where('expire', '<',  $now)->get();
-		return $expireProducts;
-	}
-
-	public function prefecture()
-	{
-		$prefectures = User::with(['products'])
-						   ->select('prefecture_id')
-						   ->groupBy('prefecture_id')
-						   ->where('group', 2)
-						   ->orderBy('prefecture_id', 'asc')
-						   ->get();
-		return $prefectures;
 	}
 
 	public function index() //商品一覧取得
@@ -64,6 +45,17 @@ class ProductController extends Controller
 		return $products;
 	}
 
+	public function prefecture() //出品したユーザーの都道府県IDを取得
+	{
+		$prefectures = User::with(['products'])
+			->select('prefecture_id')
+			->groupBy('prefecture_id')
+			->where('group', 2)
+			->orderBy('prefecture_id', 'asc')
+			->get();
+		return $prefectures;
+	}
+
 	/**
 	 * 商品詳細
 	 * @param string $id
@@ -78,11 +70,10 @@ class ProductController extends Controller
 
 	public function otherProducts(string $u_id, string $p_id) //出品者が投稿した商品を取得
 	{
-		return User::find($u_id)
-					->products()
-					->where('products.id', '!=', $p_id)  //詳細画面で表示している商品以外を取得
-					->orderByDesc('products.created_at')
-					->get();
+		return Product::where('user_id', $u_id)
+					  ->where('id', '!=', $p_id)
+					  ->orderByDesc('created_at')
+					  ->get();
 	}
 
 	public function similarProducts(string $c_id, string $p_id) //出品した商品に似た商品を取得
@@ -154,7 +145,6 @@ class ProductController extends Controller
 		$product->save();
 
 		return response($product, 200); //商品情報とstatusを返す
-//		return response($product, 200); //商品情報とstatusを返す
 	}
 
 	public function destroy(string $id) //商品削除

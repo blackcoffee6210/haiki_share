@@ -144,7 +144,7 @@
 					<input type="checkbox"
 								 id="agreement"
 								 v-model="checkAgree"
-								 class="p-auth-form__check">
+								 class="c-checkbox">
 					<router-link class="p-auth-form__agreement"
 											 target="_blank"
 											 :to="{ name: 'agreement'}">利用規約

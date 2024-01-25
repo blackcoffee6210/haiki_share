@@ -61,6 +61,10 @@
   &__user-info {
     display: flex;
     align-items: center;
+    position: relative;
+    &:hover {
+      cursor: pointer;
+    }
     @include mq() {
       width: 100%;
       margin-bottom: $space_m;
@@ -151,6 +155,7 @@
   &__title {
     margin-top: $space_2xl;
     margin-bottom: $space_m;
+    text-align: left;
   }
   &__other-container {
     width: 100%;

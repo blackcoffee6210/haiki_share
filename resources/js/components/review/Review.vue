@@ -3,33 +3,36 @@
 		<!--レビュー詳細画面のリンク-->
 		<router-link class="c-card__link"
 								 :to="{ name: 'review.detail',
-												params: { id: review.id.toString() }}" />
+												params: {
+								 					s_id: review.sender_id.toString(),
+								 					r_id: review.receiver_id.toString()
+								 				}}" />
 		
-		<div class="p-list__user-info__review">
+		<div class="p-review__user-info">
 			<!-- ユーザーの画像	-->
-			<img class="c-icon p-list__review-icon"
+			<img class="c-icon p-review__icon"
 					 :src="review.sender_image"
 					 v-show="isShopUser"
 					 alt="">
-			<img class="c-icon p-list__review-icon"
+			<img class="c-icon p-review__icon"
 					 :src="review.receiver_image"
 					 v-show="!isShopUser"
 					 alt="">
 			<div>
 				<!-- レビュー相手の名前	-->
-				<div class="p-list__name">
+				<div class="p-review__name">
 					<span v-show="isShopUser">{{ review.sender_name }}</span>
 					<span v-show="!isShopUser">{{ review.receiver_name }}</span>
 				</div>
 				<!-- ユーザーの評価 -->
-				<div class="p-list__recommendation">{{ review.recommend }}</div>
+				<div class="p-review__recommendation">{{ review.recommend }}</div>
 			</div>
 		</div>
 		
 		<!-- レビュータイトル -->
-		<div class="p-list__review-title">{{ review.title }}</div>
+		<div class="p-review__review-title">{{ review.title }}</div>
 		<!-- レビューの内容 -->
-		<div class="p-list__detail">{{ review.detail }}</div>
+		<div class="p-review__detail">{{ review.detail }}</div>
 		
 		<!-- ボタン	-->
 		<slot name="btn"></slot>
@@ -37,6 +40,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
 	name: "Review",
 	props: {
@@ -44,6 +48,11 @@ export default {
 			type: Object,
 			required: true
 		}
+	},
+	computed: {
+		...mapGetters({
+			isShopUser: 'auth/isShopUser',
+		})
 	}
 }
 </script>

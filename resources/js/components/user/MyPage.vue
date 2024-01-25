@@ -22,7 +22,7 @@
 						</div>
 						<!-- 商品がなければ表示する -->
 						<div v-if="!likedProducts.length"
-								 class="p-mypage__no-Product">お気に入りした商品はありません
+								 class="p-mypage__no-product">お気に入りした商品はありません
 						</div>
 						<div v-else class="p-mypage__card-container">
 							<!-- Productコンポーネント -->
@@ -32,7 +32,6 @@
 											 :product="product" />
 						</div>
 					</section>
-					
 					
 					<!-- 出品した商品(コンビニユーザー) -->
 					<section class="p-mypge__section" v-show="isShopUser">
@@ -47,7 +46,7 @@
 						</div>
 						<!-- 商品がなければ表示する -->
 						<div v-if="!postedProducts.length"
-								 class="p-mypage__no-Product">出品した商品はありません
+								 class="p-mypage__no-product">出品した商品はありません
 						</div>
 						<div v-else class="p-mypage__card-container">
 							<!-- Productコンポーネント -->
@@ -57,7 +56,6 @@
 											 :product="product" />
 						</div>
 					</section>
-					
 					
 					<!-- 購入した商品(利用者) -->
 					<section class="p-mypge__section" v-show="!isShopUser">
@@ -71,7 +69,7 @@
 						</div>
 						<!-- 購入した商品がなければ表示する -->
 						<div v-if="!purchasedProducts.length"
-								 class="p-mypage__no-Product">購入した商品はありません
+								 class="p-mypage__no-product">購入した商品はありません
 						</div>
 						<div v-else class="p-mypage__card-container">
 							<!-- Productコンポーネント -->
@@ -81,7 +79,6 @@
 											 :product="product" />
 						</div>
 					</section>
-					
 					
 					<!-- 購入された商品(コンビニユーザー) -->
 					<section class="p-mypage__section" v-show="isShopUser">
@@ -95,7 +92,7 @@
 						</div>
 						<!-- 購入された商品がなければ表示する -->
 						<div v-if="!wasPurchasedProducts.length"
-								 class="p-mypage__no-Product">購入された商品はありません
+								 class="p-mypage__no-product">購入された商品はありません
 						</div>
 						<div v-else class="p-mypage__card-container">
 							<!-- Productコンポーネント -->
@@ -105,7 +102,6 @@
 											 :product="product" />
 						</div>
 					</section>
-					
 					
 					<!-- キャンセルした商品一覧(利用者) -->
 					<section class="p-mypge__section" v-show="!isShopUser">
@@ -120,7 +116,7 @@
 						</div>
 						<!-- 商品がなければ表示する -->
 						<div v-if="!canceledProducts.length"
-								 class="p-mypage__no-Product">キャンセルした商品はありません
+								 class="p-mypage__no-product">キャンセルした商品はありません
 						</div>
 						<div v-else class="p-mypage__card-container">
 							<!-- Productコンポーネント -->
@@ -145,7 +141,7 @@
 						</div>
 						<!-- 商品がなければ表示する -->
 						<div v-if="!wasCanceledProducts.length"
-								 class="p-mypage__no-Product">キャンセルされた商品はありません
+								 class="p-mypage__no-product">キャンセルされた商品はありません
 						</div>
 						<div v-else class="p-mypage__card-container">
 							<!-- Productコンポーネント -->
@@ -163,7 +159,6 @@
 						</div>
 					</section>
 					
-					
 					<!-- 投稿したレビュー一覧 -->
 					<section class="p-mypge__section" v-show="!isShopUser">
 						<div class="p-mypage__title-container">
@@ -178,53 +173,18 @@
 						
 						<!-- 投稿したレビューがなければ表示する -->
 						<div v-if="!reviewedUsers.length"
-								 class="p-mypage__no-Product">投稿したレビューはありません
+								 class="p-mypage__no-review">投稿したレビューはありません
 						</div>
 						
 						<div v-else class="p-mypage__card-container">
-							<!-- todo: コンポーネントにまとめる	-->
 							<!-- todo: レビュー投稿日を実装 -->
-							<!-- カード -->
-							<div class="c-card p-list__card__review"
-									 v-for="review in reviewedUsers"
-									 :key="review.id">
-								<!--レビュー詳細画面のリンク-->
-								<router-link class="c-card__link"
-														 :to="{ name: 'review.detail',
-												 						params: {
-														 					s_id: review.sender_id.toString(),
-														 					r_id: review.receiver_id.toString()
-												 						}}" />
-								
-								<div class="p-list__user-info__review">
-									<!-- ユーザーの画像	-->
-									<img class="c-icon p-list__review-icon"
-											 :src="review.sender_image"
-											 v-show="isShopUser"
-											 alt="">
-									<img class="c-icon p-list__review-icon"
-											 :src="review.receiver_image"
-											 v-show="!isShopUser"
-											 alt="">
-									<div>
-										<!-- レビュー相手の名前	-->
-										<div class="p-list__name">
-											<span v-show="isShopUser">{{ review.sender_name }}</span>
-											<span v-show="!isShopUser">{{ review.receiver_name }}</span>
-										</div>
-										<!-- ユーザーの評価 -->
-										<div class="p-list__recommendation">{{ review.recommend }}</div>
-									</div>
-								</div>
-								
-								<!-- レビュータイトル -->
-								<div class="p-list__review-title">{{ review.title }}</div>
-								<!-- レビューの内容 -->
-								<div class="p-list__detail">{{ review.detail }}</div>
-							</div>
+							<!-- Reviewコンポーネント -->
+							<Review v-show="!loading"
+											v-for="review in reviewedUsers"
+											:key="review.id"
+											:review="review" />
 						</div>
 					</section>
-					
 					
 					<!-- 投稿されたレビュー一覧 -->
 					<section class="p-mypge__section" v-show="isShopUser">
@@ -240,50 +200,16 @@
 						
 						<!-- 投稿されたレビューがなければ表示する -->
 						<div v-if="!wasReviewedUsers.length"
-								 class="p-mypage__no-Product">投稿されたレビューはありません
+								 class="p-mypage__no-review">投稿されたレビューはありません
 						</div>
 						
 						<div v-else class="p-mypage__card-container">
-							<!-- todo: コンポーネントにまとめる	-->
 							<!-- todo: レビュー投稿日を実装 -->
-							<!-- カード -->
-							<div class="c-card p-list__card__review"
-									 v-for="review in wasReviewedUsers"
-									 :key="review.id">
-								<!--レビュー詳細画面のリンク-->
-								<router-link class="c-card__link"
-														 :to="{ name: 'review.detail',
-												 						params: {
-														 					s_id: review.sender_id.toString(),
-														 					r_id: review.receiver_id.toString()
-												 						}}" />
-								
-								<div class="p-list__user-info__review">
-									<!-- ユーザーの画像	-->
-									<img class="c-icon p-list__review-icon"
-											 :src="review.sender_image"
-											 v-show="isShopUser"
-											 alt="">
-									<img class="c-icon p-list__review-icon"
-											 :src="review.receiver_image"
-											 v-show="!isShopUser"
-											 alt="">
-									<div>
-										<!-- レビュー相手の名前	-->
-										<div class="p-list__name">
-											<span v-show="isShopUser">{{ review.sender_name }}</span>
-											<span v-show="!isShopUser">{{ review.receiver_name }}</span>
-										</div>
-										<!-- ユーザーの評価 -->
-										<div class="p-list__recommendation">{{ review.recommend }}</div>
-									</div>
-								</div>
-								
-								<!-- レビュータイトル -->
-								<div class="p-list__review-title">{{ review.title }}</div>
-								<!-- レビューの内容 -->
-								<div class="p-list__detail">{{ review.detail }}</div>
-							</div>
+							<!-- Reviewコンポーネント -->
+							<Review v-show="!loading"
+											v-for="review in wasReviewedUsers"
+											:key="review.id"
+											:review="review" />
 						</div>
 					</section>
 				
@@ -300,6 +226,7 @@
 <script>
 import Loading from "../Loading";
 import Product from "../product/Product";
+import Review  from "../review/Review";
 import Sidebar from "../Sidebar";
 import { mapGetters } from 'vuex';
 import { OK } from "../../util";
@@ -314,6 +241,7 @@ export default {
 	components: {
 		Loading,
 		Product,
+		Review,
 		Sidebar
 	},
 	data() {

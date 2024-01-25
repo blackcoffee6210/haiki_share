@@ -1,0 +1,46 @@
+.p-review {
+  width: 100%;
+  min-height: 277px;
+  padding: $space_m;
+  &__user-info {
+    display: flex;
+    align-items: center;
+  }
+  &__icon {
+    margin-right: $space_m;
+  }
+  &__name {
+    font-weight: bold;
+    word-wrap: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 1; //1行に丸める
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  &__recommendation {
+    font-size: $font-size_s;
+    font-weight: bold;
+    padding: 0 $space_s;
+    border-radius: 3px;
+    background: $sub-color;
+    color: $white;
+  }
+  &__review-title {
+    margin-top: $space_s;
+    margin-bottom: $space_m;
+    font-weight: bold;
+    word-wrap: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 1; //1行に丸める
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  &__detail {
+    word-wrap: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 6; //1行に丸める
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 153px;
+  }
+}

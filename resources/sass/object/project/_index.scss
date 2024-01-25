@@ -54,9 +54,6 @@
   }
   &__label {
     font-weight: bold;
-    &:last-child {
-      margin-left: $space_m;
-    }
     @include mq() {
       display: block;
       margin-bottom: $space_s;
@@ -66,10 +63,8 @@
       margin-bottom: $space_s;
     }
   }
-  &__check {
-    width: 18px;
-    height: 18px;
-    margin-bottom: 3px;
+  &__checkbox {
+    margin-bottom: 2px;
   }
   &__select {
     border: 1px solid $gray-color;

@@ -9,6 +9,12 @@
 									  			params: { id: id.toString() }}">マイページ
 			</router-link>
 			
+			<!-- プロフィール詳細	-->
+			<router-link class="p-sidebar__link"
+									 :to="{ name: 'user.detail',
+									  			params: { id: id.toString() }}" >プロフィール詳細
+			</router-link>
+			
 			<!-- プロフィール編集	-->
 			<router-link class="p-sidebar__link"
 									 :to="{ name: 'user.editProfile',

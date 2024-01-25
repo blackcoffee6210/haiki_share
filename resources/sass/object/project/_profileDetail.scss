@@ -1,0 +1,65 @@
+.p-profile-detail {
+  width: 680px;
+  margin: 0 auto;
+  background: $white;
+  padding: $space_xl;
+  &__title {
+    text-align: center;
+    margin-bottom: $space_xl;
+  }
+  &__container {
+    display: flex;
+    align-items: center;
+    margin-bottom: $space_xl;
+  }
+  &__btn {
+    width: 140px;
+  }
+  &__image {
+    display: block;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 1px solid $gray-color;
+    margin-right: $space_xl;
+  }
+  &__name {
+    font-size: $font-size_xl;
+    font-weight: bold;
+  }
+  &__count {
+    font-size: $font-size_xl;
+    font-weight: bold;
+  }
+  &__address {
+    font-weight: bold;
+  }
+  &__introduce {
+    font-weight: bold;
+    margin-top: $space_m;
+    margin-bottom: $space_xl;
+  }
+  &__label {
+    font-weight: bold;
+  }
+  &__product-container,
+  &__review-container {
+    margin-top: $space_s;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 33.3% 33.3% 33.3%;
+    gap: $space_l;
+    padding-right: $space_2xl;
+    position: relative;
+    @include mq() {
+      grid-template-columns: 50% 50%;
+      padding-left: $space_m;
+      gap: $space_m;
+    }
+    @include mq('tab') {
+      grid-template-columns: 50% 50%;
+    }
+    @include mq('mon') {
+    }
+  }
+}

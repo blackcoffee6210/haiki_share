@@ -33,6 +33,10 @@
 				<div class="p-product-detail__flex">
 					<!-- ユーザー情報のコンテナ(左側) -->
 					<div class="p-product-detail__user-info">
+						<!-- 詳細画面のリンク -->
+						<router-link class="c-card__link"
+												 :to="{ name: 'user.detail',
+								  							params: { id: product.user_id.toString() }}"/>
 						<!-- ユーザー画像 -->
 						<img :src="product.user_image"
 								 alt=""
@@ -147,7 +151,8 @@
 				
 				<!-- この商品に似た商品-->
 				<div class="c-title p-product-detail__title"
-						 v-show="similarProducts.length > 0">同じカテゴリーの商品
+						 v-show="similarProducts.length > 0">
+					同じカテゴリーの商品
 				</div>
 				<div class="p-product-detail__other-container">
 					<Product v-show="!loading"
@@ -239,14 +244,12 @@ export default {
 				return false;
 			}
 			this.product = response.data; //responseデータをproductプロパティに代入
-			console.log('productの中身');
-			console.log(response.data);
 			
 			if(this.product.liked_by_user) { //ログインユーザーが既に「いいね」を押していたらtrueをセット
 				this.isLike = true;
 			}
 		},
-		async getOtherProducts() {
+		async getOtherProducts() { //出品者の他の商品（購入されていないもの）を取得
 			const response = await axios.get(`/api/products/${this.product.user_id}/${this.id}/other`); //API接続
 			
 			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
@@ -254,8 +257,8 @@ export default {
 				return false; //後続の処理を抜ける
 			}
 			this.otherProducts = response.data; //responseデータをプロパティに代入
-			console.log('otherProductsの中身');
-			console.log(response.data);
+			console.log('otherProductsの中身')
+			console.log(this.otherProducts);
 		},
 		async getSimilarProducts() {
 			const response = await axios.get(`/api/products/${this.product.category_id}/${this.id}/similar`); //API接続
@@ -265,9 +268,12 @@ export default {
 				return false; //後続の処理を抜ける
 			}
 			this.similarProducts = response.data; //responseデータをプロパティに代入
-			console.log('similarProductsの中身');
-			console.log(response.data);
 		},
+		// goProfileDetail() { //プロフィール詳細画面へ遷移
+		// 	this.$router.push({
+		// 		name: 'user.detail',
+		// 		params: { id: this.product.user_id.toString() } });
+		// },
 		async onLikeClick() { //「お気に入りボタン」を押したときの処理を行うメソッド
 			if(!this.isLogin) { //ログインしていなかったらアレートを出す
 				if(confirm('いいね機能を使うにはログインしてください')) {

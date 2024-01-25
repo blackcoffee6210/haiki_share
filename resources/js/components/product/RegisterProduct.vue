@@ -262,7 +262,7 @@ export default {
 			
 			const response = await axios.post('/api/products', formData); //商品登録APIを呼び出す
 			
-			this.loading =false; //API通信が終わったらローディングを非表示にする
+			this.loading = false; //API通信が終わったらローディングを非表示にする
 			
 			if(response.status === UNPROCESSABLE_ENTITY) { //responseステータスがバリデーションエラーなら後続の処理を行う
 				this.errors = response.data.errors; //responseエラーメッセージをプロパティに格納する

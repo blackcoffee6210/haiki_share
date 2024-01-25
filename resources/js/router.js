@@ -23,6 +23,7 @@ import EditProfile     from "./components/user/EditProfile";
 import Liked           from "./components/user/Liked";
 import MyPage          from "./components/user/MyPage";
 import Posted          from "./components/user/Posted";
+import ProfileDetail   from "./components/user/ProfileDetail";
 import Purchased       from "./components/user/Purchased";
 import Reviewed        from "./components/user/Reviewed";
 import Withdrawal      from "./components/user/Withdrawal";              // ↑ここまで
@@ -82,7 +83,6 @@ const routes = [ //パスとコンポーネントのマッピング
     path: '/products/register', //商品登録
     name: 'product.register',
     component: RegisterProduct,
-    props: true,
     beforeEnter(to, from, next) { //ログインしている、かつコンビニユーザーの場合はページを表示、それ以外は商品一覧画面に遷移する
       (store.getters['auth/check'] && store.getters['auth/isShopUser']) ? next() : next({name: 'index'});
     }
@@ -130,6 +130,12 @@ const routes = [ //パスとコンポーネントのマッピング
     beforeEnter(to, from, next) { //ログイン状態でページにアクセスがあったらそのまま移動させる
       (store.getters['auth/check']) ? next() : next({name: 'login'});
     }
+  },
+  {
+    path: '/users/:id', //プロフィール詳細
+    name: 'user.detail',
+    component: ProfileDetail,
+    props: true
   },
   {
     path: '/users/:id/edit-profile', //プロフィール編集
@@ -202,15 +208,6 @@ const routes = [ //パスとコンポーネントのマッピング
       store.getters['auth/check'] ? next() : next({name: 'login'});
     }
   },
-  // {
-  //   path: '/users/:id/withdrawal',
-  //   name: 'user.withdrawal',
-  //   component: Withdrawal,
-  //   props: true,
-  //   beforeEnter(to, from ,next) { //ログイン状態でページにアクセスした場合(true)、そのまま移動させる
-  //     store.getters['auth/check'] ? next({name: 'login'}) : next();
-  //   }
-  // },
   {
     path: '/agreement', //利用規約
     name: 'agreement',
