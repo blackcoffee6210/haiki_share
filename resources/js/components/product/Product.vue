@@ -36,6 +36,7 @@
 			</div>
 			
 			<!-- 賞味期限 -->
+			<!--todo: 賞味期限が過ぎたら表示を変える-->
 			<div class="p-product__expire">
 				<div>賞味期限</div>
 				<div>

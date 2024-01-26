@@ -162,8 +162,10 @@ import { OK, UNPROCESSABLE_ENTITY } from "../../util";
 export default {
 	name: "EditProduct",
 	props: {
-		id: String,
-		required: true
+		id: {
+			type: String,
+			required: true
+		}
 	},
 	components: {
 		Loading
@@ -212,6 +214,10 @@ export default {
 			}
 			
 			this.product = response.data; //プロパティに値をセットする
+			
+			if(this.product.is_purchased) { //購入されていたらマイページに遷移する
+				this.$router.push({ name: 'user.mypage', params: { id: this.product.user_id.toString()}});
+			}
 		},
 		onFileChange(event) { //フォームでファイルが選択されたら実行されるメソッド
 			if(event.target.files.length === 0) { //何も選択されていなかったら処理中断
