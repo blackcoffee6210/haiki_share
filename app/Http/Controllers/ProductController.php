@@ -34,8 +34,8 @@ class ProductController extends Controller
 	public function index() //商品一覧取得
 	{
 		$products = Product::with(['user', 'category', 'likes', 'history'])
-						   ->orderByDesc('created_at')
-						   ->paginate(); //get()の代わりにpaginateを使うとtotalやcurrent_pageが自動的に追加される
+			->orderByDesc('created_at')
+			->paginate(); //get()の代わりにpaginateを使うとtotalやcurrent_pageが自動的に追加される
 		return $products;
 	}
 
@@ -64,6 +64,7 @@ class ProductController extends Controller
 	public function show(string $id) //商品情報取得
 	{
 		$product = Product::with(['user', 'category', 'likes', 'history'])
+						  ->withTrashed()
 						  ->find($id);
 		return $product ?? abort(404); //商品が見つからなかったら404を返す
 	}

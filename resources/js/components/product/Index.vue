@@ -146,39 +146,39 @@
 					</div>
 				</div>
 				
-				<!-- おすすめの出品者 -->
-				<!-- todo: 実装する！ -->
-				<h2 class="c-title p-sidebar-index__title">おすすめの出品者</h2>
-				<div class="p-sidebar-index__card-container">
-					<div class="c-card p-sidebar-index__card"
-							 v-for="product in recommendProducts"
-							 v-show="!product.is_purchased"
-							 :key="product.id">
-						<router-link class="c-card__link"
-												 :to="{ name: 'product.detail',
-																params: { id: product.id.toString() }}" />
-						<img class="p-sidebar-index__img"
-								 :src="product.image"
-								 alt="">
-						<div class="p-sidebar-index__right">
-							<div class="p-sidebar-index__card-title">{{ product.name }}</div>
-							<div class="p-sidebar-index__price-container">
-								<div class="p-sidebar-index__price">{{ product.price | numberFormat }}</div>
-								<div class="p-sidebar-index__expire">
-									残り
-									{{ product.expire | momentExpire }}
-									日
-								</div>
-							</div>
-							<div class="c-flex">
-								<img class="c-icon p-sidebar-index__icon"
-										 :src="product.user_image"
-										 alt="">
-								<div class="p-sidebar-index__name">{{ product.user_name }}</div>
-							</div>
-						</div>
-					</div>
-				</div>
+				<!--&lt;!&ndash; おすすめの出品者 &ndash;&gt;-->
+				<!--&lt;!&ndash; todo: 実装する！ &ndash;&gt;-->
+				<!--<h2 class="c-title p-sidebar-index__title">おすすめの出品者</h2>-->
+				<!--<div class="p-sidebar-index__card-container">-->
+				<!--	<div class="c-card p-sidebar-index__card"-->
+				<!--			 v-for="product in recommendProducts"-->
+				<!--			 v-show="!product.is_purchased"-->
+				<!--			 :key="product.id">-->
+				<!--		<router-link class="c-card__link"-->
+				<!--								 :to="{ name: 'product.detail',-->
+				<!--												params: { id: product.id.toString() }}" />-->
+				<!--		<img class="p-sidebar-index__img"-->
+				<!--				 :src="product.image"-->
+				<!--				 alt="">-->
+				<!--		<div class="p-sidebar-index__right">-->
+				<!--			<div class="p-sidebar-index__card-title">{{ product.name }}</div>-->
+				<!--			<div class="p-sidebar-index__price-container">-->
+				<!--				<div class="p-sidebar-index__price">{{ product.price | numberFormat }}</div>-->
+				<!--				<div class="p-sidebar-index__expire">-->
+				<!--					残り-->
+				<!--					{{ product.expire | momentExpire }}-->
+				<!--					日-->
+				<!--				</div>-->
+				<!--			</div>-->
+				<!--			<div class="c-flex">-->
+				<!--				<img class="c-icon p-sidebar-index__icon"-->
+				<!--						 :src="product.user_image"-->
+				<!--						 alt="">-->
+				<!--				<div class="p-sidebar-index__name">{{ product.user_name }}</div>-->
+				<!--			</div>-->
+				<!--		</div>-->
+				<!--	</div>-->
+				<!--</div>-->
 				
 			</div>
 		</aside>

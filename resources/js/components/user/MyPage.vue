@@ -159,6 +159,30 @@
 						</div>
 					</section>
 					
+					<!-- 削除した商品一覧(コンビニ) -->
+					<section class="p-mypge__section" v-show="isShopUser">
+						<div class="p-mypage__title-container">
+							<h2 class="c-title p-mypage__title">削除した商品一覧</h2>
+							<!-- 全件表示のリンク -->
+							<router-link class="p-mypage__link"
+													 :to="{ name: 'user.deleted',
+																	params: { id: id.toString() }}"
+													 v-if="deletedProducts.length">全件表示
+							</router-link>
+						</div>
+						<!-- 商品がなければ表示する -->
+						<div v-if="!deletedProducts.length"
+								 class="p-mypage__no-product">削除した商品はありません
+						</div>
+						<div v-else class="p-mypage__card-container">
+							<!-- Productコンポーネント -->
+							<Product v-show="!loading"
+											 v-for="product in deletedProducts"
+											 :key="product.id"
+											 :product="product" />
+						</div>
+					</section>
+					
 					<!-- 投稿したレビュー一覧 -->
 					<section class="p-mypge__section" v-show="!isShopUser">
 						<div class="p-mypage__title-container">
@@ -253,6 +277,7 @@ export default {
 			wasPurchasedProducts: {}, //購入された商品（コンビニ）
 			canceledProducts: {},     //キャンセルした商品（利用者）
 			wasCanceledProducts: {},  //キャンセルされた商品（コンビニ）
+			deletedProducts: {},      //削除した商品（コンビニ）
 			reviewedUsers: {},        //投稿したレビュー（利用者）
 			wasReviewedUsers: {},     //投稿されたレビュー（コンビニ）
 			
@@ -342,6 +367,19 @@ export default {
 			console.log('キャンセルされた商品');
 			console.log(this.wasPurchasedProducts);
 		},
+		async getDeletedProducts() { //削除した商品(コンビニ)
+			this.loading   = true; //ローディングを表示する
+			const response = await axios.get('/api/mypage/deleted');
+			this.loading   = false; //API通信が終わったらローディングを非表示にする
+			
+			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
+				this.$store.commit('error/setCode', response.status);
+				return false; //後続の処理を抜ける
+			}
+			this.deletedProducts = response.data; //responseデータをプロパティに代入
+			console.log('削除した商品');
+			console.log(response.data);
+		},
 		async getReviewed() { //投稿したレビュー(利用者)
 			this.loading   = true; //ローディングを表示する
 			const response = await axios.get('/api/mypage/reviewed');
@@ -376,6 +414,7 @@ export default {
 					await this.getPostedProducts();
 					await this.getWasPurchasedProducts();
 					await this.getWasCanceledProducts();
+					await this.getDeletedProducts();
 					await this.getWasReviewed();
 				}else { //利用者の場合
 					await this.getLikedProducts();

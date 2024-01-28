@@ -45,6 +45,7 @@ Route::get('/users/{id}/wasPurchased',    'UserController@wasPurchased');   //�
 Route::get('/users/{id}/liked',           'UserController@liked');          //いいねした商品一覧
 Route::get('/users/{id}/canceled',        'UserController@canceled');       //キャンセルした商品一覧
 Route::get('/users/{id}/wasCanceled',     'UserController@wasCanceled');    //キャンセルされた商品一覧
+//Route::get('/users/{id}/deleted',         'UserController@deleted');        //削除商品一覧
 Route::get('/users/{id}/reviewed',        'UserController@reviewed');       //レビューしたユーザー一覧
 Route::get('/users/{id}/wasReviewed',     'UserController@wasReviewed');    //レビューされたユーザー一覧
 
@@ -57,6 +58,7 @@ Route::get('/mypage/purchased',    'MyPageController@purchased');    //購入し
 Route::get('/mypage/wasPurchased', 'MyPageController@wasPurchased'); //購入された商品を5件取得(コンビニユーザー)
 Route::get('/mypage/canceled',     'MyPageController@canceled');     //キャンセルした商品5件取得(利用者)
 Route::get('/mypage/wasCanceled',  'MyPageController@wasCanceled');  //キャンセルされた商品5件取得(コンビニユーザー)
+Route::get('/mypage/deleted',      'MyPageController@deleted');      //削除した商品5件取得(コンビニユーザー)
 Route::get('/mypage/reviewed',     'MyPageController@reviewed');     //投稿したレビューを5件取得(利用者)
 Route::get('/mypage/wasReviewed',  'MyPageController@wasReviewed');  //投稿されたレビューを5件取得(コンビニユーザー)
 

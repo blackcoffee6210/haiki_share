@@ -63,6 +63,13 @@
 				<span v-show="isShopUser">キャンセルされた商品一覧</span>
 				<span v-show="!isShopUser">キャンセルした商品一覧</span>
 			</router-link>
+			
+			<!-- 削除した商品一覧 -->
+			<router-link class="p-sidebar__link"
+									 v-if="isShopUser"
+									 :to="{ name: 'user.deleted',
+									  			params: { id: id.toString() }}" >削除した商品一覧
+			</router-link>
 
 			<!-- 投稿した(された)レビュー一覧 -->
 			<router-link class="p-sidebar__link"

@@ -66,6 +66,16 @@ class MyPageController extends Controller
 		return $products;
 	}
 
+	public function deleted() //削除した商品を5件取得
+	{
+		$products = Product::where('user_id', Auth::id())
+						   ->onlyTrashed()
+						   ->orderByDesc('deleted_at')
+						   ->take(5)
+						   ->get();
+		return $products;
+	}
+
 	public function reviewed() //投稿したレビューを5件取得（利用者）
 	{
 		return User::find(Auth::id())
