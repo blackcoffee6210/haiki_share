@@ -2,6 +2,11 @@
   text-align: center;
   width: 600px;
   margin: 250px auto;
+  @include mq() {
+    width: 100%;
+    margin-top: 20vh;
+    margin-bottom: 30vh;
+  }
   &__title {
     font-family: Rockwell;
     font-size: 132px;
@@ -9,9 +14,21 @@
     color: #efefef;
     height: 1em;
     line-height: 158px;
+    @include mq() {
+      font-size: 100px;
+    }
+  }
+  &__text {
+    font-weight: bold;
+    @include mq() {
+      margin-top: $space_xl;
+    }
   }
   &__link {
     color: $main-color;
     display: inline-block;
+    @include mq() {
+      margin-top: $space_m;
+    }
   }
 }

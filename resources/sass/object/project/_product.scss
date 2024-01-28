@@ -8,8 +8,9 @@
     display: block;
     height: 140px;
     width: 100%;
+    border-radius: 3px;
     @include mq() {
-      height: 80px;
+      height: 100px;
     }
   }
   &__heart {
@@ -18,17 +19,23 @@
     right: 0;
     font-size: $font-size_l;
     background: rgba(255,255,255,.5);
-    //background: rgba(0, 0, 0, .4);
     padding: $space_s $space_m;
+    @include mq() {
+      font-size: $font-size_m;
+      padding: 3px 8px;
+    }
   }
   &__cancel {
-    padding: 3px 20px;
+    padding: 3px $space_xl;
     background: $img-color-bg;
     position: absolute;
     top: 5px;
     right: 0;
     border-radius: 5px 0 0 5px;
     font-size: $font-size_m;
+    @include mq() {
+      padding: 3px $space_l;
+    }
   }
   &__card-body {
     padding: $space_m;
@@ -49,7 +56,7 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
     @include mq() {
-      font-size: $font-size_m;
+      font-size: $font-size_s;
     }
   }
   &__flex {
@@ -60,7 +67,7 @@
     font-weight: bold;
     @include mq() {
       font-size: $font-size_s;
-      width: 100%;
+      text-align: right;
       margin: 0;
     }
   }
@@ -69,9 +76,15 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    @include mq() {
+      font-size: $font-size_s;
+    }
     &__date {
       font-weight: bold;
       font-size: 20px;
+      @include mq() {
+        font-size: $font-size_m;
+      }
     }
   }
   &__user-info {
@@ -90,10 +103,13 @@
   &__icon {
     width: 40px;
     height: 40px;
-    //margin-right: $space_s;
     @include mq() {
-      width: 25px;
-      height: 25px;
+      width: 35px;
+      height: 35px;
+    }
+    @include mq('tab') {
+      width: 50px;
+      height: 50px;
     }
   }
   &__usr-name {
@@ -102,13 +118,12 @@
     display: -webkit-box;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    @include mq() {
-      width: 60px;
-    }
   }
   &__date {
-    //margin-right: $space_m;
     font-size: $font-size_s;
+    @include mq() {
+      font-size: $font-size_xs;
+    }
   }
   &__category {
     font-size: $font-size_s;

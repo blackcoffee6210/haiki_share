@@ -31,7 +31,11 @@
       color: $font-color;
     }
     @include mq() {
-      font-size: $font-size_xl;
+      font-size: $font-size_l;
+      margin-right: $space_m;
+    }
+    @include mq('tab') {
+      font-size: $font-size_2xl;
     }
   }
   //説明文
@@ -39,13 +43,19 @@
     font-size: $font-size_m;
     font-weight: bold;
     @include mq() {
-      font-size: $font-size_xs;
+      font-size: .8rem;
+    }
+    @include mq('tab') {
+      font-size: $font-size_s;
     }
   }
   //改行
   &__br {
     display: none;
     @include mq() {
+      display: initial;
+    }
+    @include mq('tab') {
       display: initial;
     }
   }
@@ -60,10 +70,11 @@
     @include mq() {
       display: block;
       position: fixed;
+      margin-right: $space_l;
       top: 0;
       right: 0;
-      width: 70px;
-      height: 70px;
+      width: 50px;
+      height: 50px;
       cursor: pointer;
       z-index: 11;
     }
@@ -138,9 +149,9 @@
       width: 100%;
       display: block;
       text-align: center;
-      margin-right: initial;
+      margin-left: initial;
       padding: $space_m;
-      font-size: $font-size_m;
+      font-size: $font-size_default;
       font-weight: initial;
     }
     &:last-child {

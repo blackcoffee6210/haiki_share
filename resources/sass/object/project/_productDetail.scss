@@ -1,14 +1,13 @@
 .p-product-detail {
   width: 680px;
   margin: 0 auto;
-
   @include mq() {
     width: 100%;
     padding-left: $space_m;
     padding-right: $space_m;
   }
   @include mq('tab') {
-
+    width: 500px;
   }
   &__img {
     height: 400px;
@@ -16,8 +15,12 @@
     display: block;
     margin: 0 auto $space_2xl auto;
     @include mq() {
-      height: 200px;
+      height: 250px;
       margin-bottom: $space_m;
+    }
+    @include mq('tab') {
+      height: 300px;
+      margin-bottom: $space_xl;
     }
   }
   &__category {
@@ -30,7 +33,15 @@
     top: 15px;
     right: 15px;
     font-weight: bold;
-
+    @include mq() {
+      padding: 3px 10px;
+      top: 10px;
+      right: 10px;
+    }
+    @include mq('tab') {
+      font-size: $font-size_m;
+      padding: $space_s $space_m;
+    }
   }
   &__name-container {
     display: flex;
@@ -42,12 +53,21 @@
     font-size: $font-size_xl;
     font-weight: bold;
     @include mq() {
+      font-size: initial;
+    }
+    @include mq('tab') {
       font-size: $font-size_l;
     }
   }
   &__price {
     font-size: $font-size_xl;
     font-weight: bold;
+    @include mq() {
+      font-size: initial;
+    }
+    @include mq('tab') {
+      font-size: $font-size_l;
+    }
   }
   &__flex {
     display: flex;
@@ -55,6 +75,9 @@
     justify-content: space-between;
     margin-bottom: $space_xl;
     @include mq() {
+      display: block;
+    }
+    @include mq('tab') {
       display: block;
     }
   }
@@ -66,29 +89,29 @@
       cursor: pointer;
     }
     @include mq() {
-      width: 100%;
       margin-bottom: $space_m;
+    }
+    @include mq('tab') {
+      margin-bottom: $space_xl;
     }
   }
   &__icon {
     margin-right: $space_m;
     @include mq() {
-      width: 30px;
-      height: 30px;
-      border-radius: 30px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
     }
   }
   &__shop-name {
     margin-right: $space_m;
     @include mq() {
       display: inline-block;
-      width: 250px;
     }
   }
   &__branch {
     @include mq() {
       display: inline-block;
-      width: 250px;
     }
   }
   &__date {
@@ -104,60 +127,65 @@
     @include mq() {
       width: 100%;
     }
+    @include mq('tab') {
+      width: 100%;
+      justify-content: flex-end;
+    }
   }
   &__btn {
-    margin-left: $space_m;
-    &--edit {
-      margin-right: $space_m;
+    @include mq() {
+      width: 50%;
+      font-size: $font-size_s;
     }
     &--like {
       width: 160px;
       border-radius: 20px;
+      margin-right: $space_l;
       @include mq() {
-        font-size: $font-size_m;
         padding-top: 8px;
         padding-bottom: 8px;
+        margin-right: $space_m;
         width: 50%;
       }
     }
-    &--purchase {
-      margin-left: $space_m;
-      @include mq() {
-        width: 50%;
+    &--review {
+      margin-right: $space_m;
+      padding-top: 7px;
+      @include mq('tab') {
+        margin-right: $space_l;
       }
     }
   }
-  &__summary {
-    border-bottom: 1px solid $gray-color;
-    padding-bottom: $space_xl;
-    margin: $space_xl 0;
-    @include mq() {
-      font-size: $font-size_m;
-    }
-  }
-  &__before-buy {
-    text-align: center;
-    margin-bottom: $space_xl;
-    @include mq() {
-      font-size: $font-size_s;
-    }
-  }
+  //&__before-buy {
+  //  text-align: center;
+  //  margin-bottom: $space_xl;
+  //  @include mq() {
+  //    font-size: $font-size_s;
+  //  }
+  //}
   &__detail {
     line-height: 2;
     letter-spacing: .05em;
     background: $white;
     padding: $space_l;
+    @include mq() {
+      padding: $space_m;
+    }
   }
   &__twitter-container {
     text-align: right;
-    margin: $space_l 0;
+    margin-top: $space_l;
   }
   &__title {
-    margin-top: $space_2xl;
+    margin-top: $space_xl;
     margin-bottom: $space_m;
     text-align: left;
+    @include mq() {
+      margin-bottom: $space_s;
+      font-size: $font-size_m;
+    }
   }
-  &__other-container {
+  &__products-container {
     width: 100%;
     display: grid;
     grid-template-columns: 33.3% 33.3% 33.3%;
@@ -166,7 +194,7 @@
     position: relative;
     @include mq() {
       grid-template-columns: 50% 50%;
-      padding-left: $space_m;
+      padding-right: $space_m;
       gap: $space_m;
     }
     @include mq('tab') {

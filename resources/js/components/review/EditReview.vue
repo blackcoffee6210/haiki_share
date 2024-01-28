@@ -33,10 +33,10 @@
 								 v-model.number="reviewForm.recommendation_id">
 					<label :for="'recommend' + recommendations[0].id"
 								 class="p-review-form__recommendation__label">
-						<font-awesome-icon style="font-size: 24px;"
+						<font-awesome-icon class="p-review-form__fa"
 															 :icon="['far', 'laugh-beam']"
 															 color="#ff6f80" />
-						<span class="u-ml5">{{ recommendations[0].name }}</span>
+						<span class="p-review-form__text">{{ recommendations[0].name }}</span>
 					</label>
 					<input type="radio"
 								 :id="'recommend' + recommendations[1].id"
@@ -46,10 +46,10 @@
 								 v-model.number="reviewForm.recommendation_id">
 					<label :for="'recommend' + recommendations[1].id"
 								 class="p-review-form__recommendation__label">
-						<font-awesome-icon style="font-size: 24px;"
+						<font-awesome-icon class="p-review-form__fa"
 															 :icon="['far', 'smile']"
 															 color="#ff6f80" />
-						<span class="u-ml5">{{ recommendations[1].name }}</span>
+						<span class="p-review-form__text">{{ recommendations[1].name }}</span>
 					</label>
 					<input type="radio"
 								 :id="'recommend' + recommendations[2].id"
@@ -59,10 +59,10 @@
 								 v-model.number="reviewForm.recommendation_id">
 					<label :for="'recommend' + recommendations[2].id"
 								 class="p-review-form__recommendation__label">
-						<font-awesome-icon style="font-size: 24px;"
+						<font-awesome-icon class="p-review-form__fa"
 															 :icon="['far', 'meh']"
 															 color="#ff6f80" />
-						<span class="u-ml5">{{ recommendations[2].name }}</span>
+						<span class="p-review-form__text">{{ recommendations[2].name }}</span>
 					</label>
 				</div>
 				
@@ -113,16 +113,16 @@
 				<div class="p-review-form__btn-container">
 					<!-- ボタン -->
 					<a @click="$router.back()"
-						 class="c-btn c-btn--white p-product-form__btn--back">もどる
+						 class="c-btn c-btn--white p-review-form__btn">もどる
 					</a>
 					<!-- 削除ボタン	-->
-					<button class="c-btn c-btn--white p-review-form__btn--delete"
+					<button class="c-btn c-btn--white p-review-form__btn"
 									@click="deleteReview"
 									type="button">削除する
 					</button>
 					
 					<!-- 更新ボタン -->
-					<button class="c-btn p-review-form__btn--update"
+					<button class="c-btn p-review-form__btn"
 									type="submit">更新する
 					</button>
 				</div>
@@ -175,7 +175,13 @@ export default {
 				return false;
 			}
 			this.reviewForm = response.data[0];
+			console.log('getReviews');
 			console.log(response.data[0]);
+			
+			if(!this.reviewForm) { //投稿したレビューじゃなかったら商品一覧画面へ遷移する
+				console.log('投稿したレビューはないで！！');
+				this.$router.push({name: 'index'});
+			}
 		},
 		async update() {       //レビュー更新
 			this.loading = true; //ローディングを表示する

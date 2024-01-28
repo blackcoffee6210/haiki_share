@@ -1,5 +1,8 @@
 .p-edit-profile {
   width: 100%;
+  @include mq() {
+    width: 100%;
+  }
   @include mq('tab') {
     padding-right: $space_xl;
   }
@@ -32,7 +35,6 @@
       height: 296px;
       border-radius: 50%;
       background: $img-color-bg;
-      //position: relative;
       &__err {
         border: 1px solid $error-color;
       }
@@ -40,9 +42,9 @@
         cursor: pointer;
       }
       @include mq() {
-        width: 250px;
+        //width: 250px;
         height: 250px;
-        margin: 0 auto;
+        //margin: 0 auto;
       }
       @include mq('tab') {
         width: 350px;
@@ -55,8 +57,9 @@
     position: absolute;
     display: none;
     width: 100%;
-    height: 296px;
+    height: 100%;
     z-index: 2;
+    border-radius: 50%;
     &:hover {
       cursor: pointer;
     }

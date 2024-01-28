@@ -24,7 +24,7 @@
 						<!-- 販売中の商品のみ表示 -->
 						<input type="checkbox"
 									 id="sale"
-									 class="c-checkbox p-index__checkbox u-ml15"
+									 class="c-checkbox p-index__checkbox--sale"
 									 v-model="showSale">
 						<label for="sale" class="p-index__label">販売中のみ表示</label>
 					</div>
@@ -98,7 +98,7 @@
 				<!-- 出品したコンビニのある都道府県 -->
 				<div class="p-sidebar-index__sort">
 					<label for="sort_prefecture" class="p-sidebar-index__title">
-						出品したコンビニのある都道府県
+						出品したコンビニの<br class="u-br">ある都道府県
 					</label>
 					<select id="sort_prefecture"
 									class="c-select p-sidebar-index__select"
@@ -113,6 +113,7 @@
 				</div>
 				
 				<!-- おすすめの商品 -->
+				<!--todo: tabのスタイル変更-->
 				<h2 class="c-title p-sidebar-index__title">おすすめの商品</h2>
 				<div class="p-sidebar-index__card-container">
 					<div class="c-card p-sidebar-index__card"

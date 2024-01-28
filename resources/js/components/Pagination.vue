@@ -3,13 +3,13 @@
 		<!-- 「prev」ボタンは1ページ目以外の場合に表示する -->
 		<router-link v-if="!isFirstPage"
 								 :to="`/products?page=${ currentPage - 1 }`"
-								 class="c-pagination__active u-ml15">
+								 class="c-pagination__active c-pagination__active--left">
 			&laquo; prev
 		</router-link>
 		<!-- 「next」ボタンは最後のページ以外の場合に表示する	-->
 		<router-link v-if="!isLastPage"
 								 :to="`/products?page=${ currentPage + 1 }`"
-								 class="c-pagination__active">
+								 class="c-pagination__active c-pagination__active--right">
 			next &raquo;
 		</router-link>
 	</div>

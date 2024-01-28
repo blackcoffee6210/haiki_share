@@ -1,5 +1,4 @@
 .p-tokutei {
-  //width: 70%;
   width: 100%;
   margin: 0 auto;
   @include mq() {
@@ -7,12 +6,20 @@
     padding-left: $space_m;
     padding-right: $space_m;
   }
+  &__br {
+    display: none;
+    @include mq() {
+      display: initial;
+    }
+  }
   &__title {
     font-weight: bold;
     text-align: center;
     margin-bottom: $space_3xl;
     @include mq() {
-      font-size: $font-size_default;
+      margin-bottom: $space_m;
+    }
+    @include mq('tab') {
       margin-bottom: $space_xl;
     }
   }

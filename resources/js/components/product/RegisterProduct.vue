@@ -147,7 +147,7 @@
 					<div class="p-product-form__btn-container">
 						<!-- ボタン -->
 						<a @click="$router.back()"
-							 class="c-btn c-btn--white p-product-form__btn--back">もどる
+							 class="c-btn c-btn--white p-product-form__btn p-product-form__btn--back">もどる
 						</a>
 						<!-- ボタン	-->
 						<button class="c-btn p-product-form__btn"

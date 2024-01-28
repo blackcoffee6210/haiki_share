@@ -26,6 +26,11 @@
       height: 445px;
     }
   }
+  &__text {
+    @include mq() {
+      text-align: center;
+    }
+  }
   &__btn-container {
     display: flex;
     justify-content: space-around;

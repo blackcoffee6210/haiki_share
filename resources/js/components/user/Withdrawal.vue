@@ -1,5 +1,6 @@
 <template>
 	<div class="l-main">
+		<!--todo: リロードしたらindexに遷移される-->
 		<!-- メインコンテンツ	-->
 		<main class="l-main__2column">
 			<div class="p-withdrawal">
@@ -13,7 +14,8 @@
 								v-show="!loading"
 								@submit.prevent="submit">
 						<p class="p-withdrawal__text">
-							退会される方は、下記の「退会する」ボタンをクリックしてください。
+							退会される方は、下記の「退会する」ボタンを<br class="u-br">
+							クリックしてください。
 						</p>
 						<!--&lt;!&ndash; ボタン	&ndash;&gt;-->
 						<!--<div class="p-withdrawal__btn-container">-->

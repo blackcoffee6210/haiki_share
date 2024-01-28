@@ -218,6 +218,13 @@ class ProductController extends Controller
 						  ->get();
 		return $product;
 	}
+//	public function purchasedByUser(string $id) //購入したユーザー取得
+//	{
+//		$product = History::where('product_id', $id)
+//						  ->where('buyer_id', Auth::id())
+//						  ->get();
+//		return $product;
+//	}
 
 	public function canceledByUser(string $id)
 	{

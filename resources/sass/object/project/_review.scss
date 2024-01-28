@@ -2,12 +2,21 @@
   width: 100%;
   min-height: 277px;
   padding: $space_m;
+  @include mq() {
+    min-height: 196px;
+    //max-height: 196px;
+    padding: $space_s;
+  }
   &__user-info {
     display: flex;
     align-items: center;
   }
   &__icon {
     margin-right: $space_m;
+    @include mq() {
+      width: 40px;
+      height: 40px;
+    }
   }
   &__name {
     font-weight: bold;
@@ -24,6 +33,9 @@
     border-radius: 3px;
     background: $sub-color;
     color: $white;
+    @include mq() {
+      font-size: $font-size_xs;
+    }
   }
   &__review-title {
     margin-top: $space_s;
@@ -34,6 +46,9 @@
     -webkit-line-clamp: 1; //1行に丸める
     -webkit-box-orient: vertical;
     overflow: hidden;
+    @include mq() {
+      margin-bottom: $space_s;
+    }
   }
   &__detail {
     word-wrap: break-word;
@@ -41,6 +56,10 @@
     -webkit-line-clamp: 6; //1行に丸める
     -webkit-box-orient: vertical;
     overflow: hidden;
-    min-height: 153px;
+    min-height: 154px;
+    @include mq() {
+      min-height: 112px;
+      -webkit-line-clamp: 5; //1行に丸める
+    }
   }
 }

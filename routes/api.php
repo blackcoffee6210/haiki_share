@@ -63,11 +63,12 @@ Route::get('/mypage/wasReviewed',  'MyPageController@wasReviewed');  //投稿さ
 //=================================================================
 // Review
 //=================================================================
-Route::post('/reviews',                     'ReviewController@store');
-Route::get('/reviews/{r_id}/otherProducts', 'ReviewController@otherProducts');
-Route::get('/reviews/{s_id}/{r_id}',        'ReviewController@show');
-Route::post('/reviews/update',              'ReviewController@update');
-Route::delete('/reviews/{s_id}/{r_id}',     'ReviewController@destroy');
+Route::post('/reviews',                      'ReviewController@store');
+Route::get('/reviews/{r_id}/reviewedByUser', 'ReviewController@reviewedByUser');
+Route::get('/reviews/{r_id}/otherProducts',  'ReviewController@otherProducts');
+Route::get('/reviews/{s_id}/{r_id}',         'ReviewController@show');
+Route::post('/reviews/update',               'ReviewController@update');
+Route::delete('/reviews/{s_id}/{r_id}',      'ReviewController@destroy');
 
 //=================================================================
 // Other

@@ -3,6 +3,9 @@
   @include mq() {
     padding-right: initial;
   }
+  @include mq('tab') {
+    padding-right: $space_m;
+  }
   &__sort-container {
     font-size: $font-size_l;
     display: flex;
@@ -14,18 +17,20 @@
       width: 100%;
       padding-right: $space_m;
       padding-left: $space_m;
+      margin-bottom: $space_m;
       flex-wrap: wrap;
       font-size: $font-size_s;
     }
     @include mq('tab') {
       width: 100%;
       flex-wrap: wrap;
+      margin-bottom: $space_m;
     }
   }
   &__total {
     @include mq() {
       width: 100%;
-      margin-bottom: $space_s;
+      margin-bottom: $space_m;
     }
     @include mq('tab') {
       width: 100%;
@@ -55,16 +60,20 @@
   &__label {
     font-weight: bold;
     @include mq() {
-      display: block;
       margin-bottom: $space_s;
     }
     @include mq('tab') {
-      display: block;
       margin-bottom: $space_s;
     }
   }
   &__checkbox {
     margin-bottom: 2px;
+    &--sale {
+      margin-left: $space_l;
+      @include mq() {
+        margin-left: 35px;
+      }
+    }
   }
   &__select {
     border: 1px solid $gray-color;
@@ -94,6 +103,7 @@
     }
     @include mq('tab') {
       grid-template-columns: 50% 50%;
+      gap: $space_l;
     }
     @include mq('mon') {
     }

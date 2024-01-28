@@ -93,6 +93,14 @@ class ReviewController extends Controller
 			->orderByDesc('created_at')
 			->get();
 	}
+
+	public function reviewedByUser(string $r_id)
+	{
+		$isReviewed = Review::where('receiver_id', $r_id)
+							->where('sender_id', Auth::id())
+							->get();
+		return $isReviewed;
+	}
 }
 
 

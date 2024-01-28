@@ -2,4 +2,7 @@
   font-size: $font-size_l;
   text-align: center;
   font-weight: bold;
+  @include mq() {
+    font-size: initial;
+  }
 }

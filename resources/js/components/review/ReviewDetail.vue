@@ -22,10 +22,10 @@
 						{{ review.created_at | moment }}
 					</div>
 				</div>
+				<div class="p-review-detail__recommend">{{ review.recommend }}</div>
 			</div>
 			
 			<!-- ユーザーの評価	-->
-			<div class="p-review-detail__recommend">{{ review.recommend }}</div>
 			<div class="p-review-detail__container">
 				<!-- レビュータイトル	-->
 				<div class="p-review-detail__review-title">{{ review.title }}</div>
@@ -46,7 +46,7 @@
 			<div class="c-title p-product-detail__title"
 					 v-show="otherProducts.length > 0">この出品者の商品
 			</div>
-			<div class="p-review-detail__other-container">
+			<div class="p-review-detail__product-container">
 				<Product v-for="product in otherProducts"
 								 :key="product.id"
 								 v-if="!product.is_purchased"
@@ -106,6 +106,7 @@ export default {
 			console.log(response.data[0]);
 			console.log('r_idの中身');
 			console.log(this.r_id);
+			//todo: 存在しないレビューは商品一覧へ遷移する処理を実装
 		},
 		async getOtherProducts() {
 			const response = await axios.get(`/api/reviews/${this.r_id}/otherProducts`);

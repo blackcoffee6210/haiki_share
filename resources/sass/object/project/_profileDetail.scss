@@ -3,6 +3,14 @@
   margin: 0 auto;
   background: $white;
   padding: $space_xl;
+  @include mq() {
+    width: 100%;
+    padding-left: $space_m;
+    padding-right: $space_m;
+  }
+  @include mq('tab') {
+    width: 500px;
+  }
   &__title {
     text-align: center;
     margin-bottom: $space_xl;
@@ -14,6 +22,11 @@
   }
   &__btn {
     width: 140px;
+    @include mq() {
+      font-size: 12px;
+      width: 120px;
+      line-height: 2;
+    }
   }
   &__image {
     display: block;
@@ -22,14 +35,26 @@
     border-radius: 50%;
     border: 1px solid $gray-color;
     margin-right: $space_xl;
+    @include mq() {
+      width: 80px;
+      height: 80px;
+    }
   }
   &__name {
     font-size: $font-size_xl;
     font-weight: bold;
+    @include mq() {
+      font-size: initial;
+    }
   }
   &__count {
     font-size: $font-size_xl;
     font-weight: bold;
+  }
+  &__text {
+    @include mq() {
+      font-size: $font-size_s;
+    }
   }
   &__address {
     font-weight: bold;
@@ -38,6 +63,9 @@
     font-weight: bold;
     margin-top: $space_m;
     margin-bottom: $space_xl;
+    @include mq('tab') {
+      font-size: initial;
+    }
   }
   &__label {
     font-weight: bold;
@@ -53,11 +81,13 @@
     position: relative;
     @include mq() {
       grid-template-columns: 50% 50%;
-      padding-left: $space_m;
+      padding-right: $space_m;
       gap: $space_m;
     }
     @include mq('tab') {
+      margin-top: $space_m;
       grid-template-columns: 50% 50%;
+      padding-right: $space_l;
     }
     @include mq('mon') {
     }

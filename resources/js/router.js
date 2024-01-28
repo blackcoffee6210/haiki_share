@@ -97,7 +97,7 @@ const routes = [ //パスとコンポーネントのマッピング
     }
   },
   {
-    path: '/reviews/:id/register', //レビュー投稿(利用者)
+    path: '/reviews/:p_id/register', //レビュー投稿(利用者)
     name: 'review.register',
     component: RegisterReview,
     props: true,
@@ -110,25 +110,25 @@ const routes = [ //パスとコンポーネントのマッピング
     name: 'review.edit',
     component: EditReview,
     props: true,
-    beforeEnter(to, from, next) { //ログイン状態かつ利用者ユーザーがページにアクセスした場合(true)、そのまま移動させる
-      (store.getters['auth/check'] && !store.getters['auth/isShopUser']) ? next() : next({name: 'index'} );
+    beforeEnter(to, from, next) { //ログイン状態、利用者ユーザー、かつログインユーザーidでアクセスした場合(true)、そのまま移動させる
+      (store.getters['auth/check'] &&
+       !store.getters['auth/isShopUser'] &&
+       to.params.s_id == store.getters['auth/userId']) ? next() : next({name: 'index'} );
     }
   },  {
     path: '/reviews/:s_id/:r_id', //レビュー詳細
     name: 'review.detail',
     component: ReviewDetail,
     props: true,
-    // beforeEnter(to, from, next) { //ログイン状態かつ利用者ユーザーがページにアクセスした場合(true)、そのまま移動させる
-    //   (store.getters['auth/check'] && !store.getters['auth/isShopUser']) ? next() : next({name: 'index'} );
-    // }
   },
   {
     path: '/users/:id/my-page', //マイページ
     name: 'user.mypage',
     component: MyPage,
     props: true,
-    beforeEnter(to, from, next) { //ログイン状態でページにアクセスがあったらそのまま移動させる
-      (store.getters['auth/check']) ? next() : next({name: 'login'});
+    beforeEnter(to, from, next) { //ログイン状態、かつログインユーザーidでアクセスがあったらそのまま移動させる
+      (store.getters['auth/check'] &&
+       to.params.id == store.getters['auth/userId']) ? next() : next({name: 'login'});
     }
   },
   {
@@ -142,8 +142,9 @@ const routes = [ //パスとコンポーネントのマッピング
     name: 'user.editProfile',
     component: EditProfile,
     props: true,
-    beforeEnter(to, from ,next) { //ログイン状態でページにアクセスがあった場合(true)、そのまま移動させる
-      (store.getters['auth/check']) ? next() : next({name: 'login'});
+    beforeEnter(to, from ,next) { //ログイン状態、かつログインユーザーidでアクセスがあったらそのまま移動させる
+      (store.getters['auth/check'] &&
+       to.params.id == store.getters['auth/userId']) ? next() : next({name: 'login'});
     }
   },
   {
@@ -151,8 +152,9 @@ const routes = [ //パスとコンポーネントのマッピング
     name: 'user.editPassword',
     component: EditPassword,
     props: true,
-    beforeEnter(to, from ,next) { //ログイン状態でページにアクセスがあった場合(true)、そのまま移動させる
-      (store.getters['auth/check']) ? next() : next({name: 'login'});
+    beforeEnter(to, from ,next) { //ログイン状態、かつログインユーザーidでアクセスがあったらそのまま移動させる
+      (store.getters['auth/check'] &&
+       to.params.id == store.getters['auth/userId']) ? next() : next({name: 'login'});
     }
   },
   {
@@ -161,25 +163,28 @@ const routes = [ //パスとコンポーネントのマッピング
     component: Posted,
     props: true,
     beforeEnter(to, from ,next) { //ログイン状態かつコンビニユーザーがページにアクセスした場合(true)、そのまま移動させる
-      (store.getters['auth/check'] && store.getters['auth/isShopUser']) ? next() : next({name: 'index'});
+      (store.getters['auth/check'] &&
+       store.getters['auth/isShopUser'] &&
+       to.params.id == store.getters['auth/userId']) ? next() : next({name: 'index'});
     }
   },
   {
-    path: '/user/:id/liked', //いいねした商品一覧(利用者)
+    path: '/users/:id/liked', //いいねした商品一覧(利用者)
     name: 'user.liked',
     component: Liked,
     props: true,
-    beforeEnter(to, from ,next) { //ログイン状態かつ利用者ユーザーがページにアクセスした場合(true)、そのまま移動させる
-      (store.getters['auth/check'] && !store.getters['auth/isShopUser']) ? next() : next({name: 'index'});
+    beforeEnter(to, from ,next) { //ログイン状態、利用者ユーザーかつログインユーザーidでページにアクセスした場合(true)、そのまま移動させる
+      (store.getters['auth/check'] && !store.getters['auth/isShopUser'] && to.params.id == store.getters['auth/userId']) ?
+        next() : next({name: 'index'});
     }
   },
   {
-    path: '/users/:id/purchased', //購入した商品一覧(利用者)
+    path: '/users/:id/purchased', //購入した（された）商品一覧
     name: 'user.purchased',
     component: Purchased,
     props: true,
-    beforeEnter(to, from ,next) { //ログイン状態でページにアクセスした場合(true)、そのまま移動させる
-      (store.getters['auth/check']) ? next() : next({name: 'index'});
+    beforeEnter(to, from ,next) { //ログイン状態、かつログインユーザーidでページにアクセスした場合(true)、そのまま移動させる
+      (store.getters['auth/check'] && to.params.id == store.getters['auth/userId']) ? next() : next({name: 'index'});
     }
   },
   {
@@ -187,8 +192,8 @@ const routes = [ //パスとコンポーネントのマッピング
     name: 'user.canceled',
     component: Canceled,
     props: true,
-    beforeEnter(to, from ,next) { //ログイン状態でページにアクセスした場合(true)、そのまま移動させる
-      (store.getters['auth/check']) ? next() : next({name: 'index'});
+    beforeEnter(to, from ,next) { //ログイン状態、かつログインユーザーidでページにアクセスした場合(true)、そのまま移動させる
+      (store.getters['auth/check'] && to.params.id == store.getters['auth/userId']) ? next() : next({name: 'index'});
     }
   },
   {
@@ -196,8 +201,8 @@ const routes = [ //パスとコンポーネントのマッピング
     name: 'user.reviewed',
     component: Reviewed,
     props: true,
-    beforeEnter(to, from ,next) { //ログイン状態でページにアクセスした場合(true)、そのまま移動させる
-      (store.getters['auth/check']) ? next() : next({name: 'index'});
+    beforeEnter(to, from ,next) { //ログイン状態、かつログインユーザーidでページにアクセスした場合(true)、そのまま移動させる
+      (store.getters['auth/check'] && to.params.id == store.getters['auth/userId']) ? next() : next({name: 'index'});
     }
   },
   {

@@ -4,15 +4,20 @@
   background: $white;
   padding: $space_xl;
   position: relative;
+  @include mq() {
+    width: 100%;
+    padding-left: $space_m;
+    padding-right: $space_m;
+  }
   &__btn {
-    //position: absolute;
-    //top: 130px;
-    //right: 20px;
   }
   &__user-info {
     display: flex;
     align-items: center;
     margin-bottom: $space_xl;
+    @include mq() {
+      margin-bottom: 50px;
+    }
   }
   &__image {
     width: 80px;
@@ -28,6 +33,12 @@
     top: 20px;
     right: 20px;
     padding: $space_s $space_m;
+    @include mq() {
+      width: 125px;
+      text-align: center;
+      top: 135px;
+      left: 10px;
+    }
   }
   &__container {
     display: flex;
@@ -37,13 +48,21 @@
   }
   &__review-title {
     font-weight: bold;
+    @include mq() {
+      font-size: $font-size_default;
+    }
   }
-  &__other-container {
+  &__product-container {
     width: 100%;
     display: grid;
     grid-template-columns: 33.3% 33.3% 33.3%;
     gap: $space_l;
     padding-right: $space_2xl;
     position: relative;
+    @include mq() {
+      grid-template-columns: 50% 50%;
+      padding-right: $space_m;
+      gap: $space_m;
+    }
   }
 }

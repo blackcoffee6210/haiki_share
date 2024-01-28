@@ -22,7 +22,7 @@ class UserController extends Controller
 
 	public function index(string $id) { //ユーザー情報取得
     	$user = User::find($id);
-    	return $user;
+    	return response($user, 200);
 	}
 
 	public function shopUser(string $id) //購入した商品のコンビニユーザーを取得

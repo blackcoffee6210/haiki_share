@@ -38,8 +38,8 @@
     }
     @include mq('tab') {
       grid-template-columns: 50% 50%;
-      gap: $space_xl;
-      padding-right: $space_xl;
+      gap: $space_l;
+      padding-right: $space_m;
     }
   }
   &__card {

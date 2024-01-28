@@ -33,10 +33,10 @@
 								 v-model.number="reviewForm.recommendation_id">
 					<label :for="'recommend' + recommendations[0].id"
 								 class="p-review-form__recommendation__label">
-						<font-awesome-icon style="font-size: 24px;"
+						<font-awesome-icon class="p-review-form__fa"
 															 :icon="['far', 'laugh-beam']"
 															 color="#ff6f80" />
-						<span class="u-ml5">{{ recommendations[0].name }}</span>
+						<span class="p-review-form__text">{{ recommendations[0].name }}</span>
 					</label>
 					<input type="radio"
 								 :id="'recommend' + recommendations[1].id"
@@ -46,10 +46,10 @@
 								 v-model.number="reviewForm.recommendation_id">
 					<label :for="'recommend' + recommendations[1].id"
 								 class="p-review-form__recommendation__label">
-						<font-awesome-icon style="font-size: 24px;"
+						<font-awesome-icon class="p-review-form__fa"
 															 :icon="['far', 'smile']"
 															 color="#ff6f80" />
-						<span class="u-ml5">{{ recommendations[1].name }}</span>
+						<span class="p-review-form__text">{{ recommendations[1].name }}</span>
 					</label>
 					<input type="radio"
 								 :id="'recommend' + recommendations[2].id"
@@ -59,10 +59,10 @@
 								 v-model.number="reviewForm.recommendation_id">
 					<label :for="'recommend' + recommendations[2].id"
 								 class="p-review-form__recommendation__label">
-						<font-awesome-icon style="font-size: 24px;"
+						<font-awesome-icon class="p-review-form__fa"
 															 :icon="['far', 'meh']"
 															 color="#ff6f80" />
-						<span class="u-ml5">{{ recommendations[2].name }}</span>
+						<span class="p-review-form__text">{{ recommendations[2].name }}</span>
 					</label>
 				</div>
 
@@ -110,10 +110,12 @@
 					</div>
 				</div>
 				
-				<!-- 投稿ボタン -->
-				<button class="c-btn p-review-form__btn"
-								type="submit">投稿する
-				</button>
+				<div class="p-review-form__btn-container">
+					<!-- 投稿ボタン -->
+					<button class="c-btn p-review-form__btn--post"
+									type="submit">投稿する
+					</button>
+				</div>
 			</form>
 		</div>
 	</div>
@@ -130,12 +132,16 @@ export default {
 		Loading
 	},
 	props: {
-		id: String,
-		required: true
+		p_id: {
+			type: String,
+			required: true
+		}
 	},
 	data() {
 		return {
 			loading: false, //ローディング
+			purchasedByUser: false,
+			reviewedByUser: false,
 			errors: {       //エラーメッセージ
 				recommendation_id: null,
 				title: null,
@@ -159,8 +165,21 @@ export default {
 		}),
 	},
 	methods: {
+		async getPurchasedByUser() {
+			const response = await axios.get(`/api/products/${this.p_id}/purchasedByUser`);
+			
+			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
+				this.$store.commit('error/setCode', response.status);
+				return false;
+			}
+			response.data[0] ? this.purchasedByUser = true : this.purchasedByUser = false;
+			
+			if(!this.purchasedByUser) { //purchasedByUserがfalse(他人の購入した商品)だったら商品一覧画面に遷移する
+				this.$router.push({name: 'index'});
+			}
+		},
 		async getShopUser() { //商品idを元に出品ユーザーを取得
-			const response = await axios.get(`/api/users/${this.id}/shopUser`); //API通信
+			const response = await axios.get(`/api/users/${this.p_id}/shopUser`); //API通信
 
 			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
 				this.$store.commit('error/setCode', response.status);
@@ -170,7 +189,24 @@ export default {
 			this.reviewForm.shopUser    = response.data[0];                 //出品者の情報
 			this.reviewForm.sender_id   = this.userId;                      //送信者（レビュー投稿者）のユーザーid
 			this.reviewForm.receiver_id = this.reviewForm.shopUser.user_id; //受信者（出品者）のユーザーid
+			console.log('getShopUser');
 			console.log(this.reviewForm);
+		},
+		async getReviewedByUser() { //ログインユーザーが既にレビューを投稿済みかどうか取得する todo: 実装
+			const response = await axios.get(`/api/reviews/${this.reviewForm.receiver_id}/reviewedByUser`);
+			
+			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
+				this.$store.commit('error/setCode', response.status);
+				return false;
+			}
+			response.data[0] ? this.reviewedByUser = true : this.reviewedByUser = false;
+			console.log('getReviewedByUser')
+			console.log(response.data[0])
+			console.log(this.reviewedByUser)
+			
+			if(this.reviewedByUser) { //既にレビューしていたら商品一覧画面に遷移する
+				this.$router.push({name: 'index'});
+			}
 		},
 		async getRecommendation() { //ユーザー評価取得
 			const response = await axios.get('/api/recommendations') //API接続
@@ -208,7 +244,9 @@ export default {
 	watch: {
 		$route: {
 			async handler() {
+				this.getPurchasedByUser();
 				this.getShopUser();
+				this.getReviewedByUser();
 				this.getRecommendation();
 			},
 			immediate: true

@@ -16,7 +16,15 @@
     color: $main-color;
     border-radius: 3px;
     background: $white;
-    margin-right: 17px;
+    &--left {
+      margin-right: $space_xl;
+      @include mq() {
+        margin-right: 6px;
+      }
+    }
+    &--right {
+
+    }
     &:hover {
       color: $main-color;
       text-decoration: none;

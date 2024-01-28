@@ -59,17 +59,11 @@
 							</div>
 						</div>
 					</div>
-					<!-- ボタンコンテナ(右側)	-->
+					<!-- ボタンコンテナ(右側)	--><!-- todo: SPの気になる、レビュー投稿、購入キャンセルが3つ並んだときのスタイル -->
 					<div class="p-product-detail__btn-container">
-						<!-- 商品編集ボタン(自分の商品のときだけ & 購入されていない) -->
-						<router-link class="c-btn p-product-detail__btn--edit"
-												 v-show="product.is_my_product && !product.is_purchased"
-												 :to="{ name: 'product.edit', params: {id: id.toString() } }">編集する
-						</router-link>
-						
 						<!-- お気に入りボタン	-->
 						<!-- 自分の商品または購入されている商品は押せない -->
-						<button class="c-btn c-btn--white p-product-detail__btn--like"
+						<button class="c-btn c-btn--white p-product-detail__btn p-product-detail__btn--like"
 										:style="{
 											'border-color': [isLike ? '#ff3c53' : 'lightgray'],
 											'background'  : [isLike ? '#ffd5da' : 'white']
@@ -87,10 +81,16 @@
 							{{ product.likes_count }}
 						</button>
 						
+						<!-- 商品編集ボタン(自分の商品のときだけ & 購入されていない) -->
+						<router-link class="c-btn p-product-detail__btn"
+												 v-show="product.is_my_product && !product.is_purchased"
+												 :to="{ name: 'product.edit', params: {id: id.toString() } }">編集する
+						</router-link>
+						
 						<!-- 商品購入ボタン	-->
 						<!-- 利用者ユーザー、かつ自分の商品じゃない、かつ自分が購入してないときに出す -->
 						<!-- コンビニユーザー、または自分の商品、または購入されている商品は押せない -->
-						<button class="c-btn p-product-detail__btn--purchase"
+						<button class="c-btn p-product-detail__btn"
 										@click="purchase"
 										v-show="!isShopUser && !product.is_my_product && !purchasedByUser"
 										:disabled="isShopUser || product.is_my_product || product.is_purchased">
@@ -98,15 +98,14 @@
 							<span v-else>購入</span>
 						</button>
 						
-						<!-- レビュー投稿ボタン -->
-						<!-- 購入したユーザーかつレビューを投稿していないときに表示 -->
-						<router-link class="c-btn p-product-detail__btn"
+						<!-- レビュー投稿ボタン 購入したユーザーかつレビューを投稿していないときに表示 -->
+						<router-link class="c-btn p-product-detail__btn p-product-detail__btn--review"
 												 v-show="purchasedByUser && !isReviewed"
-												 :to="{ name: 'review.register', params: {id: id.toString() } }">レビュー投稿
+												 :to="{ name: 'review.register',
+												  			params: {p_id: id.toString() } }">レビュー投稿
 						</router-link>
 						
-						<!-- 購入キャンセルボタン	-->
-						<!-- 自分が購入した商品のときに表示 -->
+						<!-- 購入キャンセルボタン 自分が購入した商品のときに表示	-->
 						<!--todo: 購入から3日以内または賞味期限1日前まではキャンセル可能-->
 						<button v-show="purchasedByUser"
 										@click="cancel"
@@ -141,7 +140,7 @@
 				<div class="c-title p-product-detail__title"
 						 v-show="otherProducts.length > 0">この出品者の他の商品
 				</div>
-				<div class="p-product-detail__other-container">
+				<div class="p-product-detail__products-container">
 					<Product v-show="!loading"
 									 v-for="product in otherProducts"
 									 v-if="!product.is_purchased"
@@ -154,7 +153,7 @@
 						 v-show="similarProducts.length > 0">
 					同じカテゴリーの商品
 				</div>
-				<div class="p-product-detail__other-container">
+				<div class="p-product-detail__products-container">
 					<Product v-show="!loading"
 									 v-for="product in similarProducts"
 									 v-if="!product.is_purchased"
@@ -218,9 +217,9 @@ export default {
 		})
 	},
 	methods: {
-		async getPurchasedByUser() {
+		async getPurchasedByUser() { //todo: 実装する
 			const response = await axios.get(`/api/products/${this.id}/purchasedByUser`);
-			
+
 			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
 				this.$store.commit('error/setCode', response.status);
 				return false;
@@ -269,11 +268,6 @@ export default {
 			}
 			this.similarProducts = response.data; //responseデータをプロパティに代入
 		},
-		// goProfileDetail() { //プロフィール詳細画面へ遷移
-		// 	this.$router.push({
-		// 		name: 'user.detail',
-		// 		params: { id: this.product.user_id.toString() } });
-		// },
 		async onLikeClick() { //「お気に入りボタン」を押したときの処理を行うメソッド
 			if(!this.isLogin) { //ログインしていなかったらアレートを出す
 				if(confirm('いいね機能を使うにはログインしてください')) {

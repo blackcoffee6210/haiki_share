@@ -27,12 +27,20 @@
 			<div class="p-profile-detail__container u-space-between">
 				<div>
 					<span class="p-profile-detail__count">{{ products.length }}</span>
-					<span v-show="shopUser">出品数</span>
-					<span v-show="!shopUser">購入数</span>
+					<span class="p-profile-detail__text"
+								v-show="shopUser">出品数
+					</span>
+					<span class="p-profile-detail__text"
+								v-show="!shopUser">購入数
+					</span>
 					
 					<span class="p-profile-detail__count u-ml15">{{ reviews.length }}</span>
-					<span v-show="shopUser">レビューされた数</span>
-					<span v-show="!shopUser">レビューした数</span>
+					<span class="p-profile-detail__text"
+								v-show="shopUser">レビューされた数
+					</span>
+					<span class="p-profile-detail__text"
+								v-show="!shopUser">レビューした数
+					</span>
 				</div>
 				<!-- プロフィール編集	-->
 				<router-link class="c-btn p-profile-detail__btn"
@@ -164,6 +172,9 @@ export default {
 			this.user = response.data; //responseデータをプロパティに代入
 			console.log('getUserの中身')
 			console.log(response.data);
+			if(!this.user) { //存在しなかったら商品一覧画面に遷移する
+				this.$router.push({name: 'index'})
+			}
 		},
 		async getPurchasedProducts() { //利用者ユーザーの購入した商品を取得
 			const response = await axios.get(`/api/users/${this.user.id}/purchased`); //API接続

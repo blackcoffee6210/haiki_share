@@ -2,7 +2,7 @@
   border-radius: 3px;
   background: $white;
   position: relative;
-  margin-top: 32px;
+  margin-top: 35px;
   @include mq() {
     margin-top: $space_xl;
     padding-top: $space_s;
@@ -31,11 +31,11 @@
     @include mq() {
       font-size: $font-size_m;
       text-align: center;
-      padding: 10px 20px;
+      padding: $space_m $space_xl;
     }
     @include mq('tab') {
-      font-size: $font-size_default;
-      padding-left: $space_xl;
+      font-size: $font-size_m;
+      padding-left: $space_l;
     }
   }
 }
@@ -45,14 +45,24 @@
   background: $white;
   padding: $space_xl;
   @include mq() {
-    padding-left: $space_m;
-    padding-right: $space_m;
+    padding: $space_m;
+    margin-top: $space_l;
+  }
+  @include mq('tab') {
+    margin-top: 73px;
+    padding: $space_l;
   }
   &__search {
     margin-bottom: $space_xl;
+    @include mq() {
+      margin-bottom: $space_m;
+    }
   }
   &__sort {
     margin-bottom: $space_xl;
+    @include mq() {
+      margin-bottom: $space_m;
+    }
   }
   &__select {
     width: 100%;
@@ -64,12 +74,10 @@
     text-align: left;
     margin-bottom: $space_s;
     @include mq() {
-      margin-top: $space_m;
-      margin-bottom: $space_m;
+      font-size: $font-size_m;
     }
     @include mq('tab') {
-      margin-top: 60px;
-      margin-bottom: 25px;
+      font-size: initial;
     }
   }
   &__card-container {

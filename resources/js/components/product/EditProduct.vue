@@ -139,7 +139,7 @@
 					
 					<div class="p-product-form__btn-container">
 						<!-- 削除ボタン	-->
-						<button class="c-btn c-btn--white p-product-form__btn--delete"
+						<button class="c-btn c-btn--white p-product-form__btn"
 										@click="deleteProduct"
 										type="button">削除する
 						</button>
@@ -215,8 +215,8 @@ export default {
 			
 			this.product = response.data; //プロパティに値をセットする
 			
-			if(this.product.is_purchased) { //購入されていたらマイページに遷移する
-				this.$router.push({ name: 'user.mypage', params: { id: this.product.user_id.toString()}});
+			if(this.product.is_purchased || this.product.user_id != this.userId) { //購入された流商品、かつ自分の商品じゃなければ商品一覧画面に遷移する
+				this.$router.push({ name: 'index'});
 			}
 		},
 		onFileChange(event) { //フォームでファイルが選択されたら実行されるメソッド

@@ -2,9 +2,8 @@
   width: 100%;
   margin: 0 auto;
   @include mq() {
-    width: 100%;
-    padding-left: $space_xl;
-    padding-right: $space_xl;
+    padding-left: $space_m;
+    padding-right: $space_m;
   }
   &__title {
     font-weight: bold;
@@ -12,6 +11,9 @@
     margin-bottom: $space_3xl;
     @include mq() {
       font-size: $font-size_default;
+      margin-bottom: $space_m;
+    }
+    @include mq('tab') {
       margin-bottom: $space_xl;
     }
   }
