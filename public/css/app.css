@@ -3449,6 +3449,11 @@ body {
   transition: 0.3s;
 }
 
+.p-sidebar__link--active {
+  color: #333;
+  background: rgba(0, 0, 0, 0.05);
+}
+
 @media screen and (max-width: 450px) {
   .p-sidebar__link {
     font-size: 1.4rem;

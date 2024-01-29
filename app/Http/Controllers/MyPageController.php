@@ -29,7 +29,7 @@ class MyPageController extends Controller
 	{
 		return User::find(Auth::id())
 				   ->products()
-				   ->orderByDesc('products.created_at')
+				   ->orderByDesc('products.updated_at')
 				   ->take(5)
 				   ->get();
 	}

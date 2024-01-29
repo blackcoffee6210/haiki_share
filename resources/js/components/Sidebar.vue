@@ -5,30 +5,40 @@
 			
 			<!-- マイページ -->
 			<router-link class="p-sidebar__link"
+									 active-class="p-sidebar__link--active"
+									 exact
 									 :to="{ name: 'user.mypage',
 									  			params: { id: id.toString() }}">マイページ
 			</router-link>
 			
 			<!-- プロフィール詳細	-->
 			<router-link class="p-sidebar__link"
+									 active-class="p-sidebar__link--active"
+									 exact
 									 :to="{ name: 'user.detail',
 									  			params: { id: id.toString() }}" >プロフィール詳細
 			</router-link>
 			
 			<!-- プロフィール編集	-->
 			<router-link class="p-sidebar__link"
+									 active-class="p-sidebar__link--active"
+									 exact
 									 :to="{ name: 'user.editProfile',
 									  			params: { id: id.toString() }}" >プロフィール編集
 			</router-link>
 			
 			<!-- パスワード変更 -->
 			<router-link class="p-sidebar__link"
+									 active-class="p-sidebar__link--active"
+									 exact
 									 :to="{ name: 'user.editPassword',
 									  			params: { id: id.toString() }}" >パスワード変更
 			</router-link>
 			
 			<!-- 出品する	-->
 			<router-link class="p-sidebar__link"
+									 active-class="p-sidebar__link--active"
+									 exact
 									 v-if="isShopUser"
 									 :to="{ name: 'product.register',
 									  			params: { id: id.toString() }}" >出品する
@@ -36,6 +46,8 @@
 			
 			<!-- 出品した商品一覧 -->
 			<router-link class="p-sidebar__link"
+									 active-class="p-sidebar__link--active"
+									 exact
 									 v-if="isShopUser"
 									 :to="{ name: 'user.posted',
 									  			params: { id: id.toString() }}" >出品した商品一覧
@@ -43,6 +55,8 @@
 			
 			<!-- お気に入りした商品一覧 -->
 			<router-link class="p-sidebar__link"
+									 active-class="p-sidebar__link--active"
+									 exact
 									 v-if="!isShopUser"
 									 :to="{ name: 'user.liked',
 									  			params: { id: id.toString() }}" >お気に入りした商品一覧
@@ -50,6 +64,8 @@
 			
 			<!-- 購入した(された)商品一覧 -->
 			<router-link class="p-sidebar__link"
+									 active-class="p-sidebar__link--active"
+									 exact
 									 :to="{ name: 'user.purchased',
 									  			params: { id: id.toString() }}" >
 				<span v-show="isShopUser">購入された商品一覧</span>
@@ -58,6 +74,8 @@
 			
 			<!-- キャンセルした(された)商品一覧 -->
 			<router-link class="p-sidebar__link"
+									 active-class="p-sidebar__link--active"
+									 exact
 									 :to="{ name: 'user.canceled',
 									  			params: { id: id.toString() }}" >
 				<span v-show="isShopUser">キャンセルされた商品一覧</span>
@@ -66,6 +84,8 @@
 			
 			<!-- 削除した商品一覧 -->
 			<router-link class="p-sidebar__link"
+									 active-class="p-sidebar__link--active"
+									 exact
 									 v-if="isShopUser"
 									 :to="{ name: 'user.deleted',
 									  			params: { id: id.toString() }}" >削除した商品一覧
@@ -73,6 +93,8 @@
 
 			<!-- 投稿した(された)レビュー一覧 -->
 			<router-link class="p-sidebar__link"
+									 active-class="p-sidebar__link--active"
+									 exact
 									 :to="{ name: 'user.reviewed',
 									  		  params: { id: id.toString() }}" >
 				<span v-show="isShopUser">投稿されたレビュー一覧</span>

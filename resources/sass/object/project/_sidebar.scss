@@ -28,6 +28,11 @@
       border-left: 5px solid $main-color;
       transition: .3s;
     }
+    &--active {
+      color: $font-color;
+      background: rgba(0,0,0,.05);
+      //border-left: 5px solid $main-color;
+    }
     @include mq() {
       font-size: $font-size_m;
       text-align: center;
