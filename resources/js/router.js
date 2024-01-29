@@ -27,12 +27,18 @@ import Posted          from "./components/user/Posted";
 import ProfileDetail   from "./components/user/ProfileDetail";
 import Purchased       from "./components/user/Purchased";
 import Reviewed        from "./components/user/Reviewed";
-import Withdrawal      from "./components/user/Withdrawal";              // ↑ここまで
+import Withdrawal      from "./components/user/Withdrawal";
+import Top             from "./components/Top";                         // ↑ここまで
 
 
 Vue.use(VueRouter); //VueRouterプラグインを利用する(<router-view>コンポーネントなどを使うことができる)
 
 const routes = [ //パスとコンポーネントのマッピング
+  {
+    path: '/top', //トップページ
+    name: 'top',
+    component: Top
+  },
   {
     path: '/register', //会員登録
     name: 'register',

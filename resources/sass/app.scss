@@ -1,82 +1,28 @@
-//=================================================================
-//Foundation
-//================================================================
-// Reset
-@import "foundation/reset";
-// Variables
-@import 'foundation/variables';
-// Base
-@import "foundation/base";
-// Fonts
-//@import url('https://fonts.googleapis.com/css?family=Nunito');
+/*
+ * Foundation
+ */
+@import "foundation/_reset"; // Reset
+@import 'foundation/_variables'; // Variables
+@import "foundation/_base"; // Base
+//@import url('https://fonts.googleapis.com/css?family=Nunito'); // Fonts
+
+/*
+ * Layout(配置や幅などに関するスタイル)
+ */
+@import "layout/*.scss";
 
 
+/*
+ *Object/Component
+ */
+@import "object/component/*.scss";
 
-//=================================================================
-//Layout(配置や幅などに関するスタイル)
-//=================================================================
-@import "layout/footer";
-@import "layout/header";
-@import "layout/main";
-@import "layout/sidebar";
+/*
+ *Object/Project
+ */
+@import "object/project/*.scss";
 
-//=================================================================
-//Object/Component
-//=================================================================
-@import "object/component/badge";
-@import "object/component/btn";
-@import "object/component/card";
-@import "object/component/checkbox";
-@import "object/component/flex";
-@import "object/component/goTop";
-@import "object/component/icon";
-@import "object/component/input";
-@import "object/component/label";
-@import "object/component/link";
-@import "object/component/loading";
-@import "object/component/message";
-@import "object/component/pagination";
-@import "object/component/select";
-@import "object/component/title";
-
-
-//=================================================================
-//Object/Project
-//=================================================================
-@import "object/project/404";
-@import "object/project/error";
-@import "object/project/agreement";
-@import "object/project/authForm";
-@import "object/project/editPassword";
-@import "object/project/editProfile";
-@import "object/project/footer";
-@import "object/project/header";
-@import "object/project/index";
-@import "object/project/list";
-@import "object/project/mypage";
-@import "object/project/policy";
-@import "object/project/product";
-@import "object/project/productDetail";
-@import "object/project/productForm";
-@import "object/project/profileDetail";
-@import "object/project/review";
-@import "object/project/reviewDetail";
-@import "object/project/reviewForm";
-@import "object/project/sidebar";
-@import "object/project/system";
-@import "object/project/tokutei";
-@import "object/project/withdrawal";
-
-//=================================================================
-//Object/Utility
-//=================================================================
-@import "object/utility/border";
-@import "object/utility/br";
-@import "object/utility/display";
-@import "object/utility/font";
-@import "object/utility/height";
-@import "object/utility/margin";
-@import "object/utility/padding";
-@import "object/utility/position";
-@import "object/utility/width";
-
+/*
+ *Object/Utility
+ */
+@import "object/utility/*.scss";
