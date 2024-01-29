@@ -81,6 +81,18 @@
       display: block;
     }
   }
+  &__expire {
+    font-weight: bold;
+    text-align: right;
+    margin-bottom: $space_xl;
+    &__date {
+      font-weight: bold;
+      font-size: $font-size_2xl;
+      @include mq() {
+        font-size: $font-size_m;
+      }
+    }
+  }
   &__user-info {
     display: flex;
     align-items: center;
@@ -148,8 +160,9 @@
         width: 50%;
       }
     }
-    &--review {
-      margin-right: $space_m;
+    &--review,
+    &--delete {
+      margin-right: $space_xl;
       padding-top: 7px;
       @include mq('tab') {
         margin-right: $space_l;

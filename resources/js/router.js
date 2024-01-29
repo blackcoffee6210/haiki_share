@@ -18,6 +18,7 @@ import EditReview      from "./components/review/EditReview";
 import RegisterReview  from "./components/review/RegisterReview";
 import ReviewDetail    from "./components/review/ReviewDetail";
 import Canceled        from "./components/user/Canceled";
+import Deleted         from "./components/user/Deleted";
 import EditPassword    from "./components/user/EditPassword";
 import EditProfile     from "./components/user/EditProfile";
 import Liked           from "./components/user/Liked";
@@ -84,7 +85,9 @@ const routes = [ //パスとコンポーネントのマッピング
     name: 'product.register',
     component: RegisterProduct,
     beforeEnter(to, from, next) { //ログインしている、かつコンビニユーザーの場合はページを表示、それ以外は商品一覧画面に遷移する
-      (store.getters['auth/check'] && store.getters['auth/isShopUser']) ? next() : next({name: 'index'});
+      (store.getters['auth/check'] &&
+       store.getters['auth/isShopUser']) ?
+        next() : next({name: 'index'});
     }
   },
   {
@@ -93,7 +96,9 @@ const routes = [ //パスとコンポーネントのマッピング
     component: EditProduct,
     props: true,
     beforeEnter(to, from, next) { //ログイン状態かつコンビニユーザーがページにアクセスした場合(true)、そのまま移動させる
-      (store.getters['auth/check'] && store.getters['auth/isShopUser']) ? next() : next({name: 'index'});
+      (store.getters['auth/check'] &&
+       store.getters['auth/isShopUser']) ?
+        next() : next({name: 'index'});
     }
   },
   {
@@ -102,7 +107,9 @@ const routes = [ //パスとコンポーネントのマッピング
     component: RegisterReview,
     props: true,
     beforeEnter(to, from, next) { //ログイン状態かつ利用者ユーザーがページにアクセスした場合(true)、そのまま移動させる
-      (store.getters['auth/check'] && !store.getters['auth/isShopUser']) ? next() : next({name: 'index'} );
+      (store.getters['auth/check'] &&
+       !store.getters['auth/isShopUser']) ?
+        next() : next({name: 'index'} );
     }
   },
   {
@@ -113,7 +120,8 @@ const routes = [ //パスとコンポーネントのマッピング
     beforeEnter(to, from, next) { //ログイン状態、利用者ユーザー、かつログインユーザーidでアクセスした場合(true)、そのまま移動させる
       (store.getters['auth/check'] &&
        !store.getters['auth/isShopUser'] &&
-       to.params.s_id == store.getters['auth/userId']) ? next() : next({name: 'index'} );
+       to.params.s_id == store.getters['auth/userId']) ?
+        next() : next({name: 'index'} );
     }
   },  {
     path: '/reviews/:s_id/:r_id', //レビュー詳細
@@ -128,7 +136,8 @@ const routes = [ //パスとコンポーネントのマッピング
     props: true,
     beforeEnter(to, from, next) { //ログイン状態、かつログインユーザーidでアクセスがあったらそのまま移動させる
       (store.getters['auth/check'] &&
-       to.params.id == store.getters['auth/userId']) ? next() : next({name: 'login'});
+       to.params.id == store.getters['auth/userId']) ?
+        next() : next({name: 'login'});
     }
   },
   {
@@ -144,7 +153,8 @@ const routes = [ //パスとコンポーネントのマッピング
     props: true,
     beforeEnter(to, from ,next) { //ログイン状態、かつログインユーザーidでアクセスがあったらそのまま移動させる
       (store.getters['auth/check'] &&
-       to.params.id == store.getters['auth/userId']) ? next() : next({name: 'login'});
+       to.params.id == store.getters['auth/userId']) ?
+        next() : next({name: 'login'});
     }
   },
   {
@@ -154,7 +164,8 @@ const routes = [ //パスとコンポーネントのマッピング
     props: true,
     beforeEnter(to, from ,next) { //ログイン状態、かつログインユーザーidでアクセスがあったらそのまま移動させる
       (store.getters['auth/check'] &&
-       to.params.id == store.getters['auth/userId']) ? next() : next({name: 'login'});
+       to.params.id == store.getters['auth/userId']) ?
+        next() : next({name: 'login'});
     }
   },
   {
@@ -165,7 +176,8 @@ const routes = [ //パスとコンポーネントのマッピング
     beforeEnter(to, from ,next) { //ログイン状態かつコンビニユーザーがページにアクセスした場合(true)、そのまま移動させる
       (store.getters['auth/check'] &&
        store.getters['auth/isShopUser'] &&
-       to.params.id == store.getters['auth/userId']) ? next() : next({name: 'index'});
+       to.params.id == store.getters['auth/userId']) ?
+        next() : next({name: 'index'});
     }
   },
   {
@@ -174,7 +186,9 @@ const routes = [ //パスとコンポーネントのマッピング
     component: Liked,
     props: true,
     beforeEnter(to, from ,next) { //ログイン状態、利用者ユーザーかつログインユーザーidでページにアクセスした場合(true)、そのまま移動させる
-      (store.getters['auth/check'] && !store.getters['auth/isShopUser'] && to.params.id == store.getters['auth/userId']) ?
+      (store.getters['auth/check'] &&
+       !store.getters['auth/isShopUser'] &&
+       to.params.id == store.getters['auth/userId']) ?
         next() : next({name: 'index'});
     }
   },
@@ -184,7 +198,9 @@ const routes = [ //パスとコンポーネントのマッピング
     component: Purchased,
     props: true,
     beforeEnter(to, from ,next) { //ログイン状態、かつログインユーザーidでページにアクセスした場合(true)、そのまま移動させる
-      (store.getters['auth/check'] && to.params.id == store.getters['auth/userId']) ? next() : next({name: 'index'});
+      (store.getters['auth/check'] &&
+       to.params.id == store.getters['auth/userId']) ?
+        next() : next({name: 'index'});
     }
   },
   {
@@ -193,7 +209,21 @@ const routes = [ //パスとコンポーネントのマッピング
     component: Canceled,
     props: true,
     beforeEnter(to, from ,next) { //ログイン状態、かつログインユーザーidでページにアクセスした場合(true)、そのまま移動させる
-      (store.getters['auth/check'] && to.params.id == store.getters['auth/userId']) ? next() : next({name: 'index'});
+      (store.getters['auth/check'] &&
+       to.params.id == store.getters['auth/userId']) ?
+        next() : next({name: 'index'});
+    }
+  },
+  {
+    path: '/users/:id/deleted', //削除した商品一覧
+    name: 'user.deleted',
+    component: Deleted,
+    props: true,
+    beforeEnter(to, from ,next) { //ログイン状態、かつログインユーザーidでページにアクセスした場合(true)、そのまま移動させる
+      (store.getters['auth/check'] &&
+       store.getters['auth/isShopUser'] &&
+       to.params.id == store.getters['auth/userId']) ?
+        next() : next({name: 'index'});
     }
   },
   {
@@ -202,7 +232,9 @@ const routes = [ //パスとコンポーネントのマッピング
     component: Reviewed,
     props: true,
     beforeEnter(to, from ,next) { //ログイン状態、かつログインユーザーidでページにアクセスした場合(true)、そのまま移動させる
-      (store.getters['auth/check'] && to.params.id == store.getters['auth/userId']) ? next() : next({name: 'index'});
+      (store.getters['auth/check'] &&
+       to.params.id == store.getters['auth/userId']) ?
+        next() : next({name: 'index'});
     }
   },
   {

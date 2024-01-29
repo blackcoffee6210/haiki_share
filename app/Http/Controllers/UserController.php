@@ -123,6 +123,15 @@ class UserController extends Controller
 		return $products;
 	}
 
+	public function deleted() //削除した商品一覧（コンビニ）
+	{
+		$products = Product::where('user_id', Auth::id())
+						   ->onlyTrashed()
+						   ->orderByDesc('deleted_at')
+						   ->get();
+		return $products;
+	}
+
 	public function reviewed(string $id) //レビュー一覧(利用者)
 	{
 		return User::find(Auth::id())

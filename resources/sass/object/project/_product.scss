@@ -32,7 +32,6 @@
     top: 5px;
     right: 0;
     border-radius: 5px 0 0 5px;
-    font-size: $font-size_m;
     @include mq() {
       padding: 3px $space_l;
     }

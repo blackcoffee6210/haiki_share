@@ -114,15 +114,6 @@ class ProductController extends Controller
 	{
 		$product = Product::find($request->id); //商品情報取得
 
-//		$original_price = $product->price; //元値
-//		$new_price      = $request->price; //新しい金額
-//
-//		if($original_price !== $new_price) {
-//			$percent = ($original_price - $new_price) / $original_price * 100;
-//		}else {
-//			$percent = 0;
-//		}
-
 		if($request->file('image')) { //画像が送信されたらバリデーションを行う
 			$request->validate([           //画像のバリデーション
 				'image' => 'required|file|mimes:jpg,jpeg,png'
@@ -150,8 +141,19 @@ class ProductController extends Controller
 
 	public function destroy(string $id) //商品削除
 	{
-		Product::find($id)->delete();
-		return response(['product_id' => $id], 200); //商品情報取得
+		Product::find($id)->delete(); //商品情報を取得して論理削除する
+		return response(['product_id' => $id], 200);
+	}
+
+	public function restore(string $id) //論理削除した商品を復元する
+	{
+		$product = Product::withTrashed()->find($id)->restore();
+		return response(['product_id' => $id], 200);
+	}
+
+	public function forceDelete(string $id) //商品を物理削除する
+	{
+		return Product::find($id)->forceDelete();
 	}
 
 	public function like(string $id) //お気に入り登録
@@ -219,13 +221,6 @@ class ProductController extends Controller
 						  ->get();
 		return $product;
 	}
-//	public function purchasedByUser(string $id) //購入したユーザー取得
-//	{
-//		$product = History::where('product_id', $id)
-//						  ->where('buyer_id', Auth::id())
-//						  ->get();
-//		return $product;
-//	}
 
 	public function canceledByUser(string $id)
 	{

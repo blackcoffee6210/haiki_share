@@ -30,6 +30,16 @@
 					</div>
 				</div>
 				
+				<!-- 賞味期限 -->
+				<div class="p-product-detail__expire">
+					<span >賞味期限 残り</span>
+					<span class="p-product-detail__expire__date">
+						{{ product.expire | momentExpire }}
+					</span>
+					日
+					</div>
+				</div>
+				
 				<div class="p-product-detail__flex">
 					<!-- ユーザー情報のコンテナ(左側) -->
 					<div class="p-product-detail__user-info">
@@ -83,7 +93,7 @@
 						
 						<!-- 商品編集ボタン(自分の商品のときだけ & 購入されていない) -->
 						<router-link class="c-btn p-product-detail__btn"
-												 v-show="product.is_my_product && !product.is_purchased"
+												 v-show="product.is_my_product && !product.is_purchased && !product.deleted_at"
 												 :to="{ name: 'product.edit', params: {id: id.toString() } }">編集する
 						</router-link>
 						
@@ -111,7 +121,19 @@
 										@click="cancel"
 										class="c-btn c-btn--white p-product-detail__btn">購入キャンセル
 						</button>
-					
+						
+						
+						<!-- 論理削除された商品を完全削除するボタン	-->
+						<button v-show="isShopUser && product.deleted_at"
+										class="c-btn c-btn--white p-product-detail__btn--delete"
+										@click="forceDelete">完全に削除
+						</button>
+						
+						<!-- 論理削除された商品を復元するボタン	-->
+						<button v-show="isShopUser && product.deleted_at"
+										class="c-btn"
+										@click="restore">復元する
+						</button>
 					</div>
 				</div>
 				
@@ -169,7 +191,6 @@
 				</transition>
 			
 			</div>
-		</div>
 	</main>
 </template>
 
@@ -304,7 +325,6 @@ export default {
 			this.isLike = false;
 		},
 		async purchase() { //商品購入処理
-
 			if(!this.isLogin) { //ユーザーがログインしているかチェック
 				if(confirm('商品を購入するにはログインしてください')) {
 					this.$router.push({name: 'login'}); //ログインページに遷移
@@ -354,14 +374,33 @@ export default {
 					return false;
 				}
 				
-				// this.product.purchased_by_user = false; //購入キャンセルをしたのでpurchased_by_userにfalseをセット
-				// this.product.canceled_by_user  = true; //canceled_by_userにtrueをセット
-				
 				this.$store.commit('message/setContent', { //メッセージ登録
 					content: '購入をキャンセルしました'
 				});
 				
 				this.$router.push({ name: 'index' }); //インデックス画面に遷移する
+			}
+		},
+		async restore() { //論理削除した商品を復元する
+			if(confirm('この商品を復元しますか？')) {
+				const response = await axios.post(`/api/products/${this.id}/restore`); //API通信
+				if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
+					this.$store.commit('error/setCode', response.status);
+					return false;
+				}
+				
+				this.$store.commit('message/setContent', { //メッセージ登録
+					content: '商品を復元しました！'
+				});
+				
+				this.$router.push({ name: 'user.mypage',
+														params: { id: this.product.user_id.toString() }}); //マイページに遷移する
+			}
+		},
+		forceDelete() { //論理削除した商品を完全に削除する
+			if(confirm('この商品を完全に削除しますか？（復元できません）')) {
+				console.log('削除しました！');
+				this.$router.push({name: 'index'});
 			}
 		},
 		async getMyReview() { //レビュー投稿済みかどうか
