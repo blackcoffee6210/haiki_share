@@ -109,7 +109,7 @@ export default {
 				this.$store.commit('message/setContent', { //メッセージ登録
 					content: 'ログインしました！',
 				})
-				
+				// this.$router.push({name: 'index'});
 				this.$router.push(this.$router.go(-1)); //元々アクセスしたかったページにリダイレクトする
 			}
 		},

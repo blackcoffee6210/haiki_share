@@ -20,7 +20,7 @@ class ReviewController extends Controller
 	public function __construct()
 	{
 		$this->middleware('auth')
-			 ->except(['show', 'otherProducts']); //認証なしでアクセスしたいAPIはexceptに書く
+			 ->except(['show', 'otherProducts', 'topPageReview']); //認証なしでアクセスしたいAPIはexceptに書く
 	}
 
 	public function show(string $s_id, string $r_id) //レビュー取得
@@ -92,6 +92,11 @@ class ReviewController extends Controller
 		return Product::where('user_id', $r_id)
 			->orderByDesc('created_at')
 			->get();
+	}
+
+	public function topPageReview() //topページに表示するレビューをランダムで3件取得
+	{
+		return Review::inRandomOrder()->take(3)->get();
 	}
 
 	public function reviewedByUser(string $r_id)

@@ -61,4 +61,5 @@ const createApp = async () => { //アプリ起動時、Vueインスタンス生�
     template: '<App />'  //ルートコンポーネントを描画する
   });
 };
+
 createApp();

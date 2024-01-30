@@ -161,7 +161,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+// import { mapGetters } from 'vuex';
 import Loading from "../Loading";
 import { CREATED, OK, UNPROCESSABLE_ENTITY } from "../../util";
 export default {
@@ -180,7 +180,7 @@ export default {
 				expire: '',
 				price: ''
 			},
-			categories: {}, //カテゴリーを格納するプロパティ
+			categories: [], //カテゴリーを格納するプロパティ
 			preview: null,  //データURLを格納するプロパティ
 			errors: {       //エラーメッセージを格納するプロパティ
 				image: null,
@@ -193,9 +193,6 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters({
-			userId: 'auth/userId' //ユーザーID
-		}),
 		tomorrow() { //明日の日付をYYYY-MM-DDの書式で返す
 			let dt = new Date();
 			dt.setDate(dt.getDate() + 1);
@@ -253,7 +250,6 @@ export default {
 			this.loading = true; //ローティングを表示する
 			
 			const formData = new FormData;
-			formData.append('user_id',     this.userId);
 			formData.append('image',       this.product.image);
 			formData.append('category_id', this.product.category_id);
 			formData.append('name',        this.product.name);

@@ -1,6 +1,7 @@
 <template>
 	<main class="l-main">
 		<div class="p-product-detail">
+			<!--todo: 支払い確認画面を作成して、現金払いかクレジットを選択する-->
 			
 			<!-- ローディング -->
 			<Loading v-show="loading" />
@@ -277,8 +278,6 @@ export default {
 				return false; //後続の処理を抜ける
 			}
 			this.otherProducts = response.data; //responseデータをプロパティに代入
-			console.log('otherProductsの中身')
-			console.log(this.otherProducts);
 		},
 		async getSimilarProducts() {
 			const response = await axios.get(`/api/products/${this.product.category_id}/${this.id}/similar`); //API接続

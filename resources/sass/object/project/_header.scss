@@ -6,7 +6,7 @@
   position: relative;
   padding: 0 $space_xl;
   border-bottom: 1px solid $gray-color;
-  margin-bottom: 50px;
+  //margin-bottom: 50px;
   //スマートフォンのスタイル
   @include mq() {
     height: 50px;
@@ -29,6 +29,9 @@
     color: $font-color;
     &:hover {
       color: $font-color;
+    }
+    &--catch {
+      color: $main-color;
     }
     @include mq() {
       font-size: $font-size_l;

@@ -56,17 +56,18 @@ class ProductController extends Controller
 		return $prefectures;
 	}
 
-	/**
-	 * 商品詳細
-	 * @param string $id
-	 * @return Product
-	 */
+//	/**
+//	 * 商品詳細
+//	 * @param string $id
+//	 * @return Product
+//	 */
 	public function show(string $id) //商品情報取得
 	{
 		$product = Product::with(['user', 'category', 'likes', 'history'])
 						  ->withTrashed()
 						  ->find($id);
 		return $product ?? abort(404); //商品が見つからなかったら404を返す
+//		return response($product, 200);
 	}
 
 	public function otherProducts(string $u_id, string $p_id) //出品者が投稿した商品を取得
@@ -98,7 +99,8 @@ class ProductController extends Controller
 			$image_path = '';
 		}
 
-		$product->user_id      = $request->user_id; //DBに保存する
+//		$product->user_id      = $request->user_id; //DBに保存する
+		$product->user_id      = Auth::id(); //DBに保存する
 		$product->category_id  = $request->category_id;
 		$product->image        = $image_path;
 		$product->name         = $request->name;

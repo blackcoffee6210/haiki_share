@@ -35,7 +35,14 @@ Vue.use(VueRouter); //VueRouterプラグインを利用する(<router-view>コ�
 
 const routes = [ //パスとコンポーネントのマッピング
   {
-    path: '/top', //トップページ
+    // path: '*', //404画面
+
+    path: '*',
+    name: 'notFound',
+    component: NotFound
+  },
+  {
+    path: '/', //トップページ
     name: 'top',
     component: Top
   },
@@ -265,11 +272,6 @@ const routes = [ //パスとコンポーネントのマッピング
     path: '/tokutei', //特定商取引法
     name: 'tokutei',
     component: Tokutei
-  },
-  {
-    path: '*', //404画面
-    name: 'notFound',
-    component: NotFound
   },
   {
     path: '/500', //500エラー

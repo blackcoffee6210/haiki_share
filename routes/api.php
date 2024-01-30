@@ -72,6 +72,7 @@ Route::get('/reviews/{r_id}/otherProducts',  'ReviewController@otherProducts');
 Route::get('/reviews/{s_id}/{r_id}',         'ReviewController@show');
 Route::post('/reviews/update',               'ReviewController@update');
 Route::delete('/reviews/{s_id}/{r_id}',      'ReviewController@destroy');
+Route::get('/reviews/topPageReview',         'ReviewController@topPageReview');
 
 //=================================================================
 // Other
