@@ -33,11 +33,21 @@
 				
 				<!-- 賞味期限 -->
 				<div class="p-product-detail__expire">
-					<span >賞味期限 残り</span>
-					<span class="p-product-detail__expire__date">
-						{{ product.expire | momentExpire }}
-					</span>
-					日
+					<!-- 賞味期限が過ぎていたときの表示 -->
+					<div v-if="expireDate">
+						<span class="u-font-bold u-color__main">賞味期限切れ</span>
+						<span class="p-product-detail__expire__date">
+								{{ product.expire | fromExpire }}
+						</span>
+						日
+					</div>
+					<!-- 正味期限内のときの表示 -->
+					<div v-else>
+						<span >賞味期限 残り</span>
+						<span class="p-product-detail__expire__date">
+							{{ product.expire | momentExpire }}
+						</span>
+						日
 					</div>
 				</div>
 				
@@ -192,6 +202,7 @@
 				</transition>
 			
 			</div>
+		</div>
 	</main>
 </template>
 
@@ -201,6 +212,7 @@ import { mapGetters } from 'vuex';
 import Loading        from "../Loading";
 import Product        from "./Product";
 import { Carousel, Slide } from 'vue-carousel';
+import moment from "moment";
 
 export default {
 	name: "ProductDetail",
@@ -236,7 +248,13 @@ export default {
 			isLogin: 'auth/check',        //true または false が返ってくる
 			userId: 'auth/userId',        //ユーザーIDを取得
 			isShopUser: 'auth/isShopUser' //コンビニユーザならtrueが入る
-		})
+		}),
+		expireDate() { //商品の賞味期限が過ぎているかどうかを返す
+			let dt = moment().format('YYYY-MM-DD');
+			if(this.product.expire <= dt) {
+				return true;
+			}
+		}
 	},
 	methods: {
 		async getPurchasedByUser() { //todo: 実装する

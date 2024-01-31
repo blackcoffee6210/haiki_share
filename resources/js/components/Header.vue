@@ -25,7 +25,6 @@
 				
 				<!-- ログイン時のメニュー -->
 				<nav v-if="isLogin" class="p-header__nav" :class="{ 'v-slide': active }">
-					<!--<span class="p-header__greeting">こんにちは、{{ username }}さん</span>-->
 					<!-- 出品ボタン -->
 					<router-link :to="{ name: 'product.register' }"
 											 class="p-header__link"

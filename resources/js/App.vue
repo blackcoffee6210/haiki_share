@@ -38,7 +38,7 @@ export default {
 					this.$router.push({name: 'login'});                    //ログイン画面に遷移させる
 					
 				}else if (val === NOT_FOUND) {                           //404エラーだった場合は404ページに移動する
-					this.$router.push('/notFound');
+					this.$router.push('/not-found');
 				}
 			},
 			immediate: true

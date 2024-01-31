@@ -9,8 +9,8 @@ import VueSocialSharing from 'vue-social-sharing'; //twitterシェア
 import StarRating       from 'vue-star-rating';    //レビューの星
 import ReadMore         from 'vue-read-more';      //「もっと見る」表示
 
-import VueCarousel      from 'vue-carousel';
-Vue.use(VueCarousel);
+// import VueCarousel      from 'vue-carousel';
+// Vue.use(VueCarousel);
 
 //======================
 //FontAwesome
@@ -49,6 +49,12 @@ Vue.filter('momentExpire', function(date) { //日付を「残り⚪︎日」の�
   var expire = moment(date);
   var today  = moment().format('YYYY-MM-DD');
   return expire.diff(today, 'days');
+})
+Vue.filter('fromExpire', function(date) { //賞味期限が過ぎた日付を「⚪︎日」の書式で返す
+  moment.locale('ja');
+  var expire = moment(date);
+  var today  = moment();
+  return today.diff(expire, 'days');
 })
 
 const createApp = async () => { //アプリ起動時、Vueインスタンス生成前にauth/currentUserアクションを呼び出す(リロードしてもログイン状態を保持するため)

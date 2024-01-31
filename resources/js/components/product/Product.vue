@@ -36,16 +36,23 @@
 			</div>
 			
 			<!-- 賞味期限 -->
-			<!--todo: 賞味期限が過ぎたら表示を変える-->
 			<div class="p-product__expire">
 				<div>賞味期限</div>
-				<div>
+				<div v-if="expireDate"><!-- 賞味期限が過ぎたときの表示 -->
+					<span class="u-color__main u-font-bold">切れ</span>
+					<span class="p-product__expire__date">
+						{{ product.expire | fromExpire }}
+					</span>
+					日
+				</div>
+				<div v-else>
 					残り
 					<span class="p-product__expire__date">
 						{{ product.expire | momentExpire }}
 					</span>
 					 日
 				</div>
+				
 			</div>
 
 			<!-- ユーザーの情報	-->
@@ -80,6 +87,7 @@
 </template>
 
 <script>
+import moment from 'moment';
 export default {
 	name: "Product",
 	props:{
@@ -87,6 +95,14 @@ export default {
 			type: Object,
 			required: true
 		}
-	}
+	},
+	computed: {
+		expireDate() { //商品の賞味期限が過ぎているかどうかを返す
+			let dt = moment().format('YYYY-MM-DD');
+			if(this.product.expire <= dt) {
+				return true;
+			}
+		}
+	},
 }
 </script>

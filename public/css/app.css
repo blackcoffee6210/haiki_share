@@ -3457,6 +3457,10 @@ body {
   }
 }
 
+.u-color__main {
+  color: #f96204;
+}
+
 .u-d-flex {
   display: flex;
 }
