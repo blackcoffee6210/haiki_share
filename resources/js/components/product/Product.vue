@@ -64,7 +64,7 @@
 						 alt="">
 				<img class="c-icon p-product__icon"
 						 v-else
-						 :src="'images/no-image.png'"
+						 src="/storage/images/no-image.png"
 						 alt="">
 				<div class="p-product__user-info--right">
 					<!-- 出品したユーザー名 -->
@@ -103,6 +103,6 @@ export default {
 				return true;
 			}
 		}
-	},
+	}
 }
 </script>

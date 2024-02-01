@@ -34,21 +34,33 @@
 		<!--todo: underlineを動的にする！-->
 		<div class="p-top__bg--alter">
 			<section class="p-top__section">
-				<h2 class="p-top__title">
+				<h2 class="p-top__title"
+						:class="{ fadeIn1: visible1 }"
+						v-show="visible1">
 					Haiki Share（ハイキシェア）とはどんなサービス？
 				</h2>
-				<!--<p>みなさん、コンビニが廃棄する食品は1年あたりいくらかご存知ですか？</p>-->
 				<p class="p-top__text">
 					みなさん、コンビニでの廃棄金額がいくらかご存知ですか？
 				</p>
 				<p class="p-top__text">
-					なんと、1店舗あたり年間<span class="p-top__price">468</span>万円！（中央値）<br>
+					なんと、1店舗あたり年間
+					<span class="p-top__price"
+								:class="{ fadeIn2: visible2 }"
+								v-show="visible2">468
+					</span>
+					万円！（中央値）<br>
 					<span class="p-top__note">
 						※公正取引委員会による全国の大手コンビニエンスストア5万7524店を対象に行った調査（1万2093店が回答）
 					</span>
 				</p>
 				<p class="p-top__text">
-					1日に約<span class="p-top__price">13,000</span>円もの食品が廃棄として捨てられているんです。
+					1日に約
+					<!--<span class="p-top__price">13,000</span>-->
+					<span class="p-top__price"
+								:class="{ fadeIn2: visible2 }"
+								v-show="visible2">13,000
+					</span>
+					円もの食品が廃棄として捨てられているんです。
 				</p>
 				<p class="p-top__text">
 					まだまだ食べられる食品を捨てるのはもったいない！
@@ -62,7 +74,10 @@
 		<!-- 利用者のメリット（ベネフィット） -->
 		<div class="p-top__bg">
 			<section class="p-top__section">
-				<h2 class="p-top__title">Haiki Share 3つのメリット!</h2>
+				<h2 class="p-top__title"
+						:class="{ fadeIn3: visible3 }"
+						v-show="visible3">Haiki Share 3つのメリット!
+				</h2>
 				
 				<div class="p-top__container p-top__container--2line">
 					<div class="p-top__ornament">利用者の方</div>
@@ -129,21 +144,7 @@
 			</section>
 		</div>
 		
-		<!-- 利用者の声（利用者） -->
-		<!--<div class="p-top__bg">-->
-		<!--	<section class="p-top__section">-->
-		<!--		<h2 class="p-top__title">利用者の声</h2>-->
-		<!--		<div class="p-top__container">-->
-		<!--			<transition>-->
-		<!--				<Review v-show="!loading"-->
-		<!--								class="p-top__review"-->
-		<!--								v-for="review in reviews"-->
-		<!--								:key="review.id"-->
-		<!--								:review="review" />-->
-		<!--			</transition>-->
-		<!--		</div>-->
-		<!--	</section>-->
-		<!--</div>-->
+		<!-- 利用者の声 -->
 		<div class="p-top__bg">
 			<section class="p-top__section">
 				<h2 class="p-top__title">利用者の声</h2>
@@ -171,7 +172,7 @@
 		<div class="p-top__bg">
 			<section class="p-top__section">
 				<h2 class="p-top__title">カンタン！３ステップ</h2>
-
+				
 				<div class="p-top__container p-top__container--step p-top__container--2line">
 					<div class="p-top__ornament p-top__ornament--step">利用者の方</div>
 					<div class="p-top__panel p-top__panel--step">
@@ -225,7 +226,7 @@
 		<section class="p-top__section"></section>
 		
 		<!-- TOPへ	-->
-		<transition name="top">
+		<transition name="c-go-top">
 			<button class="c-go-top p-top__go-top"
 							v-show="buttonActive"
 							@click="returnTop">TOP</button>
@@ -248,6 +249,9 @@ export default {
 			reviews: [],         //レビューをランダムで3件
 			buttonActive: false, //TOPボタンを表示する
 			scroll: 0,           //scroll
+			visible1: false,
+			visible2: false,
+			visible3: false,
 		}
 	},
 	methods: {
@@ -277,9 +281,38 @@ export default {
 					this.buttonActive = true :
 					this.buttonActive = false;
 		},
+		handleScroll1() {
+			if(!this.visible1) {
+				this.visible1 = window.scrollY > 200;
+			}else if(window.scrollY < 190) {
+				this.visible1 = !this.visible1;
+			}
+		},
+		handleScroll2() {
+			if(!this.visible2) {
+				this.visible2 = window.scrollY > 200;
+			}else if(window.scrollY < 190) {
+				this.visible2 = !this.visible2;
+			}
+		},
+		handleScroll3() {
+			if(!this.visible3) {
+				this.visible3 = window.scrollY > 200;
+			}else if(window.scrollY < 190) {
+				this.visible3 = !this.visible3;
+			}
+		}
 	},
 	mounted() {
 		window.addEventListener('scroll', this.scrollWindow);
+		window.addEventListener('scroll', this.handleScroll1);
+		window.addEventListener('scroll', this.handleScroll2);
+		window.addEventListener('scroll', this.handleScroll3);
+	},
+	destroyed() {
+		window.removeEventListener("scroll", this.handleScroll1);
+		window.removeEventListener("scroll", this.handleScroll2);
+		window.removeEventListener("scroll", this.handleScroll3);
 	},
 	watch: {
 		$route: { //$routerを監視してページが変わったときにメソッドが実行されるようにする
@@ -293,6 +326,48 @@ export default {
 </script>
 
 <style>
+.fadeIn1 {
+	animation: fadeIn1 1s;
+}
+@keyframes fadeIn1 {
+	0% {
+		opacity: 0;
+		transform: translateY(50px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0px);
+	}
+}
+
+.fadeIn2 {
+	animation: fadeIn2 1s;
+}
+@keyframes fadeIn2 {
+	0% {
+		opacity: 0;
+		transform: translateY(300px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0px);
+	}
+}
+
+.fadeIn3 {
+	animation: fadeIn3 1s;
+}
+@keyframes fadeIn3 {
+	0% {
+		opacity: 0;
+		transform: translateX(50px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateX(0px);
+	}
+}
+
 .hero-enter-active,
 .hero-leave-active {
 	transition: opacity 1s, transform 1s;
@@ -300,15 +375,6 @@ export default {
 .hero-enter,
 .hero-leave-to {
 	opacity: 0;
-	transform: translateY(-30px);
-}
-
-.top-enter-active,
-.top-leave-active {
-	transition: opacity .5s;
-}
-.top-enter,
-.top-leave-to {
-	opacity: 0;
+	transform: translateY(50px);
 }
 </style>

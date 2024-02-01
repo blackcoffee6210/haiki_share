@@ -61,8 +61,12 @@
 						<!-- ユーザー画像 -->
 						<img :src="product.user_image"
 								 alt=""
+								 v-if="product.user_image"
 								 class="c-icon p-product-detail__icon">
-						<!-- todo: 画像がない場合はno-imgを表示 -->
+						<img src="/storage/images/no-image.png"
+								 alt=""
+								 v-else
+								 class="c-icon p-product-detail__icon">
 						<div>
 							<div class="c-flex">
 								<!-- コンビニ名	-->
@@ -195,7 +199,7 @@
 				</div>
 				
 				<!-- TOPへ	-->
-				<transition name="top">
+				<transition name="c-go-top">
 					<button class="c-go-top"
 									v-show="buttonActive"
 									@click="returnTop">TOP</button>
@@ -463,14 +467,3 @@ export default {
 	}
 }
 </script>
-
-<style>
-.top-enter-active,
-.top-leave-active {
-	transition: opacity .5s;
-}
-.top-enter,
-.top-leave-to {
-	opacity: 0;
-}
-</style>

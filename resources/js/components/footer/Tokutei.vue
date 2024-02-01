@@ -83,7 +83,7 @@
 			</div>
 			
 			<!-- TOPへ	-->
-			<transition name="top">
+			<transition name="c-to-top">
 				<button class="c-go-top"
 								v-show="buttonActive"
 								@click="returnTop">TOP</button>
@@ -133,7 +133,3 @@ export default {
 	}
 }
 </script>
-
-<style scoped>
-
-</style>

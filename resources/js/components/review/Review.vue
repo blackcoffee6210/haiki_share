@@ -9,14 +9,27 @@
 								 				}}" />
 		
 		<div class="p-review__user-info">
-			<!-- ユーザーの画像	-->
+			<!-- 利用者ユーザーの画像	-->
 			<img class="c-icon p-review__icon"
 					 :src="review.sender_image"
 					 v-show="isShopUser"
+					 v-if="review.sender_image"
 					 alt="">
+			<img class="c-icon p-review__icon"
+					 src="/storage/images/no-image.png"
+					 v-show="isShopUser"
+					 v-else
+					 alt="">
+			<!-- コンビニユーザーの画像	-->
 			<img class="c-icon p-review__icon"
 					 :src="review.receiver_image"
 					 v-show="!isShopUser"
+					 v-if="review.receiver_image"
+					 alt="">
+			<img class="c-icon p-review__icon"
+					 src="/storage/images/no-image.png"
+					 v-show="!isShopUser"
+					 v-else
 					 alt="">
 			<div>
 				<!-- レビュー相手の名前	-->

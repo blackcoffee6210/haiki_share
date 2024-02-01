@@ -156,7 +156,7 @@
 			</p>
 			
 			<!-- TOPへ	-->
-			<transition name="top">
+			<transition name="c-to-top">
 				<button class="c-go-top"
 								v-show="buttonActive"
 								@click="returnTop">TOP</button>
@@ -194,13 +194,3 @@ export default {
 }
 </script>
 
-<style scoped>
-.top-enter-active,
-.top-leave-active {
-	transition: opacity .5s;
-}
-.top-enter,
-.top-leave-to {
-	opacity: 0;
-}
-</style>
