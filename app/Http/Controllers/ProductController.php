@@ -51,13 +51,9 @@ class ProductController extends Controller
 
 	public function prefecture() //出品したユーザーの都道府県IDを取得
 	{
-		$prefectures = User::with(['products'])
-			->select('prefecture_id')
-			->groupBy('prefecture_id')
-			->where('group', 2)
-			->orderBy('prefecture_id', 'asc')
-			->get();
-		return $prefectures;
+		$products = Product::get();
+
+		return $products;
 	}
 
 //	/**

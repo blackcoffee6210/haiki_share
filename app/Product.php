@@ -27,6 +27,7 @@ class Product extends Model
         'is_purchased',
 		'is_canceled',
 	    'cancels_count',
+		'prefecture_name'
 	];
 
 	//$visibleはJSONに含める属性を定義する
@@ -40,6 +41,7 @@ class Product extends Model
 		'is_purchased',
 		'is_canceled',
 		'cancels_count',
+		'prefecture_name'
 	];
 
 	//=====================================================
@@ -91,11 +93,14 @@ class Product extends Model
 	 */
 	public function getPrefectureIdAttribute() //ユーザーの都道府県IDを取得する
 	{
-//		if($this->user->group === 1) {
-//			return false;
-//		}
 		return $this->user->prefecture_id;
 	}
+
+	public function getPrefectureNameAttribute()
+	{
+		return $this->prefecture->name;
+	}
+
 	/**
 	 * アクセサ - is_my_product
 	 * @return boolean
@@ -178,7 +183,6 @@ class Product extends Model
 		//created_atおよびupdated_atカラムを更新させるための指定の仕方
 	}
 
-
 	public function history() //購入履歴テーブル
 	{
 		return $this->hasOne('App\History');
@@ -187,5 +191,10 @@ class Product extends Model
 	public function cancels() //購入キャンセルテーブル
 	{
 		return $this->hasMany('App\Cancel');
+	}
+
+	public function prefecture()
+	{
+		return $this->belongsTo('App\Prefecture');
 	}
 }

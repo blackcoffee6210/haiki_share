@@ -104,16 +104,17 @@
 									class="c-select p-sidebar-index__select"
 									v-model.number="sortPrefecture">
 						<option value="0">選択してください</option>
-						<option v-for="prefecture in prefectures"
+						<option v-for="prefecture in ascPrefecture"
 										:value="prefecture.prefecture_id"
 										:key="prefecture.prefecture_id">
+							<!--{{ prefecture.prefecture_id }}-->
 							{{ prefecture.prefecture_name }}
 						</option>
 					</select>
 				</div>
 				
 				<!-- おすすめの商品 -->
-				<!--todo: tabのスタイル変更-->
+				<!--todo: レスポンシブ（tab）のスタイル変更-->
 				<h2 class="c-title p-sidebar-index__title">おすすめの商品</h2>
 				<div class="p-sidebar-index__card-container">
 					<div class="c-card p-sidebar-index__card"
@@ -145,40 +146,6 @@
 						</div>
 					</div>
 				</div>
-				
-				<!--&lt;!&ndash; おすすめの出品者 &ndash;&gt;-->
-				<!--&lt;!&ndash; todo: 実装する！ &ndash;&gt;-->
-				<!--<h2 class="c-title p-sidebar-index__title">おすすめの出品者</h2>-->
-				<!--<div class="p-sidebar-index__card-container">-->
-				<!--	<div class="c-card p-sidebar-index__card"-->
-				<!--			 v-for="product in recommendProducts"-->
-				<!--			 v-show="!product.is_purchased"-->
-				<!--			 :key="product.id">-->
-				<!--		<router-link class="c-card__link"-->
-				<!--								 :to="{ name: 'product.detail',-->
-				<!--												params: { id: product.id.toString() }}" />-->
-				<!--		<img class="p-sidebar-index__img"-->
-				<!--				 :src="product.image"-->
-				<!--				 alt="">-->
-				<!--		<div class="p-sidebar-index__right">-->
-				<!--			<div class="p-sidebar-index__card-title">{{ product.name }}</div>-->
-				<!--			<div class="p-sidebar-index__price-container">-->
-				<!--				<div class="p-sidebar-index__price">{{ product.price | numberFormat }}</div>-->
-				<!--				<div class="p-sidebar-index__expire">-->
-				<!--					残り-->
-				<!--					{{ product.expire | momentExpire }}-->
-				<!--					日-->
-				<!--				</div>-->
-				<!--			</div>-->
-				<!--			<div class="c-flex">-->
-				<!--				<img class="c-icon p-sidebar-index__icon"-->
-				<!--						 :src="product.user_image"-->
-				<!--						 alt="">-->
-				<!--				<div class="p-sidebar-index__name">{{ product.user_name }}</div>-->
-				<!--			</div>-->
-				<!--		</div>-->
-				<!--	</div>-->
-				<!--</div>-->
 				
 			</div>
 		</aside>
@@ -277,6 +244,11 @@ export default {
 		},
 		count() { //絞り込み後の商品数のカウント
 			return this.filteredProducts.length;
+		},
+		ascPrefecture() { //都道府県idを照準にして返す
+			return this.prefectures.sort(function(a, b) {
+				return a.prefecture_id - b.prefecture_id;
+			})
 		}
 	},
 	methods: {
@@ -306,6 +278,14 @@ export default {
 				return false;
 			}
 			this.prefectures = response.data;
+			console.log('filter前のprefectures')
+			console.log(this.prefectures);
+			
+			this.prefectures = this.prefectures.filter((v1, i1, a1) => {
+				return a1.findIndex(v => v1.prefecture_id === v.prefecture_id) === i1
+			});
+			console.log('filter後のprefectures')
+			console.log(this.prefectures);
 		},
 		async getProducts() { //商品取得メソッド
 			this.loading   = true; //ローディングを表示する
@@ -322,7 +302,10 @@ export default {
 			this.currentPage = response.data.current_page; //現在のページ
 			this.lastPage    = response.data.last_page;    //最後のページ
 			this.total       = response.data.total;        //商品の数
-		}
+			
+			console.log('products');
+			console.log(this.products);
+		},
 	},
 	watch: {
 		$route: {
