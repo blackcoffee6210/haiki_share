@@ -26,7 +26,7 @@ class Product extends Model
 		'is_my_product',
         'is_purchased',
 		'is_canceled',
-	    'cancels_count'
+	    'cancels_count',
 	];
 
 	//$visibleはJSONに含める属性を定義する
@@ -39,7 +39,7 @@ class Product extends Model
 		'is_my_product',
 		'is_purchased',
 		'is_canceled',
-		'cancels_count'
+		'cancels_count',
 	];
 
 	//=====================================================

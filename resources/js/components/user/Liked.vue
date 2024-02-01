@@ -106,7 +106,7 @@ export default {
 					content: 'お気に入りを解除しました',
 				});
 				
-				this.$router.push({name: 'user.mypage', params: {id: this.id}}); //マイページに遷移する
+				this.$router.push({name: 'user.mypage', params: {id: this.id.toString()}}); //マイページに遷移する
 			}
 		}
 	},

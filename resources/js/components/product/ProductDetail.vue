@@ -257,7 +257,7 @@ export default {
 		}
 	},
 	methods: {
-		async getPurchasedByUser() { //todo: 実装する
+		async getPurchasedByUser() {
 			const response = await axios.get(`/api/products/${this.id}/purchasedByUser`);
 
 			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
@@ -287,6 +287,7 @@ export default {
 			if(this.product.liked_by_user) { //ログインユーザーが既に「いいね」を押していたらtrueをセット
 				this.isLike = true;
 			}
+			console.log(this.product);
 		},
 		async getOtherProducts() { //出品者の他の商品（購入されていないもの）を取得
 			const response = await axios.get(`/api/products/${this.product.user_id}/${this.id}/other`); //API接続

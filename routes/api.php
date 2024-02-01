@@ -49,6 +49,7 @@ Route::get('/users/{id}/wasCanceled',     'UserController@wasCanceled');    //�
 Route::get('/users/{id}/deleted',         'UserController@deleted');        //削除した商品一覧(コンビニユーザー)
 Route::get('/users/{id}/reviewed',        'UserController@reviewed');       //レビューしたユーザー一覧(利用者)
 Route::get('/users/{id}/wasReviewed',     'UserController@wasReviewed');    //レビューされたユーザー一覧(コンビニユーザー)
+Route::delete('/users/{id}',              'UserController@destroy');        //商品削除
 
 //=================================================================
 // MyPage

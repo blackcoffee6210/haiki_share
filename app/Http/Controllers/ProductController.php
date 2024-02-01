@@ -34,14 +34,18 @@ class ProductController extends Controller
 	public function index() //商品一覧取得
 	{
 		$products = Product::with(['user', 'category', 'likes', 'history'])
-			->orderByDesc('created_at')
-			->paginate(); //get()の代わりにpaginateを使うとtotalやcurrent_pageが自動的に追加される
+							->orderByDesc('created_at')
+							->paginate(); //get()の代わりにpaginateを使うとtotalやcurrent_pageが自動的に追加される
 		return $products;
+
 	}
 
 	public function ranking() //お気に入りが多い５件を取得
 	{
-		$products = Product::withCount('likes')->orderByDesc('likes_count')->take(5)->get();
+		$products = Product::withCount('likes')
+						   ->orderByDesc('likes_count')
+						   ->take(5)
+						   ->get();
 		return $products;
 	}
 
@@ -67,7 +71,6 @@ class ProductController extends Controller
 						  ->withTrashed()
 						  ->find($id);
 		return $product ?? abort(404); //商品が見つからなかったら404を返す
-//		return response($product, 200);
 	}
 
 	public function otherProducts(string $u_id, string $p_id) //出品者が投稿した商品を取得

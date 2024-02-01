@@ -17,16 +17,7 @@
 							退会される方は、下記の「退会する」ボタンを<br class="u-br">
 							クリックしてください。
 						</p>
-						<!--&lt;!&ndash; ボタン	&ndash;&gt;-->
-						<!--<div class="p-withdrawal__btn-container">-->
-						<!--	<a @click="$router.back()"-->
-						<!--		 class="c-btn c-btn&#45;&#45;white p-withdrawal__btn p-withdrawal__btn&#45;&#45;back">-->
-						<!--		もどる-->
-						<!--	</a>-->
-						<!--	<button class="c-btn p-withdrawal__btn"-->
-						<!--					type="submit">退会する-->
-						<!--	</button>-->
-						<!--</div>-->
+
 						<!-- ボタン	-->
 						<div class="p-withdrawal__btn-container">
 							<a @click="$router.back()"
@@ -50,6 +41,7 @@
 <script>
 import Loading from "../Loading";
 import Sidebar from "../Sidebar";
+import { OK }  from "../../util";
 import { mapState, mapGetters } from 'vuex';
 
 export default {
@@ -74,9 +66,19 @@ export default {
 	methods: {
 		async submit() { //退会
 			if(confirm('本当に退会しますか？(お客様の情報はすべて削除されます)')) {
-					this.$store.commit('message/setContent', { //メッセージ登録
-						content: '退会しました'
-					});
+				this.loading = true; //ローティングを表示する
+				const response = await axios.delete(`/api/users/${this.id}`); //API接続
+				this.loading = false; //API通信が終わったらローディングを非表示にする
+				
+				if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
+					this.$store.commit('error/setCode', response.status);
+					return false; //後続の処理を抜ける
+				}
+				this.$store.commit('message/setContent', { //メッセージ登録
+					content: '退会しました'
+				});
+				await this.$store.dispatch('auth/logout'); //dispatchメソッドでauthストアのlogoutアクションを呼び出す
+				this.$router.push({ name: 'index' }); //トップページへ移動する
 			}
 		}
 	},

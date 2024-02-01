@@ -23,7 +23,7 @@
 								 slot="btn">
 							<!-- 論理削除された商品を復元するボタン	-->
 							<button class="c-btn p-list__btn"
-											@click="restore">復元する
+											@click="restore(product)">復元する
 							</button>
 						</div>
 					</Product>
@@ -58,7 +58,8 @@ export default {
 	data() {
 		return {
 			loading: false,
-			products: {}
+			products: [],
+			product: {}
 		}
 	},
 	methods: {
@@ -75,12 +76,24 @@ export default {
 			}
 			this.products = response.data; //プロパティにresponseデータをセットする
 		},
-		restore() { //論理削除した商品を復元する
+		async restore(product) { //論理削除した商品を復元する
+			this.product = product; //引数の値をプロパティにセット
+			
 			if(confirm('この商品を復元しますか？')) {
-				console.log('復元しました！');
-				this.$router.push({name: 'index'});
+				const response = await axios.post(`/api/products/${this.product.id}/restore`); //API通信
+				if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
+					this.$store.commit('error/setCode', response.status);
+					return false;
+				}
+				
+				this.$store.commit('message/setContent', { //メッセージ登録
+					content: '商品を復元しました！'
+				});
+				
+				this.$router.push({ name: 'user.mypage',
+														params: { id: this.id.toString() }}); //マイページに遷移する
 			}
-		},
+		}
 	},
 	watch: {
 		$route: { //$routeを監視してページが変わったときにgetProductsメソッドが実行されるようにする

@@ -83,7 +83,8 @@ class UserController extends Controller
 	{
 		$products = Product::whereHas('history', function($q) {
 						$q->where('buyer_id', Auth::id());
-					})->get();
+					})
+					->get();
 		return $products;
 	}
 
@@ -146,5 +147,11 @@ class UserController extends Controller
 					 ->orderByDesc('reviews.created_at')
 					 ->get();
 
+	}
+
+	public function destroy(string $id) //ユーザー削除
+	{
+		User::find($id)->delete(); //ユーザー情報を取得して論理削除する
+		return response(['user_id' => $id], 200);
 	}
 }
