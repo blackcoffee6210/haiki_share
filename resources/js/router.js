@@ -35,11 +35,6 @@ Vue.use(VueRouter); //VueRouterプラグインを利用する(<router-view>コ�
 
 const routes = [ //パスとコンポーネントのマッピング
   {
-    path: '*', //404画面
-    name: 'notFound',
-    component: NotFound
-  },
-  {
     path: '/', //トップページ
     name: 'top',
     component: Top
@@ -86,31 +81,21 @@ const routes = [ //パスとコンポーネントのマッピング
     }
   },
   {
-    path: '/products/:id', //商品詳細
-    name: 'product.detail',
-    component: ProductDetail,
-    props: true //ProductDetail.vueに:idの値がpropsとして渡される
-  },
-  {
     path: '/products/register', //商品登録
     name: 'product.register',
     component: RegisterProduct,
     beforeEnter(to, from, next) { //ログインしている、かつコンビニユーザーの場合はページを表示、それ以外は商品一覧画面に遷移する
       (store.getters['auth/check'] &&
-       store.getters['auth/isShopUser']) ?
+        store.getters['auth/isShopUser']) ?
         next() : next({name: 'index'});
     }
   },
-  // {
-  //   path: '/products/register', //商品登録
-  //   name: 'product.register',
-  //   component: RegisterProduct,
-  //   beforeEnter(to, from, next) { //ログインしている、かつコンビニユーザーの場合はページを表示、それ以外は商品一覧画面に遷移する
-  //     (store.getters['auth/check'] &&
-  //      store.getters['auth/isShopUser']) ?
-  //       next() : next({name: 'index'});
-  //   }
-  // },
+  {
+    path: '/products/:id', //商品詳細
+    name: 'product.detail',
+    component: ProductDetail,
+    props: true //ProductDetail.vueに:idの値がpropsとして渡される
+  },
   {
     path: '/products/:id/edit', //商品編集
     name: 'product.edit',
@@ -285,6 +270,11 @@ const routes = [ //パスとコンポーネントのマッピング
     path: '/500', //500エラー
     name: 'systemError',
     component: System
+  },
+  {
+    path: '*', //404画面
+    name: 'notFound',
+    component: NotFound
   }
 ];
 

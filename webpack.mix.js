@@ -14,7 +14,8 @@ mix.webpackConfig({
     .js('resources/js/app.js', 'public/js')
     .sass('resources/sass/app.scss', 'public/css')
     .options({ processCssUrls: false })
-    .sourceMaps();
+    .sourceMaps()
+    .version();
 
 
 // /*

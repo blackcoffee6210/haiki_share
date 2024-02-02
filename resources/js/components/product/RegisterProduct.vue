@@ -3,7 +3,6 @@
 		<div class="p-product-form">
 			
 			<h2 class="c-title p-product-form__title">商品出品</h2>
-			<!--todo: リロードがおかしい-->
 			
 			<div class="p-product-form__background">
 				<!-- ローディング -->
@@ -112,7 +111,7 @@
 								 :max="maxDate"
 								 placeholder="本日以降の日付を選択してください"
 								 v-model="product.expire">
-					<!-- エラーメッセージ	-->
+					 <!--エラーメッセージ-->
 					<div v-if="errors">
 						<div v-for="msg in errors.expire"
 								 :key="msg"
@@ -161,9 +160,10 @@
 </template>
 
 <script>
-// import { mapGetters } from 'vuex';
 import Loading from "../Loading";
+import moment  from "moment";
 import { CREATED, OK, UNPROCESSABLE_ENTITY } from "../../util";
+
 export default {
 	name: "RegisterProduct",
 	components: {
@@ -194,14 +194,14 @@ export default {
 	},
 	computed: {
 		tomorrow() { //明日の日付をYYYY-MM-DDの書式で返す
-			let dt = new Date();
-			dt.setDate(dt.getDate() + 1);
-			return this.formatDate(dt);
+			let date = new Date();
+			date.setDate(date.getDate() + 1);
+			return moment(date).format('YYYY-MM-DD');
 		},
-		maxDate() { //賞味期限を登録できる最大の日付
-			let dt = new Date();
-			dt.setDate(dt.getDate() + 30);
-			return this.formatDate(dt);
+		maxDate() { //賞味期限を登録できる最大の日付をYYYY-MM-DDの書式で返す
+			let date = new Date();
+			date.setDate(date.getDate() + 30);
+			return moment(date).format('YYYY-MM-DD');
 		},
 	},
 	methods: {
@@ -239,12 +239,6 @@ export default {
 			this.preview = '';
 			this.product.image = null;
 			this.$el.querySelector('input[type="file"]').value = null;
-		},
-		formatDate(dt) { //日付をYYYY-MM-DDの書式で返すメソッド
-			let y = dt.getFullYear();
-			let m = ('00' + (dt.getMonth() + 1)).slice(-2);
-			let d = ('00' + dt.getDate()).slice(-2);
-			return (y + '-' + m + '-' + d);
 		},
 		async submit() { //商品登録メソッド
 			this.loading = true; //ローティングを表示する

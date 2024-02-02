@@ -45,13 +45,13 @@
 					<label for="category_id"
 								 class="c-label p-product-form__label">カテゴリー
 					</label>
-					<select class="c-input p-product-form__input"
+					<select class="c-select p-product-form__input"
 									:class="{ 'c-select__err': errors.category_id }"
 									id="category_id"
 									v-model="product.category_id">
 						<option value="" disabled>カテゴリーを選択してください</option>
-						<option :value="category.id"
-										v-for="category in categories"
+						<option v-for="category in categories"
+										:value="category.id"
 										:key="category.id">{{ category.name }}</option>
 					</select>
 					<!-- エラーメッセージ	-->
@@ -68,7 +68,7 @@
 					</label>
 					<input type="text"
 								 class="c-input p-product-form__input"
-								 :class="{ 'c-select__err': errors.name }"
+								 :class="{ 'c-input__err': errors.name }"
 								 id="name"
 								 v-model="product.name"
 								 placeholder="商品の名前を入力してください">
@@ -122,12 +122,12 @@
 					<div class="u-d-flex">
 						<input type="text"
 									 class="c-input p-product-form__input p-product-form__input--yen"
-									 :class="{ 'c-select__err': errors.price }"
+									 :class="{ 'c-input__err': errors.price }"
 									 id="price"
 									 v-model="product.price"
 									 placeholder="1000">
 						<div class="p-product-form__yen"
-								 :class="{ 'c-select__err': errors.price }">円</div>
+								 :class="{ 'p-product-form__yen__err': errors.price }">円</div>
 					</div>
 					<!-- エラーメッセージ	-->
 					<div v-if="errors">
@@ -174,7 +174,7 @@ export default {
 		return {
 			loading: false, //ローディングを表示するかどうかを判定するプロパティ
 			product: {},    //商品情報
-			categories: {}, //カテゴリー
+			categories: [], //カテゴリー
 			preview: null,  //画像プレビュー
 			errors: {       //エラーメッセージを格納するプロパティ
 				image: null,

@@ -278,14 +278,10 @@ export default {
 				return false;
 			}
 			this.prefectures = response.data;
-			console.log('filter前のprefectures')
-			console.log(this.prefectures);
 			
-			this.prefectures = this.prefectures.filter((v1, i1, a1) => {
+			this.prefectures = this.prefectures.filter((v1, i1, a1) => { //取得した都道府県を照準に並び替える
 				return a1.findIndex(v => v1.prefecture_id === v.prefecture_id) === i1
 			});
-			console.log('filter後のprefectures')
-			console.log(this.prefectures);
 		},
 		async getProducts() { //商品取得メソッド
 			this.loading   = true; //ローディングを表示する
@@ -302,9 +298,6 @@ export default {
 			this.currentPage = response.data.current_page; //現在のページ
 			this.lastPage    = response.data.last_page;    //最後のページ
 			this.total       = response.data.total;        //商品の数
-			
-			console.log('products');
-			console.log(this.products);
 		},
 	},
 	watch: {

@@ -39,16 +39,15 @@
 			<router-link class="p-sidebar__link"
 									 active-class="p-sidebar__link--active"
 									 exact
-									 v-if="isShopUser"
-									 :to="{ name: 'product.register',
-									  			params: { id: id.toString() }}" >出品する
+									 v-show="isShopUser"
+									 :to="{ name: 'product.register'}" >出品する
 			</router-link>
 			
 			<!-- 出品した商品一覧 -->
 			<router-link class="p-sidebar__link"
 									 active-class="p-sidebar__link--active"
 									 exact
-									 v-if="isShopUser"
+									 v-show="isShopUser"
 									 :to="{ name: 'user.posted',
 									  			params: { id: id.toString() }}" >出品した商品一覧
 			</router-link>
@@ -57,7 +56,7 @@
 			<router-link class="p-sidebar__link"
 									 active-class="p-sidebar__link--active"
 									 exact
-									 v-if="!isShopUser"
+									 v-show="!isShopUser"
 									 :to="{ name: 'user.liked',
 									  			params: { id: id.toString() }}" >お気に入りした商品一覧
 			</router-link>
