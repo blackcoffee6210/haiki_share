@@ -7,7 +7,12 @@
   @include mq() {
     width: 100%;
     padding: $space_m;
-    margin-top: 60px;
+    margin-top: $space_2xl;
+  }
+  &--password {
+    @include mq() {
+      margin-top: 0;
+    }
   }
   &__group {
     position: absolute;

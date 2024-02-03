@@ -1,6 +1,6 @@
 <template>
 	<main class="l-main">
-		<div class="p-auth-form">
+		<div class="p-auth-form p-auth-form--password">
 			<h2 class="c-title p-auth-form__title">パスワードリセット</h2>
 			<!-- ローディング -->
 			<Loading color="#f96204" v-show="loading"/>
@@ -28,6 +28,10 @@
 					</div>
 				</div>
 				<button class="c-btn p-auth-form__btn" type="submit">Eメール送信</button>
+				<!-- 会員登録へ遷移	-->
+				<a @click="$router.back()"
+					 class="c-link">もどる
+				</a>
 			</form>
 		
 		</div>

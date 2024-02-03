@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="p-wrapper">
 		<Header />
 		<Message />
 		<RouterView />

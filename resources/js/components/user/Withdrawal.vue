@@ -50,6 +50,12 @@ export default {
 		Loading,
 		Sidebar
 	},
+	props: {
+		id: {
+			type: String,
+			required: true
+		}
+	},
 	data() {
 		return {
 			loading: false,
@@ -59,9 +65,9 @@ export default {
 		...mapState({
 			apiStatus: state => state.auth.apiStatus
 		}),
-		...mapGetters({
-			id: 'auth/userId'
-		})
+		// ...mapGetters({
+		// 	id: 'auth/userId'
+		// })
 	},
 	methods: {
 		async submit() { //退会

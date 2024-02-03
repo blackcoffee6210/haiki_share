@@ -164,6 +164,9 @@
     &--delete {
       margin-right: $space_xl;
       padding-top: 7px;
+      @include mq() {
+        margin-right: $space_m;
+      }
       @include mq('tab') {
         margin-right: $space_l;
       }

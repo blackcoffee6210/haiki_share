@@ -1,5 +1,5 @@
 <template>
-	<footer class="l-footer">
+	<footer id="footer" class="l-footer">
 		<div class="p-footer">
 			<div class="p-footer__left">
 				<!-- ログインしていれば「ログアウト」ボタンを表示する -->

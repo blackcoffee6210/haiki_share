@@ -148,6 +148,11 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+  &__br {
+    @include mq() {
+      display: none;
+    }
+  }
   &__icon {
     width: 25px;
     height: 25px;
@@ -155,6 +160,15 @@
   }
   &__price {
     font-weight: bold;
+  }
+  &__expire {
+    &__date {
+      font-weight: bold;
+      font-size: 20px;
+      @include mq() {
+        font-size: $font-size_m;
+      }
+    }
   }
   &__input {
     width: 100%;

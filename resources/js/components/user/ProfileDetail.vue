@@ -5,7 +5,14 @@
 			
 			<!-- ユーザー情報	-->
 			<div class="p-profile-detail__container">
-				<img :src="user.image" class="p-profile-detail__image" alt="">
+				<img :src="user.image"
+						 v-if="user.image"
+						 class="p-profile-detail__image"
+						 alt="">
+				<img class="p-profile-detail__image"
+						 v-else
+						 src="/storage/images/no-image.png"
+						 alt="">
 				<div>
 					<div class="p-profile-detail__name">
 						{{ user.name }}

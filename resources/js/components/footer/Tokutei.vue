@@ -57,7 +57,7 @@
 					</tr>
 					<tr>
 						<th>お支払い方法</th>
-						<td>購入先のコンビニにて現金、クレジット決済で<br class="p-tokutei__br">お支払いください。</td>
+						<td>購入先のコンビニにて現金、クレジット決済でお支払いください。</td>
 					</tr>
 					<tr>
 						<th>ご返品について</th>
@@ -67,12 +67,11 @@
 						<th>ご解約について</th>
 						<td>
 							解約（退会）は必ずログイン後に<br class="p-tokutei__br">
-							<router-link :to="{ name: 'user.withdrawal' }"
+							<router-link :to="{ name: 'user.withdrawal',
+																	params: { id: userId.toString()} }"
 													 class="p-tokutei__withdraw">コチラ
 							</router-link>
-							<!--<router-link :to="{ name: 'user.withdraw',-->
-							<!--										params: { id: (check) ? userId.toString() : -1 }-->
-							<!--									}"-->
+							<!--<router-link :to="{ name: 'user.withdrawal' }"-->
 							<!--						 class="p-tokutei__withdraw">コチラ-->
 							<!--</router-link>-->
 							から行なってください。
@@ -105,6 +104,12 @@ export default {
 			scroll: 0,                     //scroll
 		}
 	},
+	computed: {
+		...mapGetters({
+			isLogin: 'auth/check',
+			userId: 'auth/userId'
+		})
+	},
 	methods: {
 		returnTop() {
 			window.scrollTo({
@@ -121,12 +126,6 @@ export default {
 				this.buttonActive = false;
 			}
 		},
-	},
-	computed: {
-		...mapGetters({
-			isLogin: 'auth/check',
-			userId: 'auth/userId'
-		})
 	},
 	mounted() {
 		window.addEventListener('scroll', this.scrollWindow);

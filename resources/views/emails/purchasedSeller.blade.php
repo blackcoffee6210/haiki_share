@@ -1,5 +1,6 @@
 {{ $params['shop_name'] }}さん<br>
 商品が購入されました！<br>
+商品を用意してお待ちください。<br>
 <br>
 ユーザー名: {{ $params['user_name'] }}<br>
 商品名: {{ $params['product_name'] }}<br>
@@ -7,6 +8,6 @@
 金額: {{ $params['price'] }}円<br>
 購入日時: {{ $params['purchased_at'] }}<br>
 <br>
-<a href="http://127.0.0.1:8001/products/{{ $params['product_id'] }}">
+<a href="http://127.0.0.1:8000/products/{{ $params['product_id'] }}">
     購入された商品を表示する
 </a>

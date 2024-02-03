@@ -48,6 +48,7 @@ class ReviewController extends Controller
 		$review->save();
 
 		$params = [ //メール送信に必要な情報を用意
+			'sender_id'      => $request->sender_id,
 			'sender_name'    => Auth::user()->name,
 			'sender_image'   => Auth::user()->image,
 			'receiver_id'    => $request->receiver_id,

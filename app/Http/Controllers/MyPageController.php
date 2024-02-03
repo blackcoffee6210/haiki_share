@@ -36,6 +36,7 @@ class MyPageController extends Controller
 
 	public function purchased() //購入した商品を5件取得
 	{
+		//todo: 降順で取得
 		$products = Product::whereHas('history', function($q) {
 						$q->where('buyer_id', '=', Auth::id());
 					})->take(5)->get();
@@ -44,6 +45,7 @@ class MyPageController extends Controller
 
 	public function wasPurchased() //購入された商品を5件取得
 	{
+		//todo: 降順で取得
 		$products = Product::whereHas('history', function($q) {
 						$q->where('seller_id', Auth::id());
 					})->take(5)->get();
@@ -52,6 +54,7 @@ class MyPageController extends Controller
 
 	public function canceled() //キャンセルした商品を5件取得
 	{
+		//todo: 降順で取得
 		$products = Product::whereHas('cancels', function($q) {
 						$q->where('cancel_user_id', Auth::id());
 					})->take(5)->get();
@@ -60,6 +63,7 @@ class MyPageController extends Controller
 
 	public function wasCanceled() //キャンセルされた商品を5件取得
 	{
+		//todo: 降順で取得
 		$products = Product::whereHas('cancels', function($q) {
 						$q->where('post_user_id', Auth::id());
 					})->take(5)->get();

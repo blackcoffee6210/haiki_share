@@ -127,7 +127,7 @@
 						<router-link class="c-btn p-product-detail__btn p-product-detail__btn--review"
 												 v-show="purchasedByUser && !isReviewed"
 												 :to="{ name: 'review.register',
-												  			params: {p_id: id.toString() } }">レビュー投稿
+												  			params: { p_id: id.toString() }}">レビュー投稿
 						</router-link>
 						
 						<!-- 購入キャンセルボタン 自分が購入した商品のときに表示	-->
@@ -400,7 +400,8 @@ export default {
 					content: '購入をキャンセルしました'
 				});
 				
-				this.$router.push({ name: 'index' }); //インデックス画面に遷移する
+				this.$router.push({ name: 'user.mypage',
+					params: { id: this.product.user_id.toString() }}); //マイページに遷移する
 			}
 		},
 		async restore() { //論理削除した商品を復元する

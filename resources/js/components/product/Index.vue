@@ -98,7 +98,7 @@
 				<!-- 出品したコンビニのある都道府県 -->
 				<div class="p-sidebar-index__sort">
 					<label for="sort_prefecture" class="p-sidebar-index__title">
-						出品したコンビニの<br class="u-br">ある都道府県
+						出品したコンビニの<br class="p-sidebar-index__br">都道府県
 					</label>
 					<select id="sort_prefecture"
 									class="c-select p-sidebar-index__select"
@@ -107,7 +107,6 @@
 						<option v-for="prefecture in ascPrefecture"
 										:value="prefecture.prefecture_id"
 										:key="prefecture.prefecture_id">
-							<!--{{ prefecture.prefecture_id }}-->
 							{{ prefecture.prefecture_name }}
 						</option>
 					</select>
@@ -131,10 +130,27 @@
 							<div class="p-sidebar-index__card-title">{{ product.name }}</div>
 							<div class="p-sidebar-index__price-container">
 								<div class="p-sidebar-index__price">{{ product.price | numberFormat }}</div>
+								<!-- todo: 賞味期限切れの表示を実装 -->
 								<div class="p-sidebar-index__expire">
 									残り
-									{{ product.expire | momentExpire }}
+									<span class="p-product__expire__date">
+										{{ product.expire | momentExpire }}
+									</span>
 									日
+								<!--	<div v-if="expireDate">&lt;!&ndash; 賞味期限が過ぎたときの表示 &ndash;&gt;-->
+								<!--		<span class="u-color__main u-font-bold">切れ</span>-->
+								<!--		<span class="p-product__expire__date">-->
+								<!--			{{ product.expire | fromExpire }}-->
+								<!--		</span>-->
+								<!--		日-->
+								<!--	</div>-->
+								<!--	<div v-else>&lt;!&ndash; 賞味期限内のときの表示 &ndash;&gt;-->
+								<!--		残り-->
+								<!--		<span class="p-product__expire__date">-->
+								<!--			{{ product.expire | momentExpire }}-->
+								<!--		</span>-->
+								<!--		日-->
+								<!--	</div>-->
 								</div>
 							</div>
 							<div class="c-flex">
@@ -183,7 +199,6 @@ export default {
 			sortPrice: 1,					//金額「並び替え」の選択値
 			sortCategory: 0, 			//「カテゴリー」絞り込みの初期値
 			sortPrefecture: 0, 		//「都道府県」絞り込みの初期値
-			sortExpired: 0,    	  //「賞味期限」絞り込みの初期値
 			categories: [],       //カテゴリー
 			prefectures: [],      //出品したコンビニのある都道府県
 			products: [], 				//商品リスト

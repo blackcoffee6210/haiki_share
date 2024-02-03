@@ -244,11 +244,14 @@ const routes = [ //パスとコンポーネントのマッピング
     }
   },
   {
-    path: '/users/withdrawal',
+    path: '/users/:id/withdrawal', //退会画面
     name: 'user.withdrawal',
     component: Withdrawal,
-    beforeEnter(to, from ,next) { //ログイン状態でページにアクセスした場合(true)、そのまま移動させる
-      store.getters['auth/check'] ? next() : next({name: 'login'});
+    props: true,
+    beforeEnter(to, from ,next) { //ログイン状態かつログインユーザーidでページでページにアクセスした場合(true)、そのまま移動させる
+      (store.getters['auth/check'] &&
+       to.params.id == store.getters['auth/userId']) ?
+        next() : next({name: 'login'});
     }
   },
   {
@@ -266,6 +269,14 @@ const routes = [ //パスとコンポーネントのマッピング
     name: 'tokutei',
     component: Tokutei
   },
+  // {
+  //   path: '/users/withdrawal',
+  //   name: 'user.withdrawal',
+  //   component: Withdrawal,
+  //   beforeEnter(to, from ,next) { //ログイン状態でページにアクセスした場合(true)、そのまま移動させる
+  //     store.getters['auth/check'] ? next() : next({name: 'login'});
+  //   }
+  // },
   {
     path: '/500', //500エラー
     name: 'systemError',

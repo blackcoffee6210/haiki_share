@@ -10,6 +10,7 @@
   top: 70px;
   text-align: center;
   font-size: $font-size_default;
+  z-index: 2;
   @include mq() {
     top: 50px;
     height: 40px;

@@ -1,6 +1,6 @@
 <template>
 	<main class="l-main">
-		<div class="p-auth-form">
+		<div class="p-auth-form p-auth-form--password">
 			<h2 class="c-title p-auth-form__title">パスワードリセット</h2>
 			
 			<form class="c-form p-auth-form__form"

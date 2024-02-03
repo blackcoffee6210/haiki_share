@@ -45,7 +45,7 @@
 					</span>
 					日
 				</div>
-				<div v-else>
+				<div v-else><!-- 賞味期限内のときの表示 -->
 					残り
 					<span class="p-product__expire__date">
 						{{ product.expire | momentExpire }}

@@ -82,11 +82,18 @@ class UserController extends Controller
 	public function purchased(string $id) //購入した商品一覧(利用者)
 	{
 		$products = Product::whereHas('history', function($q) {
-						$q->where('buyer_id', Auth::id());
-					})
-					->get();
+			$q->where('buyer_id', Auth::id());
+		})->get();
 		return $products;
 	}
+//	public function purchased(string $id) //購入した商品一覧(利用者)
+//	{
+//		$products = Product::whereHas('history', function($q) {
+//						$q->where('buyer_id', Auth::id());
+//					})
+//					->get();
+//		return $products;
+//	}
 
 	public function wasPurchased(string $id) //購入された商品一覧(コンビニ)
 	{

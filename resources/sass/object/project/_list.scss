@@ -7,6 +7,10 @@
   &__no-review {
     text-align: center;
     padding-top: 150px;
+    @include mq() {
+      padding-top: 50px;
+      padding-bottom: 50px;
+    }
   }
   &__review-title {
     margin-top: $space_s;

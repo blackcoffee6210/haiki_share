@@ -37,6 +37,9 @@
     margin-top: $space_xl;
   }
   &__btn {
+    @include mq() {
+      width: 50%;
+    }
     &--back {
       margin-right: $space_m;
     }
