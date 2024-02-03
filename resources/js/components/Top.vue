@@ -13,14 +13,18 @@
 		<div class="p-top__bg">
 			<transition name="hero" appear>
 				<section class="p-top__section p-top__section--hero">
-					<div class="p-top__title">そこのあなた！ こう思ったことはありませんか？</div>
+					<div class="p-top__title">そこのあなた！ <br class="u-br">
+						こう思ったことはありませんか？
+					</div>
 					<p class="p-top__think p-top__think--user">
-						コンビニは便利だけどスーパーより高い..<br>
+						コンビニは便利だけど<br class="u-br">
+						スーパーより高い..<br>
 						もっと安く買えたらな...
 					</p>
 					<p class="p-top__think p-top__think--shop">
 						まだ食べられる食品を<br>
-						廃棄で捨てるのはもったいないな...
+						廃棄で捨てるのは<br class="u-br">
+						もったいないな...
 					</p>
 					<p class="p-top__title">
 						そのお悩み、<br>
@@ -50,7 +54,8 @@
 					</span>
 					万円！（中央値）<br>
 					<span class="p-top__note">
-						※公正取引委員会による全国の大手コンビニエンスストア5万7524店を対象に行った調査（1万2093店が回答）
+						※公正取引委員会による全国の大手コンビニエンスストア5万7524店を<br class="u-br">
+						対象に行った調査（1万2093店が回答）
 					</span>
 				</p>
 				<p class="p-top__text">
@@ -66,7 +71,8 @@
 					まだまだ食べられる食品を捨てるのはもったいない！
 				</p>
 				<p class="p-top__text">
-					そんなコンビニユーザーと、安く買いたい利用者の想いを「シェア」するサービスです。
+					そんなコンビニユーザーと、安く買いたい利用者の<br class="u-br">
+					想いを「シェア」するサービスです。
 				</p>
 			</section>
 		</div>
@@ -177,15 +183,21 @@
 					<div class="p-top__ornament p-top__ornament--step">利用者の方</div>
 					<div class="p-top__panel p-top__panel--step">
 						<div class="p-top__step">STEP<span class="p-top__step-number">1</span></div>
-						<h3 class="p-top__step-title">カンタン！<br>会員登録</h3>
+						<h3 class="p-top__step-title">
+							カンタン！<br class="p-top__br">会員登録
+						</h3>
 					</div>
 					<div class="p-top__panel p-top__panel--step">
 						<div class="p-top__step">STEP<span class="p-top__step-number">2</span></div>
-						<h3 class="p-top__step-title">気になる商品を<br>購入する</h3>
+						<h3 class="p-top__step-title">
+							気になる商品を<br class="p-top__br">購入する
+						</h3>
 					</div>
 					<div class="p-top__panel p-top__panel--step">
 						<div class="p-top__step">STEP<span class="p-top__step-number">3</span></div>
-						<h3 class="p-top__step-title">コンビニで<br>商品を受け取る</h3>
+						<h3 class="p-top__step-title">
+							コンビニで<br class="p-top__br">商品を受け取る
+						</h3>
 					</div>
 				</div>
 				
@@ -193,15 +205,21 @@
 					<div class="p-top__ornament p-top__ornament--step">コンビニユーザー</div>
 					<div class="p-top__panel p-top__panel--step">
 						<div class="p-top__step">STEP<span class="p-top__step-number">1</span></div>
-						<h3 class="p-top__step-title">カンタン！<br>会員登録</h3>
+						<h3 class="p-top__step-title">
+							カンタン！<br class="p-top__br">会員登録
+						</h3>
 					</div>
 					<div class="p-top__panel p-top__panel--step">
 						<div class="p-top__step">STEP<span class="p-top__step-number">2</span></div>
-						<h3 class="p-top__step-title">写真を撮って<br>商品を出品</h3>
+						<h3 class="p-top__step-title">
+							写真を撮って<br class="p-top__br">商品を出品
+						</h3>
 					</div>
 					<div class="p-top__panel p-top__panel--step">
 						<div class="p-top__step">STEP<span class="p-top__step-number">3</span></div>
-						<h3 class="p-top__step-title">購入された商品を<br>用意する</h3>
+						<h3 class="p-top__step-title">
+							購入された商品を<br class="p-top__br">用意する
+						</h3>
 					</div>
 				</div>
 			</section>

@@ -22,6 +22,15 @@
     padding: $space_l;
     padding-left: 25px;
     border-left: 5px solid transparent;
+    @include mq() {
+      font-size: $font-size_m;
+      text-align: center;
+      padding: $space_m $space_xl;
+    }
+    @include mq('tab') {
+      font-size: $font-size_m;
+      padding-left: $space_l;
+    }
     &:hover {
       color: $font-color;
       background: rgba(0,0,0,.05);
@@ -32,15 +41,9 @@
       color: $font-color;
       background: rgba(0,0,0,.05);
       border-left: 5px solid $main-color;
-    }
-    @include mq() {
-      font-size: $font-size_m;
-      text-align: center;
-      padding: $space_m $space_xl;
-    }
-    @include mq('tab') {
-      font-size: $font-size_m;
-      padding-left: $space_l;
+      @include mq() {
+        border: 1px solid $main-color;
+      }
     }
   }
 }
