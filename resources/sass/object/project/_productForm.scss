@@ -127,15 +127,16 @@
   }
   &__btn {
     margin-left: $space_xl;
-    &:first-child {
-      margin-left: initial;
-    }
     @include mq() {
       width: 50%;
       margin-left: $space_m;
     }
-    &--back {
-
+    @include mq('tab') {
+      margin-left: $space_l;
     }
+    &:first-child {
+      margin-left: initial;
+    }
+
   }
 }

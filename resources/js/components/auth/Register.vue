@@ -229,7 +229,7 @@ export default {
 		}
 	},
 	created() {
-		this.clearError();
+		this.clearError(); //エラーをクリアする
 	},
 	watch: {
 		$route: {

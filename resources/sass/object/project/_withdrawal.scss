@@ -1,7 +1,7 @@
 .p-withdrawal {
   width: 100%;
   @include mq('tab') {
-    padding-right: $space_xl;
+    padding-right: $space_l;
   }
   &__title {
     background: $bg-color;

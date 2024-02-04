@@ -215,6 +215,8 @@
     }
     @include mq('tab') {
       grid-template-columns: 50% 50%;
+      padding-right: $space_xl;
+      gap: $space_xl;
     }
     @include mq('mon') {
     }

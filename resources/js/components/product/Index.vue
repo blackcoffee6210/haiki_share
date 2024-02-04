@@ -131,27 +131,21 @@
 							<div class="p-sidebar-index__price-container">
 								<div class="p-sidebar-index__price">{{ product.price | numberFormat }}</div>
 								<!-- todo: 賞味期限切れの表示を実装 -->
-								<div class="p-sidebar-index__expire">
+								<div class="p-sidebar-index__expire" v-if="sidebarExpireDate">
+									<span class="u-color__main u-font-bold">切れ</span>
+									<span class="p-product__expire__date">
+										{{ product.expire | fromExpire }}
+									</span>
+									日
+								</div>
+								<div class="p-sidebar-index__expire" v-else>
 									残り
 									<span class="p-product__expire__date">
 										{{ product.expire | momentExpire }}
 									</span>
 									日
-								<!--	<div v-if="expireDate">&lt;!&ndash; 賞味期限が過ぎたときの表示 &ndash;&gt;-->
-								<!--		<span class="u-color__main u-font-bold">切れ</span>-->
-								<!--		<span class="p-product__expire__date">-->
-								<!--			{{ product.expire | fromExpire }}-->
-								<!--		</span>-->
-								<!--		日-->
-								<!--	</div>-->
-								<!--	<div v-else>&lt;!&ndash; 賞味期限内のときの表示 &ndash;&gt;-->
-								<!--		残り-->
-								<!--		<span class="p-product__expire__date">-->
-								<!--			{{ product.expire | momentExpire }}-->
-								<!--		</span>-->
-								<!--		日-->
-								<!--	</div>-->
 								</div>
+								
 							</div>
 							<div class="c-flex">
 								<img class="c-icon p-sidebar-index__icon"
@@ -202,6 +196,14 @@ export default {
 			categories: [],       //カテゴリー
 			prefectures: [],      //出品したコンビニのある都道府県
 			products: [], 				//商品リスト
+			product: {
+				image: '',
+				category_id: '',
+				name: '',
+				detail: '',
+				expire: '',
+				price: ''
+			},
 			currentPage: 0,			  //現在のページ
 			lastPage: 0, 					//最後のページ
 			total: 0, 						//商品の合計数
@@ -209,6 +211,12 @@ export default {
 		}
 	},
 	computed: {
+		sidebarExpireDate() { //商品の賞味期限が過ぎているかどうかを返す
+			let dt = moment().format('YYYY-MM-DD');
+			if(this.product.expire >= dt) {
+				return true;
+			}
+		},
 		filteredProducts() { //絞り込んだ商品を返す
 			let newProducts = []; //絞り込み後の商品を格納する新しい配列
 			const today = moment(new Date).format('YYYY-MM-DD hh:mm:ss'); //今日の日付を用意
@@ -242,9 +250,9 @@ export default {
 			}
 			
 			switch (this.sortPrice) { //新しい配列を並び替える
-				case 1: //金額ソート選択なし（デフォルト）
+				case 1:  //金額ソート選択なし（デフォルト）
 					break; //元の順番にsortしているので並び替えはなし
-				case 2: //価格が安い順に並び替える
+				case 2:  //価格が安い順に並び替える
 					newProducts.sort(function(a, b) {
 						return a.price - b.price;
 					});
@@ -275,6 +283,8 @@ export default {
 				return false;
 			}
 			this.recommendProducts = response.data;
+			console.log('recommendProducts')
+			console.log(response.data);
 		},
 		async getCategories() { //カテゴリー取得メソッド
 			const response = await axios.get('/api/categories'); //API接続

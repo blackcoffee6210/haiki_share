@@ -13,6 +13,9 @@
     @include mq() {
       margin-top: 0;
     }
+    @include mq('tab') {
+      margin-top: 0;
+    }
   }
   &__group {
     position: absolute;

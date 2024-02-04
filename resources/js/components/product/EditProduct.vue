@@ -156,7 +156,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import Loading from "../Loading";
+import Loading        from "../Loading";
 import { OK, UNPROCESSABLE_ENTITY } from "../../util";
 
 export default {
@@ -239,7 +239,7 @@ export default {
 			}
 			
 			reader.readAsDataURL(event.target.files[0]); //ファイルを読み込む(ファイルはデータURL形式で受け取れる(上記onload参照))
-			this.product.image = event.target.files[0]; //データに入力値のファイルを代入
+			this.product.image = event.target.files[0];  //データに入力値のファイルを代入
 		},
 		reset() { //入力欄の値とプレビュー表示をクリアするメソッド
 			this.preview = '';
@@ -275,10 +275,6 @@ export default {
 				this.$store.commit('error/setCode', response.status);
 				return false;
 			}
-			
-			// this.percent = response.data;
-			// console.log('%');
-			// console.log(this.percent);
 			
 			this.$store.commit('message/setContent', { //メッセージ登録
 				content: '商品が更新されました！'

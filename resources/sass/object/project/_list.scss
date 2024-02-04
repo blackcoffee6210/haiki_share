@@ -3,6 +3,9 @@
   @include mq() {
     margin-right: initial;
   }
+  @include mq('tab') {
+    margin-right: $space_l;
+  }
   &__no-product,
   &__no-review {
     text-align: center;
@@ -43,7 +46,7 @@
     @include mq('tab') {
       grid-template-columns: 50% 50%;
       gap: $space_l;
-      padding-right: $space_m;
+      padding-right: $space_l;
     }
   }
   &__card {

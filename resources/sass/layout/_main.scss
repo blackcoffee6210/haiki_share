@@ -9,7 +9,7 @@
   }
   @include mq('tab') {
     width: 100%;
-    margin: 0 auto;
+    margin: 30px auto 0;
     padding-right: $space_l;
     padding-left: $space_l;
   }

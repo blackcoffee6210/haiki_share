@@ -131,7 +131,6 @@
 						</router-link>
 						
 						<!-- 購入キャンセルボタン 自分が購入した商品のときに表示	-->
-						<!--todo: 購入から3日以内または賞味期限1日前まではキャンセル可能-->
 						<button v-show="purchasedByUser"
 										@click="cancel"
 										class="c-btn c-btn--white p-product-detail__btn">購入キャンセル
@@ -157,8 +156,7 @@
 					{{ product.detail }}
 				</div>
 				
-				<!-- twitterシェアボタン -->
-				<!-- 自分の商品のときは表示しない -->
+				<!-- twitterシェアボタン(自分の商品のときは表示しない) -->
 				<div class="p-product-detail__twitter-container"
 						 v-show="!product.is_my_product">
 					<social-sharing url="http://127.0.0.1:8000/products/48"

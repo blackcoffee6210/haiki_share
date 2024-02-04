@@ -13,6 +13,7 @@
 		<div class="p-top__bg">
 			<transition name="hero" appear>
 				<section class="p-top__section p-top__section--hero">
+					<!--<img src="/storage/images/index.png" class="p-top__hero-img" alt="">-->
 					<div class="p-top__title">そこのあなた！ <br class="u-br">
 						こう思ったことはありませんか？
 					</div>
@@ -21,21 +22,27 @@
 						スーパーより高い..<br>
 						もっと安く買えたらな...
 					</p>
+					<img src="/storage/images/expensive.png"
+							 class="p-top__think-img p-top__think-img--user"
+							 alt="">
 					<p class="p-top__think p-top__think--shop">
 						まだ食べられる食品を<br>
 						廃棄で捨てるのは<br class="u-br">
 						もったいないな...
 					</p>
+					<img src="/storage/images/trash.png"
+							 class="p-top__think-img p-top__think-img--shop"
+							 alt="">
 					<p class="p-top__title">
 						そのお悩み、<br>
 						「Haiki Share（ハイキシェア）」で解決できます！
 					</p>
+					<router-link class="c-btn p-top__btn" :to="{ name: 'index' }">商品一覧を見てみる</router-link>
 				</section>
 			</transition>
 		</div>
 		
 		<!-- サービス紹介 - haiki_shareとは？ -->
-		<!--todo: underlineを動的にする！-->
 		<div class="p-top__bg--alter">
 			<section class="p-top__section">
 				<h2 class="p-top__title"
@@ -91,16 +98,25 @@
 						<h3 class="p-top__panel__title">
 							コンビニの食品を<br>安く購入できる！
 						</h3>
+						<img src="/storage/images/Discount-amico.png"
+								 class="p-top__merit-img"
+								 alt="">
 					</div>
 					<div class="c-card p-top__panel">
 						<h3 class="p-top__panel__title">
 							お近くのコンビニから<br>探すことができる！
 						</h3>
+						<img src="/storage/images/near.png"
+								 class="p-top__merit-img"
+								 alt="">
 					</div>
 					<div class="c-card p-top__panel">
 						<h3 class="p-top__panel__title">
 							たくさんの<br>カテゴリーから選べる！
 						</h3>
+						<img src="/storage/images/bunch.png"
+								 class="p-top__merit-img"
+								 alt="">
 					</div>
 				</div>
 				
@@ -110,17 +126,26 @@
 						<h3 class="p-top__panel__title">
 							今まで捨てていた食品<br>で売り上げUP！
 						</h3>
+						<img src="/storage/images/increase.png"
+								 class="p-top__merit-img"
+								 alt="">
 					</div>
 					<div class="c-card p-top__panel">
 						<h3 class="p-top__panel__title">
 							カンタン出品！<br>
 							スマホでもパソコンでも！
 						</h3>
+						<img src="/storage/images/device.png"
+								 class="p-top__merit-img"
+								 alt="">
 					</div>
 					<div class="c-card p-top__panel">
 						<h3 class="p-top__panel__title">
 							賞味期限が近い、<br>過ぎている食品もOK!
 						</h3>
+						<img src="/storage/images/time.png"
+								 class="p-top__merit-img"
+								 alt="">
 					</div>
 				</div>
 			</section>
@@ -129,7 +154,10 @@
 		<!-- 実績・事例 -->
 		<div class="p-top__bg--alter">
 			<section class="p-top__section">
-				<h2 class="p-top__title">実績・事例</h2>
+				<h2 class="p-top__title"
+						:class="{ fadeIn4: visible4 }"
+						v-show="visible4">実績・事例
+				</h2>
 				<div class="p-top__container">
 					<div class="c-card p-top__panel">
 						<div class="p-top__panel__title">
@@ -153,7 +181,10 @@
 		<!-- 利用者の声 -->
 		<div class="p-top__bg">
 			<section class="p-top__section">
-				<h2 class="p-top__title">利用者の声</h2>
+				<h2 class="p-top__title"
+						:class="{ fadeIn5: visible5 }"
+						v-show="visible5">利用者の声
+				</h2>
 				<div class="p-top__container">
 					<Review v-show="!loading"
 									class="p-top__review"
@@ -168,9 +199,36 @@
 		<div class="p-top__bg--alter">
 			<section class="p-top__section">
 				<h2 class="p-top__title">こんな方におすすめ！</h2>
-				<p>毎日食べる食品を安く買いたいお客様！</p>
-				<p>今まで捨てていた食品を売って売り上げを上げたいコンビニの皆様！</p>
-				<p>美味しく食べてSDGs！ 地球に貢献!</p>
+				<div class="p-top__recommend"
+						 :class="{ fadeIn6__500: visible6 }"
+						 v-show="visible6">
+					<img src="/storage/images/Discount-amico.png"
+							 class="p-top__recommend__img"
+							 alt="">
+					<p class="p-top__recommend__text">
+						毎日食べる食品を安く買いたいお客様！
+					</p>
+				</div>
+				<div class="p-top__recommend"
+						 :class="{ fadeIn6__750: visible6 }"
+						 v-show="visible6">
+					<img src="/storage/images/increase.png"
+							 class="p-top__recommend__img"
+							 alt="">
+					<p class="p-top__recommend__text">
+						今まで捨てていた食品を売って<br>売り上げを上げたいコンビニの皆様！
+					</p>
+				</div>
+				<div class="p-top__recommend"
+						 :class="{ fadeIn6__1000: visible6 }"
+						 v-show="visible6">
+					<img src="/storage/images/enviroment.png"
+							 class="p-top__recommend__img"
+							 alt="">
+					<p class="p-top__recommend__text">
+						美味しく食べてSDGs！ 地球に貢献!
+					</p>
+				</div>
 			</section>
 		</div>
 		
@@ -182,19 +240,28 @@
 				<div class="p-top__container p-top__container--step p-top__container--2line">
 					<div class="p-top__ornament p-top__ornament--step">利用者の方</div>
 					<div class="p-top__panel p-top__panel--step">
-						<div class="p-top__step">STEP<span class="p-top__step-number">1</span></div>
+						<div class="p-top__step">
+							STEP
+							<span class="p-top__step-number">1</span>
+						</div>
 						<h3 class="p-top__step-title">
 							カンタン！<br class="p-top__br">会員登録
 						</h3>
 					</div>
 					<div class="p-top__panel p-top__panel--step">
-						<div class="p-top__step">STEP<span class="p-top__step-number">2</span></div>
+						<div class="p-top__step">
+							STEP
+							<span class="p-top__step-number">2</span>
+						</div>
 						<h3 class="p-top__step-title">
 							気になる商品を<br class="p-top__br">購入する
 						</h3>
 					</div>
 					<div class="p-top__panel p-top__panel--step">
-						<div class="p-top__step">STEP<span class="p-top__step-number">3</span></div>
+						<div class="p-top__step">
+							STEP
+							<span class="p-top__step-number">3</span>
+						</div>
 						<h3 class="p-top__step-title">
 							コンビニで<br class="p-top__br">商品を受け取る
 						</h3>
@@ -270,6 +337,9 @@ export default {
 			visible1: false,
 			visible2: false,
 			visible3: false,
+			visible4: false,
+			visible5: false,
+			visible6: false,
 		}
 	},
 	methods: {
@@ -315,22 +385,49 @@ export default {
 		},
 		handleScroll3() {
 			if(!this.visible3) {
-				this.visible3 = window.scrollY > 200;
-			}else if(window.scrollY < 190) {
+				this.visible3 = window.scrollY > 600;
+			}else if(window.scrollY < 590) {
 				this.visible3 = !this.visible3;
 			}
-		}
+		},
+		handleScroll4() {
+			if(!this.visible4) {
+				this.visible4 = window.scrollY > 1450;
+			}else if(window.scrollY < 1440) {
+				this.visible4 = !this.visible4;
+			}
+		},
+		handleScroll5() {
+			if(!this.visible5) {
+				this.visible5 = window.scrollY > 1800;
+			}else if(window.scrollY < 1790) {
+				this.visible5 = !this.visible5;
+			}
+		},
+		handleScroll6() {
+			if(!this.visible6) {
+				this.visible6 = window.scrollY > 2300;
+			}else if(window.scrollY < 2290) {
+				this.visible6 = !this.visible6;
+			}
+		},
 	},
 	mounted() {
 		window.addEventListener('scroll', this.scrollWindow);
 		window.addEventListener('scroll', this.handleScroll1);
 		window.addEventListener('scroll', this.handleScroll2);
 		window.addEventListener('scroll', this.handleScroll3);
+		window.addEventListener('scroll', this.handleScroll4);
+		window.addEventListener('scroll', this.handleScroll5);
+		window.addEventListener('scroll', this.handleScroll6);
 	},
 	destroyed() {
 		window.removeEventListener("scroll", this.handleScroll1);
 		window.removeEventListener("scroll", this.handleScroll2);
 		window.removeEventListener("scroll", this.handleScroll3);
+		window.removeEventListener("scroll", this.handleScroll4);
+		window.removeEventListener("scroll", this.handleScroll5);
+		window.removeEventListener("scroll", this.handleScroll6);
 	},
 	watch: {
 		$route: { //$routerを監視してページが変わったときにメソッドが実行されるようにする
@@ -379,6 +476,85 @@ export default {
 	0% {
 		opacity: 0;
 		transform: translateX(50px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateX(0px);
+	}
+}
+
+.fadeIn4 {
+	animation: fadeIn4 1s;
+}
+@keyframes fadeIn4 {
+	0% {
+		opacity: 0;
+		transform: translateX(50px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateX(0px);
+	}
+}
+
+.fadeIn5 {
+	animation: fadeIn5 1s;
+}
+@keyframes fadeIn5 {
+	0% {
+		opacity: 0;
+		transform: translateX(50px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateX(0px);
+	}
+}
+
+.fadeIn6__500 {
+	animation-name: fadeIn6__500;
+	animation-delay: 500ms;
+	animation-duration: 1.5s;
+	animation-fill-mode: forwards;
+	transform: translateX(-350px);
+	opacity: 0;
+}
+@keyframes fadeIn6__500 {
+	0% {
+	}
+	100% {
+		opacity: 1;
+		transform: translateX(0px);
+	}
+}
+
+.fadeIn6__750 {
+	animation-name: fadeIn6__750;
+	animation-delay: 750ms;
+	animation-duration: 1.5s;
+	animation-fill-mode: forwards;
+	transform: translateX(-350px);
+	opacity: 0;
+}
+@keyframes fadeIn6__750 {
+	0% {
+	}
+	100% {
+		opacity: 1;
+		transform: translateX(0px);
+	}
+}
+
+.fadeIn6__1000 {
+	animation-name: fadeIn6__1000;
+	animation-delay: 1000ms;
+	animation-duration: 1.5s;
+	animation-fill-mode: forwards;
+	transform: translateX(-350px);
+	opacity: 0;
+}
+@keyframes fadeIn6__1000 {
+	0% {
 	}
 	100% {
 		opacity: 1;
