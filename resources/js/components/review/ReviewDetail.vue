@@ -13,14 +13,16 @@
 						 alt=""
 						 v-else
 						 class="c-icon p-review-detail__image">
-				<img class="c-icon p-review-detail__image"
-						 v-show="!isShopUser"
-						 v-if="review.receiver_image"
-						 :src="review.receiver_image" alt="">
-				<img src="/storage/images/no-image.png"
-						 alt=""
-						 v-else
-						 class="c-icon p-review-detail__image">
+				<div v-if="user !== null"><!-- ログインしていなかったら表示しない -->
+					<img class="c-icon p-review-detail__image"
+							 v-show="!isShopUser"
+							 v-if="review.receiver_image"
+							 :src="review.receiver_image" alt="">
+					<img src="/storage/images/no-image.png"
+							 alt=""
+							 v-else
+							 class="c-icon p-review-detail__image">
+				</div>
 				<div>
 					<!-- 投稿した利用者名	-->
 					<div class="p-review-detail__name">
@@ -70,7 +72,7 @@
 import { OK }         from "../../util";
 import Loading        from "../Loading";
 import Product        from "../product/Product";
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 
 export default {
 	name: "ReviewDetail",
@@ -95,6 +97,9 @@ export default {
 		}
 	},
 	computed: {
+		...mapState({
+			user: state => state.auth.user,
+		}),
 		...mapGetters({
 			isShopUser: 'auth/isShopUser',
 			userId: 'auth/userId',

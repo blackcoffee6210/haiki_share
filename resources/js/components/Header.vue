@@ -5,7 +5,7 @@
 			<div class="p-header__left">
 				<!-- RouterLinkを使うとaタグのようなGETリクエストが発生せず、フロントエンドでの画面遷移、VueRouterでコンポーネントの切り替えを行う -->
 				<router-link class="p-header__logo" :to="{ name: 'index' }">
-					Ha<span class="p-header__logo--catch">i</span>ki Share
+					Ha<span class="c-color__main">i</span>ki Share
 					<!--Haiki<br class="p-header__logo&#45;&#45;sp"> Share-->
 				</router-link>
 				<div class="p-header__sub">

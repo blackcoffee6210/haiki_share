@@ -4,8 +4,10 @@
   padding: $space_m;
   @include mq() {
     min-height: 196px;
-    //max-height: 196px;
     padding: $space_s;
+  }
+  @include mq('tab') {
+    min-height: 260px;
   }
   &__user-info {
     display: flex;
@@ -53,13 +55,17 @@
   &__detail {
     word-wrap: break-word;
     display: -webkit-box;
-    -webkit-line-clamp: 6; //1行に丸める
+    -webkit-line-clamp: 6; //6行に丸める
     -webkit-box-orient: vertical;
     overflow: hidden;
     min-height: 154px;
     @include mq() {
       min-height: 112px;
-      -webkit-line-clamp: 5; //1行に丸める
+      -webkit-line-clamp: 5; //5行に丸める
+    }
+    @include mq('tab') {
+      min-height: 140px;
+      -webkit-line-clamp: 5; //5行に丸める
     }
   }
 }

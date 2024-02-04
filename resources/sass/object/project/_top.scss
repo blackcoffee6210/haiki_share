@@ -49,13 +49,37 @@
     position: absolute;
     width: 150px;
     height: 150px;
+    @include mq() {
+      width: 100px;
+      height: 100px;
+    }
+    @include mq('tab') {
+      width: 120px;
+      height: 120px;
+    }
     &--user {
       top: 120px;
       right: 0;
+      @include mq() {
+        top: 110px;
+        right: 10px;
+      }
+      @include mq('tab') {
+        top: 130px;
+        right: 30px;
+      }
     }
     &--shop {
-      bottom: 400px;
+      top: 320px;
       left: 0;
+      @include mq() {
+        top: 235px;
+        left: 10px;
+      }
+      @include mq('tab') {
+        top: 285px;
+        left: 30px;
+      }
     }
   }
   &__think {
@@ -65,12 +89,14 @@
     background: $white;
     padding: $space_xl;
     border-radius: 30px;
-    //box-shadow: 0 10px 20px -10px #ccc;
     @include mq() {
-      width: 75%;
+      width: 65%;
       font-size: $font-size_l;
-      padding: $space_s $space_m $space_s $space_2xl;
+      padding: $space_s $space_m $space_s $space_xl;
       border-radius: 20px;
+    }
+    @include mq('tab') {
+      font-size: $font-size_l;
     }
     &--user {
       margin: 60px auto 80px 0;
@@ -140,7 +166,10 @@
   }
   &__merit-img {
     width: 100%;
-    height: 200px;
+    height: 190px;
+    @include mq() {
+      height: 130px;
+    }
   }
   &__text {
     margin-bottom: $space_3xl;
@@ -201,7 +230,7 @@
     padding: $space_3xl $space_m;
     @include mq() {
       width: 70%;
-      height: 180px;
+      height: 210px;
       margin: 0 auto;
       margin-bottom: $space_xl;
       padding: $space_xl $space_m;
@@ -231,6 +260,7 @@
         height: 85px;
         margin-right: auto;
         margin-left: auto;
+        margin-bottom: $space_3xl;
         padding-top: 0;
       }
       &::after {
@@ -247,9 +277,9 @@
           top: 85px;
           left: 0;
           border-left: 125px solid transparent;
-          border-top: 20px solid $white;
+          border-top: 30px solid $white;
           border-right: 125px solid transparent;
-          border-bottom: 20px solid transparent;
+          border-bottom: 30px solid transparent;
         }
       }
     }
@@ -258,6 +288,9 @@
       font-weight: bold;
       font-size: $font-size_l;
       @include mq() {
+        font-size: $font-size_default;
+      }
+      @include mq('tab') {
         font-size: $font-size_default;
       }
     }
@@ -283,6 +316,9 @@
       @include mq() {
         font-size: $font-size_m;
       }
+      @include mq('tab') {
+        font-size: $font-size_default;
+      }
     }
   }
   &__review {
@@ -290,6 +326,12 @@
     @include mq() {
       width: 70%;
       margin: 0 auto $space_xl;
+    }
+    &:last-child {
+      margin-right: initial;
+      @include mq() {
+        margin-right: auto;
+      }
     }
   }
   &__recommend {
@@ -305,10 +347,18 @@
       width: 130px;
       height: 100%;
       margin-right: $space_2xl;
+      @include mq() {
+        width: 100px;
+        height: 100px;
+        margin-right: $space_m;
+      }
     }
     &__text {
       font-weight: bold;
       font-size: $font-size_xl;
+      @include mq() {
+        font-size: $font-size_m;
+      }
     }
   }
   &__btn {
@@ -328,6 +378,12 @@
   &__br {
     @include mq() {
       display: none;
+    }
+    &--think {
+      display: none;
+      @include mq() {
+        display: initial;
+      }
     }
   }
   &__go-top {
