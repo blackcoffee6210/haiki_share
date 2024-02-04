@@ -62,8 +62,19 @@
   }
   &__search {
     margin-bottom: $space_xl;
+    position: relative;
     @include mq() {
       margin-bottom: $space_m;
+    }
+  }
+  &__trash-icon {
+    position: absolute;
+    right: 10px;
+    top: 42px;
+    font-size: 20px;
+    color: #fc8134;
+    &:hover {
+      cursor: pointer;
     }
   }
   &__sort {

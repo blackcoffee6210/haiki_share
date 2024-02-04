@@ -62,6 +62,11 @@
 								 v-model="keyword"
 								 id="search"
 								 class="c-input p-sidebar-index__input">
+					<!-- ゴミ箱アイコン -->
+					<font-awesome-icon :icon="['fas', 'trash']"
+														 @click="deleteSearch"
+														 class="p-sidebar-index__trash-icon"
+														 color="#ff6f80" />
 				</div>
 				
 				<!-- 金額ソート -->
@@ -324,6 +329,9 @@ export default {
 			this.lastPage    = response.data.last_page;    //最後のページ
 			this.total       = response.data.total;        //商品の数
 		},
+		deleteSearch() {
+			this.keyword = '';
+		}
 	},
 	watch: {
 		$route: {
