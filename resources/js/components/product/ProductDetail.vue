@@ -213,7 +213,6 @@ import { OK }         from "../../util";
 import { mapGetters } from 'vuex';
 import Loading        from "../Loading";
 import Product        from "./Product";
-import { Carousel, Slide } from 'vue-carousel';
 import moment from "moment";
 
 export default {
@@ -227,8 +226,6 @@ export default {
 	components: {
 		Loading,
 		Product,
-		Carousel,
-		Slide
 	},
 	data() {
 		return {

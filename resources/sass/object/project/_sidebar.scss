@@ -71,8 +71,14 @@
     position: absolute;
     right: 10px;
     top: 42px;
-    font-size: 20px;
+    font-size: $font-size_l;
     color: #fc8134;
+    @include mq() {
+      top: 35px;
+    }
+    @include mq('tab') {
+      top: 40px;
+    }
     &:hover {
       cursor: pointer;
     }

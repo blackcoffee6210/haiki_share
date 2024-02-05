@@ -3056,8 +3056,18 @@ body {
   position: absolute;
   right: 10px;
   top: 42px;
-  font-size: 20px;
+  font-size: 1.8rem;
   color: #fc8134;
+}
+@media screen and (max-width: 450px) {
+  .p-sidebar-index__trash-icon {
+    top: 35px;
+  }
+}
+@media screen and (min-width: 451px) and (max-width:820px) {
+  .p-sidebar-index__trash-icon {
+    top: 40px;
+  }
 }
 .p-sidebar-index__trash-icon:hover {
   cursor: pointer;

@@ -329,7 +329,7 @@ export default {
 			this.lastPage    = response.data.last_page;    //最後のページ
 			this.total       = response.data.total;        //商品の数
 		},
-		deleteSearch() {
+		deleteSearch() { //サイドバー商品検索欄の文字列を削除するメソッド
 			this.keyword = '';
 		}
 	},

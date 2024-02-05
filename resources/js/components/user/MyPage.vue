@@ -280,7 +280,6 @@ export default {
 			deletedProducts: {},      //削除した商品（コンビニ）
 			reviewedUsers: {},        //投稿したレビュー（利用者）
 			wasReviewedUsers: {},     //投稿されたレビュー（コンビニ）
-			
 		}
 	},
 	computed: {
