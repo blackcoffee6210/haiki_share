@@ -128,15 +128,19 @@
 						<router-link class="c-card__link"
 												 :to="{ name: 'product.detail',
 																params: { id: product.id.toString() }}" />
+						<!-- 商品画像 -->
 						<img class="p-sidebar-index__img"
 								 :src="product.image"
 								 alt="">
 						<div class="p-sidebar-index__right">
+							<!-- 商品名 -->
 							<div class="p-sidebar-index__card-title">{{ product.name }}</div>
 							<div class="p-sidebar-index__price-container">
+								<!-- 金額 -->
 								<div class="p-sidebar-index__price">{{ product.price | numberFormat }}</div>
-								<!-- todo: 賞味期限切れの表示を実装 -->
-								<div class="p-sidebar-index__expire" v-if="sidebarExpireDate">
+								
+								<!-- 賞味期限 -->
+								<div class="p-sidebar-index__expire" v-if="sidebarExpireDate(product)">
 									<span class="u-color__main u-font-bold">切れ</span>
 									<span class="p-product__expire__date">
 										{{ product.expire | fromExpire }}
@@ -216,12 +220,12 @@ export default {
 		}
 	},
 	computed: {
-		sidebarExpireDate() { //商品の賞味期限が過ぎているかどうかを返す
-			let dt = moment().format('YYYY-MM-DD');
-			if(this.product.expire >= dt) {
-				return true;
-			}
-		},
+		// sidebarExpireDate() { //商品の賞味期限が過ぎているかどうかを返す
+		// 	let dt = moment().format('YYYY-MM-DD');
+		// 	if(this.product.expire <= dt) {
+		// 		return true;
+		// 	}
+		// },
 		filteredProducts() { //絞り込んだ商品を返す
 			let newProducts = []; //絞り込み後の商品を格納する新しい配列
 			const today = moment(new Date).format('YYYY-MM-DD hh:mm:ss'); //今日の日付を用意
@@ -280,6 +284,12 @@ export default {
 		}
 	},
 	methods: {
+		sidebarExpireDate(product) { //商品の賞味期限が過ぎているかどうかを返す
+			let dt = moment().format('YYYY-MM-DD');
+			if(product.expire <= dt) {
+				return true;
+			}
+		},
 		async getRecommend() { //おすすめの商品を5件取得
 			const response = await axios.get('/api/products/ranking');
 			

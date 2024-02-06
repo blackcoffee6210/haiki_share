@@ -141,25 +141,60 @@
 				<FadeIn>
 					<h2 class="p-top__title">実績・事例</h2>
 				</FadeIn>
-				<div class="p-top__container">
-					<div class="c-card p-top__panel">
-						<div class="p-top__panel__title">
-							北は北海道、南は沖縄までたくさんの方にご利用いただいてます！
-						</div>
-						<img src="/storage/images/japan.png"
-								 class="p-top__panel__image"
-								 alt="">
-					</div>
-					<div class="c-card p-top__panel">
-						LOREM IPSUM DOLOR SIT AMET, CONSECTETUR ADIPISICING ELIT, SED DO
-						EIUSMOD TEMPOR INCIDIDUNT UT LABORE
-					</div>
-					<div class="c-card p-top__panel">
-						LOREM IPSUM DOLOR SIT AMET, CONSECTETUR ADIPISICING ELIT, SED DO
-					</div>
+				
+				<div class="p-top__recommend">
+					<img src="/storage/images/japan.png"
+							 class="p-top__recommend__img"
+							 alt="">
+					<p class="p-top__recommend__text">
+						北は北海道、南は沖縄までたくさんの方に<br>
+						ご利用いただいてます！
+					</p>
 				</div>
+				<div class="p-top__recommend">
+					<img src="/storage/images/money.png"
+							 class="p-top__recommend__img"
+							 alt="">
+					<p class="p-top__recommend__text">
+						Haiki Shareを利用して売り上げが1.3倍に！
+					</p>
+				</div>
+				<div class="p-top__recommend">
+					<img src="/storage/images/store.png"
+							 class="p-top__recommend__img"
+							 alt="">
+					<p class="p-top__recommend__text">
+						大手コンビニチェーン「Seven Store」にサービスを<br>
+						ご利用いただいております！
+					</p>
+				</div>
+				
 			</section>
 		</div>
+		<!--<div class="p-top__bg&#45;&#45;alter">-->
+		<!--	<section class="p-top__section">-->
+		<!--		<FadeIn>-->
+		<!--			<h2 class="p-top__title">実績・事例</h2>-->
+		<!--		</FadeIn>-->
+		<!--		<div class="p-top__container">-->
+		<!--			<div class="c-card p-top__panel">-->
+		<!--				<div class="p-top__panel__title">-->
+		<!--					北は北海道、南は沖縄までたくさんの方にご利用いただいてます！-->
+		<!--				</div>-->
+		<!--				<img src="/storage/images/japan.png"-->
+		<!--						 class="p-top__panel__image"-->
+		<!--						 alt="">-->
+		<!--			</div>-->
+		<!--			<div class="c-card p-top__panel">-->
+		<!--				LOREM IPSUM DOLOR SIT AMET, CONSECTETUR ADIPISICING ELIT, SED DO-->
+		<!--				EIUSMOD TEMPOR INCIDIDUNT UT LABORE-->
+		<!--			</div>-->
+		<!--			<div class="c-card p-top__panel">-->
+		<!--				LOREM IPSUM DOLOR SIT AMET, CONSECTETUR ADIPISICING ELIT, SED DO-->
+		<!--			</div>-->
+		<!--		</div>-->
+		<!--	</section>-->
+		<!--</div>-->
 		
 		<!-- 利用者の声 -->
 		<div class="p-top__bg">
@@ -183,6 +218,7 @@
 				<FadeIn>
 					<h2 class="p-top__title">こんな方におすすめ！</h2>
 				</FadeIn>
+				
 				<FadeIn>
 					<div class="p-top__recommend">
 						<img src="/storage/images/Discount-amico.png"
