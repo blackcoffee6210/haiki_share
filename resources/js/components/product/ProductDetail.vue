@@ -27,7 +27,7 @@
 				<div class="p-product-detail__name-container">
 					<h2 class="p-product-detail__product-name">{{ product.name }}</h2>
 					<div class="p-product-detail__price">
-						{{ product.price | numberFormat }}
+						{{ product.price.toString() | numberFormat }}
 					</div>
 				</div>
 				
@@ -415,10 +415,20 @@ export default {
 														params: { id: this.product.user_id.toString() }}); //マイページに遷移する
 			}
 		},
-		forceDelete() { //論理削除した商品を完全に削除する
+		async forceDelete() { //論理削除した商品を完全に削除する
 			if(confirm('この商品を完全に削除しますか？（復元できません）')) {
-				console.log('削除しました！');
-				this.$router.push({name: 'index'});
+				const response = await axios.post(`/api/products/${this.id}/forceDelete`); //API通信
+				if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
+					this.$store.commit('error/setCode', response.status);
+					return false;
+				}
+				
+				this.$store.commit('message/setContent', { //メッセージ登録
+					content: '商品を完全に削除しました！'
+				});
+				
+				this.$router.push({ name: 'user.mypage',
+					params: { id: this.product.user_id.toString() }}); //マイページに遷移する
 			}
 		},
 		async getMyReview() { //レビュー投稿済みかどうか

@@ -75,7 +75,7 @@ class UserController extends Controller
 	{
 		return User::find($id)
 				   ->products()
-				   ->orderByDesc('products.created_at')
+				   ->orderByDesc('products.updated_at')
 				   ->get();
 	}
 

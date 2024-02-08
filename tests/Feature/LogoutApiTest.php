@@ -15,8 +15,7 @@ class LogoutApiTest extends TestCase
 	{
 		parent::setUp();
 
-		//テストユーザー作成
-		$this->user = factory(User::class)->create();
+		$this->user = factory(User::class)->create(); //テストユーザー作成
 	}
 
 	/**

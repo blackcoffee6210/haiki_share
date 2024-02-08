@@ -15,8 +15,7 @@ class UserApiTest extends TestCase
 	{
 		parent::setUp();
 
-		//テストユーザー作成
-		$this->user = factory(User::class)->create();
+		$this->user = factory(User::class)->create(); //テストユーザー作成
 	}
 
 	/**
@@ -25,8 +24,11 @@ class UserApiTest extends TestCase
 	public function should_ログイン中のユーザーを返却する()
 	{
 		$response = $this->actingAs($this->user)->json('GET', route('user'));
+
 		$response->assertStatus(200)
-				 ->assertJson(['name' => $this->user->name]);
+				 ->assertJson([
+				 	'name' => $this->user->name
+				 ]);
 	}
 
 	/**

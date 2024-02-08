@@ -34,7 +34,7 @@ class ProductController extends Controller
 	public function index() //商品一覧取得
 	{
 		$products = Product::with(['user', 'category', 'likes', 'history'])
-							->orderByDesc('created_at')
+							->orderByDesc('updated_at')
 							->paginate(); //get()の代わりにpaginateを使うとtotalやcurrent_pageが自動的に追加される
 		return $products;
 
@@ -154,7 +154,8 @@ class ProductController extends Controller
 
 	public function forceDelete(string $id) //商品を物理削除する
 	{
-		return Product::find($id)->forceDelete();
+		Product::withTrashed()->find($id)->forceDelete();
+		return response(['product_id' => $id], 200);
 	}
 
 	public function like(string $id) //お気に入り登録

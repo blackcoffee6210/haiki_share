@@ -106,7 +106,7 @@
 					<!-- キャンセルした商品一覧(利用者) -->
 					<section class="p-mypge__section" v-show="!isShopUser">
 						<div class="p-mypage__title-container">
-							<h2 class="c-title p-mypage__title">キャンセルした商品一覧</h2>
+							<h2 class="c-title p-mypage__title">キャンセルした商品</h2>
 							<!-- 全件表示のリンク -->
 							<router-link class="p-mypage__link"
 													 :to="{ name: 'user.canceled',
@@ -131,7 +131,7 @@
 					<!-- キャンセルされた商品一覧(コンビニ) -->
 					<section class="p-mypge__section" v-show="isShopUser">
 						<div class="p-mypage__title-container">
-							<h2 class="c-title p-mypage__title">キャンセルされた商品一覧</h2>
+							<h2 class="c-title p-mypage__title">キャンセルされた商品</h2>
 							<!-- 全件表示のリンク -->
 							<router-link class="p-mypage__link"
 													 :to="{ name: 'user.canceled',
@@ -162,7 +162,7 @@
 					<!-- 削除した商品一覧(コンビニ) -->
 					<section class="p-mypge__section" v-show="isShopUser">
 						<div class="p-mypage__title-container">
-							<h2 class="c-title p-mypage__title">削除した商品一覧</h2>
+							<h2 class="c-title p-mypage__title">削除した商品</h2>
 							<!-- 全件表示のリンク -->
 							<router-link class="p-mypage__link"
 													 :to="{ name: 'user.deleted',
@@ -186,7 +186,7 @@
 					<!-- 投稿したレビュー一覧 -->
 					<section class="p-mypge__section" v-show="!isShopUser">
 						<div class="p-mypage__title-container">
-							<h2 class="c-title p-mypage__title">投稿したレビュー一覧</h2>
+							<h2 class="c-title p-mypage__title">投稿したレビュー</h2>
 							<!-- 全件表示のリンク -->
 							<router-link class="p-mypage__link"
 													 :to="{ name: 'user.reviewed',
@@ -213,7 +213,7 @@
 					<!-- 投稿されたレビュー一覧 -->
 					<section class="p-mypge__section" v-show="isShopUser">
 						<div class="p-mypage__title-container">
-							<h2 class="c-title p-mypage__title">投稿されたレビュー一覧</h2>
+							<h2 class="c-title p-mypage__title">投稿されたレビュー</h2>
 							<!-- 全件表示のリンク -->
 							<router-link class="p-mypage__link"
 													 :to="{ name: 'user.reviewed',

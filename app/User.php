@@ -89,8 +89,9 @@ class User extends Authenticatable
 	{
 		if($this->group === 1) {
 			return false;
+		}elseif($this->group === 2) {
+			return $this->prefecture->name;
 		}
-		return $this->prefecture->name;
 	}
 
 	//====================================================
