@@ -225,7 +225,7 @@
 								 class="p-top__recommend__img"
 								 alt="">
 						<p class="p-top__recommend__text">
-							毎日食べる食品を安く買いたいお客様！
+							毎日食べる食品を<br class="u-br"> 安く買いたいお客様！
 						</p>
 					</div>
 				</FadeIn>
