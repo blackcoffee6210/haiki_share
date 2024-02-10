@@ -27,7 +27,7 @@
 				<div class="p-product-detail__name-container">
 					<h2 class="p-product-detail__product-name">{{ product.name }}</h2>
 					<div class="p-product-detail__price">
-						{{ product.price.toString() | numberFormat }}
+						{{ product.price | numberFormat }}
 					</div>
 				</div>
 				
