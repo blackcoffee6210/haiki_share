@@ -159,10 +159,9 @@
 				<!-- twitterシェアボタン(自分の商品のときは表示しない) -->
 				<div class="p-product-detail__twitter-container"
 						 v-show="!product.is_my_product">
-					<social-sharing url="http://127.0.0.1:8000/products/48"
+					<social-sharing url="https://haiki-share.net/products/48"
 													v-show="isLogin"
-													title="vue-social-sharingのテスト"
-													quote="Vue is a progressive framework for building user interfaces."
+													quote="Haiki Share"
 													hashtags="haiki_share"
 													inline-template class="c-btn c-btn--twitter">
 						<network network="twitter">

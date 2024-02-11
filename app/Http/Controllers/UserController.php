@@ -56,7 +56,7 @@ class UserController extends Controller
 		$user->branch    = $request->branch;
 		$user->address   = $request->address;
 		$user->email     = $request->email;
-		$user->introduce = $request->introduce;
+		$user->introduce = $request->introduce ?? '';
 		$user->save();
 
 		return response($user, 200);
