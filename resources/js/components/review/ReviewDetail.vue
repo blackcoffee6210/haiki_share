@@ -10,19 +10,20 @@
 						 v-if="review.sender_image"
 						 :src="review.sender_image" alt="">
 				<img src="/storage/images/no-image.png"
+						 v-show="isShopUser"
 						 alt=""
 						 v-else
 						 class="c-icon p-review-detail__image">
-				<!--<div v-if="user !== null">&lt;!&ndash; ログインしていなかったら表示しない &ndash;&gt;-->
-					<img class="c-icon p-review-detail__image"
-							 v-show="!isShopUser"
-							 v-if="review.receiver_image"
-							 :src="review.receiver_image" alt="">
-					<img src="/storage/images/no-image.png"
-							 alt=""
-							 v-else
-							 class="c-icon p-review-detail__image">
-				<!--</div>-->
+				
+				<img class="c-icon p-review-detail__image"
+						 v-show="!isShopUser"
+						 v-if="review.receiver_image"
+						 :src="review.receiver_image" alt="">
+				<img src="/storage/images/no-image.png"
+						 v-show="!isShopUser"
+						 alt=""
+						 v-else
+						 class="c-icon p-review-detail__image">
 				<div>
 					<!-- 投稿した利用者名	-->
 					<div class="p-review-detail__name">
