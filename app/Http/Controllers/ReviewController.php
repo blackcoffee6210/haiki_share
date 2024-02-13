@@ -29,7 +29,7 @@ class ReviewController extends Controller
 						->where('sender_id', $s_id)
 						->where('receiver_id', $r_id)
 						->get();
-		return $review;
+		return $review ?? abort(404); //レビューが見つからなかったら404を返す
 	}
 
 	public function store(StoreReview $request) //レビュー投稿

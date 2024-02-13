@@ -162,7 +162,8 @@ return [
 		'new_password'              => '新しいパスワード',
 		'new_password_confirmation' => '新しいパスワード(確認)',
 		'recommendation_id'         => 'ユーザーの評価',
-		'title'                     => 'レビュータイトル'
+		'title'                     => 'レビュータイトル',
+		'introduce'                 => '自己紹介文'
 	],
 	'values' => [
 		'expire' => [

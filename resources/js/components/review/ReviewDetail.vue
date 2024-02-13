@@ -13,7 +13,7 @@
 						 alt=""
 						 v-else
 						 class="c-icon p-review-detail__image">
-				<div v-if="user !== null"><!-- ログインしていなかったら表示しない -->
+				<!--<div v-if="user !== null">&lt;!&ndash; ログインしていなかったら表示しない &ndash;&gt;-->
 					<img class="c-icon p-review-detail__image"
 							 v-show="!isShopUser"
 							 v-if="review.receiver_image"
@@ -22,7 +22,7 @@
 							 alt=""
 							 v-else
 							 class="c-icon p-review-detail__image">
-				</div>
+				<!--</div>-->
 				<div>
 					<!-- 投稿した利用者名	-->
 					<div class="p-review-detail__name">
