@@ -82,7 +82,7 @@
 				・当サイトでは、個人情報に関するお問い合わせのために、次の窓口を設定しております。<br>
 				<br>
 				
-				{{ name }}カスタマーセンター　{{ email }}
+				{{ name }}カスタマーサービス　{{ email }}
 			</p>
 			
 			<!-- TOPへ	-->
@@ -101,7 +101,7 @@ export default {
 	data() {
 		return {
 			name: 'Haiki Share',
-			email: 'mail@haiki_share.com',
+			email: 'haikishare1@gmail.com',
 			buttonActive: false, //TOPボタンを表示する
 			scroll: 0, //scroll
 		}

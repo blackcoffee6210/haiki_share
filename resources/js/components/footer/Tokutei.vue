@@ -71,9 +71,6 @@
 																	params: { id: userId.toString()} }"
 													 class="p-tokutei__withdraw">コチラ
 							</router-link>
-							<!--<router-link :to="{ name: 'user.withdrawal' }"-->
-							<!--						 class="p-tokutei__withdraw">コチラ-->
-							<!--</router-link>-->
 							から行なってください。
 						</td>
 					</tr>
@@ -98,26 +95,26 @@ export default {
 	name: "Tokutei",
 	data() {
 		return {
-			name: '株式会社 Haiki Share',   //会社名
-			email: 'mail@haiki_share.com', //Eメール
-			buttonActive: false,           //TOPボタンを表示する
-			scroll: 0,                     //scroll
+			name: '株式会社 Haiki Share',    //会社名
+			email: 'haikishare1@gmail.com', //Eメール
+			buttonActive: false,            //TOPボタンを表示する
+			scroll: 0,                      //scroll
 		}
 	},
 	computed: {
 		...mapGetters({
-			isLogin: 'auth/check',
-			userId: 'auth/userId'
+			isLogin: 'auth/check', //ログインしているかどうか
+			userId: 'auth/userId'  //ログインユーザーのユーザーID
 		})
 	},
 	methods: {
-		returnTop() {
+		returnTop() { //TOPボタンを押したらページ先頭に移動
 			window.scrollTo({
 				top: 0,
 				behavior: 'smooth'
 			})
 		},
-		scrollWindow() {
+		scrollWindow() { //一定量スクロールしたら右下に「TOP」ボタンを表示
 			const top = 100; //ボタンを表示させたい位置
 			this.scroll = window.scrollY;
 			if(top <= this.scroll) {

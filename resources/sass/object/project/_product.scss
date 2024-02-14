@@ -130,6 +130,8 @@
     border: 1px solid $gray-color;
     border-radius: 20px;
     padding: $space_s;
+    min-width: 80px;
+    text-align: center;
     @include mq() {
       font-size: $font-size_xs;
       padding: 2px $space_s;

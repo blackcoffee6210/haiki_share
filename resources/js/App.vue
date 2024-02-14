@@ -2,7 +2,7 @@
 	<div class="p-wrapper">
 		<Header />
 		<Message />
-		<RouterView />
+		<RouterView :key="$route.params.id" />
 		<Footer />
 	</div>
 </template>

@@ -1027,6 +1027,7 @@ body {
 }
 .p-edit-profile__img {
   position: absolute;
+  background: #e7e4e1;
   display: none;
   width: 260px;
   height: 260px;
@@ -2103,6 +2104,8 @@ body {
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 20px;
   padding: 5px;
+  min-width: 80px;
+  text-align: center;
 }
 @media screen and (max-width: 450px) {
   .p-product__category {
