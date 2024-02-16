@@ -182,11 +182,8 @@ export default {
 				return false;
 			}
 			this.reviewForm = response.data[0];
-			console.log('getReviews');
-			console.log(response.data[0]);
 			
 			if(!this.reviewForm) { //投稿したレビューじゃなかったら商品一覧画面へ遷移する
-				console.log('投稿したレビューはないで！！');
 				this.$router.push({name: 'index'});
 			}
 		},
@@ -231,7 +228,7 @@ export default {
 				});
 				
 				this.$router.push({ name: 'user.mypage',
-					params: { id: this.s_id.toString() }}); //マイページに移動する
+														params: { id: this.s_id.toString() }}); //マイページに移動する
 			}
 		}
 	},

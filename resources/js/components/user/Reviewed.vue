@@ -2,6 +2,8 @@
 	<div class="l-main">
 		<main class="l-main__2column">
 			<div class="p-list">
+				
+				<!-- タイトル -->
 				<h2 class="c-title p-list__title">
 					<span v-show="isShopUser">投稿されたレビュー一覧</span>
 					<span v-show="!isShopUser">投稿したレビュー一覧</span>
@@ -18,9 +20,6 @@
 				</div>
 				
 				<div class="p-list__card-container" v-show="!loading">
-					
-					<!-- カード -->
-					<!-- todo: レビュー投稿日を実装 -->
 					<!-- Reviewコンポーネント -->
 					<Review v-show="!loading"
 									v-for="review in reviews"
@@ -85,7 +84,7 @@ export default {
 	},
 	computed: {
 		...mapGetters({
-			isShopUser: 'auth/isShopUser'
+			isShopUser: 'auth/isShopUser' //ログインユーザーがコンビニユーザーならtrueを返す
 		})
 	},
 	methods: {

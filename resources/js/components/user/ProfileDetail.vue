@@ -5,17 +5,22 @@
 			
 			<!-- ユーザー情報	-->
 			<div class="p-profile-detail__container">
+				<!-- 画像があればプロフィール画像を表示する -->
 				<img :src="user.image"
 						 v-if="user.image"
 						 class="p-profile-detail__image"
 						 alt="">
+				<!-- なければno-imgを表示 -->
 				<img class="p-profile-detail__image"
 						 v-else
 						 src="/storage/images/no-image.png"
 						 alt="">
+				
 				<div>
 					<div class="p-profile-detail__name">
+						<!-- ユーザー名（コンビニ名） -->
 						{{ user.name }}
+						<!-- 支店名（コンビニユーザーのみ表示） -->
 						<span v-show="shopUser">{{ user.branch }}</span>
 					</div>
 					<!-- 住所（コンビニユーザーのみ表示） -->
@@ -23,7 +28,7 @@
 						{{ user.prefecture_name }}
 						{{ user.address }}
 					</div>
-					<!-- todo: ユーザー評価取得 -->
+					<!-- ユーザー評価 -->
 					<div class="p-profile-detail__recommend" v-show="shopUser">
 						{{ user.recommend }}
 					</div>
@@ -57,6 +62,7 @@
 				</router-link>
 			</div>
 			
+			<!-- 自己紹介文 -->
 			<div class="p-profile-detail__introduce">{{ user.introduce }}</div>
 			
 			<!-- コンビニユーザーの出品した商品 -->
@@ -116,9 +122,9 @@
 </template>
 
 <script>
-import Product from "../product/Product";
-import Review  from "../review/Review";
-import { OK }  from "../../util";
+import Product        from "../product/Product";
+import Review         from "../review/Review";
+import { OK }         from "../../util";
 import { mapGetters } from 'vuex';
 export default {
 	name: "ProfileDetail",
@@ -134,11 +140,11 @@ export default {
 	},
 	data() {
 		return {
-			user: {},
-			reviews: [],
-			products: [],
-			loading: false,
-			showSale: false
+			user: {},       //ユーザー情報
+			reviews: [],    //レビュー
+			products: [],   //商品
+			loading: false, //ローディング
+			showSale: false //販売中かどうか
 		}
 	},
 	computed: {
@@ -149,17 +155,17 @@ export default {
 			return this.user.group === 2;
 		},
 		isMyProfile () {
-			return this.id == this.userId;
+			return this.id == this.userId; //ログインユーザーのプロフィール詳細ページならtrueを返す
 		},
 		filteredProducts() { //絞り込んだ商品を返す
 			let newProducts = []; //絞り込み後の商品を格納する新しい配列
 			
-			for(let i = 0; i < this.products.length; i++) { //カテゴリーが選択されたら、カテゴリーIDが一致する商品だけを表示する
+			for(let i = 0; i < this.products.length; i++) { //取得した商品の数だけfor文をまわす
 				let isShow = true; //表示対象かどうかを判定するフラグ
 				
 				if (this.showSale &&
 						this.products[i].is_purchased) { //「販売中のみ表示」チェックあり、かつ購入済み商品は非表示にする
-					isShow = false;
+					isShow = false; //表示しない商品なのでfalseをセット
 				}
 				if(isShow) { //表示対象の商品を新しい配列に詰めていく
 					newProducts.push(this.products[i]);
@@ -169,7 +175,7 @@ export default {
 		},
 	},
 	methods: {
-		async getUser() {
+		async getUser() { //ユーザー情報取得
 			const response = await axios.get(`/api/users/${this.id}`); //API接続
 			
 			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
@@ -177,8 +183,7 @@ export default {
 				return false; //後続の処理を抜ける
 			}
 			this.user = response.data; //responseデータをプロパティに代入
-			console.log('getUserの中身')
-			console.log(response.data);
+			
 			if(!this.user) { //存在しなかったら商品一覧画面に遷移する
 				this.$router.push({name: 'index'})
 			}
@@ -191,8 +196,6 @@ export default {
 				return false; //後続の処理を抜ける
 			}
 			this.products = response.data; //responseデータをプロパティに代入
-			console.log('getPurchasedProductの中身')
-			console.log(response.data);
 		},
 		async getReviews(){ //利用者が投稿したレビューを取得する
 			const response = await axios.get(`/api/users/${this.user.id}/reviewed`); //API接続
@@ -202,8 +205,6 @@ export default {
 				return false; //後続の処理を抜ける
 			}
 			this.reviews = response.data;
-			console.log('getReviewの中身')
-			console.log(response.data);
 		},
 		async getPostedProducts() { //コンビニユーザーの出品した商品を取得
 			const response = await axios.get(`/api/users/${this.user.id}/posted`); //API接続
@@ -213,8 +214,6 @@ export default {
 				return false; //後続の処理を抜ける
 			}
 			this.products = response.data; //responseデータをプロパティに代入
-			console.log('getPostedProductsの中身')
-			console.log(response.data);
 		},
 		async getWasReviews(){ //投稿されたレビューを取得する
 			const response = await axios.get(`/api/users/${this.user.id}/wasReviewed`); //API接続
@@ -223,9 +222,7 @@ export default {
 				this.$store.commit('error/setCode', response.status);
 				return false; //後続の処理を抜ける
 			}
-			this.reviews = response.data;
-			console.log('getWasReviewsの中身');
-			console.log(response.data);
+			this.reviews = response.data; //responseデータをプロパティにセット
 		}
 	},
 	watch: {
@@ -242,15 +239,6 @@ export default {
 						await this.getPostedProducts();
 						break;
 				}
-				
-				// if(this.user.group === 1) { //取得したユーザーが利用者なら
-				// 	await this.getReviews();
-				// 	await this.getPurchasedProducts();
-				// } else if(this.user.group === 2) { //取得したユーザーがコンビニユーザーなら
-				// 	await this.getWasReviews();
-				// 	await this.getPostedProducts();
-				// }
-				
 			},
 			immediate: true
 		}

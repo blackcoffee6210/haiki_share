@@ -14,10 +14,10 @@ class CreateHistoriesTable extends Migration
     public function up()
     {
         Schema::create('histories', function (Blueprint $table) {
-	        $table->bigIncrements('id');
-            $table->unsignedBigInteger('buyer_id');   //購入したユーザーid（利用者）
-            $table->unsignedBigInteger('seller_id');  //出品ユーザーid（コンビニ）
-            $table->unsignedBigInteger('product_id'); //商品id
+	        $table->bigIncrements('id');              //購入履歴ID
+            $table->unsignedBigInteger('buyer_id');   //購入したユーザーID（利用者）
+            $table->unsignedBigInteger('seller_id');  //出品ユーザーID（コンビニ）
+            $table->unsignedBigInteger('product_id'); //商品ID
             $table->timestamps();
 
 	        $table->foreign('buyer_id')->references('id')->on('users');      //外部キー

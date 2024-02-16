@@ -8,10 +8,10 @@
 			<form class="p-auth-form__form"
 						v-show="!loading"
 						@submit.prevent="submit">
+				
 				<!-- email-->
 				<label for="email"
-							 class="c-label p-auth-form__label">
-					Eメール
+							 class="c-label p-auth-form__label">Eメール
 				</label>
 				<input type="text"
 							 id="email"
@@ -23,10 +23,11 @@
 				<div v-if="errors">
 					<div v-for="msg in errors.email"
 							 :key="msg"
-							 class="p-error">
-						{{ msg }}
+							 class="p-error">{{ msg }}
 					</div>
 				</div>
+				
+				<!-- Email送信ボタン -->
 				<button class="c-btn p-auth-form__btn" type="submit">Eメール送信</button>
 				<!-- 会員登録へ遷移	-->
 				<a @click="$router.back()"
@@ -39,7 +40,7 @@
 </template>
 
 <script>
-import {UNPROCESSABLE_ENTITY, OK } from "../../../util";
+import { UNPROCESSABLE_ENTITY, OK } from "../../../util";
 import Loading from "../../Loading";
 export default {
 	name: "PassResetEmail",
@@ -56,7 +57,7 @@ export default {
 		}
 	},
 	methods: {
-		async submit() {
+		async submit() { //Email送信
 			
 			this.loading = true; //ローディングを表示する
 			

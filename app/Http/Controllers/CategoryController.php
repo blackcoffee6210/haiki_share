@@ -8,6 +8,6 @@ use Illuminate\Http\Request;
 class CategoryController extends Controller
 {
     public function __invoke() {
-    	return Category::all();
+    	return Category::all(); //カテゴリーをすべて取得
     }
 }

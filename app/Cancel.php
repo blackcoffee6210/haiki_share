@@ -8,6 +8,9 @@ class Cancel extends Model
 {
     protected $fillable = ['cancel_user_id', 'post_user_id', 'product_id'];
 
+	//===============================================
+	// リレーション
+	//===============================================
     public function cancelUser() //キャンセルした利用者のリレーション
     {
     	return $this->belongsTo('App\User', 'cancel_user_id');

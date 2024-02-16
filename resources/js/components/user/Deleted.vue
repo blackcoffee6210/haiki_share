@@ -45,7 +45,7 @@ import { OK }  from "../../util";
 export default {
 	name: "Deleted",
 	props: {
-		id: {
+		id: { //出品者のログインユーザーID
 			type: String,
 			required: true
 		}

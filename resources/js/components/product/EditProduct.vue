@@ -1,6 +1,7 @@
 <template>
 	<main class="l-main">
 		<div class="p-product-form">
+			<!-- タイトル -->
 			<h2 class="c-title p-product-form__title">商品の編集</h2>
 			<div class="p-product-form__background">
 				<!-- ローディング -->
@@ -28,10 +29,7 @@
 									 alt=""
 									 class="p-product-form__img p-product-form__img--edit">
 						</label>
-						<div class="p-product-form__img-text"
-								 v-if="!preview">
-							商品画像を設定する
-						</div>
+						<div class="p-product-form__img-text" v-if="!preview">商品画像を設定する</div>
 					</div>
 					<!-- エラーメッセージ	-->
 					<div v-if="errors">
@@ -187,7 +185,7 @@ export default {
 	},
 	computed: {
 		...mapGetters({
-			userId: 'auth/userId'
+			userId: 'auth/userId' //ユーザーID
 		})
 	},
 	methods: {
@@ -266,7 +264,7 @@ export default {
 			this.loading = false; //API通信が終わったらローディングを非表示にする
 			
 			if(response.status === UNPROCESSABLE_ENTITY) { //responseステータスがバリデーションエラーなら後続の処理を行う
-				this.errors = response.data.errors; //レスポンスのエラーメッセージを格納する
+				this.errors = response.data.errors;          //レスポンスのエラーメッセージを格納する
 				return false;
 			}
 			this.reset(); //送信が完了したら入力値をクリアする

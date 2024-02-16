@@ -14,10 +14,10 @@ class CreateCancelsTable extends Migration
     public function up()
     {
         Schema::create('cancels', function (Blueprint $table) {
-	        $table->bigIncrements('id');
-	        $table->unsignedBigInteger('cancel_user_id'); //キャンセルしたユーザーid（利用者）
-	        $table->unsignedBigInteger('post_user_id');   //出品したユーザーid（出品者）
-	        $table->unsignedBigInteger('product_id');     //商品id
+	        $table->bigIncrements('id');                  //キャンセルID
+	        $table->unsignedBigInteger('cancel_user_id'); //キャンセルしたユーザーID（利用者）
+	        $table->unsignedBigInteger('post_user_id');   //出品したユーザーID（出品者）
+	        $table->unsignedBigInteger('product_id');     //商品ID
             $table->timestamps();
 
 	        $table->foreign('cancel_user_id')->references('id')->on('users');       //外部キー

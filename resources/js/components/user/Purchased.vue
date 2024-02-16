@@ -2,6 +2,8 @@
 	<div class="l-main">
 		<main class="l-main__2column">
 			<div class="p-list">
+				
+				<!-- タイトル -->
 				<h2 class="c-title p-list__title">
 					<span v-show="isShopUser">購入された商品一覧</span>
 					<span v-show="!isShopUser">購入した商品一覧</span>
@@ -10,7 +12,7 @@
 				<!-- ローディング -->
 				<Loading v-show="loading" />
 				
-				<!-- 商品がなければ表示する -->
+				<!-- 購入した(された)商品がなければ表示する -->
 				<div v-if="!products.length"
 						 class="p-list__no-product">
 					<span v-show="isShopUser">購入された商品はありません</span>
@@ -24,12 +26,12 @@
 									 :key="product.id"
 									 :product="product">
 						<div class="p-product__btn-container" slot="btn">
-							<!-- 購入キャンセルボタン --> <!-- 利用者の場合 -->
+							<!-- 購入キャンセルボタン(利用者の場合) -->
 							<button class="c-btn c-btn--white p-product__btn"
 											v-show="!isShopUser"
 											@click="cancel(product)">購入キャンセル
 							</button>
-							<!-- 詳細を見るボタン --> <!-- コンビニユーザー -->
+							<!-- 詳細を見るボタン(コンビニユーザー) -->
 							<router-link class="c-btn p-product__btn"
 													 v-show="isShopUser"
 													 :to="{ name: 'product.detail',
@@ -68,13 +70,13 @@ export default {
 	},
 	data() {
 		return {
-			loading: false,
-			products: {},
+			loading: false, //ローディング
+			products: {},   //購入した(された)商品
 		}
 	},
 	computed: {
 		...mapGetters({
-			isShopUser: 'auth/isShopUser'
+			isShopUser: 'auth/isShopUser' //ログインユーザーがコンビニユーザーならtrueを返す
 		})
 	},
 	methods: {
@@ -88,8 +90,6 @@ export default {
 				return false;
 			}
 			this.products = response.data; //プロパティにデータをセット
-			console.log('getProductsの中身');
-			console.log(this.products);
 		},
 		async getWasPurchased() { //購入された商品一覧
 			this.loading   = true;  //ローディングを表示する

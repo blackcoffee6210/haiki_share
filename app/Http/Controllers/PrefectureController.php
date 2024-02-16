@@ -9,6 +9,6 @@ class PrefectureController extends Controller
 {
 		public function __invoke()
     {
-        return Prefecture::all();
+        return Prefecture::all(); //都道府県を全件取得
     }
 }

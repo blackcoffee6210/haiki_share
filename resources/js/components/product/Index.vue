@@ -13,7 +13,7 @@
 						<span>{{ count }}件 / {{ total }}件中</span>
 					</div>
 					
-					<div>
+					<div class="p-index__checkbox-container">
 						<!-- 賞味期限切れの商品のみ表示 -->
 						<input type="checkbox"
 									 id="expire"
@@ -118,7 +118,6 @@
 				</div>
 				
 				<!-- おすすめの商品 -->
-				<!--todo: レスポンシブ（tab）のスタイル変更-->
 				<h2 class="c-title p-sidebar-index__title">おすすめの商品</h2>
 				<div class="p-sidebar-index__card-container">
 					<div class="c-card p-sidebar-index__card"
@@ -154,18 +153,18 @@
 									</span>
 									日
 								</div>
-								
 							</div>
+							<!-- ユーザー情報 -->
 							<div class="c-flex">
 								<img class="c-icon p-sidebar-index__icon"
 										 :src="product.user_image"
 										 alt="">
 								<div class="p-sidebar-index__name">{{ product.user_name }}</div>
 							</div>
+							
 						</div>
 					</div>
 				</div>
-				
 			</div>
 		</aside>
 	
@@ -220,12 +219,6 @@ export default {
 		}
 	},
 	computed: {
-		// sidebarExpireDate() { //商品の賞味期限が過ぎているかどうかを返す
-		// 	let dt = moment().format('YYYY-MM-DD');
-		// 	if(this.product.expire <= dt) {
-		// 		return true;
-		// 	}
-		// },
 		filteredProducts() { //絞り込んだ商品を返す
 			let newProducts = []; //絞り込み後の商品を格納する新しい配列
 			const today = moment(new Date).format('YYYY-MM-DD hh:mm:ss'); //今日の日付を用意

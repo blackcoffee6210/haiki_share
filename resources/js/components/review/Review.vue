@@ -15,6 +15,7 @@
 					 v-show="isShopUser"
 					 v-if="review.sender_image"
 					 alt="">
+			<!-- no-img -->
 			<img class="c-icon p-review__icon"
 					 src="/storage/images/no-image.png"
 					 v-show="isShopUser"
@@ -26,6 +27,7 @@
 					 v-show="!isShopUser"
 					 v-if="review.receiver_image"
 					 alt="">
+			<!-- no-img -->
 			<img class="c-icon p-review__icon"
 					 src="/storage/images/no-image.png"
 					 v-show="!isShopUser"
@@ -53,7 +55,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 export default {
 	name: "Review",
 	props: {
@@ -63,9 +65,8 @@ export default {
 		}
 	},
 	computed: {
-	
 		...mapGetters({
-			isShopUser: 'auth/isShopUser',
+			isShopUser: 'auth/isShopUser', //コンビニユーザーならtrueを返す
 		})
 	}
 }

@@ -1,6 +1,7 @@
 <template>
 	<div class="l-main">
 		<div class="p-auth-form">
+			
 			<!-- 利用者とお店の方の切り替えをするタグ -->
 			<ul class="p-auth-form__group">
 				<li class="p-auth-form__group__item"
@@ -12,12 +13,15 @@
 						@click="registerForm.group = 2">お店の方
 				</li>
 			</ul>
+			
+			<!-- タイトル -->
 			<h2 class="c-title p-auth-form__title"
 					v-show="registerForm.group === 1">新規登録（利用者）
 			</h2>
 			<h2 class="c-title p-auth-form__title"
 					v-show="registerForm.group === 2">新規登録（お店の方）
 			</h2>
+			
 			<form class="p-auth-form__form" @submit.prevent="register">
 				
 				<!-- name -->
@@ -39,7 +43,7 @@
 					</div>
 				</div>
 				
-				<!-- 支店 -->
+				<!-- 支店（コンビニユーザーなら表示） -->
 				<div v-show="registerForm.group === 2">
 					<label for="branch" class="c-label p-auth-form__label">支店名</label>
 					<input type="text"
@@ -57,7 +61,7 @@
 					</div>
 				</div>
 				
-				<!-- 都道府県 -->
+				<!-- 都道府県（コンビニユーザーなら表示） -->
 				<div v-show="registerForm.group === 2">
 					<label for="prefecture" class="c-label p-auth-form__label">都道府県</label>
 					<select id="prefecture"
@@ -78,7 +82,7 @@
 					</div>
 				</div>
 				
-				<!-- 住所 -->
+				<!-- 住所（コンビニユーザーなら表示） -->
 				<div v-show="registerForm.group === 2">
 					<label for="address"
 								 class="c-label p-auth-form__label">住所
@@ -111,7 +115,7 @@
 					<div v-for="msg in registerErrors.email" :key="msg" class="p-error">{{ msg }}</div>
 				</div>
 				
-				<!-- password-->
+				<!-- パスワード -->
 				<label for="password" class="c-label p-auth-form__label">パスワード</label>
 				<input type="password"
 							 id="password"
@@ -124,7 +128,7 @@
 					<div v-for="msg in registerErrors.password" :key="msg" class="p-error">{{ msg }}</div>
 				</div>
 				
-				<!-- password-confirmation-->
+				<!-- パスワード(確認) -->
 				<label for="password-confirmation"
 							 class="c-label p-auth-form__label">パスワード(確認)
 				</label>
@@ -152,18 +156,19 @@
 					<label for="agreement">に同意する</label>
 				</div>
 				
+				<!-- ボタン -->
 				<div class="u-p-relative">
 					<button class="c-btn p-auth-form__btn"
 									:disabled="!checkAgree"
 									type="submit">登録する（無料）
 					</button>
-					<!--<div class="p-auth-form__btn&#45;&#45;mask">利用規約にチェックしてください</div>-->
 				</div>
 			</form>
 			<hr class="p-auth-form__u-line">
 			<!-- ログイン画面へ遷移	-->
 			<router-link :to="{ name: 'login' }"
-									 class="c-link">ログインはこちら</router-link>
+									 class="c-link">ログインはこちら
+			</router-link>
 		</div>
 	</div>
 </template>
@@ -176,16 +181,16 @@ export default {
 	name: "Register",
 	data() {
 		return {
-			prefectures: [],
+			prefectures: [], //都道府県
 			registerForm: {
-				group: 1,
-				name: '',
-				branch: '',
-				prefecture_id: '',
-				address: '',
-				email: '',
-				password: '',
-				password_confirmation: ''
+				group: 1,                 //利用者とコンビニユーザーを判別する
+				name: '',                 //利用者名（コンビニ名）
+				branch: '',               //支店名
+				prefecture_id: '',        //都道府県ID
+				address: '',              //住所
+				email: '',                //Eメール
+				password: '',             //パスワード
+				password_confirmation: '' //パスワード確認
 			},
 			checkAgree: false
 		}
@@ -206,7 +211,7 @@ export default {
 	},
 	methods: {
 		async getPrefectures() { //都道府県取得
-			const response = await axios.get('/api/prefectures');
+			const response = await axios.get('/api/prefectures'); //API接続
 			
 			if(response.status !== OK) { //responseステータスがOKじゃなかったら
 				this.$store.commit('error/setCode', response.status);

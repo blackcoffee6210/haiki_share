@@ -9,6 +9,7 @@
 		<div class="c-badge" v-show="product.is_purchased">
 			<div class="c-badge__sold">SOLD</div>
 		</div>
+		
 		<!-- 商品の画像	-->
 		<div class="p-product__img-container">
 			<img :src="product.image"
@@ -26,13 +27,9 @@
 		<div class="p-product__card-body">
 			<div class="p-product__container">
 				<!-- 商品の名前	-->
-				<div class="p-product__name">
-					{{ product.name }}
-				</div>
+				<div class="p-product__name">{{ product.name }}</div>
 				<!-- 料金	-->
-				<div class="p-product__price">
-					{{ product.price | numberFormat }}
-				</div>
+				<div class="p-product__price">{{ product.price | numberFormat }}</div>
 			</div>
 			
 			<!-- 賞味期限 -->
@@ -46,11 +43,7 @@
 					日
 				</div>
 				<div v-else><!-- 賞味期限内のときの表示 -->
-					残り
-					<span class="p-product__expire__date">
-						{{ product.expire | momentExpire }}
-					</span>
-					 日
+					残り<span class="p-product__expire__date">{{ product.expire | momentExpire }}</span>日
 				</div>
 			</div>
 
@@ -72,7 +65,6 @@
 						<!-- 出品日	-->
 						<div class="p-product__date">{{ product.created_at | moment }}</div>
 						<!-- カテゴリー名	-->
-						<!--<div class="p-product__category">{{ product.category.name }}</div>-->
 						<div class="p-product__category">{{ product.category_name }}</div>
 					</div>
 				</div>

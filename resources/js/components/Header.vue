@@ -6,7 +6,6 @@
 				<!-- RouterLinkを使うとaタグのようなGETリクエストが発生せず、フロントエンドでの画面遷移、VueRouterでコンポーネントの切り替えを行う -->
 				<router-link class="p-header__logo" :to="{ name: 'index' }">
 					Ha<span class="c-color__main">i</span>ki Share
-					<!--Haiki<br class="p-header__logo&#45;&#45;sp"> Share-->
 				</router-link>
 				<div class="p-header__sub">
 					廃棄食品を無駄にしない<br class="p-header__br">フードシェアリングサービス
@@ -75,8 +74,7 @@ export default {
 		}),
 		...mapGetters({
 			isLogin:    'auth/check', //trueまたはfalseが返ってくる(ログインしていたらtrue)
-			username:   'auth/username',
-			isShopUser: 'auth/isShopUser'
+			isShopUser: 'auth/isShopUser' //ログインしているのがコンビニユーザーならtrueを返す
 		}),
 	},
 	methods: {

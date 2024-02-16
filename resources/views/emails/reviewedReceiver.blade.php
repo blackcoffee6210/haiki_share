@@ -8,6 +8,6 @@
 レビューの内容: {{ $params['detail'] }}<br>
 投稿日時: {{ $params['reviewed_at'] }}<br>
 <br>
-<a href="http://127.0.0.1:8000/users/{{ $params['sender_id'] }}">
+<a href="https://haiki-share.net/users/{{ $params['sender_id'] }}">
     {{ $params['sender_name'] }}さんのプロフィールを表示する
 </a>

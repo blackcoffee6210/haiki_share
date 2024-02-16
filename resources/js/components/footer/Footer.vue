@@ -38,7 +38,7 @@ export default {
 			apiStatus: state => state.auth.apiStatus
 		}),
 		...mapGetters({
-			isLogin: 'auth/check'
+			isLogin: 'auth/check' //ログインしていたらtrueを返す
 		}),
 	},
 	methods: {

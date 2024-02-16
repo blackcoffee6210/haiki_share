@@ -22,7 +22,7 @@ export default {
 		handleScroll() {
 			if(!this.visible) {
 				var top = this.$el.getBoundingClientRect().top; //ブラウザの表示領域の左上を(0, 0)として、そこから要素の上端までの相対位置の値が返ってくる
-				this.visible = top < window.innerHeight + 50; //ブラウザのウィンドウの高さに100pxを足した値よりtopの値が小さくなったときにthis.visibleにtrueを入れる
+				this.visible = top < window.innerHeight + 50;
 			}
 		}
 	}

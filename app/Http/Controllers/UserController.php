@@ -16,8 +16,8 @@ class UserController extends Controller
 {
     public function __construct()
     {
-	    $this->middleware('auth') //認証なしでアクセスしたいAPIはexceptに書く
-		     ->except(['index', 'posted', 'wasReviewed']);
+	    $this->middleware('auth')
+		     ->except(['index', 'posted', 'wasReviewed']); //認証なしでアクセスしたいAPIはexceptに書く
     }
 
 	public function index(string $id) { //ユーザー情報取得
@@ -86,14 +86,6 @@ class UserController extends Controller
 		})->get();
 		return $products;
 	}
-//	public function purchased(string $id) //購入した商品一覧(利用者)
-//	{
-//		$products = Product::whereHas('history', function($q) {
-//						$q->where('buyer_id', Auth::id());
-//					})
-//					->get();
-//		return $products;
-//	}
 
 	public function wasPurchased(string $id) //購入された商品一覧(コンビニ)
 	{
@@ -101,10 +93,6 @@ class UserController extends Controller
 						$q->where('seller_id', Auth::id());
 					})->get();
 		return $products;
-
-//		return Product::with(['user', 'category', 'likes', 'histories'])
-//					  ->where('user_id', $id)
-//					  ->get();
 	}
 
 	public function liked(string $id) //いいねした商品一覧(利用者)

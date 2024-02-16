@@ -40,24 +40,24 @@ class ReviewController extends Controller
 		$sender_email   = Auth::user()->email;         //送信者のEmail
 		$receiver_email = $request->shopUser['email']; //受信者のEmail
 
-		$review->sender_id         = $request->sender_id;
-		$review->receiver_id       = $request->receiver_id;
-		$review->recommendation_id = $request->recommendation_id;
-		$review->title             = $request->title;
-		$review->detail            = $request->detail;
+		$review->sender_id         = $request->sender_id;         //送信者のID
+		$review->receiver_id       = $request->receiver_id;       //受信者のID
+		$review->recommendation_id = $request->recommendation_id; //ユーザー評価のID
+		$review->title             = $request->title;             //レビュータイトル
+		$review->detail            = $request->detail;            //レビューの内容
 		$review->save();
 
 		$params = [ //メール送信に必要な情報を用意
-			'sender_id'      => $request->sender_id,
-			'sender_name'    => Auth::user()->name,
-			'sender_image'   => Auth::user()->image,
-			'receiver_id'    => $request->receiver_id,
-			'receiver_name'  => $request->shopUser['name'],
-			'receiver_image' => $request->shopUser['image'],
-			'recommendation' => $recommendation['name'],
-			'title'          => $request->title,
-			'detail'         => $request->detail,
-			'reviewed_at'    => Carbon::now()
+			'sender_id'      => $request->sender_id,         //送信者のID
+			'sender_name'    => Auth::user()->name,          //送信者の名前
+			'sender_image'   => Auth::user()->image,         //送信者の画像
+			'receiver_id'    => $request->receiver_id,       //受信者のID
+			'receiver_name'  => $request->shopUser['name'],  //受信者の名前
+			'receiver_image' => $request->shopUser['image'], //受信者の画像
+			'recommendation' => $recommendation['name'],     //ユーザー評価
+			'title'          => $request->title,             //レビューのタイトル
+			'detail'         => $request->detail,            //レビューの内容
+			'reviewed_at'    => Carbon::now()                //レビューした日時
 		];
 
 		Mail::to($sender_email)->send(new ReviewedSenderNotification($params));     //送信者にメールを送信
@@ -77,6 +77,7 @@ class ReviewController extends Controller
 							'detail'            => $request->detail
 						]);
 		//レビュー更新処理はメールを送らない
+
 		return response($review, 200);
 	}
 
@@ -100,7 +101,7 @@ class ReviewController extends Controller
 		return Review::inRandomOrder()->take(3)->get();
 	}
 
-	public function reviewedByUser(string $r_id)
+	public function reviewedByUser(string $r_id) //ログインユーザーがレビューしたかどうか
 	{
 		$isReviewed = Review::where('receiver_id', $r_id)
 							->where('sender_id', Auth::id())

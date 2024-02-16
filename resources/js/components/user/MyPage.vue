@@ -20,7 +20,7 @@
 													 v-if="likedProducts.length">全件表示
 							</router-link>
 						</div>
-						<!-- 商品がなければ表示する -->
+						<!-- お気に入りした商品がなければ表示する -->
 						<div v-if="!likedProducts.length"
 								 class="p-mypage__no-product">お気に入りした商品はありません
 						</div>
@@ -44,7 +44,7 @@
 													 v-if="postedProducts.length">全件表示
 							</router-link>
 						</div>
-						<!-- 商品がなければ表示する -->
+						<!-- 出品した商品がなければ表示する -->
 						<div v-if="!postedProducts.length"
 								 class="p-mypage__no-product">出品した商品はありません
 						</div>
@@ -114,7 +114,7 @@
 													 v-if="canceledProducts.length">全件表示
 							</router-link>
 						</div>
-						<!-- 商品がなければ表示する -->
+						<!-- キャンセルした商品がなければ表示する -->
 						<div v-if="!canceledProducts.length"
 								 class="p-mypage__no-product">キャンセルした商品はありません
 						</div>
@@ -139,7 +139,7 @@
 													 v-if="wasCanceledProducts.length">全件表示
 							</router-link>
 						</div>
-						<!-- 商品がなければ表示する -->
+						<!-- キャンセルされた商品がなければ表示する -->
 						<div v-if="!wasCanceledProducts.length"
 								 class="p-mypage__no-product">キャンセルされた商品はありません
 						</div>
@@ -170,7 +170,7 @@
 													 v-if="deletedProducts.length">全件表示
 							</router-link>
 						</div>
-						<!-- 商品がなければ表示する -->
+						<!-- 削除した商品がなければ表示する -->
 						<div v-if="!deletedProducts.length"
 								 class="p-mypage__no-product">削除した商品はありません
 						</div>
@@ -201,7 +201,6 @@
 						</div>
 						
 						<div v-else class="p-mypage__card-container">
-							<!-- todo: レビュー投稿日を実装 -->
 							<!-- Reviewコンポーネント -->
 							<Review v-show="!loading"
 											v-for="review in reviewedUsers"
@@ -228,7 +227,6 @@
 						</div>
 						
 						<div v-else class="p-mypage__card-container">
-							<!-- todo: レビュー投稿日を実装 -->
 							<!-- Reviewコンポーネント -->
 							<Review v-show="!loading"
 											v-for="review in wasReviewedUsers"
@@ -284,35 +282,31 @@ export default {
 	},
 	computed: {
 		...mapGetters({
-			isShopUser: 'auth/isShopUser',
+			isShopUser: 'auth/isShopUser', //ログインユーザーがコンビニユーザーならtrueを返す
 		}),
 	},
 	methods: {
-		async getLikedProducts() { //お気に入りした商品(利用者)
-			this.loading   = true; //ローディングを表示する
-			const response = await axios.get('/api/mypage/liked');
-			this.loading   = false; //API通信が終わったらローディングを非表示にする
+		async getLikedProducts() {                                   //お気に入りした商品(利用者)
+			this.loading   = true;                                     //ローディングを表示する
+			const response = await axios.get('/api/mypage/liked'); //API接続
+			this.loading   = false;                                    //API通信が終わったらローディングを非表示にする
 		
 			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
 				this.$store.commit('error/setCode', response.status);
 				return false; //後続の処理を抜ける
 			}
 			this.likedProducts = response.data; //responseデータをプロパティに代入
-			console.log('お気に入りした商品一覧');
-			console.log(response.data);
 		},
-		async getPostedProducts() { //出品した商品(コンビニユーザー)
-			this.loading   = true; //ローディングを表示する
-			const response = await axios.get('/api/mypage/posted');
-			this.loading   = false; //API通信が終わったらローディングを非表示にする
+		async getPostedProducts() {                                   //出品した商品(コンビニユーザー)
+			this.loading   = true;                                      //ローディングを表示する
+			const response = await axios.get('/api/mypage/posted'); //API接続
+			this.loading   = false;                                     //API通信が終わったらローディングを非表示にする
 			
 			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
 				this.$store.commit('error/setCode', response.status);
 				return false; //後続の処理を抜ける
 			}
 			this.postedProducts = response.data; //responseデータをプロパティに代入
-			console.log('出品した商品');
-			console.log(response.data);
 		},
 		async getPurchasedProducts() { //購入した商品(利用者)
 			this.loading   = true; //ローディングを表示する
@@ -324,8 +318,6 @@ export default {
 				return false; //後続の処理を抜ける
 			}
 			this.purchasedProducts = response.data; //responseデータをプロパティに代入
-			console.log('購入した商品一覧');
-			console.log(response.data);
 		},
 		async getWasPurchasedProducts() { //購入された商品(コンビニユーザー)
 			this.loading   = true; //ローディングを表示する
@@ -337,8 +329,6 @@ export default {
 				return false; //後続の処理を抜ける
 			}
 			this.wasPurchasedProducts = response.data; //responseデータをプロパティに代入
-			console.log('購入された商品一覧');
-			console.log(this.wasPurchasedProducts);
 		},
 		async getCanceledProducts() { //キャンセルした商品(利用者)
 			this.loading   = true; //ローディングを表示する
@@ -350,8 +340,6 @@ export default {
 				return false; //後続の処理を抜ける
 			}
 			this.canceledProducts = response.data; //responseデータをプロパティに代入
-			console.log('キャンセルした商品');
-			console.log(response.data);
 		},
 		async getWasCanceledProducts() { //キャンセルされた商品(コンビニユーザー)
 			this.loading   = true; //ローディングを表示する
@@ -363,8 +351,6 @@ export default {
 				return false; //後続の処理を抜ける
 			}
 			this.wasCanceledProducts = response.data; //responseデータをプロパティに代入
-			console.log('キャンセルされた商品');
-			console.log(this.wasPurchasedProducts);
 		},
 		async getDeletedProducts() { //削除した商品(コンビニ)
 			this.loading   = true; //ローディングを表示する
@@ -376,8 +362,6 @@ export default {
 				return false; //後続の処理を抜ける
 			}
 			this.deletedProducts = response.data; //responseデータをプロパティに代入
-			console.log('削除した商品');
-			console.log(response.data);
 		},
 		async getReviewed() { //投稿したレビュー(利用者)
 			this.loading   = true; //ローディングを表示する
@@ -389,8 +373,6 @@ export default {
 				return false; //後続の処理を抜ける
 			}
 			this.reviewedUsers = response.data; //responseデータをプロパティに代入
-			console.log('投稿したレビュー');
-			console.log(this.reviewedUsers);
 		},
 		async getWasReviewed() { //投稿されたレビュー（コンビニユーザー）
 			this.loading   = true; //ローディングを表示する
@@ -402,8 +384,6 @@ export default {
 				return false; //後続の処理を抜ける
 			}
 			this.wasReviewedUsers = response.data; //responseデータをプロパティに代入
-			console.log('投稿されたレビュー');
-			console.log(this.wasReviewedUsers);
 		}
 	},
 	watch: {

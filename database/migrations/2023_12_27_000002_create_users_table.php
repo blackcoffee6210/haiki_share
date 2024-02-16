@@ -14,7 +14,7 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->bigIncrements('id');                             //ユーザーID
             $table->integer('group');                                //ユーザーを判別(1なら利用者、2ならコンビニ側)
             $table->string('name');                                  //名前
             $table->string('branch')->nullable();                    //支店名

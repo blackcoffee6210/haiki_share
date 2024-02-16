@@ -8,6 +8,6 @@
 金額: {{ $params['price'] }}円<br>
 購入日時: {{ $params['purchased_at'] }}<br>
 <br>
-<a href="http://127.0.0.1:8000/products/{{ $params['product_id'] }}">
+<a href="https://haiki-share.net/products/{{ $params['product_id'] }}">
     購入された商品を表示する
 </a>

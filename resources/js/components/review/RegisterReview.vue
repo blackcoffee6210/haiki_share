@@ -20,6 +20,7 @@
 								 alt=""
 								 v-if="reviewForm.shopUser.image"
 								 class="c-icon p-review-form__icon">
+						<!-- no-img -->
 						<img class="c-icon p-review-form__icon"
 								 v-else
 								 src="/storage/images/no-image.png"
@@ -172,14 +173,14 @@ export default {
 		}),
 	},
 	methods: {
-		async getPurchasedByUser() {
+		async getPurchasedByUser() { //購入したユーザーを取得
 			const response = await axios.get(`/api/products/${this.p_id}/purchasedByUser`);
 			
 			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
 				this.$store.commit('error/setCode', response.status);
 				return false;
 			}
-			response.data[0] ? this.purchasedByUser = true : this.purchasedByUser = false;
+			response.data[0] ? this.purchasedByUser = true : this.purchasedByUser = false; //データがあればtrue、なければfalseをプロパティにセット
 			
 			if(!this.purchasedByUser) { //purchasedByUserがfalse(他人の購入した商品)だったら商品一覧画面に遷移する
 				this.$router.push({name: 'index'});
@@ -197,14 +198,14 @@ export default {
 			this.reviewForm.sender_id   = this.userId;                      //送信者（レビュー投稿者）のユーザーid
 			this.reviewForm.receiver_id = this.reviewForm.shopUser.user_id; //受信者（出品者）のユーザーid
 		},
-		async getReviewedByUser() { //ログインユーザーが既にレビューを投稿済みかどうか取得する todo: 実装
+		async getReviewedByUser() { //ログインユーザーが既にレビューを投稿済みかどうか取得する
 			const response = await axios.get(`/api/reviews/${this.reviewForm.receiver_id}/reviewedByUser`);
 			
 			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
 				this.$store.commit('error/setCode', response.status);
 				return false;
 			}
-			response.data[0] ? this.reviewedByUser = true : this.reviewedByUser = false;
+			response.data[0] ? this.reviewedByUser = true : this.reviewedByUser = false; //ユーザーがレビューを投稿していたらtrue、そうじゃなければfalse
 			
 			if(this.reviewedByUser) { //既にレビューしていたら商品一覧画面に遷移する
 				this.$router.push({name: 'index'});

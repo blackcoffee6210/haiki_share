@@ -72,7 +72,7 @@ const routes = [ //パスとコンポーネントのマッピング
     }
   },
   {
-    path: '/products', //インデックス(商品一覧)画面
+    path: '/products', //インデックス(商品一覧)画面(未ログインでアクセスできる)
     name: 'index',
     component: Index,
     props: route => {
@@ -91,7 +91,7 @@ const routes = [ //パスとコンポーネントのマッピング
     }
   },
   {
-    path: '/products/:id', //商品詳細
+    path: '/products/:id', //商品詳細(未ログインでアクセスできる)
     name: 'product.detail',
     component: ProductDetail,
     props: true //ProductDetail.vueに:idの値がpropsとして渡される
@@ -129,8 +129,9 @@ const routes = [ //パスとコンポーネントのマッピング
        to.params.s_id == store.getters['auth/userId']) ?
         next() : next({name: 'index'} );
     }
-  },  {
-    path: '/reviews/:s_id/:r_id', //レビュー詳細
+  },
+  {
+    path: '/reviews/:s_id/:r_id', //レビュー詳細(未ログインでアクセスできる)
     name: 'review.detail',
     component: ReviewDetail,
     props: true,
@@ -143,11 +144,11 @@ const routes = [ //パスとコンポーネントのマッピング
     beforeEnter(to, from, next) { //ログイン状態、かつログインユーザーidでアクセスがあったらそのまま移動させる
       (store.getters['auth/check'] &&
        to.params.id == store.getters['auth/userId']) ?
-        next() : next({name: 'login'});
+        next() : next({name: 'index'});
     }
   },
   {
-    path: '/users/:id', //プロフィール詳細
+    path: '/users/:id', //プロフィール詳細(未ログインでアクセスできる)
     name: 'user.detail',
     component: ProfileDetail,
     props: true
@@ -160,7 +161,7 @@ const routes = [ //パスとコンポーネントのマッピング
     beforeEnter(to, from ,next) { //ログイン状態、かつログインユーザーidでアクセスがあったらそのまま移動させる
       (store.getters['auth/check'] &&
        to.params.id == store.getters['auth/userId']) ?
-        next() : next({name: 'login'});
+        next() : next({name: 'index'});
     }
   },
   {
@@ -171,7 +172,7 @@ const routes = [ //パスとコンポーネントのマッピング
     beforeEnter(to, from ,next) { //ログイン状態、かつログインユーザーidでアクセスがあったらそのまま移動させる
       (store.getters['auth/check'] &&
        to.params.id == store.getters['auth/userId']) ?
-        next() : next({name: 'login'});
+        next() : next({name: 'index'});
     }
   },
   {
@@ -269,14 +270,6 @@ const routes = [ //パスとコンポーネントのマッピング
     name: 'tokutei',
     component: Tokutei
   },
-  // {
-  //   path: '/users/withdrawal',
-  //   name: 'user.withdrawal',
-  //   component: Withdrawal,
-  //   beforeEnter(to, from ,next) { //ログイン状態でページにアクセスした場合(true)、そのまま移動させる
-  //     store.getters['auth/check'] ? next() : next({name: 'login'});
-  //   }
-  // },
   {
     path: '/500', //500エラー
     name: 'systemError',

@@ -3,6 +3,7 @@
 		
 		<main class="l-main__2column">
 			<div class="p-edit-password">
+				<!-- タイトル -->
 				<h2 class="c-title p-edit-password__title">パスワード変更</h2>
 				
 				<div class="p-edit-password__background">
@@ -106,11 +107,11 @@ export default {
 	},
 	data() {
 		return {
-			loading: false, //ローディング
-			errors: {       //エラーメッセージを格納するプロパティ
-				current_password: null,
-				new_password: null,
-				new_password_confirmation: null
+			loading: false,                   //ローディング
+			errors: {                         //エラーメッセージを格納するプロパティ
+				current_password: null,         //現在のパスワード
+				new_password: null,             //新しいパスワード
+				new_password_confirmation: null //新しいパスワード(確認)
 			},
 			passwordForm: {
 				current_password: '',         //現在のパスワード
@@ -126,8 +127,8 @@ export default {
 			this.loading = false; //API通信が終わったらローディングを非表示にする
 			
 			if(response.status === UNPROCESSABLE_ENTITY) { //responseステータスがバリデーションエラーなら後続の処理を行う
-				this.errors = response.data.errors; //レスポンスのエラーメッセージを格納する
-				return false;
+				this.errors = response.data.errors;          //レスポンスのエラーメッセージを格納する
+				return false;                                //後続の処理を抜ける
 			}
 			
 			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット

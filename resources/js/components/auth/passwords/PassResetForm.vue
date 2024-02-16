@@ -1,6 +1,8 @@
 <template>
 	<main class="l-main">
 		<div class="p-auth-form p-auth-form--password">
+			
+			<!-- タイトル -->
 			<h2 class="c-title p-auth-form__title">パスワードリセット</h2>
 			
 			<form class="c-form p-auth-form__form"
@@ -14,9 +16,9 @@
 				
 				<!-- password-->
 				<label for="password"
-							 class="c-label p-auth-form__label">
-					新しいパスワード
+							 class="c-label p-auth-form__label">新しいパスワード
 				</label>
+				<!-- 新しいパスワード -->
 				<input type="password"
 							 id="password"
 							 class="c-input p-auth-form__input"
@@ -27,15 +29,13 @@
 				<div v-if="errors">
 					<div v-for="msg in errors.password"
 							 :key="msg"
-							 class="p-error">
-						{{ msg }}
+							 class="p-error">{{ msg }}
 					</div>
 				</div>
 				
-				<!-- password(confirm)-->
+				<!-- 新しいパスワード(確認) -->
 				<label for="password-confirmation"
-							 class="c-label p-auth-form__label">
-					新しいパスワード(確認)
+							 class="c-label p-auth-form__label">新しいパスワード(確認)
 				</label>
 				<input type="password"
 							 id="password-confirmation"
@@ -47,8 +47,7 @@
 				<div v-if="errors">
 					<div v-for="msg in errors.password_confirmation"
 							 :key="msg"
-							 class="p-error">
-						{{ msg }}
+							 class="p-error">{{ msg }}
 					</div>
 				</div>
 				
@@ -101,7 +100,3 @@ export default {
 	}
 }
 </script>
-
-<style scoped>
-
-</style>

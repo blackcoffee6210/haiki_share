@@ -1,6 +1,7 @@
 <template>
 	<div class="l-main">
 		<div class="p-auth-form">
+			
 			<!-- 利用者とお店の方の切り替えをするタグ -->
 			<ul class="p-auth-form__group">
 				<li class="p-auth-form__group__item"
@@ -60,9 +61,6 @@
 								 id="remember"
 								 class="p-auth-form__check"
 								 v-model="loginForm.remember">
-					<!--<label for="remember"-->
-					<!--			 class="p-auth-form__label&#45;&#45;check">ログイン保持-->
-					<!--</label>-->
 					<label for="remember">ログイン保持</label>
 				</div>
 				
@@ -76,7 +74,8 @@
 			<hr class="p-auth-form__u-line">
 			<!-- 会員登録へ遷移	-->
 			<router-link :to="{ name: 'register' }"
-									 class="c-link">会員登録はこちら</router-link>
+									 class="c-link">会員登録はこちら
+			</router-link>
 		</div>
 	</div>
 </template>
@@ -88,7 +87,7 @@ export default {
 	data() {
 		return {
 			loginForm: {
-				group: 1,
+				group: 1, //利用者かコンビニユーザーかを判別する
 				email: '',
 				password: '',
 				remember: false
@@ -97,7 +96,7 @@ export default {
 	},
 	computed: {
 		...mapState({
-			apiStatus: state   => state.auth.apiStatus, //通信失敗の場合はインデックスへの移動を行わないように制御する
+			apiStatus: state   => state.auth.apiStatus,         //通信失敗の場合はインデックスへの移動を行わないように制御する
 			loginErrors: state => state.auth.loginErrorMessages //loginErrorMessageを参照する
 		})
 	},
@@ -109,7 +108,6 @@ export default {
 				this.$store.commit('message/setContent', { //メッセージ登録
 					content: 'ログインしました！',
 				})
-				// this.$router.push({name: 'index'});
 				this.$router.push(this.$router.go(-1)); //元々アクセスしたかったページにリダイレクトする
 			}
 		},

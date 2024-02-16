@@ -40,7 +40,7 @@ class ProductController extends Controller
 
 	}
 
-	public function ranking() //お気に入りが多い５件を取得
+	public function ranking() //お気に入りが多い５件を取得(おすすめ商品)
 	{
 		$products = Product::withCount('likes')
 						   ->orderByDesc('likes_count')
@@ -98,7 +98,6 @@ class ProductController extends Controller
 			$image_path = '';
 		}
 
-//		$product->user_id      = $request->user_id; //DBに保存する
 		$product->user_id      = Auth::id(); //DBに保存する
 		$product->category_id  = $request->category_id;
 		$product->image        = $image_path;
@@ -129,7 +128,7 @@ class ProductController extends Controller
 			$image_path = $product->image;
 		}
 
-		$product->user_id      = $request->user_id; //DBに保存
+		$product->user_id      = $request->user_id;
 		$product->category_id  = $request->category_id;
 		$product->image        = $image_path;
 		$product->name         = $request->name;
@@ -140,7 +139,7 @@ class ProductController extends Controller
 		return response($product, 200); //商品情報とstatusを返す
 	}
 
-	public function destroy(string $id) //商品削除
+	public function destroy(string $id) //商品削除(論理削除)
 	{
 		Product::find($id)->delete(); //商品情報を取得して論理削除する
 		return response(['product_id' => $id], 200);
@@ -193,7 +192,7 @@ class ProductController extends Controller
 			abort(404);
 		}
 
-		$history = new History;
+		$history = new History; //インスタンス生成
 
 		$history->buyer_id   = $buyer->id;
 		$history->seller_id  = $seller->id;
@@ -201,14 +200,14 @@ class ProductController extends Controller
 		$history->save();
 
 		$params = [ //メール送信に必要な情報を用意
-			'product_id'   => $request->id,
-			'user_name'    => $buyer->name,
-			'shop_name'    => $seller->name,
-			'product_name' => $request->name,
-			'detail'       => $request->detail,
-			'price'        => $request->price,
-			'expire'       => $request->expire,
-			'purchased_at' => Carbon::now(),
+			'product_id'   => $request->id,     //商品ID
+			'user_name'    => $buyer->name,     //利用者の名前
+			'shop_name'    => $seller->name,    //コンビニ名
+			'product_name' => $request->name,   //商品名
+			'detail'       => $request->detail, //商品の内容
+			'price'        => $request->price,  //金額
+			'expire'       => $request->expire, //賞味期限
+			'purchased_at' => Carbon::now(),    //現在の日時
 		];
 		Mail::to($buyer_email)->send(new PurchasedBuyerNotification($params));   //買い手にメールを送信
 		Mail::to($seller_email)->send(new PurchasedSellerNotification($params)); //売り手にメールを送信
@@ -224,7 +223,7 @@ class ProductController extends Controller
 		return $product;
 	}
 
-	public function canceledByUser(string $id)
+	public function canceledByUser(string $id) //ログインユーザーがキャンセルしたかを取得
 	{
 		$product = Cancel::where('product_id', $id)
 						 ->where('cancel_user_id', Auth::id())
@@ -232,7 +231,7 @@ class ProductController extends Controller
 		return $product;
 	}
 
-	public function cancel(Request $request, string $id) //購入キャンセル
+	public function cancel(Request $request, string $id) //商品の購入キャンセル
 	{
 		$buyer_email  = Auth::user()->email;                           //買い手のメールアドレス
 		$seller_email = $request->email;                               //売り手のメールアドレス
@@ -266,7 +265,7 @@ class ProductController extends Controller
 		return response(['product_id', $id], 200);
 	}
 
-	public function isReviewed(string $id) {
+	public function isReviewed(string $id) { //ログインしたユーザーがレビューしたかどうか
 		$review = DB::table('reviews')
 					->join('products', 'reviews.receiver_id', '=', 'products.user_id')
 					->where('reviews.sender_id', '=', Auth::id())

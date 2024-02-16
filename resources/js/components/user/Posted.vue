@@ -3,12 +3,14 @@
 		
 		<main class="l-main__2column">
 			<div class="p-list">
+				
+				<!-- タイトル -->
 				<h2 class="c-title p-list__title">出品した商品一覧</h2>
 				
 				<!-- ローディング -->
 				<Loading v-show="loading" />
 				
-				<!-- 商品がなければ表示する -->
+				<!-- 出品した商品がなければ表示する -->
 				<div v-if="!products.length"
 						 class="p-list__no-product">出品した商品はありません
 				</div>
@@ -19,6 +21,7 @@
 					<Product v-for="product in products"
 									 :key="product.id"
 									 :product="product">
+						
 						<div class="p-product__btn-container"
 								 slot="btn">
 							<!-- 編集ボタン -->

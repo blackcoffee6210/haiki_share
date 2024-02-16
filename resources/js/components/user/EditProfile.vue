@@ -3,6 +3,8 @@
 		<!-- プロフィール編集	-->
 		<main class="l-main__2column">
 			<div class="p-edit-profile">
+				
+				<!-- タイトル -->
 				<h2 class="c-title p-edit-profile__title">プロフィール編集</h2>
 				
 				<div class="p-edit-profile__background">
@@ -65,7 +67,6 @@
 						</div>
 						
 						<!-- 都道府県が変わることは考えにくいので、プロフィール編集画面には含めない -->
-						<!-- 都道府県が変わるコンビニユーザーは再登録する -->
 						
 						<!-- 支店名	-->
 						<div v-if="isShopUser">
@@ -146,6 +147,7 @@
 							</a>
 							<button class="c-btn" type="submit">更新する</button>
 						</div>
+						
 					</form>
 				</div>
 			</div>
@@ -157,10 +159,10 @@
 </template>
 
 <script>
-import Loading from "../Loading";
-import Sidebar from "../Sidebar";
+import Loading        from "../Loading";
+import Sidebar        from "../Sidebar";
+import { mapGetters } from "vuex";
 import { OK, UNPROCESSABLE_ENTITY } from "../../util";
-import { mapGetters, mapState } from "vuex";
 
 export default {
 	name: "EditProfile",
@@ -176,14 +178,14 @@ export default {
 	},
 	data() {
 		return {
-			user: { // ユーザーの都道府県が変わることは考えにくいので編集項目に入れない
-				image: '',
-				group: '',
-				name: '',
-				branch: '',
-				address: '',
-				email: '',
-				introduce: ''
+			user: {         //ユーザーの都道府県が変わることは考えにくいので編集項目に入れない
+				image: '',    //プロフィール画像
+				group: '',    //コンビニユーザーか利用者を判別
+				name: '',     //ユーザー名またはコンビニ名
+				branch: '',   //支店名（コンビニユーザー）
+				address: '',  //住所（コンビニユーザー）
+				email: '',    //Eメール
+				introduce: '' //自己紹介文
 			},
 			loading: false, //ローディング
 			preview: null,  //画像プレビュー
@@ -198,31 +200,27 @@ export default {
 		}
 	},
 	computed: {
-		...mapState({
-			apiStatus: state => state.auth.apiStatus,
-		}),
 		...mapGetters({
-			isShopUser: 'auth/isShopUser',
+			isShopUser: 'auth/isShopUser', //コンビニユーザーならtrueを返す
 		}),
 		name() { //名前インプットエリアのplaceholderを利用者とお店で切り替える
 			switch (this.user.group) {
-				case 1:
+				case 1: //利用者なら「ハイキ君」を返す
 					return 'ハイキ君';
-				case 2:
+				case 2: //コンビニユーザーなら「ファミリーストア」を返す
 					return 'ファミリーストア';
 			}
 		}
 	},
 	methods: {
 		async getUser() { //ユーザー情報取得
-			const response = await axios.get(`/api/users/${this.id}`);
+			const response = await axios.get(`/api/users/${this.id}`); //API接続
 			
 			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
 				this.$store.commit('error/setCode', response.status);
 				return false;
 			}
 			this.user = response.data; //responseデータをuserプロパティに代入
-			console.log(this.user);
 		},
 		onFileChange(event) { //フォームでファイルが選択されたら実行される
 			if(event.target.files.length === 0) { //何も選択されていなかったら処理中断
@@ -267,8 +265,8 @@ export default {
 			this.loading = false; //API通信が終わったらローディングを非表示にする
 			
 			if(response.status === UNPROCESSABLE_ENTITY) { //responseステータスがバリデーションエラーならエラーメッセージをセット
-				this.errors = response.data.errors; //レスポンスのエラーメッセージを格納する
-				return false;
+				this.errors = response.data.errors;          //レスポンスのエラーメッセージを格納する
+				return false;                                //処理を抜ける
 			}
 			this.reset(); //送信が完了したら入力値をクリアする
 			

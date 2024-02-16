@@ -44,7 +44,7 @@ class ForgotPasswordController extends Controller
 			? response(['message' => 'パスワード再設定メールを送信しました'], 200)
 			: response()->json(
 				['message' => 'パスワード再設定メールを送信できませんでした',
-				 'status' => false ],
+				 'status'  => false ],
 				401
 			);
 	}

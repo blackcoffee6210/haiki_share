@@ -9,6 +9,7 @@
 						 v-show="isShopUser"
 						 v-if="review.sender_image"
 						 :src="review.sender_image" alt="">
+				<!-- no-img -->
 				<img src="/storage/images/no-image.png"
 						 v-show="isShopUser"
 						 alt=""
@@ -19,6 +20,7 @@
 						 v-show="!isShopUser"
 						 v-if="review.receiver_image"
 						 :src="review.receiver_image" alt="">
+				<!-- no-img -->
 				<img src="/storage/images/no-image.png"
 						 v-show="!isShopUser"
 						 alt=""
@@ -78,11 +80,11 @@ import { mapGetters, mapState } from 'vuex';
 export default {
 	name: "ReviewDetail",
 	props: {
-		s_id: {
+		s_id: { //送信者ID
 			type: String,
 			required: true
 		},
-		r_id: {
+		r_id: { //受信者ID
 			type: String,
 			required: true
 		}
@@ -93,20 +95,20 @@ export default {
 	},
 	data() {
 		return {
-			review: {},
-			otherProducts: []
+			review: {},       //レビュー
+			otherProducts: [] //他の商品
 		}
 	},
 	computed: {
 		...mapState({
-			user: state => state.auth.user,
+			user: state => state.auth.user, //ログインユーザー
 		}),
 		...mapGetters({
-			isShopUser: 'auth/isShopUser',
-			userId: 'auth/userId',
+			isShopUser: 'auth/isShopUser', //ログインしたユーザーがコンビニユーザーならtrueを返す
+			userId: 'auth/userId', //ユーザーIDを取得
 		}),
 		isMyReview() {
-			return this.s_id == this.userId;
+			return this.s_id == this.userId; //自分のレビューならtrueを返す
 		}
 	},
 	methods: {
@@ -118,13 +120,8 @@ export default {
 				return false;
 			}
 			this.review = response.data[0];
-			console.log('getReviewの中身');
-			console.log(response.data[0]);
-			console.log('r_idの中身');
-			console.log(this.r_id);
-			//todo: 存在しないレビューは商品一覧へ遷移する処理を実装
 		},
-		async getOtherProducts() {
+		async getOtherProducts() { //レビューしたユーザーの他の商品を取得
 			const response = await axios.get(`/api/reviews/${this.r_id}/otherProducts`);
 			
 			if(response.status !== OK) {
@@ -132,8 +129,6 @@ export default {
 				return false;
 			}
 			this.otherProducts = response.data;
-			console.log('otherProductsの中身');
-			console.log(response.data);
 		}
 	},
 	watch: {

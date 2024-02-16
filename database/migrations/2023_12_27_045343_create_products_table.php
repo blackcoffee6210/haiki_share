@@ -14,9 +14,9 @@ class CreateProductsTable extends Migration
     public function up()
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id');     //ユーザーid
-            $table->unsignedBigInteger('category_id'); //カテゴリーid
+            $table->bigIncrements('id');               //商品ID
+            $table->unsignedBigInteger('user_id');     //ユーザーID
+            $table->unsignedBigInteger('category_id'); //カテゴリーID
             $table->string('name');                    //商品名
             $table->string('image')->nullable();       //商品画像
             $table->string('detail');                  //商品の内容

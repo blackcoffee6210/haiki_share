@@ -1,8 +1,7 @@
 <template>
 	<div class="p-top">
-		<!--ランディングページには、-->
+		<!--ランディングページには、以下の基本の型があります。-->
 		<!--共感 → ベネフィット → 実績・事例 → お客様の声 → 特典による検討強化 → クロージング -->
-		<!--という基本の型があります。-->
 		
 		<!-- ファーストビュー（共感） -->
 		<div class="p-top__bg">
@@ -36,7 +35,7 @@
 			</transition>
 		</div>
 		
-		<!-- サービス紹介 - haiki_shareとは？ -->
+		<!-- サービス紹介 - Haiki Shareとは？ -->
 		<div class="p-top__bg--alter">
 			<section class="p-top__section">
 				<FadeIn>
@@ -171,30 +170,6 @@
 				
 			</section>
 		</div>
-		<!--<div class="p-top__bg&#45;&#45;alter">-->
-		<!--	<section class="p-top__section">-->
-		<!--		<FadeIn>-->
-		<!--			<h2 class="p-top__title">実績・事例</h2>-->
-		<!--		</FadeIn>-->
-		<!--		<div class="p-top__container">-->
-		<!--			<div class="c-card p-top__panel">-->
-		<!--				<div class="p-top__panel__title">-->
-		<!--					北は北海道、南は沖縄までたくさんの方にご利用いただいてます！-->
-		<!--				</div>-->
-		<!--				<img src="/storage/images/japan.png"-->
-		<!--						 class="p-top__panel__image"-->
-		<!--						 alt="">-->
-		<!--			</div>-->
-		<!--			<div class="c-card p-top__panel">-->
-		<!--				LOREM IPSUM DOLOR SIT AMET, CONSECTETUR ADIPISICING ELIT, SED DO-->
-		<!--				EIUSMOD TEMPOR INCIDIDUNT UT LABORE-->
-		<!--			</div>-->
-		<!--			<div class="c-card p-top__panel">-->
-		<!--				LOREM IPSUM DOLOR SIT AMET, CONSECTETUR ADIPISICING ELIT, SED DO-->
-		<!--			</div>-->
-		<!--		</div>-->
-		<!--	</section>-->
-		<!--</div>-->
 		
 		<!-- 利用者の声 -->
 		<div class="p-top__bg">
@@ -215,6 +190,7 @@
 		<!-- こんな方におすすめ（クロージング） -->
 		<div class="p-top__bg--alter">
 			<section class="p-top__section">
+				
 				<FadeIn>
 					<h2 class="p-top__title">こんな方におすすめ！</h2>
 				</FadeIn>
@@ -229,16 +205,7 @@
 						</p>
 					</div>
 				</FadeIn>
-				<!--<div class="p-top__recommend"-->
-				<!--		 :class="{ fadeIn1000ms: visibleX }"-->
-				<!--		 v-show="visibleX">-->
-				<!--	<img src="/storage/images/Discount-amico.png"-->
-				<!--			 class="p-top__recommend__img"-->
-				<!--			 alt="">-->
-				<!--	<p class="p-top__recommend__text">-->
-				<!--		毎日食べる食品を安く買いたいお客様！-->
-				<!--	</p>-->
-				<!--</div>-->
+
 				<FadeIn>
 					<div class="p-top__recommend">
 						<img src="/storage/images/increase.png"
@@ -249,17 +216,7 @@
 						</p>
 					</div>
 				</FadeIn>
-				<!--<div class="p-top__recommend"-->
-				<!--		 :class="{ fadeIn1500ms: visibleX }"-->
-				<!--		 v-show="visibleX">-->
-				<!--	<img src="/storage/images/increase.png"-->
-				<!--			 class="p-top__recommend__img"-->
-				<!--			 alt="">-->
-				<!--	<p class="p-top__recommend__text">-->
-				<!--		&lt;!&ndash;今まで捨てていた食品を売って<br>売り上げを上げたいコンビニオーナー！&ndash;&gt;-->
-				<!--		捨てていた食品で売り上げを<br>上げたいコンビニオーナー！-->
-				<!--	</p>-->
-				<!--</div>-->
+
 				<FadeIn>
 					<div class="p-top__recommend">
 						<img src="/storage/images/enviroment.png"
@@ -270,16 +227,7 @@
 						</p>
 					</div>
 				</FadeIn>
-				<!--<div class="p-top__recommend"-->
-				<!--		 :class="{ fadeIn2000ms: visibleX }"-->
-				<!--		 v-show="visibleX">-->
-				<!--	<img src="/storage/images/enviroment.png"-->
-				<!--			 class="p-top__recommend__img"-->
-				<!--			 alt="">-->
-				<!--	<p class="p-top__recommend__text">-->
-				<!--		美味しく食べてSDGs！ <br class="u-br">地球に貢献!-->
-				<!--	</p>-->
-				<!--</div>-->
+
 			</section>
 		</div>
 		
@@ -296,27 +244,21 @@
 							STEP
 							<span class="p-top__step-number">1</span>
 						</div>
-						<h3 class="p-top__step-title">
-							カンタン！<br class="p-top__br">会員登録
-						</h3>
+						<h3 class="p-top__step-title">カンタン！<br class="p-top__br">会員登録</h3>
 					</div>
 					<div class="p-top__panel p-top__panel--step">
 						<div class="p-top__step">
 							STEP
 							<span class="p-top__step-number">2</span>
 						</div>
-						<h3 class="p-top__step-title">
-							気になる商品を<br class="p-top__br">購入する
-						</h3>
+						<h3 class="p-top__step-title">気になる商品を<br class="p-top__br">購入する</h3>
 					</div>
 					<div class="p-top__panel p-top__panel--step">
 						<div class="p-top__step">
 							STEP
 							<span class="p-top__step-number">3</span>
 						</div>
-						<h3 class="p-top__step-title">
-							コンビニで<br class="p-top__br">商品を受け取る
-						</h3>
+						<h3 class="p-top__step-title">コンビニで<br class="p-top__br">商品を受け取る</h3>
 					</div>
 				</div>
 				
@@ -351,16 +293,12 @@
 					廃棄食品を無駄にしないサービス<br>
 					「Ha<span class="c-color__main">i</span>ki Share」を早速利用してみる！
 				</h2>
-				
+				<!-- 会員登録ボタン -->
 				<router-link class="c-btn p-top__btn"
 										 :to="{ name: 'register'}">簡単！ 無料会員登録
 				</router-link>
-				
 			</section>
 		</div>
-		
-		<!-- よくある質問 -->
-		<section class="p-top__section"></section>
 		
 		<!-- TOPへ	-->
 		<transition name="c-go-top">
@@ -384,7 +322,7 @@ export default {
 	},
 	data() {
 		return {
-			loading: false,
+			loading: false,      //ローディング
 			reviews: [],         //レビューをランダムで3件
 			buttonActive: false, //TOPボタンを表示する
 			scroll: 0,           //scroll
@@ -393,16 +331,15 @@ export default {
 	},
 	methods: {
 		async getReviews() { //レビューをランダムで3件取得
-			this.loading   = true; //ローディングを表示する
-			const response = await axios.get('/api/reviews/topPageReview');
-			this.loading   = false; //API通信が終わったらローディングを非表示にする
+			this.loading   = true;                                              //ローディングを表示する
+			const response = await axios.get('/api/reviews/topPageReview'); //API接続
+			this.loading   = false;                                             //API通信が終わったらローディングを非表示にする
 			
 			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
 				this.$store.commit('error/setCode', response.status);
 				return false; //後続の処理を抜ける
 			}
 			this.reviews = response.data; //responseデータをプロパティに代入
-			console.log(this.reviews);
 		},
 		returnTop() { //「TOPにもどる」ボタンを押したときの処理
 			window.scrollTo({
@@ -421,7 +358,7 @@ export default {
 		handleScrollX() {
 			if(!this.visibleX) {
 				var top = this.$el.getBoundingClientRect().top; //ブラウザの表示領域の左上を(0, 0)として、そこから要素の上端までの相対位置の値が返ってくる
-				this.visibleX = top < window.innerHeight + 50; //ブラウザのウィンドウの高さに100pxを足した値よりtopの値が小さくなったときにthis.visibleにtrueを入れる
+				this.visibleX = top < window.innerHeight + 50;
 			}
 		}
 	},

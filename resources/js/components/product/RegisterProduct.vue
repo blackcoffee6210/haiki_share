@@ -19,7 +19,6 @@
 									 :class="{ 'p-product-form__label-img__err': errors.image }">
 							<input type="file"
 										 class="p-product-form__img"
-										 
 										 @change="onFileChange">
 							<output class="p-product-form__output" v-if="preview">
 								<img :src="preview"
@@ -27,9 +26,8 @@
 										 alt="">
 							</output>
 						</label>
-						<div class="p-product-form__img-text" v-if="!preview">
-							商品画像を設定する
-						</div>
+						<!-- 画像input中央に表示する文字 -->
+						<div class="p-product-form__img-text" v-if="!preview">商品画像を設定する</div>
 					</div>
 					<!-- エラーメッセージ	-->
 					<div v-if="errors">
@@ -173,12 +171,12 @@ export default {
 		return {
 			loading: false, //ローディングを表示するかどうかを判定するプロパティ
 			product: {
-				image: '',
-				category_id: '',
-				name: '',
-				detail: '',
-				expire: '',
-				price: ''
+				image: '',       //商品画像
+				category_id: '', //カテゴリーID
+				name: '',        //商品名
+				detail: '',      //商品の内容
+				expire: '',      //賞味期限
+				price: ''        //金額
 			},
 			categories: [], //カテゴリーを格納するプロパティ
 			preview: null,  //データURLを格納するプロパティ
@@ -256,14 +254,14 @@ export default {
 			this.loading = false; //API通信が終わったらローディングを非表示にする
 			
 			if(response.status === UNPROCESSABLE_ENTITY) { //responseステータスがバリデーションエラーなら後続の処理を行う
-				this.errors = response.data.errors; //responseエラーメッセージをプロパティに格納する
-				return false; //後続の処理を抜ける
+				this.errors = response.data.errors;          //responseエラーメッセージをプロパティに格納する
+				return false;                                //後続の処理を抜ける
 			}
 			this.reset(); //送信が完了したら入力値をクリアする
 			
 			if(response.status !== CREATED) { //responseステータスがCREATEDじゃなかったら(商品登録できなかったら)後続の処理を行う
 				this.$store.commit('error/setCode', response.status); //エラー情報を渡す
-				return false; //後続の処理を抜ける
+				return false;                                               //後続の処理を抜ける
 			}
 			this.$store.commit('message/setContent', { //上のif文を抜けたら登録成功なので、メッセージを登録する
 				content: '商品を登録しました！'

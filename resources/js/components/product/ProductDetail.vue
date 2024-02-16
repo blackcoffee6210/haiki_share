@@ -1,7 +1,6 @@
 <template>
 	<main class="l-main">
 		<div class="p-product-detail">
-			<!--todo: 支払い確認画面を作成して、現金払いかクレジットを選択する-->
 			
 			<!-- ローディング -->
 			<Loading v-show="loading" />
@@ -18,6 +17,7 @@
 					<img :src="product.image"
 							 alt=""
 							 class="p-product-detail__img">
+					<!-- カテゴリー名 -->
 					<div class="p-product-detail__category">{{ product.category_name }}</div>
 				</div>
 				
@@ -25,10 +25,10 @@
 				
 				<!-- 商品名と金額のコンテナ	-->
 				<div class="p-product-detail__name-container">
+					<!-- 商品名 -->
 					<h2 class="p-product-detail__product-name">{{ product.name }}</h2>
-					<div class="p-product-detail__price">
-						{{ product.price | numberFormat }}
-					</div>
+					<!-- 金額 -->
+					<div class="p-product-detail__price">{{ product.price | numberFormat }}</div>
 				</div>
 				
 				<!-- 賞味期限 -->
@@ -36,17 +36,13 @@
 					<!-- 賞味期限が過ぎていたときの表示 -->
 					<div v-if="expireDate">
 						<span class="u-font-bold u-color__main">賞味期限切れ</span>
-						<span class="p-product-detail__expire__date">
-								{{ product.expire | fromExpire }}
-						</span>
+						<span class="p-product-detail__expire__date">{{ product.expire | fromExpire }}</span>
 						日
 					</div>
 					<!-- 正味期限内のときの表示 -->
 					<div v-else>
 						<span >賞味期限 残り</span>
-						<span class="p-product-detail__expire__date">
-							{{ product.expire | momentExpire }}
-						</span>
+						<span class="p-product-detail__expire__date">{{ product.expire | momentExpire }}</span>
 						日
 					</div>
 				</div>
@@ -63,6 +59,7 @@
 								 alt=""
 								 v-if="product.user_image"
 								 class="c-icon p-product-detail__icon">
+						<!-- no-img -->
 						<img src="/storage/images/no-image.png"
 								 alt=""
 								 v-else
@@ -70,21 +67,15 @@
 						<div>
 							<div class="c-flex">
 								<!-- コンビニ名	-->
-								<div class="p-product-detail__shop-name">
-									{{ product.user_name }}
-								</div>
+								<div class="p-product-detail__shop-name">{{ product.user_name }}</div>
 								<!-- 支店名	-->
-								<div class="p-product-detail__branch">
-									{{ product.branch }}
-								</div>
+								<div class="p-product-detail__branch">{{ product.branch }}</div>
 							</div>
 							<!-- 商品登録日 -->
-							<div class="p-product-detail__date">
-								{{ product.created_at | moment }}
-							</div>
+							<div class="p-product-detail__date">{{ product.created_at | moment }}</div>
 						</div>
 					</div>
-					<!-- ボタンコンテナ(右側)	--><!-- todo: SPの気になる、レビュー投稿、購入キャンセルが3つ並んだときのスタイル -->
+					<!-- ボタンコンテナ(右側)	-->
 					<div class="p-product-detail__btn-container">
 						<!-- お気に入りボタン	-->
 						<!-- 自分の商品または購入されている商品は押せない -->
@@ -152,9 +143,7 @@
 				</div>
 				
 				<!-- 商品の詳細	-->
-				<div class="p-product-detail__detail">
-					{{ product.detail }}
-				</div>
+				<div class="p-product-detail__detail">{{ product.detail }}</div>
 				
 				<!-- twitterシェアボタン(自分の商品のときは表示しない) -->
 				<div class="p-product-detail__twitter-container"
@@ -184,8 +173,7 @@
 				
 				<!-- この商品に似た商品-->
 				<div class="c-title p-product-detail__title"
-						 v-show="similarProducts.length > 0">
-					同じカテゴリーの商品
+						 v-show="similarProducts.length > 0">同じカテゴリーの商品
 				</div>
 				<div class="p-product-detail__products-container">
 					<Product v-show="!loading"
@@ -255,7 +243,7 @@ export default {
 		}
 	},
 	methods: {
-		async getPurchasedByUser() {
+		async getPurchasedByUser() { //ログインユーザーが商品を購入したかどうかを返す
 			const response = await axios.get(`/api/products/${this.id}/purchasedByUser`);
 
 			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
@@ -264,7 +252,7 @@ export default {
 			}
 			response.data[0] ? this.purchasedByUser = true : this.purchasedByUser = false;
 		},
-		async getCanceledByUser() {
+		async getCanceledByUser() { //ログインユーザーが商品をキャンセルしたかどうかを返す
 			const response = await axios.get(`/api/products/${this.id}/canceledByUser`);
 			
 			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
@@ -296,7 +284,7 @@ export default {
 			}
 			this.otherProducts = response.data; //responseデータをプロパティに代入
 		},
-		async getSimilarProducts() {
+		async getSimilarProducts() { //同じカテゴリーの商品を取得
 			const response = await axios.get(`/api/products/${this.product.category_id}/${this.id}/similar`); //API接続
 			
 			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
@@ -336,7 +324,7 @@ export default {
 				this.$store.commit('error/setCode', response.status);
 				return false;
 			}
-			this.product.likes_count -= 1; //トータルのいいね数を1減らす
+			this.product.likes_count -= 1;      //トータルのいいね数を1減らす
 			this.product.liked_by_user = false; //ログインユーザーが「いいね解除」したのでfalseをセット
 			this.isLike = false;
 		},
@@ -348,7 +336,7 @@ export default {
 				return false;
 			}
 			if(this.canceledByUser) { //商品をキャンセルしたユーザーは再度購入できない
-				alert('一度キャンセルした商品は購入できません');
+				alert('一度キャンセルした商品は購入できません'); //アラートを表示
 				return false;
 			}
 			if(confirm('購入しますか？')) { //アレートで「購入しますか?」と表示し、「はい」を押すと以下の処理を実行
@@ -363,8 +351,7 @@ export default {
 					return false; //後続の処理を抜ける
 				}
 				
-				this.purchasedByUser = true;
-				// this.product.purchased_by_user = true; //ログインユーザーが商品を購入したのでtrueをセット(購入済み)にする
+				this.purchasedByUser = true; //ログインユーザーが購入したので、プロパティをtrueにする
 				
 				if(this.product.liked_by_user) { //商品を購入したため、「いいね」をしていたら外す
 					this.unlike();
@@ -437,7 +424,6 @@ export default {
 				this.$store.commit('error/setCode', response.status);
 				return false;
 			}
-			
 			response.data[0] ? this.isReviewed = true : this.isReviewed = false; //レビュー投稿済みならtrue、なければfalseをセット
 		},
 		returnTop() { //「TOPにもどる」ボタンを押したときの処理

@@ -14,9 +14,9 @@ class CreateLikesTable extends Migration
     public function up()
     {
         Schema::create('likes', function (Blueprint $table) {
-	        $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id');    //ユーザーid
-            $table->unsignedBigInteger('product_id'); //商品id
+	        $table->bigIncrements('id');              //お気に入りID
+            $table->unsignedBigInteger('user_id');    //ユーザーID
+            $table->unsignedBigInteger('product_id'); //商品ID
             $table->timestamps();
 
 	        $table->foreign('user_id')->references('id')->on('users');       //外部キー

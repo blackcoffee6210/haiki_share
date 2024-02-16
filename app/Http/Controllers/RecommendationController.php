@@ -9,6 +9,6 @@ class RecommendationController extends Controller
 {
     public function __invoke()
     {
-        return Recommendation::all();
+        return Recommendation::all(); //ユーザーの評価「とてもオススメ」「オススメ」「オススメしない」を取得
     }
 }

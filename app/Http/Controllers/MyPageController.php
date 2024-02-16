@@ -16,7 +16,7 @@ class MyPageController extends Controller
 		$this->middleware('auth'); //認証
 	}
 
-    public function liked() //お気に入りした商品を5件取得
+    public function liked() //お気に入りした商品を5件取得（利用者）
     {
     	return User::find(Auth::id())
 		           ->likes()
@@ -25,7 +25,7 @@ class MyPageController extends Controller
 		           ->get();
     }
 
-	public function posted() //投稿した商品を5件取得
+	public function posted() //出品した商品を5件取得（コンビニユーザー）
 	{
 		return User::find(Auth::id())
 				   ->products()
@@ -34,25 +34,23 @@ class MyPageController extends Controller
 				   ->get();
 	}
 
-	public function purchased() //購入した商品を5件取得
+	public function purchased() //購入した商品を5件取得（利用者）
 	{
-		//todo: 降順で取得
 		$products = Product::whereHas('history', function($q) {
 						$q->where('buyer_id', '=', Auth::id());
 					})->take(5)->get();
 		return $products;
 	}
 
-	public function wasPurchased() //購入された商品を5件取得
+	public function wasPurchased() //購入された商品を5件取得（コンビニユーザー）
 	{
-		//todo: 降順で取得
 		$products = Product::whereHas('history', function($q) {
 						$q->where('seller_id', Auth::id());
 					})->take(5)->get();
 		return $products;
 	}
 
-	public function canceled() //キャンセルした商品を5件取得
+	public function canceled() //キャンセルした商品を5件取得（利用者）
 	{
 		//todo: 降順で取得
 		$products = Product::whereHas('cancels', function($q) {
@@ -61,7 +59,7 @@ class MyPageController extends Controller
 		return $products;
 	}
 
-	public function wasCanceled() //キャンセルされた商品を5件取得
+	public function wasCanceled() //キャンセルされた商品を5件取得（コンビニユーザー）
 	{
 		//todo: 降順で取得
 		$products = Product::whereHas('cancels', function($q) {
@@ -70,7 +68,7 @@ class MyPageController extends Controller
 		return $products;
 	}
 
-	public function deleted() //削除した商品を5件取得
+	public function deleted() //削除した商品を5件取得（コンビニユーザー）
 	{
 		$products = Product::where('user_id', Auth::id())
 						   ->onlyTrashed()
@@ -89,7 +87,7 @@ class MyPageController extends Controller
 				   ->get();
 	}
 
-	public function wasReviewed() //投稿されたレビューを5件取得（コンビニ）
+	public function wasReviewed() //投稿されたレビューを5件取得（コンビニユーザー）
 	{
 		return User::find(Auth::id())
 					->receiverReviews()

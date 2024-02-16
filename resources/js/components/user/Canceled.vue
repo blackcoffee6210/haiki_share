@@ -2,6 +2,8 @@
 	<div class="l-main">
 		<main class="l-main__2column">
 			<div class="p-list">
+				
+				<!-- タイトル -->
 				<h2 class="c-title p-list__title">
 					<span v-show="isShopUser">キャンセルされた商品一覧</span>
 					<span v-show="!isShopUser">キャンセルした商品一覧</span>
@@ -33,7 +35,7 @@
 													 :to="{ name: 'product.edit',
 																	params: { id: product.id.toString() }}">編集する
 							</router-link>
-							<!--&lt;!&ndash; 詳細を見るボタン &ndash;&gt;-->
+							<!-- 詳細を見るボタン -->
 							<router-link class="c-btn p-product__btn"
 													 v-show="!isShopUser"
 													 :to="{ name: 'product.detail',
@@ -41,7 +43,6 @@
 							</router-link>
 						</div>
 						<!-- キャンセルスロット -->
-						<!-- キャンセルされた数をカウントして表示（「いいね」みたいに） -->
 						<div class="p-product__cancel"
 								 slot="cancel_count"
 								 v-show="isShopUser">{{ product.cancels_count }}回

@@ -106,10 +106,6 @@
 			</button>
 			
 			<!-- 退会ユーザーを減らすためにサイドバーには非表示（Footerの特定商取引法から退会処理を行う） -->
-			<!--&lt;!&ndash; 退会 &ndash;&gt;-->
-			<!--<router-link class="p-sidebar__link"-->
-			<!--						 :to="{ name: 'user.withdrawal'}">退会する-->
-			<!--</router-link>-->
 		</div>
 	</aside>
 </template>

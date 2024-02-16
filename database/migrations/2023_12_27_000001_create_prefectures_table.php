@@ -14,9 +14,9 @@ class CreatePrefecturesTable extends Migration
     public function up()
     {
         Schema::create('prefectures', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('name'); //都道府県名
-            $table->string('kana'); //カナ表記
+            $table->bigIncrements('id'); //都道府県ID
+            $table->string('name');      //都道府県名
+            $table->string('kana');      //カナ表記
             $table->timestamps();
         });
     }

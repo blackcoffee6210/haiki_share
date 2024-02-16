@@ -2,6 +2,8 @@
 	<div class="l-main">
 		<main class="l-main__2column">
 			<div class="p-list">
+				
+				<!-- タイトル -->
 				<h2 class="c-title p-list__title">お気に入りした商品一覧</h2>
 				
 				<!-- ローディング -->
@@ -19,11 +21,6 @@
 									 :key="product.id"
 									 :product="product">
 						<div class="p-product__btn-container" slot="btn">
-							<!--&lt;!&ndash; 詳細を見るボタン &ndash;&gt;-->
-							<!--<router-link class="c-btn p-product__btn"-->
-							<!--						 :to="{ name: 'product.detail',-->
-							<!--						  			params: { id: product.id.toString() }}">詳細を見る-->
-							<!--</router-link>-->
 							<!-- いいね解除ボタン -->
 							<button class="c-btn c-btn--white p-product__btn"
 											@click="unlike(product)">お気に入り解除
@@ -61,10 +58,10 @@ export default {
 	},
 	data() {
 		return {
-			loading: false,
-			products: {},
+			loading: false, //ローディング）
+			products: {},   //商品
 			product: {},
-			isLike: true
+			isLike: true    //いいねしたかどうか
 		}
 	},
 	computed: {
@@ -87,7 +84,7 @@ export default {
 			this.products = response.data; //プロパティにデータをセット
 			console.log(response.data);
 		},
-		async unlike(product) { //お気に入りを削除する
+		async unlike(product) {   //お気に入りを削除する
 			this.product = product; //引数の値をプロパティにセット
 			
 			if(confirm('お気に入りを解除しますか?')) {
@@ -98,9 +95,9 @@ export default {
 					return false;
 				}
 				
-				this.product.likes_count -= 1; //いいねの数を1個減らす
+				this.product.likes_count -= 1;      //お気に入りを解除したので、いいねの数を1個減らす
 				this.product.liked_by_user = false; //いいね解除したので、ユーザーのいいねをtrueからfalseにする
-				this.isLike = false; //一覧表示に表示しない
+				this.isLike = false;                //一覧表示に表示しない
 				
 				this.$store.commit('message/setContent', { //メッセージ登録
 					content: 'お気に入りを解除しました',
