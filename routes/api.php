@@ -15,24 +15,24 @@ Route::post('/password/reset', 'Auth\ResetPasswordController@reset')->name('pass
 //=================================================================
 // Product
 //=================================================================
-Route::get('/products',                       'ProductController@index')->name('index');       //商品一覧取得
-Route::get('/products/prefecture',            'ProductController@prefecture');                 //出品したユーザーの都道府県IDを取得
-Route::get('/products/ranking',               'ProductController@ranking');                    //お気に入りが多い５件を取得
-Route::get('/products/{id}',                  'ProductController@show')->name('product.show'); //商品情報取得
+Route::get('/products',                       'ProductController@index')->name('index');         //商品一覧取得
+Route::get('/products/prefecture',            'ProductController@prefecture');                   //出品したユーザーの都道府県IDを取得
+Route::get('/products/ranking',               'ProductController@ranking');                      //お気に入りが多い５件を取得
+Route::get('/products/{id}',                  'ProductController@show')->name('product.show');   //商品情報取得
 Route::post('/products',                      'ProductController@store')->name('product.store'); //商品登録
-Route::post('/products/{id}',                 'ProductController@update');                     //商品更新
-Route::delete('/products/{id}',               'ProductController@destroy');                    //商品削除(ソフトデリート)
-Route::post('/products/{id}/forceDelete',     'ProductController@forceDelete');                //商品削除（完全削除）
-Route::post('/products/{id}/restore',         'ProductController@restore');                    //商品復元
-Route::post('/products/{id}/purchase',        'ProductController@purchase');                   //商品購入
-Route::get('/products/{id}/purchasedByUser',  'ProductController@purchasedByUser');            //商品を購入したかを返す
-Route::get('/products/{id}/canceledByUser',   'ProductController@canceledByUser');             //商品をキャンセルしたかを返す
-Route::get('/products/{u_id}/{p_id}/other',   'ProductController@otherProducts');              //出品者の他の商品を返す
-Route::get('/products/{c_id}/{p_id}/similar', 'ProductController@similarProducts');            //出品者の他の商品を返す
-Route::post('/products/{id}/like',            'ProductController@like')->name('product.like'); //お気に入り登録
-Route::delete('/products/{id}/unlike',        'ProductController@unlike');                     //お気に入り解除
-Route::post('/products/{id}/cancel',          'ProductController@cancel');                     //商品キャンセル
-Route::get('/products/{id}/isReviewed',       'ProductController@isReviewed');                 //レビュー投稿済みかどうか
+Route::post('/products/{id}',                 'ProductController@update');                       //商品更新
+Route::delete('/products/{id}',               'ProductController@destroy');                      //商品削除(ソフトデリート)
+Route::post('/products/{id}/forceDelete',     'ProductController@forceDelete');                  //商品削除（完全削除）
+Route::post('/products/{id}/restore',         'ProductController@restore');                      //商品復元
+Route::post('/products/{id}/purchase',        'ProductController@purchase');                     //商品購入
+Route::get('/products/{id}/purchasedByUser',  'ProductController@purchasedByUser');              //商品を購入したかを返す
+Route::get('/products/{id}/canceledByUser',   'ProductController@canceledByUser');               //商品をキャンセルしたかを返す
+Route::get('/products/{u_id}/{p_id}/other',   'ProductController@otherProducts');                //出品者の他の商品を返す
+Route::get('/products/{c_id}/{p_id}/similar', 'ProductController@similarProducts');              //出品者の他の商品を返す
+Route::post('/products/{id}/like',            'ProductController@like')->name('product.like');   //お気に入り登録
+Route::delete('/products/{id}/unlike',        'ProductController@unlike');                       //お気に入り解除
+Route::post('/products/{id}/cancel',          'ProductController@cancel');                       //商品キャンセル
+Route::get('/products/{id}/isReviewed',       'ProductController@isReviewed');                   //レビュー投稿済みかどうか
 
 //=================================================================
 // User
@@ -68,13 +68,13 @@ Route::get('/mypage/wasReviewed',  'MyPageController@wasReviewed');  //投稿さ
 //=================================================================
 // Review
 //=================================================================
-Route::post('/reviews',                      'ReviewController@store');
-Route::get('/reviews/{r_id}/reviewedByUser', 'ReviewController@reviewedByUser');
-Route::get('/reviews/{r_id}/otherProducts',  'ReviewController@otherProducts');
-Route::get('/reviews/{s_id}/{r_id}',         'ReviewController@show');
-Route::post('/reviews/update',               'ReviewController@update');
-Route::delete('/reviews/{s_id}/{r_id}',      'ReviewController@destroy');
-Route::get('/reviews/topPageReview',         'ReviewController@topPageReview');
+Route::post('/reviews',                      'ReviewController@store');          //レビュー投稿
+Route::get('/reviews/{r_id}/reviewedByUser', 'ReviewController@reviewedByUser'); //利用者にレビューされたかどうか
+Route::get('/reviews/{r_id}/otherProducts',  'ReviewController@otherProducts');  //コンビニユーザーの他の商品
+Route::get('/reviews/{s_id}/{r_id}',         'ReviewController@show');           //レビュー取得
+Route::post('/reviews/update',               'ReviewController@update');         //レビュー更新
+Route::delete('/reviews/{s_id}/{r_id}',      'ReviewController@destroy');        //レビュー削除
+Route::get('/reviews/topPageReview',         'ReviewController@topPageReview');  //TOPページに表示するレビューを3件取得
 
 //=================================================================
 // Other
