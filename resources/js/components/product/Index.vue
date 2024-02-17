@@ -291,8 +291,6 @@ export default {
 				return false;
 			}
 			this.recommendProducts = response.data;
-			console.log('recommendProducts')
-			console.log(response.data);
 		},
 		async getCategories() { //カテゴリー取得メソッド
 			const response = await axios.get('/api/categories'); //API接続

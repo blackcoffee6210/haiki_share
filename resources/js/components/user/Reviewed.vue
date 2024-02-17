@@ -101,7 +101,6 @@ export default {
 			}
 			this.reviews = response.data; //プロパティにデータをセット
 			this.s_id = response
-			console.log(this.reviews);
 		},
 		async getWasReviewed() { //レビュ一取得
 			this.loading = true; //ローディングを表示する
@@ -115,7 +114,6 @@ export default {
 				return false;
 			}
 			this.reviews = response.data; //プロパティにデータをセット
-			console.log(response.data);
 		},
 	},
 	watch: {
