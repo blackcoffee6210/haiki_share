@@ -52,7 +52,6 @@ class MyPageController extends Controller
 
 	public function canceled() //キャンセルした商品を5件取得（利用者）
 	{
-		//todo: 降順で取得
 		$products = Product::whereHas('cancels', function($q) {
 						$q->where('cancel_user_id', Auth::id());
 					})->take(5)->get();
@@ -61,7 +60,6 @@ class MyPageController extends Controller
 
 	public function wasCanceled() //キャンセルされた商品を5件取得（コンビニユーザー）
 	{
-		//todo: 降順で取得
 		$products = Product::whereHas('cancels', function($q) {
 						$q->where('post_user_id', Auth::id());
 					})->take(5)->get();

@@ -168,6 +168,9 @@
     width: 100%;
     height: 190px;
     @include mq() {
+      display: block;
+      width: 130px;
+      margin: 0 auto;
       height: 130px;
     }
   }

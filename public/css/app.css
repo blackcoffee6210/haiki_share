@@ -3516,6 +3516,9 @@ body {
 }
 @media screen and (max-width: 450px) {
   .p-top__merit-img {
+    display: block;
+    width: 130px;
+    margin: 0 auto;
     height: 130px;
   }
 }
