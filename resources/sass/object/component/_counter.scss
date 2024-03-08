@@ -1,0 +1,8 @@
+.c-counter {
+  text-align: right;
+  margin-top: $space_s;
+  font-size: $font-size_m;
+  &--err {
+    color: $error-color;
+  }
+}

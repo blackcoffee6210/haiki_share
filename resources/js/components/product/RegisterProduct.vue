@@ -65,16 +65,29 @@
 					</label>
 					<input type="text"
 								 class="c-input p-product-form__input"
-								 :class="{ 'c-input__err': errors.name }"
+								 :class="{ 'c-input__err': errors.name || maxCounter(product.name,50) }"
 								 id="name"
 								 v-model="product.name"
 								 placeholder="商品名を入力してください">
-					<!-- エラーメッセージ	-->
-					<div v-if="errors">
-						<div v-for="msg in errors.name"
-								 :key="msg"
-								 class="p-error">{{ msg }}
+					<div class="u-d-flex u-space-between">
+						<!-- エラーメッセージ（フロントエンド） -->
+						<div v-if="maxCounter(product.name,50) && !errors.name"
+								 class="p-error">
+							<p>50文字以下で指定してください</p>
 						</div>
+						<!-- エラーメッセージ（バックエンド）	-->
+						<div v-if="errors">
+							<div v-for="msg in errors.name"
+									 :key="msg"
+									 class="p-error">
+								{{ msg }}
+							</div>
+						</div>
+						<!-- 文字数カウンター -->
+						<p class="c-counter"
+							 :class="{ 'c-counter--err': maxCounter(product.name,50) }">
+							{{ product.name.length }}/50
+						</p>
 					</div>
 					
 					<!-- 商品の内容	-->
@@ -82,17 +95,30 @@
 								 class="c-label p-product-form__label">商品の内容
 					</label>
 					<textarea	class="c-input p-product-form__textarea"
-										:class="{ 'c-input__err': errors.detail }"
-										id="detail"
-										v-model="product.detail"
-										placeholder="商品の内容を入力してください"
+										 :class="{ 'c-input__err': errors.detail || maxCounter(product.detail, 255) }"
+										 id="detail"
+										 v-model="product.detail"
+										 placeholder="商品の内容を入力してください"
 					></textarea>
-					<!-- エラーメッセージ	-->
-					<div v-if="errors">
-						<div v-for="msg in errors.detail"
-								 :key="msg"
-								 class="p-error">{{ msg }}
+					<div class="u-d-flex u-space-between">
+						<!-- エラーメッセージ（フロントエンド） -->
+						<div v-if="maxCounter(product.detail, 255) && !errors.detail"
+								 class="p-error">
+							<p>255文字以下で指定してください</p>
 						</div>
+						<!-- エラーメッセージ（バックエンド）	-->
+						<div v-if="errors">
+							<div v-for="msg in errors.detail"
+									 :key="msg"
+									 class="p-error">
+								{{ msg }}
+							</div>
+						</div>
+						<!-- 文字数カウンター -->
+						<p class="c-counter"
+							 :class="{ 'c-counter--err': maxCounter(product.detail,255) }">
+							{{ product.detail.length }}/255
+						</p>
 					</div>
 					
 					<!-- 賞味期限 -->
@@ -127,7 +153,7 @@
 									 :class="{ 'c-input__err': errors.price }"
 									 id="price"
 									 v-model="product.price"
-									 placeholder="1000">
+									 placeholder="50〜10000円の間で入力してください">
 						<div class="p-product-form__yen"
 								 :class="{'p-product-form__yen__err': errors.price }">円
 						</div>
@@ -200,9 +226,12 @@ export default {
 			let date = new Date();
 			date.setDate(date.getDate() + 30);
 			return moment(date).format('YYYY-MM-DD');
-		},
+		}
 	},
 	methods: {
+		maxCounter(content, maxValue) { //カウンターの文字数上限
+			return content.length > maxValue;
+		},
 		async getCategories() { //カテゴリー取得
 			const response = await axios.get('/api/categories');
 			

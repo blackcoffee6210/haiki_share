@@ -26,7 +26,7 @@ class StoreProduct extends FormRequest
         return [
 	        'category_id' => 'required|integer',
             'image'       => 'required|file|mimes:jpg,jpeg,png',
-	        'name'        => 'required|string|max:255',
+	        'name'        => 'required|string|max:50',
 	        'detail'      => 'required|string|max:255',
 	        'price'       => 'required|integer|between:50,10000',
 	        'expire'      => 'required|date|after:today'

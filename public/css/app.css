@@ -555,6 +555,15 @@ body {
   color: #f96204;
 }
 
+.c-counter {
+  text-align: right;
+  margin-top: 5px;
+  font-size: 1.4rem;
+}
+.c-counter--err {
+  color: #ff5252;
+}
+
 .c-flex {
   display: flex;
   align-items: center;
@@ -1079,7 +1088,7 @@ body {
 .p-error {
   color: #ff5252;
   margin-top: 5px;
-  font-size: 12px;
+  font-size: 1.4rem;
 }
 
 .p-footer {
