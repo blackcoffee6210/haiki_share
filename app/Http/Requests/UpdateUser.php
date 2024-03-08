@@ -27,8 +27,8 @@ class UpdateUser extends FormRequest
     {
         return [
             'image'     => 'nullable',
-            'name'      => 'required|string|max:255',
-            'branch'    => 'required|string|max:255',
+            'name'      => 'required|string|max:50',
+            'branch'    => 'required|string|max:50',
             'address'   => 'required|string|max:255',
 	        'email'     => ['required', 'string', 'email:filter', 'max:255',
 		                     Rule::unique('users')->ignore(Auth::user()->id)

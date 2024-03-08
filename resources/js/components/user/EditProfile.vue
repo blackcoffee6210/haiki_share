@@ -55,16 +55,40 @@
 						<input type="text"
 									 id="name"
 									 class="c-input p-edit-profile__input"
-									 :class="{ 'c-input__err': errors.name }"
+									 :class="{ 'c-input__err': errors.name || maxCounter(user.name,50) }"
 									 v-model="user.name"
 									 :placeholder="name">
-						<!-- エラーメッセージ	-->
-						<div v-if="errors">
-							<div v-for="msg in errors.name"
-									 :key="msg"
-									 class="p-error">{{ msg }}
+						<div class="u-d-flex u-space-between">
+							<!-- エラーメッセージ（フロントエンド） -->
+							<div v-if="maxCounter(user.name, 50) && !errors.name"
+									 class="p-error">
+								<p>
+									<span v-show="user.group === 1">お名前</span>
+									<span v-show="user.group === 2">コンビニ名</span>
+									は50文字以下で指定してください
+								</p>
 							</div>
+							<!-- エラーメッセージ（バックエンド）	-->
+							<div v-if="errors">
+								<div v-for="msg in errors.name"
+										 :key="msg"
+										 class="p-error">
+									{{ msg }}
+								</div>
+							</div>
+							<!-- 文字数カウンター -->
+							<p class="c-counter"
+								 :class="{ 'c-counter--err': maxCounter(user.name,50) }">
+								{{ user.name.length }}/50
+							</p>
 						</div>
+						<!--&lt;!&ndash; エラーメッセージ	&ndash;&gt;-->
+						<!--<div v-if="errors">-->
+						<!--	<div v-for="msg in errors.name"-->
+						<!--			 :key="msg"-->
+						<!--			 class="p-error">{{ msg }}-->
+						<!--	</div>-->
+						<!--</div>-->
 						
 						<!-- 都道府県が変わることは考えにくいので、プロフィール編集画面には含めない -->
 						
@@ -76,15 +100,35 @@
 										 type="text"
 										 id="branch"
 										 class="c-input p-edit-profile__input"
-										 :class="{ 'c-input__err': errors.branch }"
+										 :class="{ 'c-input__err': errors.branch || maxCounter(user.branch, 50) }"
 										 placeholder="渋谷支店">
-							<!-- エラーメッセージ	-->
-							<div v-if="errors">
-								<div v-for="msg in errors.branch"
-										 :key="msg"
-										 class="p-error">{{ msg }}
+							<div class="u-d-flex u-space-between">
+								<!-- エラーメッセージ（フロントエンド） -->
+								<div v-if="maxCounter(user.branch, 50) && !errors.branch"
+										 class="p-error">
+									<p>支店名は50文字以下で指定してください</p>
 								</div>
+								<!-- エラーメッセージ（バックエンド）	-->
+								<div v-if="errors">
+									<div v-for="msg in errors.branch"
+											 :key="msg"
+											 class="p-error">
+										{{ msg }}
+									</div>
+								</div>
+								<!-- 文字数カウンター -->
+								<p class="c-counter"
+									 :class="{ 'c-counter--err': maxCounter(user.branch,50) }">
+									{{ user.branch.length }}/50
+								</p>
 							</div>
+							<!--&lt;!&ndash; エラーメッセージ	&ndash;&gt;-->
+							<!--<div v-if="errors">-->
+							<!--	<div v-for="msg in errors.branch"-->
+							<!--			 :key="msg"-->
+							<!--			 class="p-error">{{ msg }}-->
+							<!--	</div>-->
+							<!--</div>-->
 						</div>
 						
 						<!-- 住所	-->
@@ -126,19 +170,44 @@
 						<!-- 自己紹介文	-->
 						<label for="introduce"
 									 class="c-label p-edit-profile__label">自己紹介文</label>
-						<input v-model="user.introduce"
-									 type="text"
-									 id="introduce"
-									 class="c-input p-edit-profile__input"
-									 :class="{ 'c-input__err': errors.introduce }"
-									 placeholder="こんにちは。よろしくお願いします。">
-						<!-- エラーメッセージ	-->
-						<div v-if="errors">
-							<div v-for="msg in errors.introduce"
-									 :key="msg"
-									 class="p-error">{{ msg }}
+						<textarea v-model="user.introduce"
+											id="introduce"
+											class="c-input p-edit-profile__textarea"
+											:class="{ 'c-input__err': errors.introduce || maxCounter(user.introduce, 255) }"
+											placeholder="こんにちは。よろしくお願いします。"></textarea>
+						<!--<input v-model="user.introduce"-->
+						<!--			 type="text"-->
+						<!--			 id="introduce"-->
+						<!--			 class="c-input p-edit-profile__input"-->
+						<!--			 :class="{ 'c-input__err': errors.introduce }"-->
+						<!--			 placeholder="こんにちは。よろしくお願いします。">-->
+						<div class="u-d-flex u-space-between">
+							<!-- エラーメッセージ（フロントエンド） -->
+							<div v-if="maxCounter(user.introduce, 255) && !errors.introduce"
+									 class="p-error">
+								<p>自己紹介文は255文字以下で指定してください</p>
 							</div>
+							<!-- エラーメッセージ（バックエンド）	-->
+							<div v-if="errors">
+								<div v-for="msg in errors.introduce"
+										 :key="msg"
+										 class="p-error">
+									{{ msg }}
+								</div>
+							</div>
+							<!-- 文字数カウンター -->
+							<p class="c-counter"
+								 :class="{ 'c-counter--err': maxCounter(user.introduce,255) }">
+								{{ user.introduce.length }}/255
+							</p>
 						</div>
+						<!--&lt;!&ndash; エラーメッセージ	&ndash;&gt;-->
+						<!--<div v-if="errors">-->
+						<!--	<div v-for="msg in errors.introduce"-->
+						<!--			 :key="msg"-->
+						<!--			 class="p-error">{{ msg }}-->
+						<!--	</div>-->
+						<!--</div>-->
 						
 						<!-- ボタン -->
 						<div class="p-edit-profile__btn-container">
@@ -213,6 +282,9 @@ export default {
 		}
 	},
 	methods: {
+		maxCounter(content, maxValue) { //カウンターの文字数上限
+			return content.length > maxValue;
+		},
 		async getUser() { //ユーザー情報取得
 			const response = await axios.get(`/api/users/${this.id}`); //API接続
 			

@@ -993,7 +993,7 @@ body {
   background: #fff;
 }
 .p-edit-profile__form {
-  width: 50%;
+  width: 60%;
   margin-left: auto;
   margin-right: auto;
   padding: 20px;
@@ -1075,6 +1075,10 @@ body {
 }
 .p-edit-profile__input {
   width: 100%;
+}
+.p-edit-profile__textarea {
+  width: 100%;
+  height: 200px;
 }
 .p-edit-profile__btn-container {
   display: flex;
