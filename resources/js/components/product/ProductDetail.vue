@@ -68,8 +68,10 @@
 							<div class="c-flex">
 								<!-- コンビニ名	-->
 								<div class="p-product-detail__shop-name">{{ product.user_name }}</div>
+								<!--<div class="p-product-detail__shop-name">{{ // product.user_name | readmore(10, '...') }}</div>-->
 								<!-- 支店名	-->
 								<div class="p-product-detail__branch">{{ product.branch }}</div>
+								<!--<div class="p-product-detail__branch">{{ // product.branch | readmore(10, '...') }}</div>-->
 							</div>
 							<!-- 商品登録日 -->
 							<div class="p-product-detail__date">{{ product.created_at | moment }}</div>

@@ -17,11 +17,11 @@
 						 alt="">
 				
 				<div>
-					<div class="p-profile-detail__name">
-						<!-- ユーザー名（コンビニ名） -->
-						{{ user.name }}
-						<!-- 支店名（コンビニユーザーのみ表示） -->
-						<span v-show="shopUser">{{ user.branch }}</span>
+					<!-- ユーザー名（コンビニ名） -->
+					<div class="p-profile-detail__name">{{ user.name }}</div>
+					<!-- 支店名（コンビニユーザーのみ表示） -->
+					<div v-show="shopUser"
+							 class="p-profile-detail__branch">{{ user.branch }}
 					</div>
 					<!-- 住所（コンビニユーザーのみ表示） -->
 					<div class="p-profile-detail__address" v-show="shopUser">

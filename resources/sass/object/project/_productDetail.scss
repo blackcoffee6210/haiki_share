@@ -52,6 +52,7 @@
   &__product-name {
     font-size: $font-size_xl;
     font-weight: bold;
+    word-wrap: break-word;
     @include mq() {
       font-size: initial;
     }
@@ -117,11 +118,19 @@
   }
   &__shop-name {
     margin-right: $space_m;
+    overflow: hidden;
+    max-width: 100px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     @include mq() {
       display: inline-block;
     }
   }
   &__branch {
+    overflow: hidden;
+    max-width: 100px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     @include mq() {
       display: inline-block;
     }
@@ -172,18 +181,12 @@
       }
     }
   }
-  //&__before-buy {
-  //  text-align: center;
-  //  margin-bottom: $space_xl;
-  //  @include mq() {
-  //    font-size: $font-size_s;
-  //  }
-  //}
   &__detail {
     line-height: 2;
     letter-spacing: .05em;
     background: $white;
     padding: $space_l;
+    word-wrap: break-word;
     @include mq() {
       padding: $space_m;
     }

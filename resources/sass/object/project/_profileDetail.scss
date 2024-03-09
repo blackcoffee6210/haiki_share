@@ -43,9 +43,14 @@
   &__name {
     font-size: $font-size_xl;
     font-weight: bold;
+    word-break: break-all;
     @include mq() {
       font-size: initial;
     }
+  }
+  &__branch {
+    font-weight: bold;
+    word-break: break-all;
   }
   &__count {
     font-size: $font-size_xl;
@@ -58,11 +63,13 @@
   }
   &__address {
     font-weight: bold;
+    word-break: break-all;
   }
   &__introduce {
     font-weight: bold;
     margin-top: $space_m;
     margin-bottom: $space_xl;
+    word-break: break-all;
     @include mq('tab') {
       font-size: initial;
     }

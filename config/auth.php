@@ -96,7 +96,8 @@ return [
         'users' => [
             'provider' => 'users',
             'table' => 'password_resets',
-            'expire' => 60,
+            'expire' => 1, //テストで3分に変更
+//            'expire' => 60,
         ],
     ],
 

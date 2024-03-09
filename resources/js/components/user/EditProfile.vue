@@ -82,13 +82,6 @@
 								{{ user.name.length }}/50
 							</p>
 						</div>
-						<!--&lt;!&ndash; エラーメッセージ	&ndash;&gt;-->
-						<!--<div v-if="errors">-->
-						<!--	<div v-for="msg in errors.name"-->
-						<!--			 :key="msg"-->
-						<!--			 class="p-error">{{ msg }}-->
-						<!--	</div>-->
-						<!--</div>-->
 						
 						<!-- 都道府県が変わることは考えにくいので、プロフィール編集画面には含めない -->
 						
@@ -122,13 +115,6 @@
 									{{ user.branch.length }}/50
 								</p>
 							</div>
-							<!--&lt;!&ndash; エラーメッセージ	&ndash;&gt;-->
-							<!--<div v-if="errors">-->
-							<!--	<div v-for="msg in errors.branch"-->
-							<!--			 :key="msg"-->
-							<!--			 class="p-error">{{ msg }}-->
-							<!--	</div>-->
-							<!--</div>-->
 						</div>
 						
 						<!-- 住所	-->
@@ -141,15 +127,28 @@
 										 class="c-input p-edit-profile__input"
 										 :class="{ 'c-input__err': errors.address }"
 										 placeholder="渋谷１丁目">
-							<!-- エラーメッセージ	-->
-							<div v-if="errors">
-								<div v-for="msg in errors.address"
-										 :key="msg"
-										 class="p-error">{{ msg }}
+							<div class="u-d-flex u-space-between">
+								<!-- エラーメッセージ（フロントエンド） -->
+								<div v-if="maxCounter(user.address, 255) && !errors.address"
+										 class="p-error">
+									<p>住所は255文字以下で指定してください</p>
 								</div>
+								<!-- エラーメッセージ（バックエンド）	-->
+								<div v-if="errors">
+									<div v-for="msg in errors.address"
+											 :key="msg"
+											 class="p-error">
+										{{ msg }}
+									</div>
+								</div>
+								<!-- 文字数カウンター -->
+								<p class="c-counter"
+									 :class="{ 'c-counter--err': maxCounter(user.address,255) }">
+									{{ user.address.length }}/255
+								</p>
 							</div>
 						</div>
-						
+
 						<!-- メール	-->
 						<label for="email"
 									 class="c-label p-edit-profile__label">Eメール</label>
@@ -175,12 +174,6 @@
 											class="c-input p-edit-profile__textarea"
 											:class="{ 'c-input__err': errors.introduce || maxCounter(user.introduce, 255) }"
 											placeholder="こんにちは。よろしくお願いします。"></textarea>
-						<!--<input v-model="user.introduce"-->
-						<!--			 type="text"-->
-						<!--			 id="introduce"-->
-						<!--			 class="c-input p-edit-profile__input"-->
-						<!--			 :class="{ 'c-input__err': errors.introduce }"-->
-						<!--			 placeholder="こんにちは。よろしくお願いします。">-->
 						<div class="u-d-flex u-space-between">
 							<!-- エラーメッセージ（フロントエンド） -->
 							<div v-if="maxCounter(user.introduce, 255) && !errors.introduce"
@@ -201,13 +194,6 @@
 								{{ user.introduce.length }}/255
 							</p>
 						</div>
-						<!--&lt;!&ndash; エラーメッセージ	&ndash;&gt;-->
-						<!--<div v-if="errors">-->
-						<!--	<div v-for="msg in errors.introduce"-->
-						<!--			 :key="msg"-->
-						<!--			 class="p-error">{{ msg }}-->
-						<!--	</div>-->
-						<!--</div>-->
 						
 						<!-- ボタン -->
 						<div class="p-edit-profile__btn-container">
