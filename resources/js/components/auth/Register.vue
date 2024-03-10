@@ -210,6 +210,9 @@ export default {
 		}
 	},
 	methods: {
+		maxCounter(content, maxValue) { //カウンターの文字数上限
+			return content.length > maxValue;
+		},
 		async getPrefectures() { //都道府県取得
 			const response = await axios.get('/api/prefectures'); //API接続
 			

@@ -54,7 +54,7 @@ class RegisterController extends Controller
 		    case 1: //groupが1であれば「利用者」なので、以下のバリデーションを実行
 			    return Validator::make($data, [
 				    'group'                 => ['required', 'integer'],
-				    'name'                  => ['required', 'string', 'max:255'],
+				    'name'                  => ['required', 'string', 'max:50'],
 				    'email'                 => ['required', 'string', 'email:filter', 'max:255',
 					                            Rule::unique('users', 'email')],
 				    'password'              => ['required', 'string', 'min:8', 'max:255', 'confirmed'],
@@ -63,8 +63,8 @@ class RegisterController extends Controller
 		    case 2: //groupが2であれば「コンビニの人」なので、以下のバリデーションを実行
 			    return Validator::make($data, [
 				    'group'                 => ['required', 'integer'],
-				    'name'                  => ['required', 'string', 'max:255'],
-				    'branch'                => ['required', 'string', 'max:255'],
+				    'name'                  => ['required', 'string', 'max:50'],
+				    'branch'                => ['required', 'string', 'max:50'],
 				    'address'               => ['required', 'string', 'max:255'],
 				    'prefecture_id'         => ['required', 'integer'],
 				    'email'                 => ['required',  'string', 'email:filter', 'max:255',

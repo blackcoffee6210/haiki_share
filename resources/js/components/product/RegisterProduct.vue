@@ -152,6 +152,7 @@
 						</div>
 					</div>
 					
+					<!-- todo: フロントバリデーション実装 -->
 					<!-- 金額	-->
 					<label for="price"
 								 class="c-label p-product-form__label">金額

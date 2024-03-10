@@ -8,7 +8,7 @@
 				<!-- ローディング -->
 				<Loading color="#f96204" v-show="loading" />
 				
-				<!-- レビュー投稿フォーム -->
+				<!-- レビュー編集フォーム -->
 				<form class="p-review-form__form"
 							v-show="!loading"
 							@submit.prevent="update">
@@ -86,34 +86,64 @@
 					</label>
 					<input type="text"
 								 class="c-input p-review-form__input"
-								 :class="{ 'c-input__err': errors.title }"
+								 :class="{ 'c-input__err': errors.title ||
+								 					 maxCounter(reviewForm.title, 50)
+								 }"
 								 id="title"
 								 v-model="reviewForm.title"
 								 placeholder="もっとも伝いたいポイントはなんですか？">
-					<!-- エラーメッセージ	-->
-					<div v-if="errors">
-						<div v-for="msg in errors.title"
-								 :key="msg"
-								 class="p-error">{{ msg }}
+					<div class="u-d-flex u-space-between">
+						<!-- エラーメッセージ（フロントエンド） -->
+						<div v-if="maxCounter(reviewForm.title,50) && !errors.title"
+								 class="p-error">
+							<p class="u-mb20">レビュータイトルは50文字以下で指定してください</p>
 						</div>
+						<!-- エラーメッセージ（バックエンド）	-->
+						<div v-if="errors">
+							<div v-for="msg in errors.title"
+									 :key="msg"
+									 class="p-error u-mb20">
+								{{ msg }}
+							</div>
+						</div>
+						<!-- 文字数カウンター -->
+						<p class="c-counter"
+							 :class="{ 'c-counter--err': maxCounter(reviewForm.title,50) }">
+							{{ reviewForm.title.length }}/50
+						</p>
 					</div>
 					
 					<!-- レビューの内容 -->
 					<label for="detail"
-								 class="c-label p-review-form__label">レビューの内容
+								 class="c-label p-review-form__label u-mt0">レビューの内容
 					</label>
 					<textarea class="c-input p-review-form__textarea"
-										:class="{ 'c-input__err': errors.detail }"
+										:class="{ 'c-input__err': errors.detail ||
+															maxCounter(reviewForm.detail, 255)
+										}"
 										id="detail"
 										v-model="reviewForm.detail"
 										placeholder="レビューの内容を入力してください"
 					></textarea>
-					<!-- エラーメッセージ	-->
-					<div v-if="errors">
-						<div v-for="msg in errors.detail"
-								 :key="msg"
-								 class="p-error">{{ msg }}
+					<div class="u-d-flex u-space-between">
+						<!-- エラーメッセージ（フロントエンド） -->
+						<div v-if="maxCounter(reviewForm.detail,255) && !errors.detail"
+								 class="p-error">
+							<p class="">レビューの内容は255文字以下で指定してください</p>
 						</div>
+						<!-- エラーメッセージ（バックエンド）	-->
+						<div v-if="errors">
+							<div v-for="msg in errors.detail"
+									 :key="msg"
+									 class="p-error">
+								{{ msg }}
+							</div>
+						</div>
+						<!-- 文字数カウンター -->
+						<p class="c-counter"
+							 :class="{ 'c-counter--err': maxCounter(reviewForm.detail,255) }">
+							{{ reviewForm.detail.length }}/255
+						</p>
 					</div>
 					
 					<div class="p-review-form__btn-container">
@@ -165,6 +195,9 @@ export default {
 		}
 	},
 	methods: {
+		maxCounter(content, maxValue) { //カウンターの文字数上限
+			return content.length > maxValue;
+		},
 		async getRecommendation() { //ユーザー評価取得
 			const response = await axios.get('/api/recommendations') //API接続
 			

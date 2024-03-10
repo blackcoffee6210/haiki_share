@@ -27,7 +27,7 @@ class StoreReview extends FormRequest
             'sender_id'         => 'required|integer',
 	        'receiver_id'       => 'required|integer',
 	        'recommendation_id' => 'required|integer',
-	        'title'             => 'required|string|max:255',
+	        'title'             => 'required|string|max:50',
 	        'detail'            => 'required|string|max:255',
         ];
     }
