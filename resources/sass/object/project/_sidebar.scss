@@ -131,14 +131,22 @@
     display: block;
     width: 40%;
     height: 100%;
+    @include mq() {
+      width: 125px;
+      margin: 0 auto;
+    }
     @include mq('tab') {
       width: 45%;
+      height: 65px;
     }
   }
   &__right {
     width: 60%;
     height: 100%;
     padding: $space_s;
+    @include mq() {
+
+    }
     @include mq('tab') {
       width: 55%;
     }

@@ -156,15 +156,33 @@
 									 type="text"
 									 id="email"
 									 class="c-input p-edit-profile__input"
-									 :class="{ 'c-input__err': errors.email }"
+									 :class="{ 'c-input__err': errors.email ||
+									 					 maxCounter(user.email, 255)
+									 }"
 									 placeholder="mail@haiki_share.com">
-						<!-- エラーメッセージ	-->
-						<div v-if="errors">
-							<div v-for="msg in errors.email"
-									 :key="msg"
-									 class="p-error">{{ msg }}
+						<div class="u-d-flex u-space-between">
+							<!-- エラーメッセージ（フロントエンド） -->
+							<div v-if="maxCounter(user.email, 255) && !errors.email"
+									 class="p-error">
+								<p>Eメールアドレスは255文字以下で指定してください
+								</p>
+							</div>
+							<!-- エラーメッセージ（バックエンド）	-->
+							<div v-if="errors">
+								<div v-for="msg in errors.email"
+										 :key="msg"
+										 class="p-error">
+									{{ msg }}
+								</div>
 							</div>
 						</div>
+						<!--&lt;!&ndash; エラーメッセージ	&ndash;&gt;-->
+						<!--<div v-if="errors">-->
+						<!--	<div v-for="msg in errors.email"-->
+						<!--			 :key="msg"-->
+						<!--			 class="p-error">{{ msg }}-->
+						<!--	</div>-->
+						<!--</div>-->
 						
 						<!-- 自己紹介文	-->
 						<label for="introduce"

@@ -16,16 +16,32 @@
 				<input type="text"
 							 id="email"
 							 class="c-input p-auth-form__input"
-							 :class="{ 'c-input__err': errors }"
+							 :class="{ 'c-input__err': errors || maxCounter(passResetForm.email, 255)}"
 							 v-model="passResetForm.email"
 							 placeholder="haiki_share@gmail.com">
-				<!-- エラーメッセージ	-->
-				<div v-if="errors">
-					<div v-for="msg in errors.email"
-							 :key="msg"
-							 class="p-error">{{ msg }}
+				<!-- エラーメッセージ -->
+				<div class="u-d-flex u-space-between">
+					<!-- エラーメッセージ（フロントエンド） -->
+					<div v-if="maxCounter(passResetForm.email,255) && !errors"
+							 class="p-error">
+						<p class="">Eメールは255文字以下で指定してください</p>
+					</div>
+					<!-- エラーメッセージ（バックエンド）	-->
+					<div v-if="errors">
+						<div v-for="msg in errors.email"
+								 :key="msg"
+								 class="p-error">
+							{{ msg }}
+						</div>
 					</div>
 				</div>
+				<!--&lt;!&ndash; エラーメッセージ	&ndash;&gt;-->
+				<!--<div v-if="errors">-->
+				<!--	<div v-for="msg in errors.email"-->
+				<!--			 :key="msg"-->
+				<!--			 class="p-error">{{ msg }}-->
+				<!--	</div>-->
+				<!--</div>-->
 				
 				<!-- Email送信ボタン -->
 				<button class="c-btn p-auth-form__btn" type="submit">Eメール送信</button>
@@ -57,6 +73,9 @@ export default {
 		}
 	},
 	methods: {
+		maxCounter(content, maxValue) { //カウンターの文字数上限
+			return content.length > maxValue;
+		},
 		async submit() { //Email送信
 			
 			this.loading = true; //ローディングを表示する

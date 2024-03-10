@@ -126,6 +126,7 @@
 					
 					<!-- 賞味期限は変更できないようにする(不正防止)-->
 					
+					<!-- todo: フロントバリデーション実装 -->
 					<!-- 金額	-->
 					<label for="price"
 								 class="c-label p-product-form__label u-mt0">金額

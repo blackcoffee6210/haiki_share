@@ -22,16 +22,34 @@
 				<input type="password"
 							 id="password"
 							 class="c-input p-auth-form__input"
-							 :class="{ 'c-input__err': errors.password }"
+							 :class="{ 'c-input__err': errors.password ||
+												  maxCounter(passResetForm.password,255)
+							 }"
 							 v-model="passResetForm.password"
 							 placeholder="********">
-				<!-- エラーメッセージ	-->
-				<div v-if="errors">
-					<div v-for="msg in errors.password"
-							 :key="msg"
-							 class="p-error">{{ msg }}
+				<!-- エラーメッセージ -->
+				<div class="u-d-flex u-space-between">
+					<!-- エラーメッセージ（フロントエンド） -->
+					<div v-if="maxCounter(passResetForm.password,255) && !errors.password"
+							 class="p-error">
+						<p class="">新しいパスワードは255文字以下で指定してください</p>
+					</div>
+					<!-- エラーメッセージ（バックエンド）	-->
+					<div v-if="errors">
+						<div v-for="msg in errors.password"
+								 :key="msg"
+								 class="p-error">
+							{{ msg }}
+						</div>
 					</div>
 				</div>
+				<!--&lt;!&ndash; エラーメッセージ	&ndash;&gt;-->
+				<!--<div v-if="errors">-->
+				<!--	<div v-for="msg in errors.password"-->
+				<!--			 :key="msg"-->
+				<!--			 class="p-error">{{ msg }}-->
+				<!--	</div>-->
+				<!--</div>-->
 				
 				<!-- 新しいパスワード(確認) -->
 				<label for="password-confirmation"
@@ -40,16 +58,34 @@
 				<input type="password"
 							 id="password-confirmation"
 							 class="c-input p-auth-form__input"
-							 :class="{ 'c-input__err': errors.password_confirmation }"
+							 :class="{ 'c-input__err': errors.password_confirmation ||
+							  				 maxCounter(passResetForm.password_confirmation,255)
+							 }"
 							 v-model="passResetForm.password_confirmation"
 							 placeholder="8文字以上の半角英数字">
-				<!-- エラーメッセージ	-->
-				<div v-if="errors">
-					<div v-for="msg in errors.password_confirmation"
-							 :key="msg"
-							 class="p-error">{{ msg }}
+				<!-- エラーメッセージ -->
+				<div class="u-d-flex u-space-between">
+					<!-- エラーメッセージ（フロントエンド） -->
+					<div v-if="maxCounter(passResetForm.password_confirmation,255) && !errors.password_confirmation"
+							 class="p-error">
+						<p class="">新しいパスワード(確認)は255文字以下で指定してください</p>
+					</div>
+					<!-- エラーメッセージ（バックエンド）	-->
+					<div v-if="errors">
+						<div v-for="msg in errors.password_confirmation"
+								 :key="msg"
+								 class="p-error">
+							{{ msg }}
+						</div>
 					</div>
 				</div>
+				<!--&lt;!&ndash; エラーメッセージ	&ndash;&gt;-->
+				<!--<div v-if="errors">-->
+				<!--	<div v-for="msg in errors.password_confirmation"-->
+				<!--			 :key="msg"-->
+				<!--			 class="p-error">{{ msg }}-->
+				<!--	</div>-->
+				<!--</div>-->
 				
 				<!-- パスワード変更ボタン -->
 				<button class="c-btn p-auth-form__btn" type="submit">パスワードを変更する</button>
@@ -78,6 +114,9 @@ export default {
 		}
 	},
 	methods: {
+		maxCounter(content, maxValue) { //カウンターの文字数上限
+			return content.length > maxValue;
+		},
 		async submit() {
 			const response = await axios.post('/api/password/reset', this.passResetForm); //API通信
 			

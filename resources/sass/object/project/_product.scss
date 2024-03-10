@@ -134,7 +134,7 @@
     text-align: center;
     @include mq() {
       font-size: $font-size_xs;
-      padding: 2px $space_s;
+      padding: 2px 4px;
     }
   }
   &__btn-container {

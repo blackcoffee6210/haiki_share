@@ -26,14 +26,25 @@
 				<input type="text"
 							 v-model="loginForm.email"
 							 class="c-input p-auth-form__input"
-							 :class="{'c-input__err': (loginErrors) ? loginErrors.email : ''}"
+							 :class="{ 'c-input__err': (loginErrors) ? loginErrors.email : '' ||
+							 					 maxCounter(loginForm.email,255)
+							 }"
 							 id="email"
 							 placeholder="mail@haiki_share.com">
-				<!-- Emailエラーメッセージ	-->
-				<div v-if="loginErrors">
-					<div v-for="msg in loginErrors.email"
-							 :key="msg"
-							 class="p-error">{{ msg }}
+				<!-- エラーメッセージ -->
+				<div class="u-d-flex u-space-between u-mb20">
+					<!-- エラーメッセージ（フロントエンド） -->
+					<div v-if="maxCounter(loginForm.email,255) && !loginErrors"
+							 class="p-error">
+						<p class="">Eメールは255文字以下で指定してください</p>
+					</div>
+					<!-- エラーメッセージ（バックエンド）	-->
+					<div v-if="loginErrors">
+						<div v-for="msg in loginErrors.email"
+								 :key="msg"
+								 class="p-error">
+							{{ msg }}
+						</div>
 					</div>
 				</div>
 				
@@ -44,14 +55,25 @@
 				<input type="password"
 							 v-model="loginForm.password"
 							 class="c-input p-auth-form__input"
-							 :class="{ 'c-input__err': (loginErrors) ? loginErrors.password : ''}"
+							 :class="{ 'c-input__err': (loginErrors) ? loginErrors.password : '' ||
+							 					  maxCounter(loginForm.password,255)
+							 }"
 							 id="password"
 							 placeholder="*********">
-				<!-- パスワード エラーメッセージ	-->
-				<div v-if="loginErrors">
-					<div v-for="msg in loginErrors.password"
-							 :key="msg"
-							 class="p-error">{{ msg }}
+				<!-- エラーメッセージ -->
+				<div class="u-d-flex u-space-between">
+					<!-- エラーメッセージ（フロントエンド） -->
+					<div v-if="maxCounter(loginForm.password,255) && !loginErrors"
+							 class="p-error">
+						<p class="">パスワードは255文字以下で指定してください</p>
+					</div>
+					<!-- エラーメッセージ（バックエンド）	-->
+					<div v-if="loginErrors">
+						<div v-for="msg in loginErrors.password"
+								 :key="msg"
+								 class="p-error">
+							{{ msg }}
+						</div>
 					</div>
 				</div>
 				
@@ -101,6 +123,9 @@ export default {
 		})
 	},
 	methods: {
+		maxCounter(content, maxValue) { //カウンターの文字数上限
+			return content.length > maxValue;
+		},
 		async login() { //ログイン
 			await this.$store.dispatch('auth/login', this.loginForm); //authストアのloginアクションを呼び出す
 			

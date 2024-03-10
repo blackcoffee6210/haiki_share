@@ -32,38 +32,76 @@
 				<input type="text"
 							 id="name"
 							 class="c-input p-auth-form__input"
-							 :class="{ 'c-input__err': (registerErrors) ? registerErrors.name : ''}"
+							 :class="{ 'c-input__err': (registerErrors) ? registerErrors.name : '' ||
+							 				 	 maxCounter(registerForm.name,50)
+							 }"
 							 v-model="registerForm.name"
 							 :placeholder="name">
-				<!-- エラーメッセージ	-->
-				<div v-if="registerErrors">
-					<div v-for="msg in registerErrors.name"
-							 :key="msg"
-							 class="p-error">{{ msg }}
+				<!-- エラーメッセージ -->
+				<div class="u-d-flex u-space-between">
+					<!-- エラーメッセージ（フロントエンド） -->
+					<div v-if="maxCounter(registerForm.name,50) && !registerErrors"
+							 class="p-error u-mb20">
+						<p class="">
+							<span v-show="registerForm.group === 1">お名前</span>
+							<span v-show="registerForm.group === 2">コンビニ名</span>
+							は50文字以下で指定してください
+						</p>
 					</div>
+					<!-- エラーメッセージ（バックエンド）	-->
+					<div v-if="registerErrors">
+						<div v-for="msg in registerErrors.name"
+								 :key="msg"
+								 class="p-error u-mb20">
+							{{ msg }}
+						</div>
+					</div>
+					<div v-show="!registerErrors"></div>
+					<!-- 文字数カウンター -->
+					<p class="c-counter"
+						 :class="{ 'c-counter--err': maxCounter(registerForm.name,50) }">
+						{{ registerForm.name.length }}/50
+					</p>
 				</div>
 				
 				<!-- 支店（コンビニユーザーなら表示） -->
 				<div v-show="registerForm.group === 2">
-					<label for="branch" class="c-label p-auth-form__label">支店名</label>
+					<label for="branch" class="c-label p-auth-form__label u-mt0">支店名</label>
 					<input type="text"
 								 id="branch"
 								 class="c-input p-auth-form__input"
-								 :class="{ 'c-input__err': (registerErrors) ? registerErrors.branch : ''}"
+								 :class="{ 'c-input__err': (registerErrors) ? registerErrors.branch : '' ||
+					 			 					 maxCounter(registerForm.branch,50)
+								 }"
 								 v-model="registerForm.branch"
 								 placeholder="渋谷109前店">
-					<!-- エラーメッセージ	-->
-					<div v-if="registerErrors">
-						<div v-for="msg in registerErrors.branch"
-								 :key="msg"
-								 class="p-error">{{ msg }}
+					<!-- エラーメッセージ -->
+					<div class="u-d-flex u-space-between">
+						<!-- エラーメッセージ（フロントエンド） -->
+						<div v-if="maxCounter(registerForm.branch,50) && !registerErrors"
+								 class="p-error">
+							<p class="u-mb20">支店名は50文字以下で指定してください</p>
 						</div>
+						<!-- エラーメッセージ（バックエンド）	-->
+						<div v-if="registerErrors">
+							<div v-for="msg in registerErrors.branch"
+									 :key="msg"
+									 class="p-error u-mb20">
+								{{ msg }}
+							</div>
+						</div>
+						<div v-show="!registerErrors"></div>
+						<!-- 文字数カウンター -->
+						<p class="c-counter"
+							 :class="{ 'c-counter--err': maxCounter(registerForm.branch,50) }">
+							{{ registerForm.branch.length }}/50
+						</p>
 					</div>
 				</div>
 				
 				<!-- 都道府県（コンビニユーザーなら表示） -->
 				<div v-show="registerForm.group === 2">
-					<label for="prefecture" class="c-label p-auth-form__label">都道府県</label>
+					<label for="prefecture" class="c-label p-auth-form__label u-mt0">都道府県</label>
 					<select id="prefecture"
 									class="c-select p-auth-form__input"
 									:class="{ 'c-select__err': (registerErrors) ? registerErrors.prefecture_id : ''}"
@@ -90,29 +128,60 @@
 					<input type="text"
 								 id="address"
 								 class="c-input p-auth-form__input"
-								 :class="{ 'c-input__err': (registerErrors) ? registerErrors.address : ''}"
+								 :class="{ 'c-input__err': (registerErrors) ? registerErrors.address : '' ||
+													 maxCounter(registerForm.address,255)
+								 }"
 								 v-model="registerForm.address"
 								 placeholder="渋谷区宇田川町26-4">
-					<!-- エラーメッセージ	-->
-					<div v-if="registerErrors">
-						<div v-for="msg in registerErrors.address"
-								 :key="msg"
-								 class="p-error">{{ msg }}
+					<!-- エラーメッセージ -->
+					<div class="u-d-flex u-space-between">
+						<!-- エラーメッセージ（フロントエンド） -->
+						<div v-if="maxCounter(registerForm.address,255) && !registerErrors"
+								 class="p-error">
+							<p class="u-mb20">住所は255文字以下で指定してください</p>
 						</div>
+						<!-- エラーメッセージ（バックエンド）	-->
+						<div v-if="registerErrors">
+							<div v-for="msg in registerErrors.address"
+									 :key="msg"
+									 class="p-error u-mb20">
+								{{ msg }}
+							</div>
+						</div>
+						<div v-show="!registerErrors"></div>
+						<!-- 文字数カウンター -->
+						<p class="c-counter"
+							 :class="{ 'c-counter--err': maxCounter(registerForm.address,255) }">
+							{{ registerForm.address.length }}/255
+						</p>
 					</div>
 				</div>
 				
 				<!-- email-->
-				<label for="email" class="c-label p-auth-form__label">Eメール</label>
+				<label for="email" class="c-label p-auth-form__label u-mt0">Eメール</label>
 				<input type="text"
 							 id="email"
 							 class="c-input p-auth-form__input"
-							 :class="{ 'c-input__err': (registerErrors) ? registerErrors.email : ''}"
+							 :class="{ 'c-input__err': (registerErrors) ? registerErrors.email : '' ||
+							 					 maxCounter(registerForm.email,255)
+							 }"
 							 v-model="registerForm.email"
 							 placeholder="mail@haiki_share.com">
-				<!-- エラーメッセージ	-->
-				<div v-if="registerErrors">
-					<div v-for="msg in registerErrors.email" :key="msg" class="p-error">{{ msg }}</div>
+				<!-- エラーメッセージ -->
+				<div class="u-d-flex u-space-between u-mb20">
+					<!-- エラーメッセージ（フロントエンド） -->
+					<div v-if="maxCounter(registerForm.email,255) && !registerErrors"
+							 class="p-error">
+						<p class="">Eメールは255文字以下で指定してください</p>
+					</div>
+					<!-- エラーメッセージ（バックエンド）	-->
+					<div v-if="registerErrors">
+						<div v-for="msg in registerErrors.email"
+								 :key="msg"
+								 class="p-error">
+							{{ msg }}
+						</div>
+					</div>
 				</div>
 				
 				<!-- パスワード -->
@@ -120,27 +189,54 @@
 				<input type="password"
 							 id="password"
 							 class="c-input p-auth-form__input"
-							 :class="{ 'c-input__err': (registerErrors) ? registerErrors.password : ''}"
+							 :class="{ 'c-input__err': (registerErrors) ? registerErrors.password : '' ||
+												 maxCounter(registerForm.password,255)
+							 }"
 							 v-model="registerForm.password"
 							 placeholder="8文字以上の半角英数字">
-				<!-- エラーメッセージ	-->
-				<div v-if="registerErrors">
-					<div v-for="msg in registerErrors.password" :key="msg" class="p-error">{{ msg }}</div>
+				<!-- エラーメッセージ -->
+				<div class="u-d-flex u-space-between u-mb20">
+					<!-- エラーメッセージ（フロントエンド） -->
+					<div v-if="maxCounter(registerForm.password,255) && !registerErrors"
+							 class="p-error">
+						<p class="">パスワードは255文字以下で指定してください</p>
+					</div>
+					<!-- エラーメッセージ（バックエンド）	-->
+					<div v-if="registerErrors">
+						<div v-for="msg in registerErrors.password"
+								 :key="msg"
+								 class="p-error">
+							{{ msg }}
+						</div>
+					</div>
 				</div>
 				
 				<!-- パスワード(確認) -->
 				<label for="password-confirmation"
-							 class="c-label p-auth-form__label">パスワード(確認)
+							 class="c-label p-auth-form__label u-mt0">パスワード(確認)
 				</label>
 				<input type="password"
 							 id="password-confirmation"
 							 class="c-input p-auth-form__input"
-							 :class="{ 'c-input__err': (registerErrors) ? registerErrors.password_confirmation : ''}"
+							 :class="{ 'c-input__err': (registerErrors) ? registerErrors.password_confirmation : '' ||
+												 maxCounter(registerForm.password_confirmation,255)}"
 							 v-model="registerForm.password_confirmation"
 							 placeholder="8文字以上の半角英数字">
-				<!-- エラーメッセージ	-->
-				<div v-if="registerErrors">
-					<div v-for="msg in registerErrors.password_confirmation" :key="msg" class="p-error">{{ msg }}</div>
+				<!-- エラーメッセージ -->
+				<div class="u-d-flex u-space-between">
+					<!-- エラーメッセージ（フロントエンド） -->
+					<div v-if="maxCounter(registerForm.password_confirmation,255) && !registerErrors"
+							 class="p-error">
+						<p class="">パスワード（確認）は255文字以下で指定してください</p>
+					</div>
+					<!-- エラーメッセージ（バックエンド）	-->
+					<div v-if="registerErrors">
+						<div v-for="msg in registerErrors.password_confirmation"
+								 :key="msg"
+								 class="p-error">
+							{{ msg }}
+						</div>
+					</div>
 				</div>
 				
 				<!-- 利用規約 -->

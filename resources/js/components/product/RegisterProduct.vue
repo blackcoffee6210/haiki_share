@@ -78,6 +78,7 @@
 								 id="name"
 								 v-model="product.name"
 								 placeholder="商品名を入力してください">
+					<!-- エラーメッセージ -->
 					<div class="u-d-flex u-space-between">
 						<!-- エラーメッセージ（フロントエンド） -->
 						<div v-if="maxCounter(product.name,50) && !errors.name"

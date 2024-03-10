@@ -120,7 +120,7 @@
 				<!-- おすすめの商品 -->
 				<h2 class="c-title p-sidebar-index__title">おすすめの商品</h2>
 				<div class="p-sidebar-index__card-container">
-					<div class="c-card p-sidebar-index__card"
+					<div class="c-card p-sidebar-index__card u-space-between"
 							 v-for="product in recommendProducts"
 							 v-show="!product.is_purchased"
 							 :key="product.id">

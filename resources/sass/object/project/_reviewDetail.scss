@@ -48,9 +48,14 @@
   }
   &__review-title {
     font-weight: bold;
+    margin-right: $space_m;
+    word-break: break-all;
     @include mq() {
       font-size: $font-size_default;
     }
+  }
+  &__detail {
+    word-break: break-all;
   }
   &__product-container {
     width: 100%;

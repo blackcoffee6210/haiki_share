@@ -80,6 +80,10 @@
     height: 360px;
     z-index: 2;
     border-radius: 50%;
+    @include mq() {
+      width: 340px;
+      height: 340px;
+    }
     &:hover {
       cursor: pointer;
     }
