@@ -2,6 +2,9 @@
   text-align: right;
   margin-top: $space_s;
   font-size: $font-size_m;
+  @include mq() {
+    font-size: $font-size_s;
+  }
   &--err {
     color: $error-color;
   }

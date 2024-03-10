@@ -25,7 +25,7 @@ class UpdateProduct extends FormRequest
     {
         return [
 	        'category_id' => 'required|integer',
-	        'name'        => 'required|string|max:255',
+	        'name'        => 'required|string|max:50',
 	        'detail'      => 'required|string|max:255',
 	        'price'       => 'required|integer|between:50,10000'
         ];

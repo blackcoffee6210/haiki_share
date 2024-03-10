@@ -52,7 +52,7 @@
   &__product-name {
     font-size: $font-size_xl;
     font-weight: bold;
-    word-wrap: break-word;
+    word-break: break-all;
     @include mq() {
       font-size: initial;
     }
@@ -63,6 +63,7 @@
   &__price {
     font-size: $font-size_xl;
     font-weight: bold;
+    margin-left: $space_m;
     @include mq() {
       font-size: initial;
     }
@@ -77,15 +78,15 @@
     margin-bottom: $space_xl;
     @include mq() {
       display: block;
+      margin-bottom: $space_l;
     }
     @include mq('tab') {
-      display: block;
+      margin-bottom: $space_m;
     }
   }
   &__expire {
     font-weight: bold;
     text-align: right;
-    margin-bottom: $space_xl;
     &__date {
       font-weight: bold;
       font-size: $font-size_2xl;
@@ -102,10 +103,10 @@
       cursor: pointer;
     }
     @include mq() {
-      margin-bottom: $space_m;
+      margin-bottom: $space_s;
     }
     @include mq('tab') {
-      margin-bottom: $space_xl;
+      //margin-bottom: $space_xl;
     }
   }
   &__icon {
@@ -119,20 +120,28 @@
   &__shop-name {
     margin-right: $space_m;
     overflow: hidden;
-    max-width: 100px;
+    max-width: 200px;
     text-overflow: ellipsis;
     white-space: nowrap;
     @include mq() {
       display: inline-block;
+      max-width: 140px;
+    }
+    @include mq('tab') {
+      max-width: 120px;
     }
   }
   &__branch {
     overflow: hidden;
-    max-width: 100px;
+    max-width: 200px;
     text-overflow: ellipsis;
     white-space: nowrap;
     @include mq() {
       display: inline-block;
+      max-width: 140px;
+    }
+    @include mq('tab') {
+      max-width: 120px;
     }
   }
   &__date {
@@ -145,6 +154,8 @@
   &__btn-container {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
+    margin-bottom: $space_xl;
     @include mq() {
       width: 100%;
     }

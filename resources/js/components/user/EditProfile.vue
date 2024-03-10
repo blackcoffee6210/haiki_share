@@ -19,6 +19,9 @@
 						<div class="u-p-relative">
 							<label class="p-edit-profile__label-img"
 										 :class="{ 'p-edit-profile__label-img__err': errors.image }">
+								<span class="p-edit-profile__label-text"
+											v-if="!preview">ドラッグ&ドロップ<br>またはファイルを選択
+								</span>
 								<input type="file"
 											 class="p-edit-profile__img"
 											 @change="onFileChange">
@@ -34,9 +37,6 @@
 										 class="p-edit-profile__img"
 										 :class="{ 'p-edit-profile__hasImg': user.image }">
 							</label>
-							<div class="p-edit-profile__img-text"
-									 v-if="!preview">プロフィール画像を設定する
-							</div>
 						</div>
 						<!-- エラーメッセージ	-->
 						<div v-if="errors">
@@ -55,7 +55,7 @@
 						<input type="text"
 									 id="name"
 									 class="c-input p-edit-profile__input"
-									 :class="{ 'c-input__err': errors.name || maxCounter(user.name,50) }"
+									 :class="{ 'c-input__err': errors.name || maxCounter(user.name,50)}"
 									 v-model="user.name"
 									 :placeholder="name">
 						<div class="u-d-flex u-space-between">
@@ -125,7 +125,7 @@
 										 type="text"
 										 id="address"
 										 class="c-input p-edit-profile__input"
-										 :class="{ 'c-input__err': errors.address }"
+										 :class="{ 'c-input__err': errors.address || maxCounter(user.address, 255) }"
 										 placeholder="渋谷１丁目">
 							<div class="u-d-flex u-space-between">
 								<!-- エラーメッセージ（フロントエンド） -->
@@ -148,7 +148,7 @@
 								</p>
 							</div>
 						</div>
-
+						
 						<!-- メール	-->
 						<label for="email"
 									 class="c-label p-edit-profile__label">Eメール</label>

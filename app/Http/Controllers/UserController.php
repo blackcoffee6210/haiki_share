@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use App\History;
 use App\Http\Requests\UpdatePassword;
 use App\Http\Requests\UpdateUser;
+use App\Mail\OldEmailNotification;
+use App\Mail\UpdateEmailNotification;
 use App\Product;
 use App\Review;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -51,6 +54,8 @@ class UserController extends Controller
 			$image_path = $user->image;
 		}
 
+		$old_email = $user->getOriginal('email'); //変更前のEmailアドレスを変数に入れる
+
 		$user->image     = $image_path;
 		$user->name      = $request->name;
 		$user->branch    = $request->branch;
@@ -58,6 +63,22 @@ class UserController extends Controller
 		$user->email     = $request->email;
 		$user->introduce = $request->introduce ?? '';
 		$user->save();
+
+		//===========================================================
+		//todo: メールアドレスが変更されたら、更新元と更新先にメールを送る
+		if($old_email !== $request->email) { //DBのEメールアドレスとrequestのEメールが違ったら（変更されていたら）確認メールを送る
+
+			$params = [ //メール送信に必要な情報を用意
+				'user_id'   => Auth::id(),
+				'name'      => $user->name,
+				'old_email' => $old_email,
+				'new_email' => $user->email
+			];
+
+			Mail::to($old_email)->send(new UpdateEmailNotification($params));   //変更前のメールアドレスに送信
+			Mail::to($user->email)->send(new UpdateEmailNotification($params)); //変更後のメールアドレスに送信
+		}
+		//===========================================================
 
 		return response($user, 200);
 	}

@@ -31,29 +31,14 @@
 					<div class="p-product-detail__price">{{ product.price | numberFormat }}</div>
 				</div>
 				
-				<!-- 賞味期限 -->
-				<div class="p-product-detail__expire">
-					<!-- 賞味期限が過ぎていたときの表示 -->
-					<div v-if="expireDate">
-						<span class="u-font-bold u-color__main">賞味期限切れ</span>
-						<span class="p-product-detail__expire__date">{{ product.expire | fromExpire }}</span>
-						日
-					</div>
-					<!-- 正味期限内のときの表示 -->
-					<div v-else>
-						<span >賞味期限 残り</span>
-						<span class="p-product-detail__expire__date">{{ product.expire | momentExpire }}</span>
-						日
-					</div>
-				</div>
-				
+				<!-- ユーザー情報と賞味期限のコンテナ -->
 				<div class="p-product-detail__flex">
 					<!-- ユーザー情報のコンテナ(左側) -->
 					<div class="p-product-detail__user-info">
 						<!-- 詳細画面のリンク -->
 						<router-link class="c-card__link"
 												 :to="{ name: 'user.detail',
-								  							params: { id: product.user_id.toString() }}"/>
+																	params: { id: product.user_id.toString() }}"/>
 						<!-- ユーザー画像 -->
 						<img :src="product.user_image"
 								 alt=""
@@ -68,16 +53,62 @@
 							<div class="c-flex">
 								<!-- コンビニ名	-->
 								<div class="p-product-detail__shop-name">{{ product.user_name }}</div>
-								<!--<div class="p-product-detail__shop-name">{{ // product.user_name | readmore(10, '...') }}</div>-->
 								<!-- 支店名	-->
 								<div class="p-product-detail__branch">{{ product.branch }}</div>
-								<!--<div class="p-product-detail__branch">{{ // product.branch | readmore(10, '...') }}</div>-->
 							</div>
 							<!-- 商品登録日 -->
 							<div class="p-product-detail__date">{{ product.created_at | moment }}</div>
 						</div>
 					</div>
-					<!-- ボタンコンテナ(右側)	-->
+					<!-- 賞味期限 -->
+					<div class="p-product-detail__expire">
+						<!-- 賞味期限が過ぎていたときの表示 -->
+						<div v-if="expireDate">
+							<span class="u-font-bold u-color__main">賞味期限切れ</span>
+							<span class="p-product-detail__expire__date">{{ product.expire | fromExpire }}</span>
+							日
+						</div>
+						<!-- 正味期限内のときの表示 -->
+						<div v-else>
+							<span >賞味期限 残り</span>
+							<span class="p-product-detail__expire__date">{{ product.expire | momentExpire }}</span>
+							日
+						</div>
+					</div>
+				</div>
+				
+				<!--<div class="p-product-detail__flex">-->
+					<!--&lt;!&ndash; ユーザー情報のコンテナ(左側) &ndash;&gt;-->
+					<!--<div class="p-product-detail__user-info">-->
+					<!--	&lt;!&ndash; 詳細画面のリンク &ndash;&gt;-->
+					<!--	<router-link class="c-card__link"-->
+					<!--							 :to="{ name: 'user.detail',-->
+					<!--			  							params: { id: product.user_id.toString() }}"/>-->
+					<!--	&lt;!&ndash; ユーザー画像 &ndash;&gt;-->
+					<!--	<img :src="product.user_image"-->
+					<!--			 alt=""-->
+					<!--			 v-if="product.user_image"-->
+					<!--			 class="c-icon p-product-detail__icon">-->
+					<!--	&lt;!&ndash; no-img &ndash;&gt;-->
+					<!--	<img src="/storage/images/no-image.png"-->
+					<!--			 alt=""-->
+					<!--			 v-else-->
+					<!--			 class="c-icon p-product-detail__icon">-->
+					<!--	<div>-->
+					<!--		<div class="c-flex">-->
+					<!--			&lt;!&ndash; コンビニ名	&ndash;&gt;-->
+					<!--			<div class="p-product-detail__shop-name">{{ product.user_name }}</div>-->
+					<!--			&lt;!&ndash;<div class="p-product-detail__shop-name">{{ // product.user_name | readmore(10, '...') }}</div>&ndash;&gt;-->
+					<!--			&lt;!&ndash; 支店名	&ndash;&gt;-->
+					<!--			<div class="p-product-detail__branch">{{ product.branch }}</div>-->
+					<!--			&lt;!&ndash;<div class="p-product-detail__branch">{{ // product.branch | readmore(10, '...') }}</div>&ndash;&gt;-->
+					<!--		</div>-->
+					<!--		&lt;!&ndash; 商品登録日 &ndash;&gt;-->
+					<!--		<div class="p-product-detail__date">{{ product.created_at | moment }}</div>-->
+					<!--	</div>-->
+					<!--</div>-->
+					
+					<!-- ボタンコンテナ	-->
 					<div class="p-product-detail__btn-container">
 						<!-- お気に入りボタン	-->
 						<!-- 自分の商品または購入されている商品は押せない -->
@@ -142,7 +173,73 @@
 										@click="restore">復元する
 						</button>
 					</div>
-				</div>
+				<!--</div>-->
+				<!--	&lt;!&ndash; ボタンコンテナ(右側)	&ndash;&gt;-->
+				<!--	<div class="p-product-detail__btn-container">-->
+				<!--		&lt;!&ndash; お気に入りボタン	&ndash;&gt;-->
+				<!--		&lt;!&ndash; 自分の商品または購入されている商品は押せない &ndash;&gt;-->
+				<!--		<button class="c-btn c-btn&#45;&#45;white p-product-detail__btn p-product-detail__btn&#45;&#45;like"-->
+				<!--						:style="{-->
+				<!--							'border-color': [isLike ? '#ff3c53' : 'lightgray'],-->
+				<!--							'background'  : [isLike ? '#ffd5da' : 'white']-->
+				<!--						}"-->
+				<!--						:disabled="product.is_my_product || product.is_purchased || purchasedByUser"-->
+				<!--						@click="onLikeClick">-->
+				<!--			<span v-if="isLike">お気に入り済み</span>-->
+				<!--			<span v-else>気になる！</span>-->
+				<!--			<font-awesome-icon v-if="isLike"-->
+				<!--												 :icon="['fas', 'heart']"-->
+				<!--												 color="#ff6f80" />-->
+				<!--			<font-awesome-icon v-else-->
+				<!--												 :icon="['fas', 'heart']"-->
+				<!--												 color="#ccc" />-->
+				<!--			{{ product.likes_count }}-->
+				<!--		</button>-->
+				<!--		-->
+				<!--		&lt;!&ndash; 商品編集ボタン(自分の商品のときだけ & 購入されていない) &ndash;&gt;-->
+				<!--		<router-link class="c-btn p-product-detail__btn"-->
+				<!--								 v-show="product.is_my_product && !product.is_purchased && !product.deleted_at"-->
+				<!--								 :to="{ name: 'product.edit', params: {id: id.toString() } }">編集する-->
+				<!--		</router-link>-->
+				<!--		-->
+				<!--		&lt;!&ndash; 商品購入ボタン	&ndash;&gt;-->
+				<!--		&lt;!&ndash; 利用者ユーザー、かつ自分の商品じゃない、かつ自分が購入してないときに出す &ndash;&gt;-->
+				<!--		&lt;!&ndash; コンビニユーザー、または自分の商品、または購入されている商品は押せない &ndash;&gt;-->
+				<!--		<button class="c-btn p-product-detail__btn"-->
+				<!--						@click="purchase"-->
+				<!--						v-show="!isShopUser && !product.is_my_product && !purchasedByUser"-->
+				<!--						:disabled="isShopUser || product.is_my_product || product.is_purchased">-->
+				<!--			<span v-if="product.is_purchased">購入済み</span>-->
+				<!--			<span v-else>購入</span>-->
+				<!--		</button>-->
+				<!--		-->
+				<!--		&lt;!&ndash; レビュー投稿ボタン 購入したユーザーかつレビューを投稿していないときに表示 &ndash;&gt;-->
+				<!--		<router-link class="c-btn p-product-detail__btn p-product-detail__btn&#45;&#45;review"-->
+				<!--								 v-show="purchasedByUser && !isReviewed"-->
+				<!--								 :to="{ name: 'review.register',-->
+				<!--								  			params: { p_id: id.toString() }}">レビュー投稿-->
+				<!--		</router-link>-->
+				<!--		-->
+				<!--		&lt;!&ndash; 購入キャンセルボタン 自分が購入した商品のときに表示	&ndash;&gt;-->
+				<!--		<button v-show="purchasedByUser"-->
+				<!--						@click="cancel"-->
+				<!--						class="c-btn c-btn&#45;&#45;white p-product-detail__btn">購入キャンセル-->
+				<!--		</button>-->
+				<!--		-->
+				<!--		-->
+				<!--		&lt;!&ndash; 論理削除された商品を完全削除するボタン	&ndash;&gt;-->
+				<!--		<button v-show="isShopUser && product.deleted_at"-->
+				<!--						class="c-btn c-btn&#45;&#45;white p-product-detail__btn&#45;&#45;delete"-->
+				<!--						@click="forceDelete">完全に削除-->
+				<!--		</button>-->
+				<!--		-->
+				<!--		&lt;!&ndash; 論理削除された商品を復元するボタン	&ndash;&gt;-->
+				<!--		<button v-show="isShopUser && product.deleted_at"-->
+				<!--						class="c-btn"-->
+				<!--						@click="restore">復元する-->
+				<!--		</button>-->
+				<!--	</div>-->
+				<!--</div>-->
 				
 				<!-- 商品の詳細	-->
 				<div class="p-product-detail__detail">{{ product.detail }}</div>

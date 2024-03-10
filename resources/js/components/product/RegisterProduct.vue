@@ -16,7 +16,17 @@
 					<!-- 商品画像	-->
 					<div class="u-p-relative">
 						<label class="p-product-form__label-img"
-									 :class="{ 'p-product-form__label-img__err': errors.image }">
+									 :class="{
+											'p-product-form__label-img__err': errors.image,
+											'p-product-form__img--enter': isEnter
+									 }"
+									 @dragenter="dragEnter"
+									 @dragleave="dragLeave"
+									 @dragover.prevent
+									 @drop.stop="dropFile">
+							<span class="p-product-form__label-text"
+										v-if="!preview">ドラッグ&ドロップ<br>またはファイルを選択
+							</span>
 							<input type="file"
 										 class="p-product-form__img"
 										 @change="onFileChange">
@@ -26,9 +36,8 @@
 										 alt="">
 							</output>
 						</label>
-						<!-- 画像input中央に表示する文字 -->
-						<div class="p-product-form__img-text" v-if="!preview">商品画像を設定する</div>
 					</div>
+					
 					<!-- エラーメッセージ	-->
 					<div v-if="errors">
 						<div v-for="msg in errors.image"
@@ -73,13 +82,13 @@
 						<!-- エラーメッセージ（フロントエンド） -->
 						<div v-if="maxCounter(product.name,50) && !errors.name"
 								 class="p-error">
-							<p>50文字以下で指定してください</p>
+							<p class="u-mb20">商品名は50文字以下で指定してください</p>
 						</div>
 						<!-- エラーメッセージ（バックエンド）	-->
 						<div v-if="errors">
 							<div v-for="msg in errors.name"
 									 :key="msg"
-									 class="p-error">
+									 class="p-error u-mb20">
 								{{ msg }}
 							</div>
 						</div>
@@ -92,7 +101,7 @@
 					
 					<!-- 商品の内容	-->
 					<label for="detail"
-								 class="c-label p-product-form__label">商品の内容
+								 class="c-label p-product-form__label u-mt0">商品の内容
 					</label>
 					<textarea	class="c-input p-product-form__textarea"
 										 :class="{ 'c-input__err': errors.detail || maxCounter(product.detail, 255) }"
@@ -104,13 +113,13 @@
 						<!-- エラーメッセージ（フロントエンド） -->
 						<div v-if="maxCounter(product.detail, 255) && !errors.detail"
 								 class="p-error">
-							<p>255文字以下で指定してください</p>
+							<p class="u-mb20">商品の内容は255文字以下で指定してください</p>
 						</div>
 						<!-- エラーメッセージ（バックエンド）	-->
 						<div v-if="errors">
 							<div v-for="msg in errors.detail"
 									 :key="msg"
-									 class="p-error">
+									 class="p-error u-mb20">
 								{{ msg }}
 							</div>
 						</div>
@@ -123,7 +132,7 @@
 					
 					<!-- 賞味期限 -->
 					<label for="expire_date"
-								 class="c-label p-product-form__label">賞味期限
+								 class="c-label p-product-form__label u-mt0">賞味期限
 					</label>
 					<input type="text"
 								 onfocusin="this.type='date'"
@@ -213,7 +222,9 @@ export default {
 				detail: null,
 				expire: null,
 				price: null
-			}
+			},
+			isEnter: false, //画像のクラスバインドを行う
+			files: [],
 		}
 	},
 	computed: {
@@ -229,6 +240,17 @@ export default {
 		}
 	},
 	methods: {
+		dragEnter() { //画像が要素内に入ったら
+			this.isEnter = true;
+		},
+		dragLeave() { //画像が要素から出たら
+			this.isEnter = false;
+		},
+		dropFile(event) {
+			console.log(event.dataTransfer.files);
+			this.files = [...event.dataTransfer.files];
+			this.isEnter = false;
+		},
 		maxCounter(content, maxValue) { //カウンターの文字数上限
 			return content.length > maxValue;
 		},

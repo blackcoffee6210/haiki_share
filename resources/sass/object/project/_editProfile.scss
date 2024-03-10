@@ -23,7 +23,7 @@
       padding: $space_m;
     }
     @include mq('tab') {
-      width: 60%;
+      width: 80%;
     }
   }
   &__label {
@@ -31,8 +31,8 @@
     margin-bottom: $space_s;
     &-img {
       display: block;
-      width: 260px;
-      height: 260px;
+      width: 360px;
+      height: 360px;
       margin: 0 auto;
       border-radius: 50%;
       background: $img-color-bg;
@@ -42,10 +42,33 @@
       &:hover {
         cursor: pointer;
       }
-      @include mq('tab') {
-        width: 260px;
-        height: 260px;
+      @include mq() {
+        width: 340px;
+        height: 340px;
         margin: 0 auto;
+      }
+      @include mq('tab') {
+        width: 360px;
+        height: 360px;
+        margin: 0 auto;
+      }
+    }
+    &-text {
+      font-size: $font-size_l;
+      color: #999;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      -webkit-transform: translate(-50%, -50%);
+      @include mq() {
+        font-size: $font-size_default;
+      }
+      @include mq('tab') {
+        font-size: $font-size_default;
+      }
+      &:hover {
+        cursor: pointer;
       }
     }
   }
@@ -53,8 +76,8 @@
     position: absolute;
     background: $img-color-bg;
     display: none;
-    width: 260px;
-    height: 260px;
+    width: 360px;
+    height: 360px;
     z-index: 2;
     border-radius: 50%;
     &:hover {

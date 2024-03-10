@@ -15,6 +15,9 @@
 					<div class="u-p-relative">
 						<label class="p-product-form__label-img"
 									 :class="{ 'p-product-form__label-img__err': errors.image }">
+							<span class="p-product-form__label-text"
+										v-if="!preview">ドラッグ&ドロップ<br>またはファイルを選択
+							</span>
 							<input type="file"
 										 class="p-product-form__img"
 										 @change="onFileChange">
@@ -29,7 +32,6 @@
 									 alt=""
 									 class="p-product-form__img p-product-form__img--edit">
 						</label>
-						<div class="p-product-form__img-text" v-if="!preview">商品画像を設定する</div>
 					</div>
 					<!-- エラーメッセージ	-->
 					<div v-if="errors">
@@ -66,56 +68,67 @@
 					</label>
 					<input type="text"
 								 class="c-input p-product-form__input"
-								 :class="{ 'c-input__err': errors.name }"
+								 :class="{ 'c-input__err': errors.name || maxCounter(product.name,50)}"
 								 id="name"
 								 v-model="product.name"
 								 placeholder="商品の名前を入力してください">
-					<!-- エラーメッセージ	-->
-					<div v-if="errors">
-						<div v-for="msg in errors.name"
-								 :key="msg"
-								 class="p-error">{{ msg }}
+					<div class="u-d-flex u-space-between">
+						<!-- エラーメッセージ（フロントエンド） -->
+						<div v-if="maxCounter(product.name,50) && !errors.name"
+								 class="p-error">
+							<p class="u-mb20">商品名は、50文字以下で指定してください。</p>
 						</div>
+						<!-- エラーメッセージ（バックエンド）	-->
+						<div v-if="errors">
+							<div v-for="msg in errors.name"
+									 :key="msg"
+									 class="p-error u-mb20">
+								{{ msg }}
+							</div>
+						</div>
+						<!-- 文字数カウンター -->
+						<p class="c-counter"
+							 :class="{ 'c-counter--err': maxCounter(product.name,50) }">
+							{{ product.name.length }}/50
+						</p>
 					</div>
 					
 					<!-- 商品の内容	-->
 					<label for="detail"
-								 class="c-label p-product-form__label">商品の内容
+								 class="c-label p-product-form__label u-mt0">商品の内容
 					</label>
 					<textarea	class="c-input p-product-form__textarea"
-										 :class="{ 'c-input__err': errors.detail }"
+										 :class="{ 'c-input__err': errors.detail || maxCounter(product.detail, 255) }"
 										 id="detail"
 										 v-model="product.detail"
 										 placeholder="商品の内容を入力してください"
 					></textarea>
-					<!-- エラーメッセージ	-->
-					<div v-if="errors">
-						<div v-for="msg in errors.detail"
-								 :key="msg"
-								 class="p-error">{{ msg }}
+					<div class="u-d-flex u-space-between">
+						<!-- エラーメッセージ（フロントエンド） -->
+						<div v-if="maxCounter(product.detail, 255) && !errors.detail"
+								 class="p-error">
+							<p class="u-mb20">商品の内容は、255文字以下で指定してください。</p>
 						</div>
+						<!-- エラーメッセージ（バックエンド）	-->
+						<div v-if="errors">
+							<div v-for="msg in errors.detail"
+									 :key="msg"
+									 class="p-error u-mb20">
+								{{ msg }}
+							</div>
+						</div>
+						<!-- 文字数カウンター -->
+						<p class="c-counter"
+							 :class="{ 'c-counter--err': maxCounter(product.detail,255) }">
+							{{ product.detail.length }}/255
+						</p>
 					</div>
 					
 					<!-- 賞味期限は変更できないようにする(不正防止)-->
-					<!--&lt;!&ndash; 賞味期限 &ndash;&gt;-->
-					<!--<label for="expire_date"-->
-					<!--			 class="c-label p-product-form__label">賞味期限-->
-					<!--</label>-->
-					<!--<input type="text"-->
-					<!--			 onfocusin="this.type='date'"-->
-					<!--			 onfocusout="this.type='text'"-->
-					<!--			 class="c-input p-product-form__input"-->
-					<!--			 :class="{ 'c-input__err': errors.expire }"-->
-					<!--			 id="expire_date"-->
-					<!--			 readonly-->
-					<!--			 :min="tomorrow"-->
-					<!--			 :max="maxDate"-->
-					<!--			 placeholder="本日以降の日付を選択してください"-->
-					<!--			 v-model="product.expire">-->
 					
 					<!-- 金額	-->
 					<label for="price"
-								 class="c-label p-product-form__label">金額
+								 class="c-label p-product-form__label u-mt0">金額
 					</label>
 					<div class="u-d-flex">
 						<input type="text"
@@ -189,6 +202,9 @@ export default {
 		})
 	},
 	methods: {
+		maxCounter(content, maxValue) { //カウンターの文字数上限
+			return content.length > maxValue;
+		},
 		async getCategories() { //カテゴリー取得
 			const response = await axios.get('/api/categories');
 			
