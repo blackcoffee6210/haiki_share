@@ -37,10 +37,7 @@
     }
   }
   &__card-body {
-    padding: $space_m;
-    @include mq() {
-      padding: $space_s;
-    }
+    padding: $space_s;
   }
   &__container {
     display: flex;

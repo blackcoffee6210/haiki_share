@@ -77,186 +77,103 @@
 					</div>
 				</div>
 				
-				<!--<div class="p-product-detail__flex">-->
-					<!--&lt;!&ndash; ユーザー情報のコンテナ(左側) &ndash;&gt;-->
-					<!--<div class="p-product-detail__user-info">-->
-					<!--	&lt;!&ndash; 詳細画面のリンク &ndash;&gt;-->
-					<!--	<router-link class="c-card__link"-->
-					<!--							 :to="{ name: 'user.detail',-->
-					<!--			  							params: { id: product.user_id.toString() }}"/>-->
-					<!--	&lt;!&ndash; ユーザー画像 &ndash;&gt;-->
-					<!--	<img :src="product.user_image"-->
-					<!--			 alt=""-->
-					<!--			 v-if="product.user_image"-->
-					<!--			 class="c-icon p-product-detail__icon">-->
-					<!--	&lt;!&ndash; no-img &ndash;&gt;-->
-					<!--	<img src="/storage/images/no-image.png"-->
-					<!--			 alt=""-->
-					<!--			 v-else-->
-					<!--			 class="c-icon p-product-detail__icon">-->
-					<!--	<div>-->
-					<!--		<div class="c-flex">-->
-					<!--			&lt;!&ndash; コンビニ名	&ndash;&gt;-->
-					<!--			<div class="p-product-detail__shop-name">{{ product.user_name }}</div>-->
-					<!--			&lt;!&ndash;<div class="p-product-detail__shop-name">{{ // product.user_name | readmore(10, '...') }}</div>&ndash;&gt;-->
-					<!--			&lt;!&ndash; 支店名	&ndash;&gt;-->
-					<!--			<div class="p-product-detail__branch">{{ product.branch }}</div>-->
-					<!--			&lt;!&ndash;<div class="p-product-detail__branch">{{ // product.branch | readmore(10, '...') }}</div>&ndash;&gt;-->
-					<!--		</div>-->
-					<!--		&lt;!&ndash; 商品登録日 &ndash;&gt;-->
-					<!--		<div class="p-product-detail__date">{{ product.created_at | moment }}</div>-->
-					<!--	</div>-->
-					<!--</div>-->
+				<!-- ボタンコンテナ	-->
+				<div class="p-product-detail__btn-container">
+					<!-- お気に入りボタン	-->
+					<!-- 自分の商品または購入されている商品は押せない -->
+					<button class="c-btn c-btn--white p-product-detail__btn p-product-detail__btn--like"
+									:style="{
+										'border-color': [isLike ? '#ff3c53' : 'lightgray'],
+										'background'  : [isLike ? '#ffd5da' : 'white']
+									}"
+									:disabled="product.is_my_product || product.is_purchased || purchasedByUser"
+									@click="onLikeClick">
+						<span v-if="isLike">お気に入り済み</span>
+						<span v-else>気になる！</span>
+						<font-awesome-icon v-if="isLike"
+															 :icon="['fas', 'heart']"
+															 color="#ff6f80" />
+						<font-awesome-icon v-else
+															 :icon="['fas', 'heart']"
+															 color="#ccc" />
+						{{ product.likes_count }}
+					</button>
 					
-					<!-- ボタンコンテナ	-->
-					<div class="p-product-detail__btn-container">
-						<!-- お気に入りボタン	-->
-						<!-- 自分の商品または購入されている商品は押せない -->
-						<button class="c-btn c-btn--white p-product-detail__btn p-product-detail__btn--like"
-										:style="{
-											'border-color': [isLike ? '#ff3c53' : 'lightgray'],
-											'background'  : [isLike ? '#ffd5da' : 'white']
-										}"
-										:disabled="product.is_my_product || product.is_purchased || purchasedByUser"
-										@click="onLikeClick">
-							<span v-if="isLike">お気に入り済み</span>
-							<span v-else>気になる！</span>
-							<font-awesome-icon v-if="isLike"
-																 :icon="['fas', 'heart']"
-																 color="#ff6f80" />
-							<font-awesome-icon v-else
-																 :icon="['fas', 'heart']"
-																 color="#ccc" />
-							{{ product.likes_count }}
-						</button>
-						
-						<!-- 商品編集ボタン(自分の商品のときだけ & 購入されていない) -->
-						<router-link class="c-btn p-product-detail__btn"
-												 v-show="product.is_my_product && !product.is_purchased && !product.deleted_at"
-												 :to="{ name: 'product.edit', params: {id: id.toString() } }">編集する
-						</router-link>
-						
-						<!-- 商品購入ボタン	-->
-						<!-- 利用者ユーザー、かつ自分の商品じゃない、かつ自分が購入してないときに出す -->
-						<!-- コンビニユーザー、または自分の商品、または購入されている商品は押せない -->
-						<button class="c-btn p-product-detail__btn"
-										@click="purchase"
-										v-show="!isShopUser && !product.is_my_product && !purchasedByUser"
-										:disabled="isShopUser || product.is_my_product || product.is_purchased">
-							<span v-if="product.is_purchased">購入済み</span>
-							<span v-else>購入</span>
-						</button>
-						
-						<!-- レビュー投稿ボタン 購入したユーザーかつレビューを投稿していないときに表示 -->
-						<router-link class="c-btn p-product-detail__btn p-product-detail__btn--review"
-												 v-show="purchasedByUser && !isReviewed"
-												 :to="{ name: 'review.register',
-												  			params: { p_id: id.toString() }}">レビュー投稿
-						</router-link>
-						
-						<!-- 購入キャンセルボタン 自分が購入した商品のときに表示	-->
-						<button v-show="purchasedByUser"
-										@click="cancel"
-										class="c-btn c-btn--white p-product-detail__btn">購入キャンセル
-						</button>
-						
-						
-						<!-- 論理削除された商品を完全削除するボタン	-->
-						<button v-show="isShopUser && product.deleted_at"
-										class="c-btn c-btn--white p-product-detail__btn--delete"
-										@click="forceDelete">完全に削除
-						</button>
-						
-						<!-- 論理削除された商品を復元するボタン	-->
-						<button v-show="isShopUser && product.deleted_at"
-										class="c-btn"
-										@click="restore">復元する
-						</button>
-					</div>
-				<!--</div>-->
-				<!--	&lt;!&ndash; ボタンコンテナ(右側)	&ndash;&gt;-->
-				<!--	<div class="p-product-detail__btn-container">-->
-				<!--		&lt;!&ndash; お気に入りボタン	&ndash;&gt;-->
-				<!--		&lt;!&ndash; 自分の商品または購入されている商品は押せない &ndash;&gt;-->
-				<!--		<button class="c-btn c-btn&#45;&#45;white p-product-detail__btn p-product-detail__btn&#45;&#45;like"-->
-				<!--						:style="{-->
-				<!--							'border-color': [isLike ? '#ff3c53' : 'lightgray'],-->
-				<!--							'background'  : [isLike ? '#ffd5da' : 'white']-->
-				<!--						}"-->
-				<!--						:disabled="product.is_my_product || product.is_purchased || purchasedByUser"-->
-				<!--						@click="onLikeClick">-->
-				<!--			<span v-if="isLike">お気に入り済み</span>-->
-				<!--			<span v-else>気になる！</span>-->
-				<!--			<font-awesome-icon v-if="isLike"-->
-				<!--												 :icon="['fas', 'heart']"-->
-				<!--												 color="#ff6f80" />-->
-				<!--			<font-awesome-icon v-else-->
-				<!--												 :icon="['fas', 'heart']"-->
-				<!--												 color="#ccc" />-->
-				<!--			{{ product.likes_count }}-->
-				<!--		</button>-->
-				<!--		-->
-				<!--		&lt;!&ndash; 商品編集ボタン(自分の商品のときだけ & 購入されていない) &ndash;&gt;-->
-				<!--		<router-link class="c-btn p-product-detail__btn"-->
-				<!--								 v-show="product.is_my_product && !product.is_purchased && !product.deleted_at"-->
-				<!--								 :to="{ name: 'product.edit', params: {id: id.toString() } }">編集する-->
-				<!--		</router-link>-->
-				<!--		-->
-				<!--		&lt;!&ndash; 商品購入ボタン	&ndash;&gt;-->
-				<!--		&lt;!&ndash; 利用者ユーザー、かつ自分の商品じゃない、かつ自分が購入してないときに出す &ndash;&gt;-->
-				<!--		&lt;!&ndash; コンビニユーザー、または自分の商品、または購入されている商品は押せない &ndash;&gt;-->
-				<!--		<button class="c-btn p-product-detail__btn"-->
-				<!--						@click="purchase"-->
-				<!--						v-show="!isShopUser && !product.is_my_product && !purchasedByUser"-->
-				<!--						:disabled="isShopUser || product.is_my_product || product.is_purchased">-->
-				<!--			<span v-if="product.is_purchased">購入済み</span>-->
-				<!--			<span v-else>購入</span>-->
-				<!--		</button>-->
-				<!--		-->
-				<!--		&lt;!&ndash; レビュー投稿ボタン 購入したユーザーかつレビューを投稿していないときに表示 &ndash;&gt;-->
-				<!--		<router-link class="c-btn p-product-detail__btn p-product-detail__btn&#45;&#45;review"-->
-				<!--								 v-show="purchasedByUser && !isReviewed"-->
-				<!--								 :to="{ name: 'review.register',-->
-				<!--								  			params: { p_id: id.toString() }}">レビュー投稿-->
-				<!--		</router-link>-->
-				<!--		-->
-				<!--		&lt;!&ndash; 購入キャンセルボタン 自分が購入した商品のときに表示	&ndash;&gt;-->
-				<!--		<button v-show="purchasedByUser"-->
-				<!--						@click="cancel"-->
-				<!--						class="c-btn c-btn&#45;&#45;white p-product-detail__btn">購入キャンセル-->
-				<!--		</button>-->
-				<!--		-->
-				<!--		-->
-				<!--		&lt;!&ndash; 論理削除された商品を完全削除するボタン	&ndash;&gt;-->
-				<!--		<button v-show="isShopUser && product.deleted_at"-->
-				<!--						class="c-btn c-btn&#45;&#45;white p-product-detail__btn&#45;&#45;delete"-->
-				<!--						@click="forceDelete">完全に削除-->
-				<!--		</button>-->
-				<!--		-->
-				<!--		&lt;!&ndash; 論理削除された商品を復元するボタン	&ndash;&gt;-->
-				<!--		<button v-show="isShopUser && product.deleted_at"-->
-				<!--						class="c-btn"-->
-				<!--						@click="restore">復元する-->
-				<!--		</button>-->
-				<!--	</div>-->
-				<!--</div>-->
+					<!-- 商品編集ボタン(自分の商品のときだけ & 購入されていない) -->
+					<router-link class="c-btn p-product-detail__btn"
+											 v-show="product.is_my_product && !product.is_purchased && !product.deleted_at"
+											 :to="{ name: 'product.edit', params: {id: id.toString() } }">編集する
+					</router-link>
+					
+					<!-- 商品購入ボタン	-->
+					<!-- 利用者ユーザー、かつ自分の商品じゃない、かつ自分が購入してないときに出す -->
+					<!-- コンビニユーザー、または自分の商品、または購入されている商品は押せない -->
+					<button class="c-btn p-product-detail__btn"
+									@click="purchase"
+									v-show="!isShopUser && !product.is_my_product && !purchasedByUser"
+									:disabled="isShopUser || product.is_my_product || product.is_purchased">
+						<span v-if="product.is_purchased">購入済み</span>
+						<span v-else>購入</span>
+					</button>
+					
+					<!-- レビュー投稿ボタン 購入したユーザーかつレビューを投稿していないときに表示 -->
+					<router-link class="c-btn p-product-detail__btn p-product-detail__btn--review"
+											 v-show="purchasedByUser && !isReviewed"
+											 :to="{ name: 'review.register',
+															params: { p_id: id.toString() }}">レビュー投稿
+					</router-link>
+					
+					<!-- 購入キャンセルボタン 自分が購入した商品のときに表示	-->
+					<button v-show="purchasedByUser"
+									@click="cancel"
+									class="c-btn c-btn--white p-product-detail__btn">購入キャンセル
+					</button>
+					
+					
+					<!-- 論理削除された商品を完全削除するボタン	-->
+					<button v-show="isShopUser && product.deleted_at"
+									class="c-btn c-btn--white p-product-detail__btn--delete"
+									@click="forceDelete">完全に削除
+					</button>
+					
+					<!-- 論理削除された商品を復元するボタン	-->
+					<button v-show="isShopUser && product.deleted_at"
+									class="c-btn"
+									@click="restore">復元する
+					</button>
+				</div>
 				
 				<!-- 商品の詳細	-->
 				<div class="p-product-detail__detail">{{ product.detail }}</div>
 				
+				
 				<!-- twitterシェアボタン(自分の商品のときは表示しない) -->
+				<!-- todo: URL修正 -->
 				<div class="p-product-detail__twitter-container"
 						 v-show="!product.is_my_product">
-					<social-sharing url="https://haiki-share.net/products/48"
+					<social-sharing url="localhost:8000/products/48"
 													v-show="isLogin"
-													quote="Haiki Share"
-													hashtags="haiki_share"
-													inline-template class="c-btn c-btn--twitter">
+													:title="product.name"
+													:hashtags="twitterHashTags"
+													inline-template
+													class="c-btn c-btn--twitter">
 						<network network="twitter">
 							<font-awesome-icon :icon="['fab', 'twitter']" /> Twitter
 						</network>
 					</social-sharing>
 				</div>
+				<!--<div class="p-product-detail__twitter-container"-->
+				<!--		 v-show="!product.is_my_product">-->
+				<!--	<social-sharing url="https://haiki-share.net/products/48"-->
+				<!--									v-show="isLogin"-->
+				<!--									quote="Haiki Share"-->
+				<!--									hashtags="haiki_share"-->
+				<!--									inline-template class="c-btn c-btn&#45;&#45;twitter">-->
+				<!--		<network network="twitter">-->
+				<!--			<font-awesome-icon :icon="['fab', 'twitter']" /> Twitter-->
+				<!--		</network>-->
+				<!--	</social-sharing>-->
+				<!--</div>-->
 				
 				<!-- 出品者の他の商品-->
 				<div class="c-title p-product-detail__title"
@@ -326,6 +243,7 @@ export default {
 			canceledByUser: false,  //ログインした利用者がキャンセルしたかどうか
 			otherProducts: [],      //出品者の他の商品
 			similarProducts: [],    //出品した商品に似た商品
+			twitterHashTags: [],    //Twitterのハッシュタグで表示する
 		}
 	},
 	computed: {
@@ -372,6 +290,14 @@ export default {
 			if(this.product.liked_by_user) { //ログインユーザーが既に「いいね」を押していたらtrueをセット
 				this.isLike = true;
 			}
+			
+			this.twitterHashTags.push(  //Twitterのハッシュタグに追加
+					this.product.name,
+					'HaikiShare',
+					'ハイキシェア',
+					'フードシェアリング',
+					'フードロス',
+			);
 		},
 		async getOtherProducts() { //出品者の他の商品（購入されていないもの）を取得
 			const response = await axios.get(`/api/products/${this.product.user_id}/${this.id}/other`); //API接続

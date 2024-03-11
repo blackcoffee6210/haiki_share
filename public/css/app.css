@@ -2051,12 +2051,7 @@ body {
   }
 }
 .p-product__card-body {
-  padding: 10px;
-}
-@media screen and (max-width: 450px) {
-  .p-product__card-body {
-    padding: 5px;
-  }
+  padding: 5px;
 }
 .p-product__container {
   display: flex;

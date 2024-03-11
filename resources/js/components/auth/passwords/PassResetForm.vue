@@ -79,13 +79,6 @@
 						</div>
 					</div>
 				</div>
-				<!--&lt;!&ndash; エラーメッセージ	&ndash;&gt;-->
-				<!--<div v-if="errors">-->
-				<!--	<div v-for="msg in errors.password_confirmation"-->
-				<!--			 :key="msg"-->
-				<!--			 class="p-error">{{ msg }}-->
-				<!--	</div>-->
-				<!--</div>-->
 				
 				<!-- パスワード変更ボタン -->
 				<button class="c-btn p-auth-form__btn" type="submit">パスワードを変更する</button>
