@@ -1,35 +1,22 @@
 .c-pagination {
-  width: 100%;
-  margin: $space_3xl auto 0 auto;
-  text-align: center;
-  @include mq() {
-    margin-top: $space_xl;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  list-style-type: none;
+  margin-top: $space_3xl;
+  &:hover {
+    cursor: pointer;
   }
-  @include mq('tab') {
-    margin-top: $space_xl;
+  &__block {
+    border: 1px solid #ddd;
+    padding: 6px 12px;
+    text-align: center;
   }
-  &__active {
-    display: inline-block;
-    font-size: 20px;
-    border: 1px solid $gray-color;
-    padding: 0 10px;
+  &--active {
+    background-color: $main-color;
+    color: $white;
+  }
+  &--inactive {
     color: $main-color;
-    border-radius: 3px;
-    background: $white;
-    &--left {
-      margin-right: $space_xl;
-      @include mq() {
-        margin-right: 6px;
-      }
-    }
-    &--right {
-
-    }
-    &:hover {
-      color: $main-color;
-      text-decoration: none;
-      background: rgba(0,0,0,.05);
-      transition: .3s;
-    }
   }
 }

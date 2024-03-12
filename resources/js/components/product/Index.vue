@@ -10,8 +10,22 @@
 					<!-- 検索件数 -->
 					<div class="p-index__total">
 						<span class="u-font-bold">検索結果</span>
-						<span>{{ count }}件 / {{ total }}件中</span>
+						<span>
+							{{ from }} -
+							{{ to }}件 /
+							{{ total }}件中
+						</span>
+						<!--<span>-->
+						<!--	{{ currentMinNum + 1 }} - -->
+						<!--	{{ currentMinNum + perPage }}件 /-->
+						<!--	{{ total }}件中-->
+						<!--</span>-->
 					</div>
+					<!--&lt;!&ndash; 検索件数 &ndash;&gt;-->
+					<!--<div class="p-index__total">-->
+					<!--	<span class="u-font-bold">検索結果</span>-->
+					<!--	<span>{{ count }}件 / {{ total }}件中</span>-->
+					<!--</div>-->
 					
 					<div class="p-index__checkbox-container">
 						<!-- 賞味期限切れの商品のみ表示 -->
@@ -42,10 +56,46 @@
 			</div>
 			
 			<!-- ページネーション	-->
-			<Pagination v-show="!loading"
-									:current-page="currentPage"
-									:last-page="lastPage"
-									:link-max="7"/>
+			<ul class="c-pagination">
+				<li class="c-pagination__block c-pagination--inactive"
+						v-show="currentPage != 1"
+						@click="changePage(currentPage - 1)">
+					<
+				</li>
+				<li v-for="page in frontPageRange"
+						:key="page"
+						@click="changePage(page)"
+						class="c-pagination__block"
+						:class="(isCurrent(page)) ? 'c-pagination--active' : 'c-pagination--inactive'">
+					{{ page }}
+				</li>
+				<li v-show="frontDot"
+						class="c-pagination__block inactive u-disabled">...
+				</li>
+				<li v-for="page in middlePageRange"
+						:key="page"
+						@click="changePage(page)"
+						class="c-pagination__block"
+						:class="(isCurrent(page)) ? 'c-pagination--active' : 'c-pagination--inactive'">
+					{{ page }}
+				</li>
+				<li v-show="endDot"
+						class="c-pagination__block c-pagination--inactive u-disabled">...
+				</li>
+				<li v-for="page in endPageRange"
+						:key="page"
+						@click="changePage(page)"
+						class="c-pagination__block"
+						:class="(isCurrent(page)) ? 'c-pagination--active' : 'c-pagination--inactive'">
+					{{ page }}
+				</li>
+				<li class="c-pagination__block c-pagination--inactive"
+						v-show="currentPage != lastPage"
+						@click="changePage(currentPage + 1)">
+					>
+				</li>
+			</ul>
+			
 		</main>
 		
 		<!-- サイドバー	-->
@@ -172,15 +222,14 @@
 </template>
 
 <script>
-import Loading    from "../Loading";
-import Product    from "./Product";
-import Pagination from "../Pagination";
-import { OK }     from "../../util";
-import moment     from "moment";
+import Loading from "../Loading";
+import Product from "./Product";
+import { OK }  from "../../util";
+import moment  from "moment";
 
 export default {
 	name: "Index",
-	props: {
+	props: { //todo: 削除する（ページネーション自作したので）
 		page: { //ルーター(router.js)から渡されるpageプロパティを受け取る
 			type: Number,
 			required: false,
@@ -190,20 +239,19 @@ export default {
 	components: {
 		Loading,
 		Product,
-		Pagination
 	},
 	data() {
 		return {
-			loading: false, 			//ローディングを表示するかどうかを判定するプロパティ
-			showExpired: false,		//賞味期限切れかどうかを判定
-			showSale: false,			//販売中かどうかを判定
-			keyword: '', 					//リアルタイム検索をするための検索ボックス
-			sortPrice: 1,					//金額「並び替え」の選択値
-			sortCategory: 0, 			//「カテゴリー」絞り込みの初期値
-			sortPrefecture: 0, 		//「都道府県」絞り込みの初期値
-			categories: [],       //カテゴリー
-			prefectures: [],      //出品したコンビニのある都道府県
-			products: [], 				//商品リスト
+			loading: false,     //ローディングを表示するかどうかを判定するプロパティ
+			showExpired: false, //賞味期限切れかどうかを判定
+			showSale: false,    //販売中かどうかを判定
+			keyword: '',        //リアルタイム検索をするための検索ボックス
+			sortPrice: 1,       //金額「並び替え」の選択値
+			sortCategory: 0,    //「カテゴリー」絞り込みの初期値
+			sortPrefecture: 0,  //「都道府県」絞り込みの初期値
+			categories: [],     //カテゴリー
+			prefectures: [],    //出品したコンビニのある都道府県
+			products: [],       //商品リスト
 			product: {
 				image: '',
 				category_id: '',
@@ -212,10 +260,15 @@ export default {
 				expire: '',
 				price: ''
 			},
-			currentPage: 0,			  //現在のページ
-			lastPage: 0, 					//最後のページ
-			total: 0, 						//商品の合計数
-			recommendProducts: [] //おすすめ商品
+			recommendProducts: [], //おすすめ商品
+			currentPage: 1,        //現在のページ
+			lastPage: 0,           //最後のページ
+			total: 0,              //商品の合計数
+			range: 5,              //
+			frontDot: false,
+			endDot: false,
+			from: 0,
+			to: 0,
 		}
 	},
 	computed: {
@@ -270,11 +323,52 @@ export default {
 		count() { //絞り込み後の商品数のカウント
 			return this.filteredProducts.length;
 		},
-		ascPrefecture() { //都道府県idを照準にして返す
+		ascPrefecture() { //都道府県idを昇順にして返す
 			return this.prefectures.sort(function(a, b) {
 				return a.prefecture_id - b.prefecture_id;
-			})
-		}
+			});
+		},
+		frontPageRange() {
+			if(!this.sizeCheck) {
+				this.frontDot = false;
+				this.endDot   = false;
+				return this.calRange(1, this.lastPage);
+			}
+			return this.calRange(1, 2);
+		},
+		middlePageRange() {
+			if(!this.sizeCheck) return [];
+			
+			let start = '';
+			let end   = '';
+			if(this.currentPage <= this.range) {
+				start = 3;
+				end   = this.range + 2;
+				this.frontDot = false;
+				this.endDot = true;
+			}else if(this.currentPage > this.lastPage - this.range) {
+				start = this.lastPage - this.range - 1;
+				end   = this.lastPage - 2;
+				this.frontDot = true;
+				this.endDot = false;
+			}else {
+				start = this.currentPage - Math.floor(this.range / 2);
+				end   = this.currentPage + Math.floor(this.range / 2);
+				this.frontDot = true;
+				this.endDot = true;
+			}
+			return this.calRange(start, end);
+		},
+		endPageRange() {
+			if(!this.sizeCheck) return [];
+			return this.calRange(this.lastPage - 1, this.lastPage);
+		},
+		sizeCheck() {
+			if(this.lastPage <= this.range + 4) {
+				return false;
+			}
+			return true;
+		},
 	},
 	methods: {
 		sidebarExpireDate(product) { //商品の賞味期限が過ぎているかどうかを返す
@@ -316,7 +410,7 @@ export default {
 		},
 		async getProducts() { //商品取得メソッド
 			this.loading   = true; //ローディングを表示する
-			const response = await axios.get(`/api/products?page=${this.page}`); //API接続
+			const response = await axios.get(`/api/products?page=${this.currentPage}`); //API接続
 			this.loading   = false; //API通信が終わったらローディングを非表示にする
 			
 			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
@@ -329,10 +423,28 @@ export default {
 			this.currentPage = response.data.current_page; //現在のページ
 			this.lastPage    = response.data.last_page;    //最後のページ
 			this.total       = response.data.total;        //商品の数
+			this.from        = response.data.from;
+			this.to          = response.data.to;
+		},
+		calRange(start, end) {
+			const range = [];
+			for(let i = start; i <= end; i++) {
+				range.push(i);
+			}
+			return range;
 		},
 		deleteSearch() { //サイドバー商品検索欄の文字列を削除するメソッド
 			this.keyword = '';
-		}
+		},
+		changePage(page) {
+			if(page > 0 && page <= this.lastPage) {
+				this.currentPage = page;
+				this.getProducts();
+			}
+		},
+		isCurrent(page) {
+			return page === this.currentPage;
+		},
 	},
 	watch: {
 		$route: {
@@ -347,9 +459,6 @@ export default {
 	}
 }
 </script>
-
-
-
 
 
 

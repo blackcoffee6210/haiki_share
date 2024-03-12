@@ -678,42 +678,26 @@ body {
 }
 
 .c-pagination {
-  width: 100%;
-  margin: 40px auto 0 auto;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  list-style-type: none;
+  margin-top: 40px;
+}
+.c-pagination:hover {
+  cursor: pointer;
+}
+.c-pagination__block {
+  border: 1px solid #ddd;
+  padding: 6px 12px;
   text-align: center;
 }
-@media screen and (max-width: 450px) {
-  .c-pagination {
-    margin-top: 20px;
-  }
+.c-pagination--active {
+  background-color: #f96204;
+  color: #fff;
 }
-@media screen and (min-width: 451px) and (max-width:820px) {
-  .c-pagination {
-    margin-top: 20px;
-  }
-}
-.c-pagination__active {
-  display: inline-block;
-  font-size: 20px;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  padding: 0 10px;
+.c-pagination--inactive {
   color: #f96204;
-  border-radius: 3px;
-  background: #fff;
-}
-.c-pagination__active--left {
-  margin-right: 20px;
-}
-@media screen and (max-width: 450px) {
-  .c-pagination__active--left {
-    margin-right: 6px;
-  }
-}
-.c-pagination__active:hover {
-  color: #f96204;
-  text-decoration: none;
-  background: rgba(0, 0, 0, 0.05);
-  transition: 0.3s;
 }
 
 .c-select {
@@ -3982,6 +3966,10 @@ body {
 
 .u-color__main {
   color: #f96204;
+}
+
+.u-disabled {
+  cursor: not-allowed;
 }
 
 .u-d-flex {
