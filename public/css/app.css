@@ -678,7 +678,6 @@ body {
 }
 
 .c-pagination {
-  font-weight: bold;
   display: flex;
   justify-content: center;
   list-style-type: none;

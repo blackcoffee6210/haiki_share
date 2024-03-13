@@ -43,13 +43,6 @@
 						</div>
 					</div>
 				</div>
-				<!--&lt;!&ndash; エラーメッセージ	&ndash;&gt;-->
-				<!--<div v-if="errors">-->
-				<!--	<div v-for="msg in errors.password"-->
-				<!--			 :key="msg"-->
-				<!--			 class="p-error">{{ msg }}-->
-				<!--	</div>-->
-				<!--</div>-->
 				
 				<!-- 新しいパスワード(確認) -->
 				<label for="password-confirmation"

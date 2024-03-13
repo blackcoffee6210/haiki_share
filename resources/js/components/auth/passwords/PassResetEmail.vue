@@ -35,13 +35,6 @@
 						</div>
 					</div>
 				</div>
-				<!--&lt;!&ndash; エラーメッセージ	&ndash;&gt;-->
-				<!--<div v-if="errors">-->
-				<!--	<div v-for="msg in errors.email"-->
-				<!--			 :key="msg"-->
-				<!--			 class="p-error">{{ msg }}-->
-				<!--	</div>-->
-				<!--</div>-->
 				
 				<!-- Email送信ボタン -->
 				<button class="c-btn p-auth-form__btn" type="submit">Eメール送信</button>

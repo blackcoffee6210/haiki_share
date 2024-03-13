@@ -60,7 +60,7 @@
 				<li class="c-pagination__block c-pagination--inactive"
 						v-show="currentPage != 1"
 						@click="changePage(currentPage - 1)">
-					<
+					&lt;
 				</li>
 				<li v-for="page in frontPageRange"
 						:key="page"
@@ -92,7 +92,7 @@
 				<li class="c-pagination__block c-pagination--inactive"
 						v-show="currentPage != lastPage"
 						@click="changePage(currentPage + 1)">
-					>
+					&gt;
 				</li>
 			</ul>
 			
@@ -264,7 +264,7 @@ export default {
 			currentPage: 1,        //現在のページ
 			lastPage: 0,           //最後のページ
 			total: 0,              //商品の合計数
-			range: 5,              //
+			range: 5,
 			frontDot: false,
 			endDot: false,
 			from: 0,
