@@ -2557,7 +2557,7 @@ body {
   z-index: 2;
 }
 .p-product-form__img--enter {
-  border: 5px #fdbf99 dotted;
+  outline: 5px #fdbf99 dotted;
 }
 .p-product-form__img--edit {
   display: block;
@@ -2611,7 +2611,6 @@ body {
   margin-top: 5px;
 }
 .p-product-form__yen {
-  height: 38px;
   vertical-align: bottom;
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-left: 0;

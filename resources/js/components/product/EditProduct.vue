@@ -1,3 +1,4 @@
+#下記コードで、画像ドラッグ時に枠線がきれいに表示されない
 <template>
 	<main class="l-main">
 		<div class="p-product-form">
@@ -14,7 +15,13 @@
 					<!-- 画像	-->
 					<div class="u-p-relative">
 						<label class="p-product-form__label-img"
-									 :class="{ 'p-product-form__label-img__err': errors.image }">
+									 :class="{ 'p-product-form__label-img__err': errors.image,
+									  				 'p-product-form__img--enter': isEnter
+									 }"
+									 @dragenter="dragEnter"
+									 @dragleave="dragLeave"
+									 @dragover.prevent
+									 @drop.stop="dropFile">
 							<span class="p-product-form__label-text"
 										v-if="!preview">ドラッグ&ドロップ<br>またはファイルを選択
 							</span>
@@ -134,18 +141,27 @@
 					<div class="u-d-flex">
 						<input type="text"
 									 class="c-input p-product-form__input p-product-form__input--yen"
-									 :class="{ 'c-input__err': errors.price }"
+									 :class="{ 'c-input__err': errors.price || errorMessage }"
 									 id="price"
 									 v-model="product.price"
+									 @input="validatePrice"
 									 placeholder="1000">
 						<div class="p-product-form__yen"
-								 :class="{ 'p-product-form__yen__err': errors.price }">円</div>
+								 :class="{ 'p-product-form__yen__err': errors.price || errorMessage }">円</div>
 					</div>
-					<!-- エラーメッセージ	-->
-					<div v-if="errors">
-						<div v-for="msg in errors.price"
-								 :key="msg"
-								 class="p-error">{{ msg }}
+					<div class="u-d-flex u-space-between">
+						<!-- エラーメッセージ（フロントエンド） -->
+						<div v-if="errorMessage && !errors.price"
+								 class="p-error">
+							<p class="">{{ errorMessage }}</p>
+						</div>
+						<!-- エラーメッセージ（バックエンド）	-->
+						<div v-if="errors">
+							<div v-for="msg in errors.price"
+									 :key="msg"
+									 class="p-error">
+								{{ msg }}
+							</div>
 						</div>
 					</div>
 					
@@ -195,6 +211,9 @@ export default {
 				detail: null,
 				price: null
 			},
+			isEnter: false, //画像のクラスバインドを行う
+			files: [],
+			errorMessage: ''
 		}
 	},
 	computed: {
@@ -203,6 +222,35 @@ export default {
 		})
 	},
 	methods: {
+		dragEnter() { //画像が要素内に入ったら
+			this.isEnter = true;
+		},
+		dragLeave() { //画像が要素から出たら
+			this.isEnter = false;
+		},
+		dropFile(event) {
+			event.preventDefault(); // デフォルトのイベントを防ぐ
+			this.isEnter = false;
+			
+			if (event.dataTransfer.files.length !== 1) { // ドロップされたファイルがない、または複数ファイルがドロップされた場合は処理しない
+				return;
+			}
+			
+			const file = event.dataTransfer.files[0];
+			
+			if (!file.type.match('image.*')) { // ドロップされたファイルが画像であるかを確認
+				this.reset(); // ファイルが画像でなければリセット
+				return;
+			}
+			
+			// FileReaderを使用して画像を読み込み、プレビューとして表示
+			const reader = new FileReader();
+			reader.onload = e => {
+				this.preview = e.target.result; // プレビュー用のデータURLをセット
+				this.product.image = file; // 実際に送信するファイルをセット
+			};
+			reader.readAsDataURL(file); // ファイルをデータURLとして読み込む
+		},
 		maxCounter(content, maxValue) { //カウンターの文字数上限
 			return content.length > maxValue;
 		},
@@ -215,6 +263,14 @@ export default {
 			}
 			
 			this.categories = response.data; //プロパティに値をセットする
+		},
+		validatePrice() {
+			const value = Number(this.product.price);
+			if(isNaN(value) || value < 50 || value > 10000) {
+				this.errorMessage = '金額は50〜10000円の間で指定してください';
+			}else {
+				this.errorMessage = ''; //エラーなし
+			}
 		},
 		async getProduct() { //商品情報取得
 			this.loading = true; //ローティングを表示する
@@ -235,26 +291,24 @@ export default {
 			}
 		},
 		onFileChange(event) { //フォームでファイルが選択されたら実行されるメソッド
-			if(event.target.files.length === 0) { //何も選択されていなかったら処理中断
-				this.reset();
-				return false;
-			}
-			if(!event.target.files[0].type.match('image.*')) { //ファイルが画像ではなかったら処理中断
-				this.reset();
-				return false;
-			}
-			const reader = new FileReader; //FileReaderクラスのインスタンスを取得
-			
-			reader.onload = e => { //ファイルを読み込み終わったタイミングで実行する処理
-				//previewに読み込み結果（データURL）を代入する
-				//previewに値が入ると<output>につけたv-ifがtrueと判定される
-				//また<output>内部の<img>のsrc属性はpreviewの値を参照しているので
-				//結果として画像が表示される
-				this.preview = e.target.result;
+			if (event.target.files.length === 0) { //何も選択されていなかったら処理中断
+				this.reset(); // 選択されたファイルがなければリセット
+				return;
 			}
 			
-			reader.readAsDataURL(event.target.files[0]); //ファイルを読み込む(ファイルはデータURL形式で受け取れる(上記onload参照))
-			this.product.image = event.target.files[0];  //データに入力値のファイルを代入
+			const file = event.target.files[0];
+			
+			if (!file.type.match('image.*')) { //ファイルが画像ではなかったら処理中断
+				this.reset(); // ファイルが画像でなければリセット
+				return;
+			}
+			
+			const reader = new FileReader();
+			reader.onload = e => {
+				this.preview = e.target.result; // プレビュー用のデータURLをセット
+				this.product.image = file; // 実際に送信するファイルをセット
+			};
+			reader.readAsDataURL(file); // ファイルをデータURLとして読み込む
 		},
 		reset() { //入力欄の値とプレビュー表示をクリアするメソッド
 			this.preview = '';
