@@ -75,10 +75,10 @@ const routes = [ //パスとコンポーネントのマッピング
     path: '/products', //インデックス(商品一覧)画面(未ログインでアクセスできる)
     name: 'index',
     component: Index,
-    // props: route => {
-    //   const page = route.query.page;
-    //   return { page: /^[1-9][0-9]*$/.test(page) ? page * 1 : 1 }
-    // }
+    props: route => {
+      const page = route.query.page;
+      return { page: /^[1-9][0-9]*$/.test(page) ? page * 1 : 1 }
+    }
   },
   {
     path: '/products/register', //商品登録
