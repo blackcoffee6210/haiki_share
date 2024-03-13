@@ -87,6 +87,9 @@
     &:hover {
       cursor: pointer;
     }
+    &--enter {
+      outline: 5px $sub-color dotted;
+    }
     &-text {
       font-size: $font-size_l;
       color: #999;

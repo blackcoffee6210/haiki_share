@@ -1,4 +1,3 @@
-#下記コードで、画像ドラッグ時に枠線がきれいに表示されない
 <template>
 	<main class="l-main">
 		<div class="p-product-form">
@@ -133,7 +132,6 @@
 					
 					<!-- 賞味期限は変更できないようにする(不正防止)-->
 					
-					<!-- todo: フロントバリデーション実装 -->
 					<!-- 金額	-->
 					<label for="price"
 								 class="c-label p-product-form__label u-mt0">金額
@@ -295,14 +293,14 @@ export default {
 				this.reset(); // 選択されたファイルがなければリセット
 				return;
 			}
-			
+
 			const file = event.target.files[0];
-			
+
 			if (!file.type.match('image.*')) { //ファイルが画像ではなかったら処理中断
 				this.reset(); // ファイルが画像でなければリセット
 				return;
 			}
-			
+
 			const reader = new FileReader();
 			reader.onload = e => {
 				this.preview = e.target.result; // プレビュー用のデータURLをセット
