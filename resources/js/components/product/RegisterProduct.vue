@@ -258,9 +258,27 @@ export default {
 			this.isEnter = false;
 		},
 		dropFile(event) {
-			console.log(event.dataTransfer.files);
-			this.files = [...event.dataTransfer.files];
+			event.preventDefault(); // デフォルトのイベントを防ぐ
 			this.isEnter = false;
+			
+			if (event.dataTransfer.files.length !== 1) { // ドロップされたファイルがない、または複数ファイルがドロップされた場合は処理しない
+				return;
+			}
+			
+			const file = event.dataTransfer.files[0];
+			
+			if (!file.type.match('image.*')) { // ドロップされたファイルが画像であるかを確認
+				this.reset(); // ファイルが画像でなければリセット
+				return;
+			}
+			
+			// FileReaderを使用して画像を読み込み、プレビューとして表示
+			const reader = new FileReader();
+			reader.onload = e => {
+				this.preview = e.target.result; // プレビュー用のデータURLをセット
+				this.product.image = file; // 実際に送信するファイルをセット
+			};
+			reader.readAsDataURL(file); // ファイルをデータURLとして読み込む
 		},
 		maxCounter(content, maxValue) { //カウンターの文字数上限
 			return content.length > maxValue;
@@ -283,25 +301,24 @@ export default {
 			}
 		},
 		onFileChange(event) { //フォームでファイルが選択されたら実行されるメソッド
-			if(event.target.files.length === 0) { //何も選択されていなかったら処理中断
-				this.reset();
-				return false;
+			if (event.target.files.length === 0) { //何も選択されていなかったら処理中断
+				this.reset(); // 選択されたファイルがなければリセット
+				return;
 			}
-			if(!event.target.files[0].type.match('image.*')) { //ファイルが画像ではなかったら処理中断
-				this.reset();
-				return false;
-			}
-			const reader = new FileReader; //FileReaderクラスのインスタンスを取得
 			
-			reader.onload = e => { //ファイルを読み込み終わったタイミングで実行する処理
-				//previewに読み込み結果（データURL）を代入する
-				//previewに値が入ると<output>につけたv-ifがtrueと判定される
-				//また<output>内部の<img>のsrc属性はpreviewの値を参照しているので
-				//結果として画像が表示される
-				this.preview = e.target.result;
+			const file = event.target.files[0];
+			
+			if (!file.type.match('image.*')) { //ファイルが画像ではなかったら処理中断
+				this.reset(); // ファイルが画像でなければリセット
+				return;
 			}
-			reader.readAsDataURL(event.target.files[0]); //ファイルを読み込む(ファイルはデータURL形式で受け取れる(上記onload参照))
-			this.product.image = event.target.files[0]; //データに入力値のファイルを代入
+			
+			const reader = new FileReader();
+			reader.onload = e => {
+				this.preview = e.target.result; // プレビュー用のデータURLをセット
+				this.product.image = file; // 実際に送信するファイルをセット
+			};
+			reader.readAsDataURL(file); // ファイルをデータURLとして読み込む
 		},
 		reset() { //入力欄の値とプレビュー表示をクリアするメソッド
 			this.preview = '';
