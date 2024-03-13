@@ -153,7 +153,6 @@
 						</div>
 					</div>
 					
-					<!-- todo: フロントバリデーション実装 -->
 					<!-- 金額	-->
 					<label for="price"
 								 class="c-label p-product-form__label">金額
@@ -161,19 +160,28 @@
 					<div class="u-d-flex">
 						<input type="text"
 									 class="c-input p-product-form__input p-product-form__input--yen"
-									 :class="{ 'c-input__err': errors.price }"
+									 :class="{ 'c-input__err': errors.price || errorMessage }"
 									 id="price"
 									 v-model="product.price"
+									 @input="validatePrice"
 									 placeholder="50〜10000円の間で入力してください">
 						<div class="p-product-form__yen"
-								 :class="{'p-product-form__yen__err': errors.price }">円
+								 :class="{'p-product-form__yen__err': errors.price || errorMessage }">円
 						</div>
 					</div>
-					<!-- エラーメッセージ	-->
-					<div v-if="errors">
-						<div v-for="msg in errors.price"
-								 :key="msg"
-								 class="p-error">{{ msg }}
+					<div class="u-d-flex u-space-between">
+						<!-- エラーメッセージ（フロントエンド） -->
+						<div v-if="errorMessage && !errors.price"
+								 class="p-error">
+							<p class="">{{ errorMessage }}</p>
+						</div>
+						<!-- エラーメッセージ（バックエンド）	-->
+						<div v-if="errors">
+							<div v-for="msg in errors.price"
+									 :key="msg"
+									 class="p-error">
+								{{ msg }}
+							</div>
 						</div>
 					</div>
 					
@@ -227,6 +235,7 @@ export default {
 			},
 			isEnter: false, //画像のクラスバインドを行う
 			files: [],
+			errorMessage: ''
 		}
 	},
 	computed: {
@@ -264,6 +273,14 @@ export default {
 				return false;
 			}
 			this.categories = response.data; //プロパティに値をセットする
+		},
+		validatePrice() {
+			const value = Number(this.product.price);
+			if(isNaN(value) || value < 50 || value > 10000) {
+				this.errorMessage = '金額は50〜10000円の間で指定してください';
+			}else {
+				this.errorMessage = ''; //エラーなし
+			}
 		},
 		onFileChange(event) { //フォームでファイルが選択されたら実行されるメソッド
 			if(event.target.files.length === 0) { //何も選択されていなかったら処理中断

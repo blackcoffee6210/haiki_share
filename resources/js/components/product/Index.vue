@@ -280,26 +280,29 @@ export default {
 				let isShow = true; //表示対象かどうかを判定するフラグ
 				
 				if(this.showExpired &&
-					 this.products[i].expire > today) { //「賞味期限切れのみ表示」チェックありで賞味期限が本日の日付より大きい（賞味期限内）場合は非表示にする
+						this.products[i].expire > today) { //「賞味期限切れのみ表示」チェックありで賞味期限が本日の日付より大きい（賞味期限内）場合は非表示にする
 					isShow = false;
 				}
 				
 				if(this.showSale &&
-					 this.products[i].is_purchased) { //「販売中のみ未表示」チェックあり、かつ購入済み商品は非表示にする
+						this.products[i].is_purchased) { //「販売中のみ未表示」チェックあり、かつ購入済み商品は非表示にする
 					isShow = false;
 				}
 				
 				if(this.sortCategory !== 0 &&
-					 this.sortCategory !== this.products[i].category_id) { //i番目の商品が表示可能かどうかを判定する
+						this.sortCategory !== this.products[i].category_id) { //i番目の商品が表示可能かどうかを判定する
 					isShow = false; //カテゴリーが選択されていて(0じゃない) かつカテゴリーIDと商品カテゴリーIDが一致しない商品は非表示にする
 				}
 				
 				if(this.sortPrefecture !== 0 &&
-					 this.sortPrefecture !== this.products[i].prefecture_id) { //i番目の商品が表示可能かどうかを判定する
+						this.sortPrefecture !== this.products[i].prefecture_id) { //i番目の商品が表示可能かどうかを判定する
 					isShow = false; //都道府県が選択されていて(0じゃない)、かつ都道府県IDと商品の都道府県IDが一致しない商品は非表示にする
 				}
 				
-				if(isShow && this.products[i].name.indexOf(this.keyword) !== -1) { //リアルタイム検索をするための処理
+				// キーワードと商品名をひらがなに統一してから検索条件を適用
+				const normalizedKeyword = this.katakanaToHiragana(this.keyword.trim());
+				const normalizedProductName = this.katakanaToHiragana(this.products[i].name);
+				if(isShow && normalizedProductName.includes(normalizedKeyword)) {
 					newProducts.push(this.products[i]);
 				}
 			}
@@ -320,6 +323,54 @@ export default {
 			}
 			return newProducts; //絞り込み後の商品を返す
 		},
+		// filteredProducts() { //絞り込んだ商品を返す
+		// 	let newProducts = []; //絞り込み後の商品を格納する新しい配列
+		// 	const today = moment(new Date).format('YYYY-MM-DD hh:mm:ss'); //今日の日付を用意
+		//
+		// 	for(let i = 0; i < this.products.length; i++) { //カテゴリーが選択されたら、カテゴリーIDが一致する商品だけを表示する
+		// 		let isShow = true; //表示対象かどうかを判定するフラグ
+		//
+		// 		if(this.showExpired &&
+		// 			 this.products[i].expire > today) { //「賞味期限切れのみ表示」チェックありで賞味期限が本日の日付より大きい（賞味期限内）場合は非表示にする
+		// 			isShow = false;
+		// 		}
+		//
+		// 		if(this.showSale &&
+		// 			 this.products[i].is_purchased) { //「販売中のみ未表示」チェックあり、かつ購入済み商品は非表示にする
+		// 			isShow = false;
+		// 		}
+		//
+		// 		if(this.sortCategory !== 0 &&
+		// 			 this.sortCategory !== this.products[i].category_id) { //i番目の商品が表示可能かどうかを判定する
+		// 			isShow = false; //カテゴリーが選択されていて(0じゃない) かつカテゴリーIDと商品カテゴリーIDが一致しない商品は非表示にする
+		// 		}
+		//
+		// 		if(this.sortPrefecture !== 0 &&
+		// 			 this.sortPrefecture !== this.products[i].prefecture_id) { //i番目の商品が表示可能かどうかを判定する
+		// 			isShow = false; //都道府県が選択されていて(0じゃない)、かつ都道府県IDと商品の都道府県IDが一致しない商品は非表示にする
+		// 		}
+		//
+		// 		if(isShow && this.products[i].name.indexOf(this.keyword) !== -1) { //リアルタイム検索をするための処理
+		// 			newProducts.push(this.products[i]);
+		// 		}
+		// 	}
+		//
+		// 	switch (this.sortPrice) { //新しい配列を並び替える
+		// 		case 1:  //金額ソート選択なし（デフォルト）
+		// 			break; //元の順番にsortしているので並び替えはなし
+		// 		case 2:  //価格が安い順に並び替える
+		// 			newProducts.sort(function(a, b) {
+		// 				return a.price - b.price;
+		// 			});
+		// 			break;
+		// 		case 3: //価格が高い順に並び替える
+		// 			newProducts.sort(function(a, b) {
+		// 				return b.price - a.price;
+		// 			});
+		// 			break;
+		// 	}
+		// 	return newProducts; //絞り込み後の商品を返す
+		// },
 		count() { //絞り込み後の商品数のカウント
 			return this.filteredProducts.length;
 		},
@@ -371,6 +422,11 @@ export default {
 		},
 	},
 	methods: {
+		katakanaToHiragana(str) { //カタカナをひらがなに変換する関数
+			return str.replace(/[\u30A1-\u30F6]/g, match => {
+				return String.fromCharCode(match.charCodeAt(0) - 0x60);
+			});
+		},
 		sidebarExpireDate(product) { //商品の賞味期限が過ぎているかどうかを返す
 			let dt = moment().format('YYYY-MM-DD');
 			if(product.expire <= dt) {
