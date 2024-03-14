@@ -1,25 +1,3 @@
-#GETパラメータに以下の「要件」を表示したい
-
-##要件
-・賞味期限切れの商品のみ表示（showExpired）
-・販売中の商品のみ表示（showSale）
-・検索ボックス（keyword）
-・金額ソート（sortPrice）
-・カテゴリー（sortCategory）
-・出品したコンビニのある都道府県（sortPrefecture）
-
-##使用しているVueRouterのコード
-{
-	path: '/products', //インデックス(商品一覧)画面(未ログインでアクセスできる)
-	name: 'index',
-	component: Index,
-	props: route => {
-		const page = route.query.page;
-		return { page: /^[1-9][0-9]*$/.test(page) ? page * 1 : 1 }
-	}
-},
-
-##GETパラメータ処理を追加したいIndex.vueファイル
 <template>
 	<div class="l-main">
 		<main class="l-main__2column">
@@ -251,7 +229,7 @@ import moment  from "moment";
 
 export default {
 	name: "Index",
-	props: { //todo: 削除する（ページネーション自作したので）
+	props: {
 		page: { //ルーター(router.js)から渡されるpageプロパティを受け取る
 			type: Number,
 			required: false,
@@ -261,6 +239,14 @@ export default {
 	components: {
 		Loading,
 		Product,
+	},
+	beforeRouteEnter(to, from, next) {
+		next(vm => {
+			// `vm` はコンポーネントインスタンスを指す
+			if (from.name !== 'index') {
+				vm.clearFilters(); // 別のページから遷移した場合、絞り込み条件をリセット
+			}
+		});
 	},
 	data() {
 		return {
@@ -293,6 +279,27 @@ export default {
 			from: 0,
 			to: 0,
 		}
+	},
+	mounted() {
+		const currentQuery = { ...this.$route.query }; // 現在のクエリパラメータを取得
+		const newQuery = {};
+		
+		
+		if (currentQuery.page) { // `page` パラメータが存在する場合は、新しいクエリオブジェクトに追加
+			newQuery.page = currentQuery.page;
+		} else { // `page` パラメータが存在しない場合、デフォルト値として 1 を設定
+			newQuery.page = '1';
+		}
+		
+		// URLのクエリパラメータを更新
+		// `page`パラメータ以外を削除し、`page`パラメータがない場合はデフォルトで1を設定
+		this.$router.replace({ query: newQuery }).catch(err => {
+			// Vue Routerが同じルートへの重複したナビゲーションをエラーとして扱うため、
+			// NavigationDuplicatedエラーを無視する
+			if (err.name !== "NavigationDuplicated") {
+				throw err; // 予期せぬエラーはそのまま投げる
+			}
+		});
 	},
 	created() {
 		//================================================================================
@@ -433,7 +440,7 @@ export default {
 		},
 		updateQueryParams() { // 現在のルートに新しいクエリパラメータを追加する
 			this.$router.push({
-				path: '/products',
+				name: 'index',
 				query: {
 					showExpired: this.showExpired,
 					showSale: this.showSale,
@@ -441,6 +448,7 @@ export default {
 					sortPrice: this.sortPrice,
 					sortCategory: this.sortCategory,
 					sortPrefecture: this.sortPrefecture,
+					page: this.currentPage || 1 // 現在のページ番号を追加
 				}
 			}).catch(err => {});
 		},
@@ -519,7 +527,8 @@ export default {
 		changePage(page) {
 			if(page > 0 && page <= this.lastPage) {
 				this.currentPage = page;
-				this.getProducts();
+				this.updateQueryParams(); //URLのクエリパラメータを更新
+				this.getProducts();       //新しいページの商品を取得
 			}
 		},
 		isCurrent(page) {
