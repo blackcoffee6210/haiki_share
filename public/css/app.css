@@ -1195,6 +1195,7 @@ body {
 }
 .p-header__logo:hover {
   color: #333;
+  cursor: pointer;
 }
 .p-header__logo--catch {
   color: #f96204;

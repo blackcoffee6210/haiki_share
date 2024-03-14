@@ -2,11 +2,10 @@
 	<header class="l-header">
 		<div class="p-header">
 			<!-- ロゴ -->
-			<div class="p-header__left">
-				<!-- RouterLinkを使うとaタグのようなGETリクエストが発生せず、フロントエンドでの画面遷移、VueRouterでコンポーネントの切り替えを行う -->
-				<router-link class="p-header__logo" :to="{ name: 'index' }">
+			<div class="p-header__left" @click="navigateToHome">
+				<a class="p-header__logo" href="javascript:void(0)">
 					Ha<span class="c-color__main">i</span>ki Share
-				</router-link>
+				</a>
 				<div class="p-header__sub">
 					廃棄食品を無駄にしない<br class="p-header__br">フードシェアリングサービス
 				</div>
@@ -78,6 +77,10 @@ export default {
 		}),
 	},
 	methods: {
+		navigateToHome(event) {
+			event.preventDefault(); // デフォルトのイベントを止める
+			this.$router.push({ name: 'index', query: { page: 1 } }); //GETパラメータに「?page=1」を追加する
+		},
 		toggleNav() { //ハンバーガーメニューをtoggleで切り替える
 			return this.active = !this.active;
 		},

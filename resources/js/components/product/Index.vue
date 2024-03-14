@@ -94,7 +94,9 @@
 			<div class="p-sidebar-index">
 				
 				<!-- 絞り込みを解除するボタン -->
-				<button v-if="isFiltered" @click="clearFilters" class="c-btn p-sidebar-index__clear-filter">
+				<button v-if="isFiltered"
+								@click="clearFilters"
+								class="c-btn p-sidebar-index__clear-filter">
 					絞り込みを解除
 				</button>
 				<!-- 検索ボックス -->
