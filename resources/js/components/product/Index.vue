@@ -1,3 +1,25 @@
+#GETパラメータに以下の「要件」を表示したい
+
+##要件
+・賞味期限切れの商品のみ表示（showExpired）
+・販売中の商品のみ表示（showSale）
+・検索ボックス（keyword）
+・金額ソート（sortPrice）
+・カテゴリー（sortCategory）
+・出品したコンビニのある都道府県（sortPrefecture）
+
+##使用しているVueRouterのコード
+{
+	path: '/products', //インデックス(商品一覧)画面(未ログインでアクセスできる)
+	name: 'index',
+	component: Index,
+	props: route => {
+		const page = route.query.page;
+		return { page: /^[1-9][0-9]*$/.test(page) ? page * 1 : 1 }
+	}
+},
+
+##GETパラメータ処理を追加したいIndex.vueファイル
 <template>
 	<div class="l-main">
 		<main class="l-main__2column">
@@ -17,6 +39,7 @@
 						</span>
 					</div>
 					
+					<!-- フィルタリング条件のチェックボックス -->
 					<div class="p-index__checkbox-container">
 						<!-- 賞味期限切れの商品のみ表示 -->
 						<input type="checkbox"
@@ -236,9 +259,9 @@ export default {
 			showExpired: false, //賞味期限切れかどうかを判定
 			showSale: false,    //販売中かどうかを判定
 			keyword: '',        //リアルタイム検索をするための検索ボックス
-			sortPrice: 1,       //金額「並び替え」の選択値
-			sortCategory: 0,    //「カテゴリー」絞り込みの初期値
-			sortPrefecture: 0,  //「都道府県」絞り込みの初期値
+			sortPrice: 1,       //金額「並び替え」の選択値（1: 標準, 2: 安い順, 3: 高い順）
+			sortCategory: 0,    //「カテゴリー」絞り込みの初期値（0: 全て）
+			sortPrefecture: 0,  //「都道府県」絞り込みの初期値（0: 全て）
 			categories: [],     //カテゴリー
 			prefectures: [],    //出品したコンビニのある都道府県
 			products: [],       //商品リスト
