@@ -86,10 +86,11 @@ class RegisterController extends Controller
 	    switch ($data['group']) {
 		    case 1: //groupが1であれば「利用者」なので、以下のバリデーションを実行
 			    return User::create([
-				    'group'    => $data['group'],
-				    'name'     => $data['name'],
-				    'email'    => $data['email'],
-				    'password' => Hash::make($data['password'])
+				    'group'     => $data['group'],
+				    'name'      => $data['name'],
+				    'email'     => $data['email'],
+				    'password'  => Hash::make($data['password']),
+				    'introduce' => null, // 自己紹介文をnullで登録
 			    ]);
 		    case 2: //groupが2であれば「コンビニの人」なので、以下のバリデーションを実行
 			    return User::create([
@@ -99,7 +100,8 @@ class RegisterController extends Controller
 				    'prefecture_id' => $data['prefecture_id'],
 				    'address'       => $data['address'],
 				    'email'         => $data['email'],
-				    'password'      => Hash::make($data['password'])
+				    'password'      => Hash::make($data['password']),
+				    'introduce'     => null, // 自己紹介文をnullで登録
 			    ]);
 	    }
     }

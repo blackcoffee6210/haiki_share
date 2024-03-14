@@ -44,11 +44,15 @@ class UserController extends Controller
 
 		if($request->file('image')) { //画像が送信されていたらバリデーションを行う
 			$request->validate([ 'image' => 'file|mimes:jpg,jpeg,png' ]);
-
-			$original_name = $request->file('image')->getClientOriginalName();                        //formDataから画像の名前を取得する
-			$file_name     = date('Ymd_His') . '_' . $original_name;                                //保存する画像名を作成
-			$image_path    = $request->file('image')->storeAs('public/images', $file_name);      //名前を変更して保存。保存先のパスを返す
-			$image_path    = str_replace('public/images/', '/storage/images/', $image_path); //HTML出力用の整形とパスの修正
+			$original_name = $request->file('image')
+									 ->getClientOriginalName();                    //formDataから画像の名前を取得する
+			$file_name     = date('Ymd_His') . '_' . $original_name;        //保存する画像名を作成
+			$image_path    = $request->file('image')
+									 ->storeAs('public/images', $file_name); //名前を変更して保存。保存先のパスを返す
+			$image_path    = str_replace(  //HTML出力用の整形とパスの修正
+				'public/images/',
+				'/storage/images/',
+				$image_path);
 
 		}else { //画像が送信されていなかったらDBの画像を使う
 			$image_path = $user->image;
@@ -65,7 +69,7 @@ class UserController extends Controller
 		$user->save();
 
 		//===========================================================
-		//todo: メールアドレスが変更されたら、更新元と更新先にメールを送る
+		//メールアドレスが変更されたら、更新元と更新先にメールを送る
 		if($old_email !== $request->email) { //DBのEメールアドレスとrequestのEメールが違ったら（変更されていたら）確認メールを送る
 
 			$params = [ //メール送信に必要な情報を用意
