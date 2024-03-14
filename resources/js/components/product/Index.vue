@@ -115,6 +115,10 @@
 		<aside class="l-sidebar" v-show="!loading">
 			<div class="p-sidebar-index">
 				
+				<!-- 絞り込みを解除するボタン -->
+				<button v-if="isFiltered" @click="clearFilters" class="c-btn p-sidebar-index__clear-filter">
+					絞り込みを解除
+				</button>
 				<!-- 検索ボックス -->
 				<div class="p-sidebar-index__search">
 					<label class="p-sidebar-index__title"
@@ -122,9 +126,14 @@
 					</label>
 					<input type="text"
 								 placeholder="SEARCH"
-								 v-model="keyword"
+								 v-model="tempKeyword"
 								 id="search"
 								 class="c-input p-sidebar-index__input">
+					<!-- 検索アイコン -->
+					<font-awesome-icon :icon="['fas', 'search']"
+														 class="p-sidebar-index__search-icon"
+														 @click="searchProducts"
+														 color="#ff6f80" />
 					<!-- ゴミ箱アイコン -->
 					<font-awesome-icon :icon="['fas', 'trash']"
 														 @click="deleteSearch"
@@ -258,7 +267,8 @@ export default {
 			loading: false,     //ローディングを表示するかどうかを判定するプロパティ
 			showExpired: false, //賞味期限切れかどうかを判定
 			showSale: false,    //販売中かどうかを判定
-			keyword: '',        //リアルタイム検索をするための検索ボックス
+			tempKeyword: '',    //検索文字列を一時保存するキーワード
+			keyword: '',        //実際の検索に使われるキーワード
 			sortPrice: 1,       //金額「並び替え」の選択値（1: 標準, 2: 安い順, 3: 高い順）
 			sortCategory: 0,    //「カテゴリー」絞り込みの初期値（0: 全て）
 			sortPrefecture: 0,  //「都道府県」絞り込みの初期値（0: 全て）
@@ -284,7 +294,26 @@ export default {
 			to: 0,
 		}
 	},
+	created() {
+		//================================================================================
+		// Vue Routerからクエリパラメータを読み込む
+		this.showExpired    = this.$route.query.showExpired === 'true';
+		this.showSale       = this.$route.query.showSale === 'true';
+		this.keyword        = this.$route.query.keyword || '';
+		this.sortPrice      = parseInt(this.$route.query.sortPrice, 10) || 1;
+		this.sortCategory   = parseInt(this.$route.query.sortCategory, 10) || 0;
+		this.sortPrefecture = parseInt(this.$route.query.sortPrefecture, 10) || 0;
+		//================================================================================
+	},
 	computed: {
+		isFiltered() { //ひとつでも絞り込みがされていたらtrueを返し、「絞り込みを解除」ボタンをサイドバーに表示
+			return this.showExpired || // 賞味期限切れの商品が選択されている
+					this.showSale || // 販売中の商品が選択されている
+					this.keyword !== '' || // 検索キーワードが入力されている
+					this.sortPrice !== 1 || // 金額ソートがデフォルト値以外
+					this.sortCategory !== 0 || // カテゴリーが選択されている
+					this.sortPrefecture !== 0; // 都道府県が選択されている
+		},
 		filteredProducts() { //絞り込んだ商品を返す
 			let newProducts = []; //絞り込み後の商品を格納する新しい配列
 			const today = moment(new Date).format('YYYY-MM-DD hh:mm:ss'); //今日の日付を用意
@@ -387,6 +416,34 @@ export default {
 		},
 	},
 	methods: {
+		clearFilters() { //絞り込みを解除する
+			this.showExpired    = false; // 賞味期限切れの商品の表示をリセット
+			this.showSale       = false; // 販売中の商品の表示をリセット
+			this.tempKeyword    = '';    // 検索キーワードをリセット
+			this.keyword        = '';    // 検索キーワードをリセット
+			this.sortPrice      = 1;     // 金額ソートをデフォルトにリセット
+			this.sortCategory   = 0;     // カテゴリー絞り込みを全てにリセット
+			this.sortPrefecture = 0;     // 都道府県絞り込みを全てにリセット
+			
+			// 必要に応じて商品リストを再取得または更新
+			this.searchProducts(); // キーワードをクリアしてから検索を実行
+		},
+		searchProducts() {
+			this.keyword = this.tempKeyword; // 検索アイコンをクリックしたら、検索キーワードを更新
+		},
+		updateQueryParams() { // 現在のルートに新しいクエリパラメータを追加する
+			this.$router.push({
+				path: '/products',
+				query: {
+					showExpired: this.showExpired,
+					showSale: this.showSale,
+					keyword: this.keyword,
+					sortPrice: this.sortPrice,
+					sortCategory: this.sortCategory,
+					sortPrefecture: this.sortPrefecture,
+				}
+			}).catch(err => {});
+		},
 		katakanaToHiragana(str) { //カタカナをひらがなに変換する関数
 			return str.replace(/[\u30A1-\u30F6]/g, match => {
 				return String.fromCharCode(match.charCodeAt(0) - 0x60);
@@ -455,7 +512,9 @@ export default {
 			return range;
 		},
 		deleteSearch() { //サイドバー商品検索欄の文字列を削除するメソッド
+			this.tempKeyword = '';
 			this.keyword = '';
+			this.searchProducts();
 		},
 		changePage(page) {
 			if(page > 0 && page <= this.lastPage) {
@@ -476,7 +535,13 @@ export default {
 				await this.getProducts();
 			},
 			immediate: true //immediateをtrueにすると、コンポーネントが生成されたタイミングでも実行する
-		}
+		},
+		showExpired: 'updateQueryParams',
+		showSale: 'updateQueryParams',
+		keyword: 'updateQueryParams',
+		sortPrice: 'updateQueryParams',
+		sortCategory: 'updateQueryParams',
+		sortPrefecture: 'updateQueryParams',
 	}
 }
 </script>

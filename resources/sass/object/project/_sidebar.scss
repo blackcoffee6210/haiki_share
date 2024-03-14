@@ -60,6 +60,13 @@
     margin-top: 73px;
     padding: $space_l;
   }
+  &__clear-filter {
+    width: 100%;
+    margin-bottom: $space_xl;
+    @include mq() {
+      margin-bottom: $space_m;
+    }
+  }
   &__search {
     margin-bottom: $space_xl;
     position: relative;
@@ -67,12 +74,29 @@
       margin-bottom: $space_m;
     }
   }
+  &__search-icon {
+    position: absolute;
+    right: 35px;
+    top: 42px;
+    font-size: $font-size_l;
+    color: $main-color;
+    @include mq() {
+      top: 35px;
+    }
+    @include mq('tab') {
+      top: 40px;
+    }
+    &:hover {
+      cursor: pointer;
+    }
+  }
   &__trash-icon {
     position: absolute;
     right: 10px;
     top: 42px;
     font-size: $font-size_l;
-    color: #fc8134;
+    color: $sub-color;
+    //color: #ccc;
     @include mq() {
       top: 35px;
     }

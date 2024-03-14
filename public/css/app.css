@@ -3143,6 +3143,15 @@ body {
     padding: 15px;
   }
 }
+.p-sidebar-index__clear-filter {
+  width: 100%;
+  margin-bottom: 20px;
+}
+@media screen and (max-width: 450px) {
+  .p-sidebar-index__clear-filter {
+    margin-bottom: 10px;
+  }
+}
 .p-sidebar-index__search {
   margin-bottom: 20px;
   position: relative;
@@ -3152,12 +3161,32 @@ body {
     margin-bottom: 10px;
   }
 }
+.p-sidebar-index__search-icon {
+  position: absolute;
+  right: 35px;
+  top: 42px;
+  font-size: 1.8rem;
+  color: #f96204;
+}
+@media screen and (max-width: 450px) {
+  .p-sidebar-index__search-icon {
+    top: 35px;
+  }
+}
+@media screen and (min-width: 451px) and (max-width:820px) {
+  .p-sidebar-index__search-icon {
+    top: 40px;
+  }
+}
+.p-sidebar-index__search-icon:hover {
+  cursor: pointer;
+}
 .p-sidebar-index__trash-icon {
   position: absolute;
   right: 10px;
   top: 42px;
   font-size: 1.8rem;
-  color: #fc8134;
+  color: #fdbf99;
 }
 @media screen and (max-width: 450px) {
   .p-sidebar-index__trash-icon {
