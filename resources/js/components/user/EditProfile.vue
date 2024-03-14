@@ -250,6 +250,8 @@ export default {
 	},
 	data() {
 		return {
+			preview: null,  //画像プレビュー
+			loading: false, //ローディング
 			user: {         //ユーザーの都道府県が変わることは考えにくいので編集項目に入れない
 				image: '',    //プロフィール画像
 				group: '',    //コンビニユーザーか利用者を判別
@@ -259,8 +261,6 @@ export default {
 				email: '',    //Eメール
 				introduce: '' //自己紹介文
 			},
-			loading: false, //ローディング
-			preview: null,  //画像プレビュー
 			errors: {       //エラーメッセージ
 				image: null,
 				name: null,

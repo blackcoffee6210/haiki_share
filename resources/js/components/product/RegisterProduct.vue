@@ -30,7 +30,8 @@
 							<input type="file"
 										 class="p-product-form__img"
 										 @change="onFileChange">
-							<output class="p-product-form__output" v-if="preview">
+							<output class="p-product-form__output"
+											v-if="preview">
 								<img :src="preview"
 										 class="p-product-form__output-img"
 										 alt="">

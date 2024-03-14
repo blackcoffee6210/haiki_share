@@ -1,20 +1,27 @@
 .c-pagination {
-  //font-weight: bold;
   display: flex;
   justify-content: center;
   list-style-type: none;
   margin-top: $space_3xl;
-  &:hover {
-    cursor: pointer;
-  }
   &__block {
     border: 1px solid #ddd;
     padding: 6px 12px;
     text-align: center;
+    & + & { // 隣接セレクタを使用して隣接するボックスの左側のボーダーを削除
+      border-left: none;
+    }
+    &:hover {
+      cursor: pointer;
+      background: rgba(0,0,0,.05);
+      transition: .3s;
+    }
   }
   &--active {
     background-color: $main-color;
     color: $white;
+    &:hover {
+      background: $main-color;
+    }
   }
   &--inactive {
     color: $main-color;

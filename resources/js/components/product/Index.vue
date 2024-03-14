@@ -47,7 +47,7 @@
 			</div>
 			
 			<!-- ページネーション	-->
-			<ul class="c-pagination">
+			<ul class="c-pagination" v-show="!loading">
 				<li class="c-pagination__block c-pagination--inactive"
 						v-show="currentPage != 1"
 						@click="changePage(currentPage - 1)">
