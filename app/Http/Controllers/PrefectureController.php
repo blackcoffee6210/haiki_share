@@ -15,7 +15,7 @@ class PrefectureController extends Controller
     		return $prefectures;
 	    }catch(\Exception $e) {
     		Log::error('都道府県の取得に失敗しました: '. $e->getMessage());
-    		return response()->json(['error', '都道府県の取得に失敗しました'], 500);
+    		return response()->json(['error' => '都道府県の取得に失敗しました'], 500);
 	    }
     }
 }
