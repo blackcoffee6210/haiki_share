@@ -6,6 +6,7 @@ use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Validation\Rule;
@@ -83,26 +84,31 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-	    switch ($data['group']) {
-		    case 1: //groupが1であれば「利用者」なので、以下のバリデーションを実行
-			    return User::create([
-				    'group'     => $data['group'],
-				    'name'      => $data['name'],
-				    'email'     => $data['email'],
-				    'password'  => Hash::make($data['password']),
-				    'introduce' => null, // 自己紹介文をnullで登録
-			    ]);
-		    case 2: //groupが2であれば「コンビニの人」なので、以下のバリデーションを実行
-			    return User::create([
-				    'group'         => $data['group'],
-				    'name'          => $data['name'],
-				    'branch'        => $data['branch'],
-				    'prefecture_id' => $data['prefecture_id'],
-				    'address'       => $data['address'],
-				    'email'         => $data['email'],
-				    'password'      => Hash::make($data['password']),
-				    'introduce'     => null, // 自己紹介文をnullで登録
-			    ]);
+    	try {
+		    switch ($data['group']) {
+			    case 1: //groupが1であれば「利用者」なので、以下のバリデーションを実行
+				    return User::create([
+					    'group'     => $data['group'],
+					    'name'      => $data['name'],
+					    'email'     => $data['email'],
+					    'password'  => Hash::make($data['password']),
+					    'introduce' => null, // 自己紹介文をnullで登録
+				    ]);
+			    case 2: //groupが2であれば「コンビニの人」なので、以下のバリデーションを実行
+				    return User::create([
+					    'group'         => $data['group'],
+					    'name'          => $data['name'],
+					    'branch'        => $data['branch'],
+					    'prefecture_id' => $data['prefecture_id'],
+					    'address'       => $data['address'],
+					    'email'         => $data['email'],
+					    'password'      => Hash::make($data['password']),
+					    'introduce'     => null, // 自己紹介文をnullで登録
+				    ]);
+		    }
+	    }catch (\Exception $e) {
+    		Log::error('ユーザー登録に失敗しました: '. $e->getMessage());
+    		abort(500, 'ユーザー登録処理に失敗しました。');
 	    }
     }
 
