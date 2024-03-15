@@ -133,7 +133,7 @@ export default {
 				this.$store.commit('message/setContent', { //メッセージ登録
 					content: 'ログインしました！',
 				})
-				this.$router.push(this.$router.go(-1)); //元々アクセスしたかったページにリダイレクトする
+				this.$router.go(-1); //元々アクセスしたかったページにリダイレクトする
 			}
 		},
 		clearError() { //エラーメッセージをクリアするメソッド(これがないと別のページに行って戻ってくると以前のエラーが表示されたままになる)

@@ -10,17 +10,15 @@ use App\Mail\CanceledBuyerNotification;
 use App\Mail\CanceledSellerNotification;
 use App\Mail\PurchasedBuyerNotification;
 use App\Mail\PurchasedSellerNotification;
-use App\Prefecture;
 use App\Product;
 use App\User;
 use Carbon\Carbon;
-use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use function foo\func;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -30,6 +28,16 @@ class ProductController extends Controller
 			 ->except([
 			 	'index', 'show', 'ranking', 'prefecture', 'otherProducts', 'similarProducts'
 			 ]);
+	}
+
+	private function saveImage($image) //画像処理専用メソッド
+	{
+		if($image) {
+			$file_name  = date('Ymd_His') . '_' . $image->getClientOriginalName(); //保存する画像名を作成
+			$image_path = $image->storeAs('public/images', $file_name);                   //名前を変更して保存。保存先のパスを返す
+			return Storage::url($image_path);
+		}
+		return null; //画像がない場合はnullを返す
 	}
 
 	public function index() //商品一覧取得
@@ -111,31 +119,26 @@ class ProductController extends Controller
 		try {
 			$product = new Product; //インスタンス生成
 
-			if($request->file('image')) {
-				$original_name = $request->file('image')->getClientOriginalName();                        //requestから画像名を取得する
-				$file_name     = date('Ymd_His') . '_' . $original_name;                                //保存する画像名を作成
-				$image_path    = $request->file('image')->storeAs('public/images', $file_name);      //名前を変更して保存。保存先のパスを返す
-				$image_path    = str_replace('public/images/', '/storage/images/', $image_path); //HTML出力用の整形とパスの修正
-			}else {
-				$image_path = '';
+			if($request->hasFile('image')) {
+				$image_path = $this->saveImage($request->file('image'));
+				$product->image = $image_path; //DBに保存
 			}
 
 			//============================================
-			//DBに保存する
-			$product->user_id      = Auth::id();
-			$product->category_id  = $request->category_id;
-			$product->image        = $image_path;
-			$product->name         = $request->name;
-			$product->detail       = $request->detail;
-			$product->price        = $request->price;
-			$product->expire       = $request->expire;
+			//その他のカラムデータをDBに保存する
+			$product->user_id     = Auth::id();
+			$product->category_id = $request->category_id;
+			$product->name        = $request->name;
+			$product->detail      = $request->detail;
+			$product->price       = $request->price;
+			$product->expire      = $request->expire;
 			$product->save();
 			//============================================
 
 			return response($product, 201); //新規作成なので、responseは201(CREATED)を返す
 		}catch (\Exception $e) {
 			Log::error('商品の登録に失敗しました: '. $e->getMessage());
-			return response()->json(['error' => '商品の登録に失敗しました'], 500);
+			return response()->json(['error' => '商品の登録に失敗しました。入力データを確認してください。例: 商品名が長すぎる、必須フィールドが欠けている、など。'], 500);
 		}
 	}
 
@@ -144,26 +147,17 @@ class ProductController extends Controller
 		try {
 			$product = Product::find($request->id); //商品情報取得
 
-			if($request->file('image')) { //画像が送信されたらバリデーションを行う
-				$request->validate([           //画像のバリデーション
-					'image' => 'required|file|mimes:jpg,jpeg,png'
-				]);
-
-				$original_name = $request->file('image')->getClientOriginalName();                        //requestから画像名を取得する
-				$file_name     = date('Ymd_His') . '_' . $original_name;                                //保存する画像名を作成
-				$image_path    = $request->file('image')->storeAs('public/images', $file_name);      //名前を変更して保存。保存先のパスを返す
-				$image_path    = str_replace('public/images/', '/storage/images/', $image_path); //HTML出力用の整形とパスの修正
-
-			}else { //画像が送信されなかったらDBの画像をパスに入れる
-				$image_path = $product->image;
+			if($request->hasFile('image')) {
+				$image_path = $this->saveImage($request->file('image'));
+				$product->image = $image_path;
 			}
 
-			$product->user_id      = $request->user_id;
-			$product->category_id  = $request->category_id;
-			$product->image        = $image_path;
-			$product->name         = $request->name;
-			$product->detail       = $request->detail;
-			$product->price        = $request->price;
+			//DBに保存
+			$product->user_id     = $request->user_id;
+			$product->category_id = $request->category_id;
+			$product->name        = $request->name;
+			$product->detail      = $request->detail;
+			$product->price       = $request->price;
 			$product->save();
 
 			return response($product, 200); //商品情報とstatusを返す
@@ -182,7 +176,7 @@ class ProductController extends Controller
 				return response()->json(['error' => '商品が見つかりませんでした。'], 404);
 			}
 			$product->delete();
-			return response()->json(['message' => '商品を削除しました。'],500);
+			return response()->json(['message' => '商品を削除しました。'],200);
 		}catch(\Exception $e) {
 			Log::error('商品の削除に失敗しました: ' . $e->getMessage());
 			return response()->json(['error' => '商品の削除に失敗しました。'], 500);
