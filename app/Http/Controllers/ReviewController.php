@@ -11,8 +11,10 @@ use App\Recommendation;
 use App\Review;
 use App\User;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class ReviewController extends Controller
@@ -26,87 +28,140 @@ class ReviewController extends Controller
 	public function show(string $s_id, string $r_id) //レビュー取得
 	{
 		$review = Review::with(['sender', 'receiver', 'recommendation'])
-						->where('sender_id', $s_id)
-						->where('receiver_id', $r_id)
-						->get();
-		return $review ?? abort(404); //レビューが見つからなかったら404を返す
+			->where('sender_id', $s_id)
+			->where('receiver_id', $r_id)
+			->first();
+
+		if(!$review) { //レビューがなければ
+			return response()->json(['message' => 'レビューが見つかりませんでした'], 404);
+		}
+		return $review;
 	}
 
 	public function store(StoreReview $request) //レビュー投稿
 	{
-		$recommendation = Recommendation::find($request->recommendation_id); //ユーザー評価(name)を取得
+		$recommendation = Recommendation::findOrFail($request->recommendation_id); //ユーザー評価を取得（なければ404を返す）
 
-		$review         = new Review;                  //インスタンス生成
-		$sender_email   = Auth::user()->email;         //送信者のEmail
-		$receiver_email = $request->shopUser['email']; //受信者のEmail
+		try { //例外処理
+			//=========================================================================
+			//DB登録
+			$review = new Review; //インスタンス生成
+			$review->sender_id         = $request->sender_id;         //送信者のID
+			$review->receiver_id       = $request->receiver_id;       //受信者のID
+			$review->recommendation_id = $request->recommendation_id; //ユーザー評価のID
+			$review->title             = $request->title;             //レビュータイトル
+			$review->detail            = $request->detail;            //レビューの内容
+			$review->save();
+			//=========================================================================
 
-		$review->sender_id         = $request->sender_id;         //送信者のID
-		$review->receiver_id       = $request->receiver_id;       //受信者のID
-		$review->recommendation_id = $request->recommendation_id; //ユーザー評価のID
-		$review->title             = $request->title;             //レビュータイトル
-		$review->detail            = $request->detail;            //レビューの内容
-		$review->save();
+			$sender_email   = Auth::user()->email; //送信者のEmail
+			$receiver_email = User::findOrFail($request->receiver_id)->email; //送信者のEmail。存在しない場合は404エラー
 
-		$params = [ //メール送信に必要な情報を用意
-			'sender_id'      => $request->sender_id,         //送信者のID
-			'sender_name'    => Auth::user()->name,          //送信者の名前
-			'sender_image'   => Auth::user()->image,         //送信者の画像
-			'receiver_id'    => $request->receiver_id,       //受信者のID
-			'receiver_name'  => $request->shopUser['name'],  //受信者の名前
-			'receiver_image' => $request->shopUser['image'], //受信者の画像
-			'recommendation' => $recommendation['name'],     //ユーザー評価
-			'title'          => $request->title,             //レビューのタイトル
-			'detail'         => $request->detail,            //レビューの内容
-			'reviewed_at'    => Carbon::now()                //レビューした日時
-		];
+			$params = [ //メール送信に必要な情報を用意
+				'sender_id'      => $request->sender_id,         //送信者のID
+				'sender_name'    => Auth::user()->name,          //送信者の名前
+				'sender_image'   => Auth::user()->image,         //送信者の画像
+				'receiver_id'    => $request->receiver_id,       //受信者のID
+				'receiver_name'  => $request->shopUser['name'],  //受信者の名前
+				'receiver_image' => $request->shopUser['image'], //受信者の画像
+				'recommendation' => $recommendation['name'],     //ユーザー評価
+				'title'          => $request->title,             //レビューのタイトル
+				'detail'         => $request->detail,            //レビューの内容
+				'reviewed_at'    => Carbon::now()                //レビューした日時
+			];
+			Mail::to($sender_email)->send(new ReviewedSenderNotification($params));     //送信者にメールを送信
+			Mail::to($receiver_email)->send(new ReviewedReceiverNotification($params)); //受信者にメールを送信
 
-		Mail::to($sender_email)->send(new ReviewedSenderNotification($params));     //送信者にメールを送信
-		Mail::to($receiver_email)->send(new ReviewedReceiverNotification($params)); //受信者にメールを送信
-
-		return response($review, 201);
+		}catch(\Exception $e) {
+			Log::error($e->getMessage()); //エラーログを記録
+			return response()->json(['message' => 'レビュー投稿に失敗しました'], 500);
+		}
+		return response($review, 201); //レビューの保存に成功した場合
 	}
 
 	public function update(UpdateReview $request) //レビュー更新
 	{
-		$review = Review::with(['sender', 'receiver', 'recommendation'])
-						->where('sender_id', $request->sender_id)
-						->where('receiver_id', $request->receiver_id)
-						->update([
-							'recommendation_id' => $request->recommendation_id,
-							'title'             => $request->title,
-							'detail'            => $request->detail
-						]);
-		//レビュー更新処理はメールを送らない
+		DB::beginTransaction(); //トランザクション開始
+		try {
+			$review = Review::where('sender_id', $request->sender_id) //対象レビューの検索(なければ404を返す)
+							->where('receiver_id', $request->receiver_id)
+							->firstOrFail();
 
-		return response($review, 200);
+			$review->fill([
+				'recommendation_id' => $request->recommendation_id,
+				'title'             => $request->title,
+				'detail'            => $request->detail
+			])->save();
+
+			DB::commit(); //トランザクション確定
+
+			return response($review, 200); //更新後のレビューをレスポンシブとして返す
+
+		}catch(ModelNotFoundException $e) {
+			DB::rollBack(); //トランザクションをロールバック
+			return response()->json(['message' => 'レビューが見つかりませんでした。'], 404);
+
+		}catch(\Exception $e) {
+			Log::error($e->getMessage());
+			return response()->json(['message' => 'レビューの更新に失敗しました。'], 500);
+		}
 	}
 
 	public function destroy(string $s_id, string $r_id) //レビュー削除
 	{
-		$review = Review::where('sender_id', $s_id)
-						->where('receiver_id', $r_id)
-						->delete();
-		return response($review, 200);
+		try {
+			$review = Review::where(['sender_id', $s_id]) //レビューがあるか確認(なければ404を返す)
+							->where('receiver_id', $r_id)
+							->firstOrFail();
+
+			$review->delete();
+
+			return response($review, 200);
+
+		}catch (ModelNotFoundException $e) {
+			return response()->json(['message' => 'レビューが見つかりませんでした。'], 404);
+
+		}catch (\Exception $e) {
+			Log::error($e->getMessage());
+			return response()->json(['message' => 'レビューの削除に失敗しました'], 500);
+		}
+
 	}
 
 	public function otherProducts(string $r_id) //出品した商品を取得
 	{
-		return Product::where('user_id', $r_id)
-			->orderByDesc('created_at')
-			->get();
+		$products = Product::where('user_id', $r_id)
+						   ->orderByDesc('created_at')
+						   ->get();
+
+		if($products->isEmpty()) {
+			return response()->json(['message' => '出品した商品が見つかりません'], 404);
+		}
+		return $products;
 	}
 
 	public function topPageReview() //topページに表示するレビューをランダムで3件取得
 	{
-		return Review::inRandomOrder()->take(3)->get();
+		$reviews = Review::inRandomOrder()->take(3)->get();
+
+		if($reviews->isEmpty()) {
+			return response()->json(['message' => 'レビューが見つかりませんでした'], 404);
+		}
+		return $reviews;
 	}
 
 	public function reviewedByUser(string $r_id) //ログインユーザーがレビューしたかどうか
 	{
-		$isReviewed = Review::where('receiver_id', $r_id)
-							->where('sender_id', Auth::id())
-							->get();
-		return $isReviewed;
+		try {
+			$isReviewed = Review::where('receiver_id', $r_id)
+								->where('sender_id', Auth::id())
+								->exists();
+			return response()->json(['isReviewed' => $isReviewed], 200);
+
+		}catch(\Exception $e) {
+			Log::error('ユーザーのレビュー確認時にエラーが発生しました'. $e->getMessage());
+			return response()->json(['message' => 'レビュー状況の確認中にエラーが発生しました'], 500);
+		}
 	}
 }
 

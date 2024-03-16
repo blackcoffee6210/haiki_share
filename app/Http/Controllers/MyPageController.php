@@ -5,10 +5,8 @@ namespace App\Http\Controllers;
 use App\History;
 use App\Product;
 use App\User;
-use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class MyPageController extends Controller
