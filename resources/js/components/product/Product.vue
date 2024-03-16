@@ -90,9 +90,7 @@ export default {
 	computed: {
 		expireDate() { //商品の賞味期限が過ぎているかどうかを返す
 			let dt = moment().format('YYYY-MM-DD');
-			if(this.product.expire <= dt) {
-				return true;
-			}
+			return this.product.expire <= dt;
 		}
 	}
 }

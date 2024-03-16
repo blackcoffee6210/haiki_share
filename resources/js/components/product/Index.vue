@@ -466,53 +466,81 @@ export default {
 			}
 		},
 		async getRecommend() { //おすすめの商品を5件取得
-			const response = await axios.get('/api/products/ranking');
-			
-			if(response.status !== OK) {
-				this.$store.commit('error/setCode', response.status);
-				return false;
+			try {
+				const response = await axios.get('/api/products/ranking');
+				
+				if(response.status === OK) { //成功なら
+					this.recommendProducts = response.data;
+					
+				}else { //失敗なら
+					this.$store.commit('error/setCode', response.status);
+					return false;
+				}
+				
+			}catch (error) {
+				console.error('おすすめの商品取得に失敗しました: ', error);
 			}
-			this.recommendProducts = response.data;
 		},
 		async getCategories() { //カテゴリー取得メソッド
-			const response = await axios.get('/api/categories'); //API接続
-			
-			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
-				this.$store.commit('error/setCode', response.status);
-				return false;
+			try {
+				const response = await axios.get('/api/categories'); //API接続
+				
+				if(response.status === OK) {
+					this.categories = response.data; //プロパティにresponseデータを代入
+					
+				}else {
+					this.$store.commit('error/setCode', response.status);
+					return false;
+				}
+				
+			}catch (error) {
+				console.error('カテゴリーの取得に失敗しました: ', error);
 			}
-			this.categories = response.data; //プロパティにresponseデータを代入
 		},
 		async getPrefectures() { //出品したコンビニのある都道府県を取得
-			const response = await axios.get('/api/products/prefecture'); //API接続
-			
-			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
-				this.$store.commit('error/setCode', response.status);
-				return false;
+			try {
+				const response = await axios.get('/api/products/prefecture'); //API接続
+				
+				if(response.status === OK) {
+					this.prefectures = response.data;
+					this.prefectures = this.prefectures.filter((v1, i1, a1) => { //取得した都道府県を照準に並び替える
+						return a1.findIndex(v => v1.prefecture_id === v.prefecture_id) === i1
+					});
+				}else {
+					this.$store.commit('error/setCode', response.status);
+					return false;
+				}
+				
+			}catch (error) {
+				console.error('都道府県データの取得に失敗しました: ', error);
 			}
-			this.prefectures = response.data;
-			
-			this.prefectures = this.prefectures.filter((v1, i1, a1) => { //取得した都道府県を照準に並び替える
-				return a1.findIndex(v => v1.prefecture_id === v.prefecture_id) === i1
-			});
 		},
 		async getProducts() { //商品取得メソッド
-			this.loading   = true; //ローディングを表示する
-			const response = await axios.get(`/api/products?page=${this.currentPage}`); //API接続
-			this.loading   = false; //API通信が終わったらローディングを非表示にする
-			
-			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
-				this.$store.commit('error/setCode', response.status);
-				return false;
+			this.loading = true; //ローディングを表示する
+			try {
+				const response = await axios.get(`/api/products?page=${ this.currentPage }`); //API接続
+				
+				if(response.status === OK) { //成功なら
+					//response.dataだとレスポンスのJSONの取得になる
+					//productはresponse.data.dataの中になるので、下記のような書き方になる
+					this.products    = response.data.data;         //商品情報
+					this.currentPage = response.data.current_page; //現在のページ
+					this.lastPage    = response.data.last_page;    //最後のページ
+					this.total       = response.data.total;        //商品の数
+					this.from        = response.data.from;
+					this.to          = response.data.to;
+					
+				}else { //失敗なら
+					this.$store.commit('error/setCode', response.status);
+					return false;
+				}
+				
+			}catch (error) {
+				console.error('商品の取得に失敗しました: ', error);
+				
+			}finally {
+				this.loading = false; //ローディングを非表示にする
 			}
-			//response.dataだとレスポンスのJSONの取得になる
-			//productはresponse.data.dataの中になるので、下記のような書き方になる
-			this.products    = response.data.data;         //商品情報
-			this.currentPage = response.data.current_page; //現在のページ
-			this.lastPage    = response.data.last_page;    //最後のページ
-			this.total       = response.data.total;        //商品の数
-			this.from        = response.data.from;
-			this.to          = response.data.to;
 		},
 		calRange(start, end) {
 			const range = [];
