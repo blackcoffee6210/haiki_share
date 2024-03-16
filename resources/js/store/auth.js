@@ -43,21 +43,29 @@ const mutations = {      //mutationsはstateを更新するためのメソッド
 const actions = {                         //actionsはAPI通信などの非同期処理を行ったあとに、mutationsを呼び出してstateを更新する
   async register(context, data) {         //会員登録APIを呼び出すアクション
     context.commit('setApiStatus', null); //apiStatusステートに最初はnullをセットする
+    try { //例外処理
+      const response = await axios.post('/api/register', data); //会員登録APIを呼び出し、返却データを定数responseに渡す
 
-    const response = await axios.post('/api/register', data); //会員登録APIを呼び出し、返却データを定数responseに渡す
+      if(response.status === CREATED) {           //responseステータスがCREATED(201)なら後続の処理を行う
+        context.commit('setApiStatus', true);     //通信成功なので、apiStatusにtrueをセットする
+        context.commit('setUser', response.data); //setUserミューテーションを実行してuserステートにデータをセット
+        return true;                             //下に書いた処理をfalseを使って抜ける(成功なので)
+      }
+    }catch (error) {
+      context.commit('setApiStatus', false); //通信失敗なら、apiStatusにfalseをセット
 
-    if(response.status === CREATED) {           //responseステータスがCREATED(201)なら後続の処理を行う
-      context.commit('setApiStatus', true);     //通信成功なので、apiStatusにtrueをセットする
-      context.commit('setUser', response.data); //setUserミューテーションを実行してuserステートにデータをセット
-      return false;                             //下に書いた処理をfalseを使って抜ける(成功なので)
-    }
-    context.commit('setApiStatus', false); //通信失敗なら、apiStatusにfalseをセット
+      if(error.response) {
+        if(error.response.status === UNPROCESSABLE_ENTITY) {                //responseステータスがバリデーションエラーなら後続の処理を行う
+          context.commit('setRegisterErrorMessages', response.data.errors); //registerErrorMessagesにデータをセットする
 
-    if(response.status === UNPROCESSABLE_ENTITY) {                      //responseステータスがバリデーションエラーなら後続の処理を行う
-      context.commit('setRegisterErrorMessages', response.data.errors); //registerErrorMessagesにデータをセットする
+        }else {
+          context.commit('error/setCode', response.status, { root: true }); //あるストアモジュールから別モジュールのミューテーションをcommitする場合は第三引数に { root: true } を追加する
+        }
 
-    }else { //あるストアモジュールから別モジュールのミューテーションをcommitする場合は第三引数に { root: true } を追加する
-      context.commit('error/setCode', response.status, { root: true });
+      }else {
+        console.error('ネットワークまたはレスポンスなしのエラー', error);
+      }
+      return false; //falseを返すことで、呼びだdし元にエラーが発生したことを知らせる
     }
   },
   async login(context, data) { //ログインアクション

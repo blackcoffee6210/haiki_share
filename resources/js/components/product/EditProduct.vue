@@ -231,13 +231,14 @@ export default {
 			this.isEnter = false;
 			
 			if (event.dataTransfer.files.length !== 1) { // ドロップされたファイルがない、または複数ファイルがドロップされた場合は処理しない
+				alert('一度にドロップできるファイルは1つだけです。');
 				return;
 			}
 			
 			const file = event.dataTransfer.files[0];
 			
 			if (!file.type.match('image.*')) { // ドロップされたファイルが画像であるかを確認
-				this.reset(); // ファイルが画像でなければリセット
+				alert('ドロップされたファイルは画像ではありません。');
 				return;
 			}
 			
@@ -253,14 +254,12 @@ export default {
 			return content.length > maxValue;
 		},
 		async getCategories() { //カテゴリー取得
-			const response = await axios.get('/api/categories');
-			
-			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
-				this.$store.commit('error/setCode', response.status);
-				return false;
+			try {
+				const response = await axios.get('/api/categories'); //API通信
+				this.categories = response.data; //プロパティに値をセットする
+			}catch(error) {
+				console.error('カテゴリーの取得に失敗しました', error);
 			}
-			
-			this.categories = response.data; //プロパティに値をセットする
 		},
 		validatePrice() {
 			const value = Number(this.product.price);
@@ -273,30 +272,24 @@ export default {
 		async getProduct() { //商品情報取得
 			this.loading = true; //ローティングを表示する
 			
-			const response = await axios.get(`/api/products/${this.id}`); //API通信
-			
-			this.loading = false; //API通信が終わったらローディングを非表示にする
-			
-			if(response.status !== OK) { //responseステータスがOKじゃなかったら後続の処理を行う
-				this.$store.commit('error/setCode', response.status);
-				return false;
-			}
-			
-			this.product = response.data; //プロパティに値をセットする
-			
-			if(this.product.is_purchased || this.product.user_id != this.userId) { //購入された流商品、かつ自分の商品じゃなければ商品一覧画面に遷移する
-				this.$router.push({ name: 'index'});
+			try {
+				const response = await axios.get(`/api/products/${this.id}`); //API通信
+				
+				if(response.status === OK) { //成功なら
+					this.product = response.data; //プロパティに値をセットする
+				}else {
+					this.handleError({ response }, '商品情報取得時にエラーが発生しました');
+				}
+			}catch (error) {
+				this.handleError(error, '商品情報取得時にエラーが発生しました');
+			}finally {
+				this.loading = false; //ローディングを非表示
 			}
 		},
 		onFileChange(event) { //フォームでファイルが選択されたら実行されるメソッド
-			if (event.target.files.length === 0) { //何も選択されていなかったら処理中断
-				this.reset(); // 選択されたファイルがなければリセット
-				return;
-			}
-
 			const file = event.target.files[0];
-
-			if (!file.type.match('image.*')) { //ファイルが画像ではなかったら処理中断
+			
+			if (!file || !file.type.match('image.*')) { //ファイルがない、または画像ではなかったら処理中断
 				this.reset(); // ファイルが画像でなければリセット
 				return;
 			}
@@ -304,73 +297,75 @@ export default {
 			const reader = new FileReader();
 			reader.onload = e => {
 				this.preview = e.target.result; // プレビュー用のデータURLをセット
-				this.product.image = file; // 実際に送信するファイルをセット
+				this.product.image = file;      // 実際に送信するファイルをセット
 			};
 			reader.readAsDataURL(file); // ファイルをデータURLとして読み込む
 		},
 		reset() { //入力欄の値とプレビュー表示をクリアするメソッド
-			this.preview = '';
+			this.preview = null;
 			this.product.image = null;
 			this.$el.querySelector('input[type="file"]').value = null;
 		},
 		async update() { //画像更新処理
 			if(this.product.is_purchased) { //この商品が購入されていたらボタンを押せなくする
 				alert('ユーザーに購入された商品は編集できません');
-				return false;
+				return;
 			}
 			this.loading = true; //ローティングを表示する
 			
-			const formData = new FormData;
-			formData.append('user_id',     this.userId);
-			formData.append('image',       this.product.image);
-			formData.append('category_id', this.product.category_id);
-			formData.append('name',        this.product.name);
-			formData.append('detail',      this.product.detail);
-			formData.append('price',       this.product.price);
-			
-			const response = await axios.post(`/api/products/${this.product.id}`, formData); //API通信
-			
-			this.loading = false; //API通信が終わったらローディングを非表示にする
-			
-			if(response.status === UNPROCESSABLE_ENTITY) { //responseステータスがバリデーションエラーなら後続の処理を行う
-				this.errors = response.data.errors;          //レスポンスのエラーメッセージを格納する
-				return false;
+			try { //例外処理
+				const formData = new FormData;
+				formData.append('user_id',     this.userId);
+				formData.append('image',       this.product.image);
+				formData.append('category_id', this.product.category_id);
+				formData.append('name',        this.product.name);
+				formData.append('detail',      this.product.detail);
+				formData.append('price',       this.product.price);
+				
+				const response = await axios.post(`/api/products/${this.product.id}`, formData); //API通信
+				
+				if(response.status === OK) { //成功なら
+					this.$store.commit('message/setContent', { content: '商品が更新されました！'});
+					this.$router.push({ name: 'product.detail',	params: { id: this.id.toString() }}); //商品詳細ページへ移動する
+					
+				}else if(response.status === UNPROCESSABLE_ENTITY) { //バリデーションエラーなら後続の処理を行う
+					this.errors = response.data.errors;
+					
+				}else {
+					this.$store.commit('error/setCode', response.status); //エラーコードをセット
+				}
+				
+			}catch(error) {
+				console.error('更新に失敗しました。', error);
+				
+			}finally {
+				this.loading = false; //ローディングを非表示にする
 			}
-			this.reset(); //送信が完了したら入力値をクリアする
-			
-			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
-				this.$store.commit('error/setCode', response.status);
-				return false;
-			}
-			
-			this.$store.commit('message/setContent', { //メッセージ登録
-				content: '商品が更新されました！'
-			})
-			
-			this.$router.push({ name: 'product.detail',
-													params: { id: this.id.toString() }}); //商品詳細ページへ移動する
 		},
 		async deleteProduct() { //商品の削除
-			if(confirm('商品を削除しますか?')) {
-				this.loading = true; //ローティングを表示する
-				
+			if(!confirm('商品を削除しますか?')) return;
+			
+			this.loading = true; //ローティングを表示する
+			
+			try { //例外処理
 				const response = await axios.delete(`/api/products/${this.id}`); //API通信
 				
-				this.loading = false; //API通信が終わったらローディングを非表示にする
-				
-				if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
+				if(response.status === OK) { //成功なら
+					this.$store.commit('message/setContent', { content: '商品を削除しました' }); //メッセージ登録
+					this.$router.push({ name: 'user.mypage', params: { id: this.userId.toString() }}); //マイページに移動する
+					
+				}else { //失敗なら
 					this.$store.commit('error/setCode', response.status);
 					return false;
 				}
 				
-				this.$store.commit('message/setContent', { //メッセージ登録
-					content: '商品を削除しました'
-				});
+			}catch (error) {
+				console.error('削除処理に失敗しました', error);
 				
-				this.$router.push({ name: 'user.mypage',
-														params: { id: this.userId.toString() }}); //マイページに移動する
+			}finally {
+				this.loading = false; //ローディングを非表示にする
 			}
-		}
+		},
 	},
 	watch: {
 		$route: {

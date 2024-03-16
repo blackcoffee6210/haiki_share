@@ -319,13 +319,19 @@ export default {
 			this.prefectures = response.data; //プロパティに値をセットする
 		},
 		async register() { //ユーザー登録
-			await this.$store.dispatch('auth/register', this.registerForm); //dispatchメソッドでauthストアのregisterアクションを呼び出す
-			
-			if(this.apiStatus) { //apiStatusがtrue(通信成功)なら後続の処理を行う
-				this.$store.commit('message/setContent', { //メッセージを登録
-					content: 'ユーザー登録しました！',
-				});
-				this.$router.push({ name: 'index' }); //トップページ(index画面)に移動する
+			this.clearError(); //エラー状態を初期化
+			try {
+				const response = await this.$store.dispatch('auth/register', this.registerForm); //dispatchメソッドでauthストアのregisterアクションを呼び出す
+				if(response) {
+					if(this.apiStatus) { //apiStatusがtrue(通信成功)なら後続の処理を行う
+						this.$store.commit('message/setContent', { //メッセージを登録
+							content: 'ユーザー登録しました！',
+						});
+						this.$router.push({ name: 'index' }); //トップページ(index画面)に移動する
+					}
+				}
+			}catch(error) {
+				console.error('ユーザー登録処理でエラーが発生しました: ', error);
 			}
 		},
 		clearError() { //エラーメッセージをクリアするメソッド
