@@ -211,7 +211,7 @@ export default {
 			},
 			isEnter: false, //画像のクラスバインドを行う
 			files: [],
-			errorMessage: ''
+			errorMessage: '',
 		}
 	},
 	computed: {
@@ -281,7 +281,7 @@ export default {
 					this.handleError({ response }, '商品情報取得時にエラーが発生しました');
 				}
 			}catch (error) {
-				this.handleError(error, '商品情報取得時にエラーが発生しました');
+				console.error('商品情報取得時にエラーが発生しました', error);
 			}finally {
 				this.loading = false; //ローディングを非表示
 			}
