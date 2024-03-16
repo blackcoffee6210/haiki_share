@@ -207,74 +207,89 @@ export default {
 			return content.length > maxValue;
 		},
 		async getPurchasedByUser() { //購入したユーザーを取得
-			const response = await axios.get(`/api/products/${this.p_id}/purchasedByUser`);
-			
-			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
-				this.$store.commit('error/setCode', response.status);
-				return false;
-			}
-			response.data[0] ? this.purchasedByUser = true : this.purchasedByUser = false; //データがあればtrue、なければfalseをプロパティにセット
-			
-			if(!this.purchasedByUser) { //purchasedByUserがfalse(他人の購入した商品)だったら商品一覧画面に遷移する
-				this.$router.push({name: 'index'});
+			this.loading = true;
+			try {
+				const response = await axios.get(`/api/products/${this.p_id}/purchasedByUser`); //API接続
+				this.purchasedByUser = response.data.purchased;
+				
+				if(!this.purchasedByUser) { //purchasedByUserがfalse(他人の購入した商品)だったら商品一覧画面に遷移する
+					this.$router.push({name: 'index'});
+				}
+				
+			}catch (error) {
+				console.error('購入ユーザー状態取得中にエラーが発生しました: ', error);
+				
+			}finally {
+				this.loading = false;
 			}
 		},
 		async getShopUser() { //商品idを元に出品ユーザーを取得
-			const response = await axios.get(`/api/users/${this.p_id}/shopUser`); //API通信
-
-			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
-				this.$store.commit('error/setCode', response.status);
-				return false;
+			try {
+				const response = await axios.get(`/api/users/${this.p_id}/shopUser`); //API通信
+				
+				if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
+					this.$store.commit('error/setCode', response.status);
+					return false;
+				}
+				this.reviewForm.shopUser    = response.data[0];                 //出品者の情報
+				this.reviewForm.sender_id   = this.userId;                      //送信者（レビュー投稿者）のユーザーid
+				this.reviewForm.receiver_id = this.reviewForm.shopUser.user_id; //受信者（出品者）のユーザーid
+				
+			}catch(error) {
+				console.error('出品ユーザー取得処理中にエラーが発生しました');
 			}
-
-			this.reviewForm.shopUser    = response.data[0];                 //出品者の情報
-			this.reviewForm.sender_id   = this.userId;                      //送信者（レビュー投稿者）のユーザーid
-			this.reviewForm.receiver_id = this.reviewForm.shopUser.user_id; //受信者（出品者）のユーザーid
 		},
 		async getReviewedByUser() { //ログインユーザーが既にレビューを投稿済みかどうか取得する
-			const response = await axios.get(`/api/reviews/${this.reviewForm.receiver_id}/reviewedByUser`);
-			
-			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
-				this.$store.commit('error/setCode', response.status);
-				return false;
-			}
-			response.data[0] ? this.reviewedByUser = true : this.reviewedByUser = false; //ユーザーがレビューを投稿していたらtrue、そうじゃなければfalse
-			
-			if(this.reviewedByUser) { //既にレビューしていたら商品一覧画面に遷移する
-				this.$router.push({name: 'index'});
+			try {
+				const response = await axios.get(`/api/reviews/${this.reviewForm.receiver_id}/reviewedByUser`);
+				this.reviewedByUser = response.data[0] ? true : false;
+				
+				if(this.reviewedByUser) { //既にレビューしていたら商品一覧画面に遷移する
+					this.$router.push({name: 'index'});
+				}
+				
+			}catch (error) {
+				console.error('レビュー状態取得中にエラーが発生しました', error);
 			}
 		},
 		async getRecommendation() { //ユーザー評価取得
-			const response = await axios.get('/api/recommendations') //API接続
-			
-			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
-				this.$store.commit('error/setCode', response.status);
-				return false;
+			try {
+				const response = await axios.get('/api/recommendations') //API接続
+				this.recommendations = response.data;
+				
+				if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
+					this.$store.commit('error/setCode', response.status);
+					return false;
+				}
+				
+			}catch (error) {
+				console.error('ユーザー評価取得中にエラーが発生しました', error);
 			}
-			this.recommendations = response.data;
 		},
-		async submit() {       //レビュー投稿
+		async submit() { //レビュー投稿
 			this.loading = true; //ローディングを表示する
 			
-			const response = await axios.post('/api/reviews', this.reviewForm); //API接続
+			try {
+				const response = await axios.post('/api/reviews', this.reviewForm); //API接続
+				
+				if(response.status === CREATED) {
+					this.$store.commit('message/setContent', { content: 'レビューを投稿しました！', }); //メッセージ登録
+					this.$router.push({ name: 'user.mypage', params: { id: this.userId.toString() } }); //マイページに遷移
+					
+				}else if(response.status === UNPROCESSABLE_ENTITY) { //responseステータスがバリデーションエラーなら後続の処理を行う
+					this.errors = response.data.errors;
+					return false;
+				}else {
+					this.$store.commit('error/setCode', response.status);
+					return false;
+				}
 			
-			this.loading = false; //API通信が終わったらローディングを非表示にする
-			
-			if(response.status === UNPROCESSABLE_ENTITY) { //responseステータスがバリデーションエラーなら後続の処理を行う
-				this.errors = response.data.errors;
-				return false;
+			}catch (error) {
+				console.error('レビュー投稿処理中にエラーが発生しました: ', error);
+				
+			}finally {
+				this.loading = false; //ローディング非表示
 			}
-			
-			if(response.status !== CREATED) { //responseステータスがCREATEDじゃなかったら後続の処理を行う
-				this.$store.commit('error/setCode', response.status);
-				return false;
-			}
-			
-			this.$store.commit('message/setContent', { //メッセージ登録
-				content: 'レビューを投稿しました！',
-			});
-			
-			this.$router.push({ name: 'user.mypage', params: { id: this.userId.toString() } }); //マイページに遷移
 		}
 	},
 	watch: {
