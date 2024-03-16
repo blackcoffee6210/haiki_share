@@ -113,7 +113,8 @@ export default {
 				email: '',
 				password: '',
 				remember: false
-			}
+			},
+			localApiStatus: null, // ローカルでAPIステータスを追跡
 		}
 	},
 	computed: {
@@ -127,13 +128,15 @@ export default {
 			return content.length > maxValue;
 		},
 		async login() { //ログイン
-			await this.$store.dispatch('auth/login', this.loginForm); //authストアのloginアクションを呼び出す
-			
-			if(this.apiStatus) { //apiStatusが成功(true)だった場合のみindexへ移動する
-				this.$store.commit('message/setContent', { //メッセージ登録
-					content: 'ログインしました！',
-				})
-				this.$router.go(-1); //元々アクセスしたかったページにリダイレクトする
+			try {
+				const result = await this.$store.dispatch('auth/login', this.loginForm); //authストアのloginアクションを呼び出す
+				if(result) {
+					this.$store.commit('message/setContent',{ content: 'ログインしました！'}); //メッセージ登録
+					this.$router.go(-1); //元々アクセスしたかったページにリダイレクトする
+				}
+			}catch(error) {
+				console.error('ログイン処理でエラーが発生しました: ', error);
+				this.localApiStatus = false; //ローカルステータスを更新してエラーを反映
 			}
 		},
 		clearError() { //エラーメッセージをクリアするメソッド(これがないと別のページに行って戻ってくると以前のエラーが表示されたままになる)

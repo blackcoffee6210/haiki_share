@@ -60,26 +60,32 @@ const actions = {                         //actionsはAPI通信などの非同�
       context.commit('error/setCode', response.status, { root: true });
     }
   },
-  async login(context, data) {            //ログインアクション
+  async login(context, data) { //ログインアクション
     context.commit('setApiStatus', null); //apiStatusステートに最初はnullをセットする
 
-    const response = await axios.post('/api/login', data); //ログインAPIを呼び出し、返却データを定数responseに渡す
+    try { //例外処理
+      const response = await axios.post('/api/login', data); //ログインAPIを呼び出し、返却データを定数responseに渡す
+      if(response.status === OK) {                //responseステータスがOK(200)なら後続の処理を行う
+        context.commit('setApiStatus', true);     //通信成功(200 OK)なので、apiStatusステートにtrueをセット
+        context.commit('setUser', response.data); //userステートにresponseデータをセット
+        return true; //成功した場合はtrueを返す
+      }
+    }catch(error) {
+      context.commit('setApiStatus', false); //通信失敗なら、apiStatusにfalseをセット
 
-    if(response.status === OK) {                //responseステータスがOK(200)なら後続の処理を行う
-      context.commit('setApiStatus', true);     //通信成功(200 OK)なので、apiStatusステートにtrueをセット
-      context.commit('setUser', response.data); //userステートにresponseデータをセット
-      return false;
-    }
-    context.commit('setApiStatus', false); //通信失敗なら、apiStatusにfalseをセット
+      if(error.response) {
+        if (error.response.status === UNPROCESSABLE_ENTITY) { //バリデーションエラーなら
+          context.commit('setLoginErrorMessages', error.response.data.errors); //loginErrorMessagesにエラーメッセージをセットする
 
-    if(response.status === UNPROCESSABLE_ENTITY) {                   //responseステータスがバリデーションエラーなら後続の処理を行う
-      context.commit('setLoginErrorMessages', response.data.errors); //loginErrorMessagesにエラーメッセージをセットする
+        } else if (error.response.status === TOO_MANY_REQUEST) { //入力エラーの回数が5回を超えたらエラーメッセージをセット
+          context.commit('setLoginErrorMessages', {general: ['ログイン試行回数が多すぎます。しばらくしてから再試行してください。']});
 
-    }else if(response.status === TOO_MANY_REQUEST) { //入力エラーの回数が5回を超えたらエラーメッセージをセット
-      context.commit('setLoginErrorMessages', response.data.errors);
-
-    }else { //あるストアモジュールから別のモジュールのミューテーションをcommitする場合は第三引数に { root: true }を追加する
-      context.commit('error/setCode', response.status, { root: true });
+        } else { //その他のエラーで、別のモジュールのミューテーションをcommitする場合
+          context.commit('error/setCode', error.response.status, {root: true});
+        }
+      }else {
+        console.error("ネットワークエラーまたはレスポンスなしのエラー", error); // ネットワークエラーなど、レスポンスがないエラーのハンドリング
+      }
     }
   },
   async logout(context) {                 //ログアウト
