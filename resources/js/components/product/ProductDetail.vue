@@ -28,7 +28,7 @@
 					<!-- 商品名 -->
 					<h2 class="p-product-detail__product-name">{{ product.name }}</h2>
 					<!-- 金額 -->
-					<div class="p-product-detail__price">{{ product.price | numberFormat }}</div>
+					<div class="p-product-detail__price" v-if="product.price">{{ product.price | numberFormat }}</div>
 				</div>
 				
 				<!-- ユーザー情報と賞味期限のコンテナ -->
@@ -154,7 +154,7 @@
 					<social-sharing url="localhost:8000/products/48"
 													v-show="isLogin"
 													:title="product.name"
-													:hashtags="twitterHashTags"
+													:hashtags="twitterHashTags.join(',')"
 													inline-template
 													class="c-btn c-btn--twitter">
 						<network network="twitter">
@@ -162,18 +162,6 @@
 						</network>
 					</social-sharing>
 				</div>
-				<!--<div class="p-product-detail__twitter-container"-->
-				<!--		 v-show="!product.is_my_product">-->
-				<!--	<social-sharing url="https://haiki-share.net/products/48"-->
-				<!--									v-show="isLogin"-->
-				<!--									quote="Haiki Share"-->
-				<!--									hashtags="haiki_share"-->
-				<!--									inline-template class="c-btn c-btn&#45;&#45;twitter">-->
-				<!--		<network network="twitter">-->
-				<!--			<font-awesome-icon :icon="['fab', 'twitter']" /> Twitter-->
-				<!--		</network>-->
-				<!--	</social-sharing>-->
-				<!--</div>-->
 				
 				<!-- 出品者の他の商品-->
 				<div class="c-title p-product-detail__title"
@@ -261,132 +249,195 @@ export default {
 	},
 	methods: {
 		async getPurchasedByUser() { //ログインユーザーが商品を購入したかどうかを返す
-			const response = await axios.get(`/api/products/${this.id}/purchasedByUser`);
-
-			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
-				this.$store.commit('error/setCode', response.status);
-				return false;
-			}
-			response.data[0] ? this.purchasedByUser = true : this.purchasedByUser = false;
-		},
-		async getCanceledByUser() { //ログインユーザーが商品をキャンセルしたかどうかを返す
-			const response = await axios.get(`/api/products/${this.id}/canceledByUser`);
-			
-			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
-				this.$store.commit('error/setCode', response.status);
-				return false;
-			}
-			response.data[0] ? this.canceledByUser = true : this.canceledByUser = false;
-		},
-		async getProduct() { //商品詳細情報取得
-			const response = await axios.get(`/api/products/${this.id}`);
-			
-			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
-				this.$store.commit('error/setCode', response.status);
-				return false;
-			}
-			this.product = response.data; //responseデータをproductプロパティに代入
-			
-			if(this.product.liked_by_user) { //ログインユーザーが既に「いいね」を押していたらtrueをセット
-				this.isLike = true;
-			}
-			
-			this.twitterHashTags.push(  //Twitterのハッシュタグに追加
-					this.product.name,
-					'HaikiShare',
-					'ハイキシェア',
-					'フードシェアリング',
-					'フードロス',
-			);
-		},
-		async getOtherProducts() { //出品者の他の商品（購入されていないもの）を取得
-			const response = await axios.get(`/api/products/${this.product.user_id}/${this.id}/other`); //API接続
-			
-			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
-				this.$store.commit('error/setCode', response.status);
-				return false; //後続の処理を抜ける
-			}
-			this.otherProducts = response.data; //responseデータをプロパティに代入
-		},
-		async getSimilarProducts() { //同じカテゴリーの商品を取得
-			const response = await axios.get(`/api/products/${this.product.category_id}/${this.id}/similar`); //API接続
-			
-			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
-				this.$store.commit('error/setCode', response.status);
-				return false; //後続の処理を抜ける
-			}
-			this.similarProducts = response.data; //responseデータをプロパティに代入
-		},
-		async onLikeClick() { //「お気に入りボタン」を押したときの処理を行うメソッド
-			if(!this.isLogin) { //ログインしていなかったらアレートを出す
-				if(confirm('いいね機能を使うにはログインしてください')) {
-					this.$router.push({name: 'login'}); //ログインページに遷移
+			try {
+				const response = await axios.get(`/api/products/${this.id}/purchasedByUser`);
+				
+				if(response.status === OK) { //成功なら
+					this.purchasedByUser = !!response.data[0];
+					
+				}else { //失敗なら
+					this.$store.commit('error/setCode', response.status);
 					return false;
 				}
-			}
-			if(this.product.liked_by_user) { //すでにいいねを押していたらいいねを外す
-				this.unlike();
-			} else { //いいねしていなかったらいいねをつける
-				this.like();
+				
+			}catch(error) {
+				console.error('購入情報の取得中にエラーが発生しました');
 			}
 		},
-		async like() { //お気に入り登録メソッド
-			const response = await axios.post(`/api/products/${this.id}/like`);
-			
-			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
-				this.$store.commit('error/setCode', response.status);
-				return false; //後続の処理を抜ける
-			}
-			this.product.likes_count += 1; //トータルのいいね数を1増やす
-			this.product.liked_by_user = true; //ログインユーザーが「いいね」をしたのでtrueをセット
-			this.isLike = true;
-		},
-		async unlike() { //お気に入り解除メソッド
-			const response = await axios.delete(`/api/products/${this.id}/unlike`);
-			
-			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
-				this.$store.commit('error/setCode', response.status);
-				return false;
-			}
-			this.product.likes_count -= 1;      //トータルのいいね数を1減らす
-			this.product.liked_by_user = false; //ログインユーザーが「いいね解除」したのでfalseをセット
-			this.isLike = false;
-		},
-		async purchase() { //商品購入処理
-			if(!this.isLogin) { //ユーザーがログインしているかチェック
-				if(confirm('商品を購入するにはログインしてください')) {
-					this.$router.push({name: 'login'}); //ログインページに遷移
+		async getCanceledByUser() { //ログインユーザーが商品をキャンセルしたかどうかを返す
+			try {
+				const response = await axios.get(`/api/products/${this.id}/canceledByUser`);
+				
+				if(response.status === OK) { //成功なら
+					this.canceledByUser = !!response.data[0];
+					
+				}else { //失敗なら
+					this.$store.commit('error/setCode', response.status);
+					return false;
 				}
-				return false;
+				
+			}catch (error) {
+				console.error('キャンセル商品情報取得中にエラーが発生しました', error);
 			}
-			if(this.canceledByUser) { //商品をキャンセルしたユーザーは再度購入できない
-				alert('一度キャンセルした商品は購入できません'); //アラートを表示
-				return false;
+		},
+		async getProduct() { //商品詳細情報取得
+			this.loading = true; //loadingをtrueにする
+			try {
+				const response = await axios.get(`/api/products/${ this.id }`); //API通信
+				
+				if(response.status === OK) { //成功なら
+					this.product = response.data; //responseデータをproductプロパティに代入
+					
+					if(this.product.liked_by_user) { //ログインユーザーが既に「いいね」を押していたらtrueをセット
+						this.isLike = true;
+					}
+					this.twitterHashTags.push(  //Twitterのハッシュタグに追加
+							this.product.name,
+							'HaikiShare',
+							'ハイキシェア',
+							'フードシェアリング',
+							'フードロス',
+					);
+					
+				}else { //失敗なら
+					this.$store.commit('error/setCode', response.status); //エラーコードをセット
+					return false;
+				}
+				
+			}catch (error) {
+				console.error('商品詳細情報取得に失敗しました', error);
+				
+			}finally {
+				this.loading = false; //loadingをfalseにする
 			}
-			if(confirm('購入しますか？')) { //アレートで「購入しますか?」と表示し、「はい」を押すと以下の処理を実行
-				this.loading   = true; //ローディングを表示する
+		},
+		async getOtherProducts() { //出品者の他の商品（購入されていないもの）を取得
+			try {
+				const response = await axios.get(`/api/products/${this.product.user_id}/${this.id}/other`); //API接続
 				
-				const response = await axios.post(`/api/products/${this.id}/purchase`, this.product); //商品購入APIに接続
-				
-				this.loading   = false; //API通信が終わったらローディングを非表示にする
-				
-				if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
+				if(response.status === OK) {
+					this.otherProducts = response.data; //responseデータをプロパティに代入
+					
+				}else {
 					this.$store.commit('error/setCode', response.status);
 					return false; //後続の処理を抜ける
 				}
 				
-				this.purchasedByUser = true; //ログインユーザーが購入したので、プロパティをtrueにする
+			}catch (error) {
+				console.error('出品者の他の商品取得中にエラーが発生しました', error);
+			}
+		},
+		async getSimilarProducts() { //同じカテゴリーの商品を取得
+			try {
+				const response = await axios.get(`/api/products/${this.product.category_id}/${this.id}/similar`); //API接
 				
-				if(this.product.liked_by_user) { //商品を購入したため、「いいね」をしていたら外す
-					this.unlike();
+				if(response.status === OK) {
+					this.similarProducts = response.data; //responseデータをプロパティに代入
+					
+				}else {
+					this.$store.commit('error/setCode', response.status);
+					return false; //後続の処理を抜ける
 				}
 				
-				this.$store.commit('message/setContent', { //メッセージ登録
-					content: '商品を購入しました！'
-				});
-				
-				this.$router.push({name: 'product.detail', params: {id: this.id}}).catch(() => {} ); //自画面(商品詳細)に遷移する
+			}catch (error) {
+				console.error('同じカテゴリーの商品取得中にエラーが発生しました', error);
 			}
+		},
+		async onLikeClick() { //「お気に入りボタン」を押したときの処理を行うメソッド
+			
+			if(!this.isLogin && confirm('いいね機能を使うにはログインしてください')) {
+				this.$router.push({ name: 'login' }); //ログインしていない場合、ログインページに遷移
+			}
+			
+			try {
+				if(this.product.liked_by_user) {
+					await this.unlike(); //すでにいいねを押していたらいいねを外す
+				}else {
+					this.like(); //いいねしていなかったらいいねをつける
+				}
+			}catch(error) {
+				console.error('お気に入りの切り替えに失敗しました', error);
+			}
+		},
+		async like() { //お気に入り登録メソッド
+			try {
+				const response = await axios.post(`/api/products/${this.id}/like`);
+				
+				if(response.status === OK) {
+					this.product.likes_count += 1; //トータルのいいね数を1増やす
+					this.product.liked_by_user = true; //ログインユーザーが「いいね」をしたのでtrueをセット
+					this.isLike = true;
+					
+				}else {
+					this.$store.commit('error/setCode', response.status);
+					return false;
+				}
+				
+			}catch(error) {
+				console.error('いいねの処理中にエラーが発生しました', error);
+			}
+		},
+		async unlike() { //お気に入り解除メソッド
+			try {
+				const response = await axios.delete(`/api/products/${this.id}/unlike`);
+				
+				if(response.status === OK) {
+					this.product.likes_count -= 1;      //トータルのいいね数を1減らす
+					this.product.liked_by_user = false; //ログインユーザーが「いいね解除」したのでfalseをセット
+					this.isLike = false;
+					
+				}else {
+					this.$store.commit('error/setCode', response.status);
+					return false;
+					
+				}
+				
+			}catch(error) {
+				console.error('いいね解除の処理中にエラーが発生しました', error)
+			}
+		},
+		async purchase() { //商品購入処理
+			if(!this.isLogin) { //ユーザーがログインしているかチェック
+				alert('商品を購入するにはログインしてください。')
+				this.$router.push({name: 'login'}); //ログインページに遷移
+				return;
+			}
+			
+			if(this.canceledByUser) { //商品をキャンセルしたユーザーは再度購入できない
+				alert('一度キャンセルした商品は購入できません'); //アラートを表示
+				return;
+			}
+			if(!confirm('購入しますか？')) return; //アレートで「購入しますか?」と表示し、「はい」を押すと以下の処理を実行
+			this.loading = true; //ローディングを表示する
+			
+			try {
+				const response = await axios.post(`/api/products/${this.id}/purchase`, this.product); //商品購入APIに接続
+				
+				if(response.status === OK) { //成功なら
+					this.processPurchaseSuccess(response.data); //購入成功処理
+					
+				}else { //失敗なら
+					this.$store.commit('error/setCode', response.status);
+					return false;
+				}
+				
+			}catch(error) {
+				console.error('購入処理に失敗しました', error);
+				
+			}finally {
+				this.loading = false; //ローディングを非表示
+			}
+		},
+		processPurchaseSuccess(data) { //購入成功時の処理
+			this.product = { ...this.product, ...data }; //商品データの更新
+			
+			if(this.product.liked_by_user) { //商品を購入したため、「いいね」をしていたら外す
+				this.isLike = false;
+				this.product.likes_count--;
+			}
+			this.purchasedByUser = true; //ログインユーザーが購入したので、プロパティをtrueにする
+			this.$store.commit('message/setContent', { content: '商品を購入しました！' }); //メッセージ登録
+			this.$router.push({name: 'product.detail', params: {id: this.product.id}}).catch(err => {} ); //自画面(商品詳細)に遷移する
 		},
 		async cancel() { //購入キャンセル
 			if(confirm('購入をキャンセルしますか？(キャンセルした商品は再度購入できません)')) {
@@ -410,45 +461,53 @@ export default {
 			}
 		},
 		async restore() { //論理削除した商品を復元する
-			if(confirm('この商品を復元しますか？')) {
+			if(!confirm('この商品を復元しますか？')) return;
+			try {
 				const response = await axios.post(`/api/products/${this.id}/restore`); //API通信
-				if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
+				
+				if (response.status !== OK) { //失敗したら
 					this.$store.commit('error/setCode', response.status);
 					return false;
 				}
 				
-				this.$store.commit('message/setContent', { //メッセージ登録
-					content: '商品を復元しました！'
-				});
+				this.$store.commit('message/setContent', {content: '商品を復元しました！'}); //メッセージ登録
+				this.$router.push({name: 'user.mypage', params: {id: this.product.user_id.toString()}}); //マイページに遷移する
 				
-				this.$router.push({ name: 'user.mypage',
-														params: { id: this.product.user_id.toString() }}); //マイページに遷移する
+			}catch (error) {
+				console.error('復元に失敗しました', error);
 			}
 		},
 		async forceDelete() { //論理削除した商品を完全に削除する
-			if(confirm('この商品を完全に削除しますか？（復元できません）')) {
+			if(!confirm('この商品を完全に削除しますか？（復元できません）')) return;
+			
+			try {
 				const response = await axios.post(`/api/products/${this.id}/forceDelete`); //API通信
+				
 				if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
 					this.$store.commit('error/setCode', response.status);
 					return false;
 				}
 				
-				this.$store.commit('message/setContent', { //メッセージ登録
-					content: '商品を完全に削除しました！'
-				});
+				this.$store.commit('message/setContent', { content: '商品を完全に削除しました！' }); //メッセージ登録
+				this.$router.push({ name: 'user.mypage', params: { id: this.product.user_id.toString() }}); //マイページに遷移する
 				
-				this.$router.push({ name: 'user.mypage',
-					params: { id: this.product.user_id.toString() }}); //マイページに遷移する
+			}catch(error) {
+				console.error('商品の完全削除に失敗しました。', error);
 			}
 		},
 		async getMyReview() { //レビュー投稿済みかどうか
-			const response = await axios.get(`/api/products/${this.product.user_id}/isReviewed`); //API接続
-			
-			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
-				this.$store.commit('error/setCode', response.status);
-				return false;
+			try {
+				const response = await axios.get(`/api/products/${this.product.user_id}/isReviewed`); //API接続
+				
+				if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
+					this.$store.commit('error/setCode', response.status);
+					return false;
+				}
+				this.isReviewed = response.data.isReviewed;
+				
+			}catch(error) {
+				console.error('レビュー状態の取得に失敗しました', error);
 			}
-			response.data[0] ? this.isReviewed = true : this.isReviewed = false; //レビュー投稿済みならtrue、なければfalseをセット
 		},
 		returnTop() { //「TOPにもどる」ボタンを押したときの処理
 			window.scrollTo({
@@ -457,11 +516,7 @@ export default {
 			});
 		},
 		scrollWindow() { //「TOPにもどる」ボタンを表示するメソッド
-			const top = 100; //ボタンを表示させたい位置
-			this.scroll = window.scrollY;
-			
-			(top <= this.scroll) ? this.buttonActive = true //scrollがtop以上になったらボタンを表示する
-													 : this.buttonActive = false;
+			this.buttonActive = window.scrollY > 100;
 		},
 	},
 	mounted() {

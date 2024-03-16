@@ -25,9 +25,7 @@ class ProductController extends Controller
 	public function __construct() //認証なしでアクセスしたいAPIはexceptに書く
 	{
 		$this->middleware('auth')
-			 ->except([
-			 	'index', 'show', 'ranking', 'prefecture', 'otherProducts', 'similarProducts'
-			 ]);
+			 ->only(['purchasedByUser', 'canceledByUser']);
 	}
 
 	private function saveImage($image) //画像処理専用メソッド
@@ -296,7 +294,7 @@ class ProductController extends Controller
 	public function canceledByUser(string $id) //ログインユーザーがキャンセルしたかを取得
 	{
 		try {
-			$product = Cancel::where('product_id', $id)->where('cancel_user_id', Auth::id())->get();
+			$product = Cancel::where('product_id', $id)->where('cancel_user_id', Auth::id())->first();
 			return $product;
 		} catch (\Exception $e) {
 			Log::error('キャンセルしたユーザーの取得に失敗しました: ' . $e->getMessage());
