@@ -259,39 +259,49 @@ export default {
 			this.isEnter = false;
 		},
 		dropFile(event) {
-			event.preventDefault(); // デフォルトのイベントを防ぐ
-			this.isEnter = false;
-			
-			if (event.dataTransfer.files.length !== 1) { // ドロップされたファイルがない、または複数ファイルがドロップされた場合は処理しない
-				return;
+			try {
+				event.preventDefault(); // デフォルトのイベントを防ぐ
+				this.isEnter = false;
+				
+				if (event.dataTransfer.files.length !== 1) { // ドロップされたファイルがない、または複数ファイルがドロップされた場合は処理しない
+					return;
+				}
+				
+				const file = event.dataTransfer.files[0];
+				
+				if (!file.type.match('image.*')) { // ドロップされたファイルが画像であるかを確認
+					this.reset(); // ファイルが画像でなければリセット
+					return;
+				}
+				
+				const reader = new FileReader(); // FileReaderを使用して画像を読み込み、プレビューとして表示
+				reader.onload = e => {
+					this.preview = e.target.result; // プレビュー用のデータURLをセット
+					this.product.image = file; // 実際に送信するファイルをセット
+				};
+				reader.readAsDataURL(file); // ファイルをデータURLとして読み込む
+				
+			}catch (error) {
+				console.error('ドラッグ＆ドロップ処理にエラーが発生しました。', error);
 			}
-			
-			const file = event.dataTransfer.files[0];
-			
-			if (!file.type.match('image.*')) { // ドロップされたファイルが画像であるかを確認
-				this.reset(); // ファイルが画像でなければリセット
-				return;
-			}
-			
-			// FileReaderを使用して画像を読み込み、プレビューとして表示
-			const reader = new FileReader();
-			reader.onload = e => {
-				this.preview = e.target.result; // プレビュー用のデータURLをセット
-				this.product.image = file; // 実際に送信するファイルをセット
-			};
-			reader.readAsDataURL(file); // ファイルをデータURLとして読み込む
 		},
 		maxCounter(content, maxValue) { //カウンターの文字数上限
 			return content.length > maxValue;
 		},
 		async getCategories() { //カテゴリー取得
-			const response = await axios.get('/api/categories');
-			
-			if(response.status !== OK) { //responseステータスがOKじゃなかったら
-				this.$store.commit('error/setCode', response.status);
-				return false;
+			try {
+				const response = await axios.get('/api/categories');
+				if(response.status === OK) {
+					this.categories = response.data; //プロパティに値をセットする
+					
+				}else {
+					this.$store.commit('error/setCode', response.status);
+					return false;
+				}
+				
+			}catch (error) {
+				console.error('カテゴリー取得中にエラーが発生しました。', error);
 			}
-			this.categories = response.data; //プロパティに値をセットする
 		},
 		validatePrice() {
 			const value = Number(this.product.price);
@@ -328,34 +338,38 @@ export default {
 		},
 		async submit() { //商品登録メソッド
 			this.loading = true; //ローティングを表示する
-			
-			const formData = new FormData;
-			formData.append('image',       this.product.image);
-			formData.append('category_id', this.product.category_id);
-			formData.append('name',        this.product.name);
-			formData.append('detail',      this.product.detail);
-			formData.append('price',       this.product.price);
-			formData.append('expire',      this.product.expire);
-			
-			const response = await axios.post('/api/products', formData); //商品登録APIを呼び出す
-			
-			this.loading = false; //API通信が終わったらローディングを非表示にする
-			
-			if(response.status === UNPROCESSABLE_ENTITY) { //responseステータスがバリデーションエラーなら後続の処理を行う
-				this.errors = response.data.errors;          //responseエラーメッセージをプロパティに格納する
-				return false;                                //後続の処理を抜ける
+			try {
+				const formData = new FormData;
+				formData.append('image',       this.product.image);
+				formData.append('category_id', this.product.category_id);
+				formData.append('name',        this.product.name);
+				formData.append('detail',      this.product.detail);
+				formData.append('price',       this.product.price);
+				formData.append('expire',      this.product.expire);
+				
+				const response = await axios.post('/api/products', formData); //商品登録APIを呼び出す
+				
+				this.loading = false; //API通信が終わったらローディングを非表示にする
+				
+				if(response.status === UNPROCESSABLE_ENTITY) { //responseステータスがバリデーションエラーなら後続の処理を行う
+					this.errors = response.data.errors;          //responseエラーメッセージをプロパティに格納する
+					return;                                      //後続の処理を抜ける
+				}
+				this.reset(); //送信が完了したら入力値をクリアする
+				
+				if(response.status !== CREATED) { //responseステータスがCREATEDじゃなかったら(商品登録できなかったら)後続の処理を行う
+					this.$store.commit('error/setCode', response.status); //エラー情報を渡す
+					return;                                                     //後続の処理を抜ける
+				}
+				
+				this.$store.commit('message/setContent', { //上のif文を抜けたら登録成功なので、メッセージを登録する
+					content: '商品を登録しました！'
+				});
+				this.$router.push({ name: 'index' }); //トップページへ移動する
+				
+			}catch (error) {
+				console.error('商品出品処理に失敗しました', error);
 			}
-			this.reset(); //送信が完了したら入力値をクリアする
-			
-			if(response.status !== CREATED) { //responseステータスがCREATEDじゃなかったら(商品登録できなかったら)後続の処理を行う
-				this.$store.commit('error/setCode', response.status); //エラー情報を渡す
-				return false;                                               //後続の処理を抜ける
-			}
-			this.$store.commit('message/setContent', { //上のif文を抜けたら登録成功なので、メッセージを登録する
-				content: '商品を登録しました！'
-			});
-			
-			this.$router.push({ name: 'index' }); //トップページへ移動する
 		}
 	},
 	watch: {
@@ -368,27 +382,3 @@ export default {
 	}
 }
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

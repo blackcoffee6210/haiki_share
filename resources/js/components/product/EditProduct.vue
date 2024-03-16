@@ -330,9 +330,11 @@ export default {
 					
 				}else if(response.status === UNPROCESSABLE_ENTITY) { //バリデーションエラーなら後続の処理を行う
 					this.errors = response.data.errors;
+					return false;
 					
 				}else {
 					this.$store.commit('error/setCode', response.status); //エラーコードをセット
+					return false;
 				}
 				
 			}catch(error) {

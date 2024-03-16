@@ -199,69 +199,88 @@ export default {
 			return content.length > maxValue;
 		},
 		async getRecommendation() { //ユーザー評価取得
-			const response = await axios.get('/api/recommendations') //API接続
-			
-			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
-				this.$store.commit('error/setCode', response.status);
-				return false;
+			try {
+				const response = await axios.get('/api/recommendations') //API接続
+				
+				if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
+					this.$store.commit('error/setCode', response.status);
+					return;
+				}
+				this.recommendations = response.data;
+				
+			}catch (error) {
+				console.error('ユーザー評価取得中にエラーが発生しました', error);
 			}
-			this.recommendations = response.data;
 		},
 		async getReview() { //レビュー取得
-			const response = await axios.get(`/api/reviews/${this.s_id}/${this.r_id}`);
-			
-			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
-				this.$store.commit('error/setCode', response.status);
-				return false;
-			}
-			this.reviewForm = response.data[0];
-			
-			if(!this.reviewForm) { //投稿したレビューじゃなかったら商品一覧画面へ遷移する
-				this.$router.push({name: 'index'});
+			try {
+				const response = await axios.get(`/api/reviews/${this.s_id}/${this.r_id}`);
+				if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
+					this.$store.commit('error/setCode', response.status);
+					return false;
+				}
+				this.reviewForm = response.data[0];
+				
+				if(!this.reviewForm) { //投稿したレビューじゃなかったら商品一覧画面へ遷移する
+					this.$router.push({name: 'index'});
+				}
+				
+			}catch (error) {
+				console.error('レビュー取得処理中にエラーが発生しました', error);
 			}
 		},
 		async update() {       //レビュー更新
 			this.loading = true; //ローディングを表示する
 			
-			const response = await axios.post('/api/reviews/update', this.reviewForm); //API接続
-			
-			this.loading = false; //API通信が終わったらローディングを非表示にする
-			
-			if (response.status === UNPROCESSABLE_ENTITY) { //responseステータスがバリデーションエラーなら後続の処理を行う
-				this.errors = response.data.errors;
-				return false;
-			}
-			
-			if (response.status !== OK) { //responseステータスがOKじゃなかったら後続の処理を行う
-				this.$store.commit('error/setCode', response.status);
-				return false;
-			}
-			
-			this.$store.commit('message/setContent', { //メッセージ登録
-				content: 'レビューを更新しました！',
-			});
-			
-			this.$router.push({name: 'user.mypage', params: {id: this.s_id.toString()}}); //マイページに遷移
-		},
-		async deleteReview() { //レビュー削除
-			if(confirm('レビューを削除しますか?')) {
-				this.loading = true; //ローティングを表示する
-
-				const response = await axios.delete(`/api/reviews/${this.s_id}/${this.r_id}`); //API通信
-
-				this.loading = false; //API通信が終わったらローディングを非表示にする
-
-				if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
+			try {
+				const response = await axios.post('/api/reviews/update', this.reviewForm); //API接続
+				
+				if(response.status === OK) { //成功なら
+					this.$store.commit('message/setContent', { //メッセージ登録
+						content: 'レビューを更新しました！',
+					});
+					this.$router.push({name: 'user.mypage', params: {id: this.s_id.toString()}}); //マイページに遷移
+					
+				}else if (response.status === UNPROCESSABLE_ENTITY) { //responseステータスがバリデーションエラーなら後続の処理を行う
+					this.errors = response.data.errors;
+					return false;
+					
+				}else {
 					this.$store.commit('error/setCode', response.status);
 					return false;
 				}
-
-				this.$store.commit('message/setContent', { //メッセージ登録
-					content: 'レビューを削除しました'
-				});
 				
-				this.$router.push({ name: 'user.mypage',
-														params: { id: this.s_id.toString() }}); //マイページに移動する
+			}catch (error) {
+				console.error('更新に失敗しました。', error);
+				
+			}finally {
+				this.loading = false; //ローディングを非表示にする
+			}
+		},
+		async deleteReview() { //レビュー削除
+			if(!confirm('レビューを削除しますか?')) return;
+			
+			this.loading = true; //ローティングを表示する
+			
+			try {
+				const response = await axios.delete(`/api/reviews/${this.s_id}/${this.r_id}`); //API通信
+				
+				if(response.status === OK) { //成功なら
+					this.$store.commit('message/setContent', {  //メッセージ登録
+						content: 'レビューを削除しました'
+					});
+					this.$router.push({ name: 'user.mypage', params: { id: this.s_id.toString() }}); //マイページに移動する
+					
+				}else { //失敗ならエラーコードをセット
+					this.$store.commit('error/setCode', response.status);
+					return false;
+				}
+				
+			}catch(error) {
+				console.error('レビュー削除処理に失敗しました', error);
+				
+			}finally {
+				this.loading = false; //ローディングを非表示にする
 			}
 		}
 	},
