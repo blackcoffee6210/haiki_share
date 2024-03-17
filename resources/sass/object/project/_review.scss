@@ -22,7 +22,7 @@
   }
   &__name {
     font-weight: bold;
-    word-wrap: break-word;
+    word-break: break-all;
     display: -webkit-box;
     -webkit-line-clamp: 1; //1行に丸める
     -webkit-box-orient: vertical;
@@ -35,15 +35,18 @@
     border-radius: 3px;
     background: $sub-color;
     color: $white;
+    max-width: 98px;
+    text-align: center;
     @include mq() {
       font-size: $font-size_xs;
+      max-width: 84px;
     }
   }
   &__review-title {
     margin-top: $space_s;
     margin-bottom: $space_m;
     font-weight: bold;
-    word-wrap: break-word;
+    word-break: break-all;
     display: -webkit-box;
     -webkit-line-clamp: 1; //1行に丸める
     -webkit-box-orient: vertical;
@@ -53,7 +56,7 @@
     }
   }
   &__detail {
-    word-wrap: break-word;
+    word-break: break-all;
     display: -webkit-box;
     -webkit-line-clamp: 6; //6行に丸める
     -webkit-box-orient: vertical;

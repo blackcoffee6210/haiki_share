@@ -1,71 +1,46 @@
 <template>
 	<main class="l-main">
 		<div class="p-review-detail">
-			<h2 class="c-title p-review-detail__title">レビュー詳細</h2>
+			<Loading v-show="loading" />
 			
-			
-			<div class="p-review-detail__user-info">
-				<img class="c-icon p-review-detail__image"
-						 v-show="isShopUser"
-						 v-if="review.sender_image"
-						 :src="review.sender_image" alt="">
-				<!-- no-img -->
-				<img src="/storage/images/no-image.png"
-						 v-show="isShopUser"
-						 alt=""
-						 v-else
-						 class="c-icon p-review-detail__image">
+			<div v-if="!loading && review">
+				<h2 class="c-title p-review-detail__title">レビュー詳細</h2>
 				
-				<img class="c-icon p-review-detail__image"
-						 v-show="!isShopUser"
-						 v-if="review.receiver_image"
-						 :src="review.receiver_image" alt="">
-				<!-- no-img -->
-				<img src="/storage/images/no-image.png"
-						 v-show="!isShopUser"
-						 alt=""
-						 v-else
-						 class="c-icon p-review-detail__image">
-				<div>
-					<!-- 投稿した利用者名	-->
-					<div class="p-review-detail__name">
-						<span v-show="isShopUser">{{ review.sender_name }}</span>
-						<span v-show="!isShopUser">{{ review.receiver_name }}</span>
+				<div class="p-review-detail__user-info">
+					<img v-if="getReviewerImage" :src="getReviewerImage" alt="" class="c-icon p-review-detail__image">
+					<div>
+						<!-- 投稿した利用者名	-->
+						<div class="p-review-detail__name">{{ getReviewerName }}</div>
+						<!-- 投稿日	-->
+						<div class="p-review-detail__send_date">{{ review.created_at | moment }}</div>
 					</div>
-					<!-- 投稿日	-->
-					<div class="p-review-detail__send_date">
-						{{ review.created_at | moment }}
-					</div>
+					<div class="p-review-detail__recommend">{{ review.recommend }}</div>
 				</div>
-				<div class="p-review-detail__recommend">{{ review.recommend }}</div>
-			</div>
-			
-			<!-- ユーザーの評価	-->
-			<div class="p-review-detail__container">
-				<!-- レビュータイトル	-->
-				<div class="p-review-detail__review-title">{{ review.title }}</div>
-				<!-- 編集ボタン(利用者) -->
-				<router-link class="c-btn p-review-detail__btn"
-										 v-show="isMyReview"
-										 :to="{ name: 'review.edit',
-													params: {
-														s_id: review.sender_id.toString(),
-														r_id: review.receiver_id.toString()
-												}}">編集する
-				</router-link>
-			</div>
-			<!-- レビューの内容	-->
-			<div class="p-review-detail__detail">{{ review.detail }}</div>
-			
-			<!-- 出品者の購入されていない商品を表示 -->
-			<div class="c-title p-product-detail__title"
-					 v-show="otherProducts.length > 0">この出品者の商品
-			</div>
-			<div class="p-review-detail__product-container">
-				<Product v-for="product in otherProducts"
-								 :key="product.id"
-								 v-if="!product.is_purchased"
-								 :product="product" />
+				
+				<!-- ユーザーの評価	-->
+				<div class="p-review-detail__container">
+					<!-- レビュータイトル	-->
+					<div class="p-review-detail__review-title">{{ review.title }}</div>
+					<!-- 編集ボタン(利用者) -->
+					<router-link v-if="isMyReview"
+											 class="c-btn p-review-detail__btn"
+											 :to="{ name: 'review.edit',
+															params: {
+																s_id: review.sender_id.toString(),
+																r_id: review.receiver_id.toString()
+														}}">編集する
+					</router-link>
+				</div>
+				<!-- レビューの内容	-->
+				<div class="p-review-detail__detail">{{ review.detail }}</div>
+				
+				<!-- 出品者の購入されていない商品を表示 -->
+				<div class="c-title p-product-detail__title" v-if="otherProducts.length > 0">この出品者の商品</div>
+				<div class="p-review-detail__product-container">
+					<Product v-for="product in otherProducts"
+									 :key="product.id"
+									 :product="product" />
+				</div>
 			</div>
 		</div>
 	</main>
@@ -80,14 +55,8 @@ import { mapGetters, mapState } from 'vuex';
 export default {
 	name: "ReviewDetail",
 	props: {
-		s_id: { //送信者ID
-			type: String,
-			required: true
-		},
-		r_id: { //受信者ID
-			type: String,
-			required: true
-		}
+		s_id: { type: String, required: true },  //送信者ID
+		r_id: { type: String, required: true },  //受信者ID
 	},
 	components: {
 		Loading,
@@ -95,7 +64,8 @@ export default {
 	},
 	data() {
 		return {
-			review: {},       //レビュー
+			loading: true,   //ローディング
+			review: null,       //レビュー
 			otherProducts: [] //他の商品
 		}
 	},
@@ -109,33 +79,69 @@ export default {
 		}),
 		isMyReview() {
 			return this.s_id == this.userId; //自分のレビューならtrueを返す
+		},
+		getReviewerImage() { //受信者の画像
+			if(this.isShopUser && this.review.sender_image) {
+				return this.review.sender_image;
+			}else if(!this.isShopUser && this.review.receiver_image) {
+				return this.review.receiver_image;
+			}
+			return '/storage/images/no-image.png';
+		},
+		getReviewerName() {
+			return this.isShopUser ? this.review.sender_name : this.review.receiver_name;
 		}
+	},
+	async created() {
+		await this.getReview();
+		if(!this.isShopUser) await this.getOtherProducts(); //利用者ユーザーなら
 	},
 	methods: {
 		async getReview() { //レビュー取得
-			const response = await axios.get(`/api/reviews/${this.s_id}/${this.r_id}`);
-			
-			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
-				this.$store.commit('error/setCode', response.status);
-				return false;
+			this.loading = true; //loadingをtrueにする
+			try {
+				const response = await axios.get(`/api/reviews/${this.s_id}/${this.r_id}`);
+				
+				if(response.status === OK && response.data) { //API通信が成功なら
+					this.review = response.data;
+					
+				}else { //失敗なら
+					this.$store.commit('error/setCode', response.status);
+					return false;
+				}
+				
+			}catch(error) {
+				console.error('レビュー取得処理中にエラーが発生しました', error);
+				
+			}finally {
+				this.loading = false; //loadingをfalseにする
 			}
-			this.review = response.data[0];
 		},
 		async getOtherProducts() { //レビューしたユーザーの他の商品を取得
-			const response = await axios.get(`/api/reviews/${this.r_id}/otherProducts`);
-			
-			if(response.status !== OK) {
-				this.$store.commit('error/setCode', response.status);
-				return false;
+			try {
+				const response = await axios.get(`/api/reviews/${this.r_id}/otherProducts`);
+				
+				if(response.status === OK) {
+					this.otherProducts = response.data;
+				}else {
+					this.$store.commit('error/setCode', response.status);
+					return false;
+				}
+				
+			}catch(error) {
+				console.error('レビューしたユーザーの他の商品を取得中にエラーが発生しました', error);
+				
+			}finally {
+				this.loading = false; //loadingをfalseにする
 			}
-			this.otherProducts = response.data;
 		}
 	},
 	watch: {
 		$route: {
 			async handler() {
 				await this.getReview();
-				if(!this.isShopUser) await this.getOtherProducts();
+				// if(!this.isShopUser) await this.getOtherProducts();
+				await this.getOtherProducts();
 			},
 			immediate: true
 		}

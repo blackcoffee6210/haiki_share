@@ -3,9 +3,12 @@
 		<div class="p-header">
 			<!-- ロゴ -->
 			<div class="p-header__left" @click="navigateToHome">
-				<a class="p-header__logo" href="javascript:void(0)">
+				<router-link :to="{ name: 'index' }" class="p-header__logo">
 					Ha<span class="c-color__main">i</span>ki Share
-				</a>
+				</router-link>
+				<!--<a class="p-header__logo" href="javascript:void(0)">-->
+				<!--	Ha<span class="c-color__main">i</span>ki Share-->
+				<!--</a>-->
 				<div class="p-header__sub">
 					廃棄食品を無駄にしない<br class="p-header__br">フードシェアリングサービス
 				</div>
@@ -77,23 +80,25 @@ export default {
 		}),
 	},
 	methods: {
-		navigateToHome(event) {
-			event.preventDefault(); // デフォルトのイベントを止める
-			this.$router.push({ name: 'index', query: { page: 1 } }); //GETパラメータに「?page=1」を追加する
+		navigateToHome() {
+			this.$router.push({ name: 'index' });
 		},
 		toggleNav() { //ハンバーガーメニューをtoggleで切り替える
-			return this.active = !this.active;
+			this.active = !this.active;
 		},
 		async logout() { //ログアウト
-			await this.$store.dispatch('auth/logout');
-			
-			if(this.apiStatus) { //通信成功(true)なら以下の処理を実行
-				this.$store.commit('message/setContent', { //「ログアウト」メッセージ登録
-					content: 'ログアウトしました'
-				});
-				this.toggleNav(); //メニューを切り替える(スマホのハンバーガーメニューを閉じる)
+			try {
+				await this.$store.dispatch('auth/logout'); //API接続
 				
+				this.$store.commit('message/setContent', { content: 'ログアウトしました' }); //「ログアウト」メッセージ登録
+				this.toggleNav(); //メニューを切り替える(スマホのハンバーガーメニューを閉じる)
 				this.$router.push({ name: 'index' }).catch(() => {}); //商品一覧画面に移動する
+				
+			}catch (error) {
+				console.error('ログアウト処理に失敗しました: ', error);
+				this.$store.commit('message/setContent',  //「ログアウト失敗」メッセージ登録
+						{ content: 'ログアウトに失敗しました。再度お試しください。'}
+				);
 			}
 		}
 	},

@@ -24,6 +24,7 @@ class MyPageController extends Controller
 				return response()->json(['error' => 'ユーザーが見つかりません。'], 404);
 			}
 			return $user->likes()->orderByDesc('likes.created_at')->take(5)->get();
+
 		} catch (\Exception $e) {
 			Log::error('お気に入り商品の取得に失敗しました。: ' . $e->getMessage());
 			return response()->json(['error' => 'お気に入り商品の取得に失敗しました。'], 500);
@@ -38,6 +39,7 @@ class MyPageController extends Controller
 				return response()->json(['error' => 'ユーザーが見つかりません。', 404]);
 			}
 			return $user->products()->orderByDesc('products.updated_at')->take(5)->get();
+
 		}catch(\Exception $e) {
 			Log::error('出品した商品の取得に失敗しました: '. $e->getMessage());
 			return response()->json(['error' => '出品した商品の取得に失敗しました。'], 500);
@@ -51,6 +53,7 @@ class MyPageController extends Controller
 				$q->where('buyer_id', '=', Auth::id());
 			})->take(5)->get();
 			return $products;
+
 		}catch(\Exception $e) {
 			Log::error('購入した商品の取得に失敗しました: '. $e->getMessage());
 			return response()->json(['error' => '購入した商品の取得に失敗しました。'], 500);
@@ -64,6 +67,7 @@ class MyPageController extends Controller
 				$q->where('seller_id', Auth::id());
 			})->take(5)->get();
 			return $products;
+
 		}catch(\Exception $e) {
 			Log::error('購入された商品の取得に失敗しました。'. $e->getMessage());
 			return response()->json(['error' => '購入された商品の取得に失敗しました。'], 500);
@@ -78,6 +82,7 @@ class MyPageController extends Controller
 				$q->where('cancel_user_id', Auth::id());
 			})->take(5)->get();
 			return $products;
+
 		}catch(\Exception $e) {
 			Log::error('キャンセルした商品の取得に失敗しました。'. $e->getMessage());
 			return response()->json(['error' => 'キャンセルした商品の取得に失敗しました。'], 500);
@@ -91,6 +96,7 @@ class MyPageController extends Controller
 				$q->where('post_user_id', Auth::id());
 			})->take(5)->get();
 			return $products;
+
 		}catch(\Exception $e) {
 			Log::error('キャンセルされた商品の取得に失敗しました。'. $e->getMessage());
 			return response()->json(['error' => 'キャンセルされた商品の取得に失敗しました。'], 500);
@@ -106,6 +112,7 @@ class MyPageController extends Controller
 				return response()->json(['error' => '削除した商品が見つかりません。'], 404);
 			}
 			return $products->onlyTrashed()->orderByDesc('deleted_at')->take(5)->get();
+
 		}catch(\Exception $e) {
 			Log::error('削除した商品の取得に失敗しました。'. $e->getMessage());
 			return response()->json(['error' => '削除した商品の取得に失敗しました。'], 500);
@@ -120,6 +127,7 @@ class MyPageController extends Controller
 				return response()->json(['error' => 'ユーザーが見つかりません。'], 404);
 			}
 			return $user->senderReviews()->orderByDesc('reviews.created_at')->take(5)->get();
+
 		}catch (\Exception $e) {
 			Log::error('投稿したレビューの取得に失敗しました。'. $e->getMessage());
 			return response()->json(['error' => '投稿したレビューの取得に失敗しました。'], 500);
@@ -134,6 +142,7 @@ class MyPageController extends Controller
 				return response()->json(['error' => 'ユーザーが見つかりません。'], 404);
 			}
 			return $user->receiverReviews()->orderByDesc('reviews.created_at')->take(5)->get();
+
 		}catch(\Exception $e) {
 			Log::error('投稿されたレビューの取得に失敗しました： '. $e->getMessage());
 			return response()->json(['error' => '投稿されたレビューの取得に失敗しました。'], 500);

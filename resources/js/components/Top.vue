@@ -324,22 +324,31 @@ export default {
 		return {
 			loading: false,      //ローディング
 			reviews: [],         //レビューをランダムで3件
-			buttonActive: false, //TOPボタンを表示する
-			scroll: 0,           //scroll
-			visibleX: false
+			buttonActive: false, //TOPボタンの表示フラグ
+			scroll: 0,           //スクロール量
+			visibleX: false      //X方向の可視性フラグ
 		}
 	},
 	methods: {
 		async getReviews() { //レビューをランダムで3件取得
-			this.loading   = true;                                              //ローディングを表示する
-			const response = await axios.get('/api/reviews/topPageReview'); //API接続
-			this.loading   = false;                                             //API通信が終わったらローディングを非表示にする
+			this.loading   = true; //ローディングを表示
 			
-			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
-				this.$store.commit('error/setCode', response.status);
-				return false; //後続の処理を抜ける
+			try {
+				const response = await axios.get('/api/reviews/topPageReview'); //API接続
+				if(response.status === OK) { //成功なら
+					this.reviews = response.data; //responseデータをプロパティに代入
+					
+				}else { //失敗なら
+					this.$store.commit('error/setCode', response.status);
+					return false; //後続の処理を抜ける
+				}
+				
+			}catch(error) {
+				console.error('レビュー取得中にエラーが発生しました', error);
+				
+			}finally {
+				this.loading = false; //ローディングを非表示
 			}
-			this.reviews = response.data; //responseデータをプロパティに代入
 		},
 		returnTop() { //「TOPにもどる」ボタンを押したときの処理
 			window.scrollTo({
@@ -355,18 +364,18 @@ export default {
 					this.buttonActive = true :
 					this.buttonActive = false;
 		},
-		handleScrollX() {
+		handleScrollX() { //X方向のスクロール処理
 			if(!this.visibleX) {
 				var top = this.$el.getBoundingClientRect().top; //ブラウザの表示領域の左上を(0, 0)として、そこから要素の上端までの相対位置の値が返ってくる
 				this.visibleX = top < window.innerHeight + 50;
 			}
 		}
 	},
-	created() {
+	created() { //スクロールイベントの登録
 		window.addEventListener("scroll", this.scrollWindow);
 		window.addEventListener("scroll", this.handleScrollX);
 	},
-	destroyed() {
+	destroyed() { //スクロールイベントの削除
 		window.removeEventListener("scroll", this.handleScrollX);
 	},
 	watch: {
@@ -400,9 +409,6 @@ export default {
 
 .fadeIn1500ms {
 	animation: fadeIn1500ms 1.5s;
-	/*animation-name: fadeIn1500ms;*/
-	/*animation-duration: 1750ms;*/
-	/*animation-fill-mode: forwards;*/
 }
 @keyframes fadeIn1500ms {
 	0% {
@@ -417,9 +423,6 @@ export default {
 
 .fadeIn2000ms {
 	animation: fadeIn2000ms 1.5s;
-	/*animation-name: fadeIn2000ms;*/
-	/*animation-duration: 2000ms; !* 開始から終了までの時間 *!*/
-	/*animation-fill-mode: forwards;*/
 }
 @keyframes fadeIn2000ms {
 	0% {

@@ -27,22 +27,25 @@ class ReviewController extends Controller
 
 	public function show(string $s_id, string $r_id) //レビュー取得
 	{
-		$review = Review::with(['sender', 'receiver', 'recommendation'])
-			->where('sender_id', $s_id)
-			->where('receiver_id', $r_id)
-			->first();
+		try {
+			$review = Review::with(['sender', 'receiver', 'recommendation'])
+							->where('sender_id', $s_id)
+							->where('receiver_id', $r_id)
+							->firstOrFail();
+			return response($review, 200);
 
-		if(!$review) { //レビューがなければ
-			return response()->json(['message' => 'レビューが見つかりませんでした'], 404);
+		}catch (\Exception $e) {
+			Log::error('レビュー詳細の取得に失敗しました: '. $e->getMessage());
+			return response()->json(['error' => 'レビュー詳細の取得に失敗しました'], 500);
 		}
-		return $review;
 	}
 
 	public function store(StoreReview $request) //レビュー投稿
 	{
-		$recommendation = Recommendation::findOrFail($request->recommendation_id); //ユーザー評価を取得（なければ404を返す）
+		DB::beginTransaction(); //トランザクション開始
 
 		try { //例外処理
+			$recommendation = Recommendation::findOrFail($request->recommendation_id); //ユーザー評価を取得（なければ404を返す）
 			//=========================================================================
 			//DB登録
 			$review = new Review; //インスタンス生成
@@ -72,11 +75,14 @@ class ReviewController extends Controller
 			Mail::to($sender_email)->send(new ReviewedSenderNotification($params));     //送信者にメールを送信
 			Mail::to($receiver_email)->send(new ReviewedReceiverNotification($params)); //受信者にメールを送信
 
+			DB::commit();
+			return response($review, 201); //レビューの保存に成功した場合
+
 		}catch(\Exception $e) {
+			DB::rollBack(); //エラー発生時はトランザクションをロールバック
 			Log::error($e->getMessage()); //エラーログを記録
 			return response()->json(['message' => 'レビュー投稿に失敗しました'], 500);
 		}
-		return response($review, 201); //レビューの保存に成功した場合
 	}
 
 	public function update(UpdateReview $request) //レビュー更新
@@ -113,9 +119,7 @@ class ReviewController extends Controller
 			$review = Review::where(['sender_id', $s_id]) //レビューがあるか確認(なければ404を返す)
 							->where('receiver_id', $r_id)
 							->firstOrFail();
-
 			$review->delete();
-
 			return response($review, 200);
 
 		}catch (ModelNotFoundException $e) {
@@ -130,24 +134,31 @@ class ReviewController extends Controller
 
 	public function otherProducts(string $r_id) //出品した商品を取得
 	{
-		$products = Product::where('user_id', $r_id)
-						   ->orderByDesc('created_at')
-						   ->get();
+		try {
+			$products = Product::where('user_id', $r_id)
+							   ->orderByDesc('created_at')
+							   ->get();
+			return response($products, 200);
 
-		if($products->isEmpty()) {
-			return response()->json(['message' => '出品した商品が見つかりません'], 404);
+		}catch (\Exception $e) {
+			Log::error('出品した商品を取得できませんでした: '. $e->getMessage());
+			return response()->json(['message' => '出品した商品を取得できませんでした'], 500);
 		}
-		return $products;
 	}
 
 	public function topPageReview() //topページに表示するレビューをランダムで3件取得
 	{
-		$reviews = Review::inRandomOrder()->take(3)->get();
+		try {
+			$reviews = Review::inRandomOrder()->take(3)->get();
+			if($reviews->isEmpty()) {
+				return response()->json(['message' => 'レビューが見つかりませんでした'], 404);
+			}
+			return $reviews;
 
-		if($reviews->isEmpty()) {
-			return response()->json(['message' => 'レビューが見つかりませんでした'], 404);
+		}catch (\Exception $e) {
+			Log::error('topページに表示するレビューを取得中にエラーが発生しました: '. $e->getMessage());
+			return response()->json(['message' => 'topページに表示するレビューを取得中にエラーが発生しました'], 500);
 		}
-		return $reviews;
 	}
 
 	public function reviewedByUser(string $r_id) //ログインユーザーがレビューしたかどうか

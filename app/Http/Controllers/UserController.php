@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\History;
 use App\Http\Requests\UpdatePassword;
 use App\Http\Requests\UpdateUser;
 use App\Mail\UpdateEmailNotification;
 use App\Product;
 use App\Review;
 use App\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;

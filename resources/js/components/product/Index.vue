@@ -10,14 +10,10 @@
 					<!-- 検索件数 -->
 					<div class="p-index__total">
 						<span class="u-font-bold">検索結果</span>
-						<span>
-							{{ from }} -
-							{{ to }}件 /
-							{{ total }}件中
-						</span>
+						<span>{{ from }} - {{ to }}件 / {{ total }}件中</span>
 					</div>
 					
-					<!-- フィルタリング条件のチェックボックス -->
+					<!-- 絞り込み条件のチェックボックス -->
 					<div class="p-index__checkbox-container">
 						<!-- 賞味期限切れの商品のみ表示 -->
 						<input type="checkbox"
@@ -40,7 +36,7 @@
 					<!-- Productコンポーネント -->
 					<Product v-show="!loading"
 									 v-for="product in filteredProducts"
-									 v-if="sortCategory !== 0 || sortCategory !== product.category_id"
+									 v-if="sortCategory === 0 || sortCategory === product.category_id"
 									 :key="product.id"
 									 :product="product" />
 				</div>
@@ -48,41 +44,24 @@
 			
 			<!-- ページネーション	-->
 			<ul class="c-pagination" v-show="!loading">
-				<li class="c-pagination__block c-pagination--inactive"
-						v-show="currentPage != 1"
-						@click="changePage(currentPage - 1)">
+				<!-- もどるボタン -->
+				<li v-if="currentPage > 1"
+						@click="changePage(currentPage - 1)"
+						class="c-pagination__block c-pagination--inactive">
 					&lt;
 				</li>
-				<li v-for="page in frontPageRange"
+				<!-- ページの数字部分 -->
+				<li v-for="page in pages"
 						:key="page"
 						@click="changePage(page)"
 						class="c-pagination__block"
-						:class="(isCurrent(page)) ? 'c-pagination--active' : 'c-pagination--inactive'">
+						:class="{ 'c-pagination--active': isCurrent(page), 'c-pagination--inactive': !isCurrent(page) }">
 					{{ page }}
 				</li>
-				<li v-show="frontDot"
-						class="c-pagination__block inactive u-disabled">...
-				</li>
-				<li v-for="page in middlePageRange"
-						:key="page"
-						@click="changePage(page)"
-						class="c-pagination__block"
-						:class="(isCurrent(page)) ? 'c-pagination--active' : 'c-pagination--inactive'">
-					{{ page }}
-				</li>
-				<li v-show="endDot"
-						class="c-pagination__block c-pagination--inactive u-disabled">...
-				</li>
-				<li v-for="page in endPageRange"
-						:key="page"
-						@click="changePage(page)"
-						class="c-pagination__block"
-						:class="(isCurrent(page)) ? 'c-pagination--active' : 'c-pagination--inactive'">
-					{{ page }}
-				</li>
-				<li class="c-pagination__block c-pagination--inactive"
-						v-show="currentPage != lastPage"
-						@click="changePage(currentPage + 1)">
+				<!-- すすむボタン -->
+				<li v-if="currentPage < lastPage"
+						@click="changePage(currentPage + 1)"
+						class="c-pagination__block c-pagination--inactive">
 					&gt;
 				</li>
 			</ul>
@@ -99,16 +78,19 @@
 								class="c-btn p-sidebar-index__clear-filter">
 					絞り込みを解除
 				</button>
+				
 				<!-- 検索ボックス -->
 				<div class="p-sidebar-index__search">
-					<label class="p-sidebar-index__title"
-								 for="search">商品検索
-					</label>
+					<label class="p-sidebar-index__title" for="search">商品検索</label>
 					<input type="text"
 								 placeholder="SEARCH"
 								 v-model="tempKeyword"
 								 id="search"
-								 class="c-input p-sidebar-index__input">
+								 class="c-input p-sidebar-index__input"
+								 @keydown.enter="handleEnter"
+								 @compositionstart="handleCompositionStart"
+								 @compositionend="handleCompositionEnd"
+								 @input="handleInput">
 					<!-- 検索アイコン -->
 					<font-awesome-icon :icon="['fas', 'search']"
 														 class="p-sidebar-index__search-icon"
@@ -123,9 +105,7 @@
 				
 				<!-- 金額ソート -->
 				<div class="p-sidebar-index__sort">
-					<label for="sort_price" class="p-sidebar-index__title">
-						金額
-					</label>
+					<label for="sort_price" class="p-sidebar-index__title">金額</label>
 					<select id="sort_price"
 									class="c-select p-sidebar-index__select"
 									v-model.number="sortPrice">
@@ -137,9 +117,7 @@
 				
 				<!-- カテゴリー -->
 				<div class="p-sidebar-index__sort">
-					<label for="sort_category" class="p-sidebar-index__title">
-						カテゴリー
-					</label>
+					<label for="sort_category" class="p-sidebar-index__title">カテゴリー</label>
 					<select id="sort_category"
 									class="c-select p-sidebar-index__select"
 									v-model.number="sortCategory">
@@ -177,8 +155,7 @@
 							 v-show="!product.is_purchased"
 							 :key="product.id">
 						<router-link class="c-card__link"
-												 :to="{ name: 'product.detail',
-																params: { id: product.id.toString() }}" />
+												 :to="{ name: 'product.detail', params: { id: product.id.toString() }}" />
 						<!-- 商品画像 -->
 						<img class="p-sidebar-index__img"
 								 :src="product.image"
@@ -232,7 +209,7 @@ import moment  from "moment";
 export default {
 	name: "Index",
 	props: {
-		page: { //ルーター(router.js)から渡されるpageプロパティを受け取る
+		page: { // ルーターから受け取るページ番号プロパティ
 			type: Number,
 			required: false,
 			default: 1
@@ -242,189 +219,109 @@ export default {
 		Loading,
 		Product,
 	},
-	beforeRouteEnter(to, from, next) {
-		next(vm => {
-			// `vm` はコンポーネントインスタンスを指す
-			if (from.name !== 'index') {
-				vm.clearFilters(); // 別のページから遷移した場合、絞り込み条件をリセット
-			}
-		});
-	},
 	data() {
 		return {
-			loading: false,     //ローディングを表示するかどうかを判定するプロパティ
-			showExpired: false, //賞味期限切れかどうかを判定
-			showSale: false,    //販売中かどうかを判定
-			tempKeyword: '',    //検索文字列を一時保存するキーワード
-			keyword: '',        //実際の検索に使われるキーワード
-			sortPrice: 1,       //金額「並び替え」の選択値（1: 標準, 2: 安い順, 3: 高い順）
-			sortCategory: 0,    //「カテゴリー」絞り込みの初期値（0: 全て）
-			sortPrefecture: 0,  //「都道府県」絞り込みの初期値（0: 全て）
-			categories: [],     //カテゴリー
-			prefectures: [],    //出品したコンビニのある都道府県
-			products: [],       //商品リスト
-			product: {
-				image: '',
-				category_id: '',
-				name: '',
-				detail: '',
-				expire: '',
-				price: ''
-			},
-			recommendProducts: [], //おすすめ商品
-			currentPage: 1,        //現在のページ
-			lastPage: 0,           //最後のページ
+			loading: false,        //ローディングを表示するかどうかを判定するプロパティ
+			products: [],          //商品リスト
+			currentPage: 1,        //現在のページ番号
+			lastPage: 0,           //最後のページ番号
 			total: 0,              //商品の合計数
-			range: 5,
-			frontDot: false,
-			endDot: false,
-			from: 0,
-			to: 0,
+			from: 0,               //表示範囲の開始
+			to: 0,                 //表示範囲の終了
+			showExpired: false,    //賞味期限切れ商品の表示フラグ
+			showSale: false,       //販売中商品の表示フラグ
+			tempKeyword: '',       //検索文字列を一時保存するキーワード
+			keyword: '',           //実際の検索に使われるキーワード
+			sortPrice: 1,          //金額「並び替え」の選択値（1: 標準, 2: 安い順, 3: 高い順）
+			sortCategory: 0,       //「カテゴリー」絞り込みの初期値（0: 全て）
+			sortPrefecture: 0,     //「都道府県」絞り込みの初期値（0: 全て）
+			categories: [],        //カテゴリーリスト
+			prefectures: [],       //出品したコンビニのある都道府県リスト
+			recommendProducts: [], //おすすめ商品
+			range: 5,              //ページネーション表示範囲
+			frontDot: false,       //前方のドット表示
+			endDot: false,         //後方のドット表示
+			isComposing: false,    // 日本語入力の確定状態を追跡するためのフラグ
 		}
 	},
-	mounted() {
-		const currentQuery = { ...this.$route.query }; // 現在のクエリパラメータを取得
-		const newQuery = {};
-		
-		
-		if (currentQuery.page) { // `page` パラメータが存在する場合は、新しいクエリオブジェクトに追加
-			newQuery.page = currentQuery.page;
-		} else { // `page` パラメータが存在しない場合、デフォルト値として 1 を設定
-			newQuery.page = '1';
-		}
-		
-		// URLのクエリパラメータを更新
-		// `page`パラメータ以外を削除し、`page`パラメータがない場合はデフォルトで1を設定
-		this.$router.replace({ query: newQuery }).catch(err => {
-			// Vue Routerが同じルートへの重複したナビゲーションをエラーとして扱うため、
-			// NavigationDuplicatedエラーを無視する
-			if (err.name !== "NavigationDuplicated") {
-				throw err; // 予期せぬエラーはそのまま投げる
-			}
-		});
+	async beforeRouteEnter(to, from, next) {
+		next(vm => vm.updatePageAndData(to.query)); //ルートに入る前にデータを更新
 	},
-	created() {
-		//================================================================================
-		// Vue Routerからクエリパラメータを読み込む
-		this.showExpired    = this.$route.query.showExpired === 'true';
-		this.showSale       = this.$route.query.showSale === 'true';
-		this.keyword        = this.$route.query.keyword || '';
-		this.sortPrice      = parseInt(this.$route.query.sortPrice, 10) || 1;
-		this.sortCategory   = parseInt(this.$route.query.sortCategory, 10) || 0;
-		this.sortPrefecture = parseInt(this.$route.query.sortPrefecture, 10) || 0;
-		//================================================================================
+	beforeRouteUpdate(to, from, next) {
+		this.updatePageAndData(to.query); //ルートが更新されたときデータを更新
+		next();
 	},
 	computed: {
-		isFiltered() { //ひとつでも絞り込みがされていたらtrueを返し、「絞り込みを解除」ボタンをサイドバーに表示
-			return this.showExpired || // 賞味期限切れの商品が選択されている
-					this.showSale || // 販売中の商品が選択されている
-					this.keyword !== '' || // 検索キーワードが入力されている
-					this.sortPrice !== 1 || // 金額ソートがデフォルト値以外
-					this.sortCategory !== 0 || // カテゴリーが選択されている
-					this.sortPrefecture !== 0; // 都道府県が選択されている
+		pages() { //ページネーションに表示するページ番号の計算
+			return [...Array(this.lastPage).keys()].map(i => i + 1);
 		},
-		filteredProducts() { //絞り込んだ商品を返す
-			let newProducts = []; //絞り込み後の商品を格納する新しい配列
-			const today = moment(new Date).format('YYYY-MM-DD hh:mm:ss'); //今日の日付を用意
-			
-			for(let i = 0; i < this.products.length; i++) { //カテゴリーが選択されたら、カテゴリーIDが一致する商品だけを表示する
-				let isShow = true; //表示対象かどうかを判定するフラグ
-				
-				if(this.showExpired &&
-						this.products[i].expire > today) { //「賞味期限切れのみ表示」チェックありで賞味期限が本日の日付より大きい（賞味期限内）場合は非表示にする
-					isShow = false;
-				}
-				
-				if(this.showSale &&
-						this.products[i].is_purchased) { //「販売中のみ未表示」チェックあり、かつ購入済み商品は非表示にする
-					isShow = false;
-				}
-				
-				if(this.sortCategory !== 0 &&
-						this.sortCategory !== this.products[i].category_id) { //i番目の商品が表示可能かどうかを判定する
-					isShow = false; //カテゴリーが選択されていて(0じゃない) かつカテゴリーIDと商品カテゴリーIDが一致しない商品は非表示にする
-				}
-				
-				if(this.sortPrefecture !== 0 &&
-						this.sortPrefecture !== this.products[i].prefecture_id) { //i番目の商品が表示可能かどうかを判定する
-					isShow = false; //都道府県が選択されていて(0じゃない)、かつ都道府県IDと商品の都道府県IDが一致しない商品は非表示にする
-				}
-				
-				// キーワードと商品名をひらがなに統一してから検索条件を適用
-				const normalizedKeyword = this.katakanaToHiragana(this.keyword.trim());
-				const normalizedProductName = this.katakanaToHiragana(this.products[i].name);
-				if(isShow && normalizedProductName.includes(normalizedKeyword)) {
-					newProducts.push(this.products[i]);
-				}
-			}
-			
-			switch (this.sortPrice) { //新しい配列を並び替える
-				case 1:  //金額ソート選択なし（デフォルト）
-					break; //元の順番にsortしているので並び替えはなし
-				case 2:  //価格が安い順に並び替える
-					newProducts.sort(function(a, b) {
-						return a.price - b.price;
-					});
-					break;
-				case 3: //価格が高い順に並び替える
-					newProducts.sort(function(a, b) {
-						return b.price - a.price;
-					});
-					break;
-			}
-			return newProducts; //絞り込み後の商品を返す
+		isFiltered() { //絞り込みが行われているかどうか
+			return this.showExpired ||        // 賞味期限切れの商品が選択されている
+						 this.showSale ||           // 販売中の商品が選択されている
+						 this.keyword !== '' ||     // 検索キーワードが入力されている
+						 this.sortPrice !== 1 ||    // 金額ソートがデフォルト値以外
+						 this.sortCategory !== 0 || // カテゴリーが選択されている
+						 this.sortPrefecture !== 0; // 都道府県が選択されている
 		},
-		count() { //絞り込み後の商品数のカウント
-			return this.filteredProducts.length;
+		filteredProducts() { //絞り込み後の商品リスト
+			return this.products.filter(product => {
+				const today             = moment(new Date).format('YYYY-MM-DD');
+				const isExpired         = product.expire > today;
+				const isPurchased       = product.is_purchased;
+				const matchesCategory   = this.sortCategory === 0 || this.sortCategory === product.category_id;
+				const matchesPrefecture = this.sortPrefecture === 0 || this.sortPrefecture === product.prefecture_id;
+				const matchesKeyword    = this.katakanaToHiragana(product.name).includes(this.katakanaToHiragana(this.keyword.trim()));
+				
+				return(!this.showExpired || !isExpired) &&
+						  (!this.showSale || !isPurchased) &&
+						  matchesCategory && matchesPrefecture && matchesKeyword;
+			}).sort((a, b) => { //金額でソート
+				switch(this.sortPrice) {
+					case 1: break;                    //選択なし（デフォルト）
+					case 2: return a.price - b.price; //価格が安い順
+					case 3: return b.price - a.price; //価格が高い順
+				}
+			});
 		},
 		ascPrefecture() { //都道府県idを昇順にして返す
 			return this.prefectures.sort(function(a, b) {
 				return a.prefecture_id - b.prefecture_id;
 			});
 		},
-		frontPageRange() {
-			if(!this.sizeCheck) {
-				this.frontDot = false;
-				this.endDot   = false;
-				return this.calRange(1, this.lastPage);
-			}
-			return this.calRange(1, 2);
-		},
-		middlePageRange() {
-			if(!this.sizeCheck) return [];
-			
-			let start = '';
-			let end   = '';
-			if(this.currentPage <= this.range) {
-				start = 3;
-				end   = this.range + 2;
-				this.frontDot = false;
-				this.endDot = true;
-			}else if(this.currentPage > this.lastPage - this.range) {
-				start = this.lastPage - this.range - 1;
-				end   = this.lastPage - 2;
-				this.frontDot = true;
-				this.endDot = false;
-			}else {
-				start = this.currentPage - Math.floor(this.range / 2);
-				end   = this.currentPage + Math.floor(this.range / 2);
-				this.frontDot = true;
-				this.endDot = true;
-			}
-			return this.calRange(start, end);
-		},
-		endPageRange() {
-			if(!this.sizeCheck) return [];
-			return this.calRange(this.lastPage - 1, this.lastPage);
-		},
-		sizeCheck() {
-			if(this.lastPage <= this.range + 4) {
-				return false;
-			}
-			return true;
-		},
 	},
 	methods: {
+		handleCompositionStart() { //日本語入力開始
+			this.isComposing = true;
+		},
+		handleCompositionEnd() { //日本語入力終了
+			this.isComposing = false;
+		},
+		handleEnter() { //Enterキー押下時の処理
+			if(!this.isComposing) { //日本語入力が確定していれば検索
+				this.searchProducts();
+			}
+		},
+		handleInput() { //入力フィールドの値が変更されたときの処理
+			if(!this.tempKeyword) { //入力が空になったら検索絞り込みを解除
+				this.deleteSearch();
+			}
+		},
+		async updatePageAndData(query) { // ページまたはクエリパラメータが変更された際にデータを更新
+			this.currentPage    = parseInt(query.page, 10) || 1;
+			this.showExpired    = query.showExpired === 'true';
+			this.showSale       = query.showSale === 'true';
+			this.keyword        = this.$route.query.keyword || '';
+			this.sortPrice      = parseInt(query.sortPrice, 10) || 1;
+			this.sortCategory   = parseInt(query.sortCategory, 10) || 0;
+			this.sortPrefecture = parseInt(query.sortPrefecture, 10) || 0;
+			
+			await Promise.all([
+					this.getProducts(),
+					this.getCategories(),
+					this.getPrefectures(),
+					this.getRecommend(),
+			]);
+		},
 		clearFilters() { //絞り込みを解除する
 			this.showExpired    = false; // 賞味期限切れの商品の表示をリセット
 			this.showSale       = false; // 販売中の商品の表示をリセット
@@ -434,13 +331,12 @@ export default {
 			this.sortCategory   = 0;     // カテゴリー絞り込みを全てにリセット
 			this.sortPrefecture = 0;     // 都道府県絞り込みを全てにリセット
 			
-			// 必要に応じて商品リストを再取得または更新
 			this.searchProducts(); // キーワードをクリアしてから検索を実行
 		},
-		searchProducts() {
-			this.keyword = this.tempKeyword; // 検索アイコンをクリックしたら、検索キーワードを更新
+		searchProducts() { //商品を検索する
+			this.keyword = this.tempKeyword; // 一時キーワードを確定キーワードに設定
 		},
-		updateQueryParams() { // 現在のルートに新しいクエリパラメータを追加する
+		updateQueryParams() { // URLのクエリパラメータを更新する
 			this.$router.push({
 				name: 'index',
 				query: {
@@ -454,18 +350,16 @@ export default {
 				}
 			}).catch(err => {});
 		},
-		katakanaToHiragana(str) { //カタカナをひらがなに変換する関数
+		katakanaToHiragana(str) { //カタカナをひらがなに変換する
 			return str.replace(/[\u30A1-\u30F6]/g, match => {
 				return String.fromCharCode(match.charCodeAt(0) - 0x60);
 			});
 		},
-		sidebarExpireDate(product) { //商品の賞味期限が過ぎているかどうかを返す
+		sidebarExpireDate(product) { //商品の賞味期限が過ぎているかどうかを判定する
 			let dt = moment().format('YYYY-MM-DD');
-			if(product.expire <= dt) {
-				return true;
-			}
+			return product.expire <= dt;
 		},
-		async getRecommend() { //おすすめの商品を5件取得
+		async getRecommend() { //おすすめの商品を取得
 			try {
 				const response = await axios.get('/api/products/ranking');
 				
@@ -474,7 +368,6 @@ export default {
 					
 				}else { //失敗なら
 					this.$store.commit('error/setCode', response.status);
-					return false;
 				}
 				
 			}catch (error) {
@@ -490,7 +383,6 @@ export default {
 					
 				}else {
 					this.$store.commit('error/setCode', response.status);
-					return false;
 				}
 				
 			}catch (error) {
@@ -502,20 +394,18 @@ export default {
 				const response = await axios.get('/api/products/prefecture'); //API接続
 				
 				if(response.status === OK) {
-					this.prefectures = response.data;
 					this.prefectures = this.prefectures.filter((v1, i1, a1) => { //取得した都道府県を照準に並び替える
-						return a1.findIndex(v => v1.prefecture_id === v.prefecture_id) === i1
+						return a1.findIndex(v => v1.prefecture_id === v.prefecture_id) === i1;
 					});
 				}else {
 					this.$store.commit('error/setCode', response.status);
-					return false;
 				}
 				
 			}catch (error) {
 				console.error('都道府県データの取得に失敗しました: ', error);
 			}
 		},
-		async getProducts() { //商品取得メソッド
+		async getProducts() { //商品リスト取得
 			this.loading = true; //ローディングを表示する
 			try {
 				const response = await axios.get(`/api/products?page=${ this.currentPage }`); //API接続
@@ -526,13 +416,9 @@ export default {
 					this.products    = response.data.data;         //商品情報
 					this.currentPage = response.data.current_page; //現在のページ
 					this.lastPage    = response.data.last_page;    //最後のページ
-					this.total       = response.data.total;        //商品の数
-					this.from        = response.data.from;
-					this.to          = response.data.to;
-					
-				}else { //失敗なら
-					this.$store.commit('error/setCode', response.status);
-					return false;
+					this.total       = response.data.total;        //商品の合計数
+					this.from        = response.data.from;         //表示範囲の開始
+					this.to          = response.data.to;           //表示範囲の終了
 				}
 				
 			}catch (error) {
@@ -542,66 +428,28 @@ export default {
 				this.loading = false; //ローディングを非表示にする
 			}
 		},
-		calRange(start, end) {
-			const range = [];
-			for(let i = start; i <= end; i++) {
-				range.push(i);
-			}
-			return range;
-		},
-		deleteSearch() { //サイドバー商品検索欄の文字列を削除するメソッド
+		deleteSearch() { //検索条件をクリアして再検索する
 			this.tempKeyword = '';
 			this.keyword = '';
 			this.searchProducts();
 		},
-		changePage(page) {
+		changePage(page) { //ページを変更する
 			if(page > 0 && page <= this.lastPage) {
-				this.currentPage = page;
-				this.updateQueryParams(); //URLのクエリパラメータを更新
-				this.getProducts();       //新しいページの商品を取得
+				this.$router.push({ query: { ...this.$route.query, page }}).catch(err => {});
 			}
 		},
-		isCurrent(page) {
+		isCurrent(page) { //現在のページかどうかを判定する
 			return page === this.currentPage;
 		},
 	},
 	watch: {
-		$route: {
-			async handler() {
-				await this.getRecommend();
-				await this.getCategories();
-				await this.getPrefectures();
-				await this.getProducts();
+		'$route.query': { //ルートクエリが変更された場合、データを更新
+			async handler(newQuery) {
+				await this.updatePageAndData(newQuery);
 			},
-			immediate: true //immediateをtrueにすると、コンポーネントが生成されたタイミングでも実行する
-		},
-		showExpired: 'updateQueryParams',
-		showSale: 'updateQueryParams',
-		keyword: 'updateQueryParams',
-		sortPrice: 'updateQueryParams',
-		sortCategory: 'updateQueryParams',
-		sortPrefecture: 'updateQueryParams',
+			immediate: true,
+			deep: true
+		}
 	}
 }
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

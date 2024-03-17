@@ -18,7 +18,7 @@ const state = {         //stateはデータの入れ物
   }
 }
 
-const getters = {                                               //gettersはstateの内容から算出される値
+const getters = { //gettersはstateの内容から算出される値
   check:      state => !! state.user,                           //ログインチェックに使用する（確実に真偽値を返すために二重否定にしている）
   username:   state => state.user ? state.user.name : '',       //ログインユーザー名を取得(nullの場合に呼ばれてもエラーが発生しないように空文字を返す)
   userId:     state => state.user ? state.user.id : '',         //ログインユーザーのIDを取得
@@ -43,29 +43,19 @@ const mutations = {      //mutationsはstateを更新するためのメソッド
 const actions = {                         //actionsはAPI通信などの非同期処理を行ったあとに、mutationsを呼び出してstateを更新する
   async register(context, data) {         //会員登録APIを呼び出すアクション
     context.commit('setApiStatus', null); //apiStatusステートに最初はnullをセットする
+
     try { //例外処理
       const response = await axios.post('/api/register', data); //会員登録APIを呼び出し、返却データを定数responseに渡す
 
       if(response.status === CREATED) {           //responseステータスがCREATED(201)なら後続の処理を行う
         context.commit('setApiStatus', true);     //通信成功なので、apiStatusにtrueをセットする
         context.commit('setUser', response.data); //setUserミューテーションを実行してuserステートにデータをセット
-        return true;                             //下に書いた処理をfalseを使って抜ける(成功なので)
+        return true;                              //下に書いた処理をfalseを使って抜ける(成功なので)
       }
+
     }catch (error) {
-      context.commit('setApiStatus', false); //通信失敗なら、apiStatusにfalseをセット
-
-      if(error.response) {
-        if(error.response.status === UNPROCESSABLE_ENTITY) {                //responseステータスがバリデーションエラーなら後続の処理を行う
-          context.commit('setRegisterErrorMessages', response.data.errors); //registerErrorMessagesにデータをセットする
-
-        }else {
-          context.commit('error/setCode', response.status, { root: true }); //あるストアモジュールから別モジュールのミューテーションをcommitする場合は第三引数に { root: true } を追加する
-        }
-
-      }else {
-        console.error('ネットワークまたはレスポンスなしのエラー', error);
-      }
-      return false; //falseを返すことで、呼びだdし元にエラーが発生したことを知らせる
+      handleApiError(context, error);
+      return false;
     }
   },
   async login(context, data) { //ログインアクション
@@ -78,50 +68,66 @@ const actions = {                         //actionsはAPI通信などの非同�
         context.commit('setUser', response.data); //userステートにresponseデータをセット
         return true; //成功した場合はtrueを返す
       }
+
     }catch(error) {
-      context.commit('setApiStatus', false); //通信失敗なら、apiStatusにfalseをセット
+      handleApiError(context, error);
+      return false;
+    }
+  },
+  async logout(context) { //ログアウト
+    context.commit('setApiStatus', null); //apiStatusステートに最初はnullをセットする
 
-      if(error.response) {
-        if (error.response.status === UNPROCESSABLE_ENTITY) { //バリデーションエラーなら
-          context.commit('setLoginErrorMessages', error.response.data.errors); //loginErrorMessagesにエラーメッセージをセットする
+    try {
+      const response = await axios.post('/api/logout');
 
-        } else if (error.response.status === TOO_MANY_REQUEST) { //入力エラーの回数が5回を超えたらエラーメッセージをセット
-          context.commit('setLoginErrorMessages', {general: ['ログイン試行回数が多すぎます。しばらくしてから再試行してください。']});
-
-        } else { //その他のエラーで、別のモジュールのミューテーションをcommitする場合
-          context.commit('error/setCode', error.response.status, {root: true});
-        }
-      }else {
-        console.error("ネットワークエラーまたはレスポンスなしのエラー", error); // ネットワークエラーなど、レスポンスがないエラーのハンドリング
+      if(response.status === OK) {            //responseステータスがOK(200)なら後続の処理を行う
+        context.commit('setApiStatus', true); //通信成功なので、apiStatusステートにtrueをセット
+        context.commit('setUser', null);      //userステートにnullをセットして空にする(userデータを消す)
+        return true;
       }
-    }
-  },
-  async logout(context) {                 //ログアウト
-    context.commit('setApiStatus', null); //apiStatusステートに最初はnullをセットする
-    const response = await axios.post('/api/logout');
 
-    if(response.status === OK) {            //responseステータスがOK(200)なら後続の処理を行う
-      context.commit('setApiStatus', true); //通信成功なので、apiStatusステートにtrueをセット
-      context.commit('setUser', null);      //userステートにnullをセットして空にする(userデータを消す)
+    }catch(error) {
+      handleApiError(context, error);
       return false;
     }
-    context.commit('setApiStatus', false); //apiStatusにfalseをセット(OKじゃないので)
-    context.commit('error/setCode', response.status, { root: true });
   },
-  async currentUser(context) {            //ログインユーザーチェック
+  async currentUser(context) { //ログインユーザーチェック
     context.commit('setApiStatus', null); //apiStatusステートに最初はnullをセットする
 
-    const response = await axios.get('/api/user'); //ユーザー情報をAPIから取得する
-    const user = response.data || null;                //データをセット。ログインしていないときはuserステートの初期値をnullに揃えておく
+    try {
+      const response = await axios.get('/api/user'); //ユーザー情報をAPIから取得する
 
-    if(response.status === OK) {            //responseステータスがOK(200)なら後続の処理を行う
-      context.commit('setApiStatus', true); //通信成功なので、apiStatusステートにtrueをセット
-      context.commit('setUser', user);      //ユーザーデータをセット。データがない(ログインしていない)場合はnullが入る
+      if(response.status === OK) {            //responseステータスがOK(200)なら後続の処理を行う
+        context.commit('setApiStatus', true); //通信成功なので、apiStatusステートにtrueをセット
+        context.commit('setUser', response.data || null);      //ユーザーデータをセット。データがない(ログインしていない)場合はnullが入る
+        return true;
+      }
+
+    }catch(error) {
+      handleApiError(context, error);
       return false;
     }
-    context.commit('setApiStatus', false);
-    context.commit('error/setCode', response.status, { root: true });
   },
+}
+
+function handleApiError(context, error) {
+  context.commit('setApiStatus', false);
+  if(error.response) {
+    const status = error.response.status;
+    switch(status) {
+      case UNPROCESSABLE_ENTITY:
+        context.commit('setRegisterErrorMessages', error.response.data.errors);
+        break;
+      case TOO_MANY_REQUEST:
+        context.commit('setLoginErrorMessages', { general: ['ログイン試行回数が多すぎます。しばらくしてからやり直してください。'] });
+        break;
+      default:
+        context.commit('error/setCode', status, { root: true });
+    }
+
+  }else {
+    console.error('ネットワークエラーまたはレスポンスなしのエラー', error);
+  }
 }
 
 export default { //外部ファイルで読み込めるようにエクスポートする

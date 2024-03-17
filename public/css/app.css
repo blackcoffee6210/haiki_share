@@ -2805,7 +2805,7 @@ body {
 }
 .p-review__name {
   font-weight: bold;
-  word-wrap: break-word;
+  word-break: break-all;
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
@@ -2818,17 +2818,20 @@ body {
   border-radius: 3px;
   background: #fdbf99;
   color: #fff;
+  max-width: 98px;
+  text-align: center;
 }
 @media screen and (max-width: 450px) {
   .p-review__recommendation {
     font-size: 1rem;
+    max-width: 84px;
   }
 }
 .p-review__review-title {
   margin-top: 5px;
   margin-bottom: 10px;
   font-weight: bold;
-  word-wrap: break-word;
+  word-break: break-all;
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
@@ -2840,7 +2843,7 @@ body {
   }
 }
 .p-review__detail {
-  word-wrap: break-word;
+  word-break: break-all;
   display: -webkit-box;
   -webkit-line-clamp: 6;
   -webkit-box-orient: vertical;
