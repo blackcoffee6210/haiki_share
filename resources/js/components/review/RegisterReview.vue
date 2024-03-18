@@ -82,9 +82,7 @@
 					</div>
 					
 					<!-- タイトル -->
-					<label for="title"
-								 class="c-label p-review-form__label">レビュータイトル
-					</label>
+					<label for="title" class="c-label p-review-form__label">レビュータイトル</label>
 					<input type="text"
 								 class="c-input p-review-form__input"
 								 :class="{ 'c-input__err': errors.title ||
@@ -115,9 +113,7 @@
 					</div>
 					
 					<!-- レビューの内容 -->
-					<label for="detail"
-								 class="c-label p-review-form__label u-mt0">レビューの内容
-					</label>
+					<label for="detail" class="c-label p-review-form__label u-mt0">レビューの内容</label>
 					<textarea class="c-input p-review-form__textarea"
 										:class="{ 'c-input__err': errors.detail ||
 					 										maxCounter(reviewForm.detail, 255)
@@ -149,9 +145,7 @@
 					
 					<div class="p-review-form__btn-container">
 						<!-- 投稿ボタン -->
-						<button class="c-btn p-review-form__btn--post"
-										type="submit">投稿する
-						</button>
+						<button class="c-btn p-review-form__btn--post" type="submit">投稿する</button>
 					</div>
 				</form>
 			</div>
@@ -194,7 +188,6 @@ export default {
 				detail: '',              //レビューコメント
 				shopUser: {},            //出品ユーザーの情報
 			},
-			
 		}
 	},
 	computed: {
@@ -227,13 +220,15 @@ export default {
 			try {
 				const response = await axios.get(`/api/users/${this.p_id}/shopUser`); //API通信
 				
-				if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
+				if(response.status === OK) { //成功
+					this.reviewForm.shopUser    = response.data[0];                 //出品者の情報
+					this.reviewForm.sender_id   = this.userId;                      //送信者（レビュー投稿者）のユーザーid
+					this.reviewForm.receiver_id = this.reviewForm.shopUser.user_id; //受信者（出品者）のユーザーid
+					
+				}else { //失敗
 					this.$store.commit('error/setCode', response.status);
 					return false;
 				}
-				this.reviewForm.shopUser    = response.data[0];                 //出品者の情報
-				this.reviewForm.sender_id   = this.userId;                      //送信者（レビュー投稿者）のユーザーid
-				this.reviewForm.receiver_id = this.reviewForm.shopUser.user_id; //受信者（出品者）のユーザーid
 				
 			}catch(error) {
 				console.error('出品ユーザー取得処理中にエラーが発生しました');
@@ -255,9 +250,11 @@ export default {
 		async getRecommendation() { //ユーザー評価取得
 			try {
 				const response = await axios.get('/api/recommendations') //API接続
-				this.recommendations = response.data;
 				
-				if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
+				if(response.status === OK) { //成功
+					this.recommendations = response.data;
+				
+				}else { //失敗
 					this.$store.commit('error/setCode', response.status);
 					return false;
 				}
@@ -272,13 +269,14 @@ export default {
 			try {
 				const response = await axios.post('/api/reviews', this.reviewForm); //API接続
 				
-				if(response.status === CREATED) {
+				if(response.status === CREATED) { //成功
 					this.$store.commit('message/setContent', { content: 'レビューを投稿しました！', }); //メッセージ登録
 					this.$router.push({ name: 'user.mypage', params: { id: this.userId.toString() } }); //マイページに遷移
 					
 				}else if(response.status === UNPROCESSABLE_ENTITY) { //responseステータスがバリデーションエラーなら後続の処理を行う
 					this.errors = response.data.errors;
 					return false;
+					
 				}else {
 					this.$store.commit('error/setCode', response.status);
 					return false;

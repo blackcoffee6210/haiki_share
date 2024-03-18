@@ -25,7 +25,22 @@ class ProductController extends Controller
 	public function __construct() //認証なしでアクセスしたいAPIはexceptに書く
 	{
 		$this->middleware('auth')
-			 ->only(['purchasedByUser', 'canceledByUser']);
+			->only(['purchasedByUser', 'canceledByUser']);
+	}
+
+	protected $errorMessages = [
+		'fetchFailed'    => 'データの取得に失敗しました',
+		'saveFailed'     => 'データの保存に失敗しました',
+		'updateFailed'   => 'データの更新に失敗しました',
+		'deleteFailed'   => 'データの削除に失敗しました',
+		'purchaseFailed' => '購入に失敗しました',
+		'restoreFailed'  => 'データの復元に失敗しました',
+	];
+
+	private function handleException($e, $messageKey)
+	{
+		Log::error($this->errorMessages[$messageKey]. ': '. $e->getMessage());
+		return response()->json(['message' => $this->errorMessages[$messageKey]], 500);
 	}
 
 	private function saveImage($image) //画像処理専用メソッド
@@ -44,10 +59,9 @@ class ProductController extends Controller
 			$products = Product::with(['user', 'category', 'likes', 'history'])
 				->orderByDesc('updated_at')
 				->paginate(); //get()の代わりにpaginateを使うとtotalやcurrent_pageが自動的に追加される
-			return $products;
+			return response($products, 200);
 		}catch(\Exception $e) {
-			Log::error('商品一覧の取得に失敗しました: '. $e->getMessage());
-			return response()->json(['error' => '商品一覧の取得に失敗しました'], 500);
+			return $this->handleException($e, 'fetchFailed');
 		}
 	}
 
@@ -57,8 +71,7 @@ class ProductController extends Controller
 			$products = Product::withCount('likes')->orderByDesc('likes_count')->take(5)->get();
 			return $products;
 		}catch (\Exception $e) {
-			Log::error('ランキングの取得に失敗しました: '. $e->getMessage());
-			return response()->json(['error' => 'ランキングの取得に失敗しました'], 500);
+			return $this->handleException($e, 'fetchFailed');
 		}
 	}
 
@@ -68,8 +81,7 @@ class ProductController extends Controller
 			$products = Product::get();
 			return $products;
 		}catch (\Exception $e) {
-			Log::error('都道府県IDの取得に失敗しました: '. $e->getMessage());
-			return response()->json(['error' => '都道府県IDの取得に失敗しました'], 500);
+			return $this->handleException($e, 'fetchFailed');
 		}
 	}
 
@@ -82,8 +94,7 @@ class ProductController extends Controller
 			}
 			return $product;
 		} catch (\Exception $e) {
-			Log::error('商品詳細の取得に失敗しました: ' . $e->getMessage());
-			return response()->json(['error' => '商品詳細の取得に失敗しました。'], 500);
+			return $this->handleException($e, 'fetchFailed');
 		}
 	}
 
@@ -93,8 +104,7 @@ class ProductController extends Controller
 			$products = Product::where('user_id', $u_id)->where('id', '!=', $p_id)->orderByDesc('created_at')->get();
 			return $products;
 		}catch (\Exception $e) {
-			Log::error('投稿した商品の取得に失敗しました: '. $e->getMessage());
-			return response()->json(['error' => '投稿した商品の取得に失敗しました'], 500);
+			return $this->handleException($e, 'fetchFailed');
 		}
 	}
 
@@ -107,8 +117,7 @@ class ProductController extends Controller
 				->get();
 			return $products;
 		}catch (\Exception $e) {
-			Log::error('出品した商品に似た商品の取得に失敗しました: '. $e->getMessage());
-			return response()->json(['error' => '出品した商品に似た商品の取得に失敗しました'], 500);
+			return $this->handleException($e, 'fetchFailed');
 		}
 	}
 
@@ -121,7 +130,6 @@ class ProductController extends Controller
 				$image_path = $this->saveImage($request->file('image'));
 				$product->image = $image_path; //DBに保存
 			}
-
 			//============================================
 			//その他のカラムデータをDBに保存する
 			$product->user_id     = Auth::id();
@@ -135,8 +143,7 @@ class ProductController extends Controller
 
 			return response($product, 201); //新規作成なので、responseは201(CREATED)を返す
 		}catch (\Exception $e) {
-			Log::error('商品の登録に失敗しました: '. $e->getMessage());
-			return response()->json(['error' => '商品の登録に失敗しました。入力データを確認してください。例: 商品名が長すぎる、必須フィールドが欠けている、など。'], 500);
+			return $this->handleException($e, 'saveFailed');
 		}
 	}
 
@@ -149,7 +156,6 @@ class ProductController extends Controller
 				$image_path = $this->saveImage($request->file('image'));
 				$product->image = $image_path;
 			}
-
 			//DBに保存
 			$product->user_id     = $request->user_id;
 			$product->category_id = $request->category_id;
@@ -161,8 +167,7 @@ class ProductController extends Controller
 			return response($product, 200); //商品情報とstatusを返す
 
 		}catch(\Exception $e) {
-			Log::error('商品の更新に失敗しました: '. $e->getMessage());
-			return response()->json(['error' => '商品の更新に失敗しました'], 500);
+			return $this->handleException($e, 'updateFailed');
 		}
 	}
 
@@ -176,8 +181,7 @@ class ProductController extends Controller
 			$product->delete();
 			return response()->json(['message' => '商品を削除しました。'],200);
 		}catch(\Exception $e) {
-			Log::error('商品の削除に失敗しました: ' . $e->getMessage());
-			return response()->json(['error' => '商品の削除に失敗しました。'], 500);
+			return $this->handleException($e, 'deleteFailed');
 		}
 	}
 
@@ -191,8 +195,7 @@ class ProductController extends Controller
 			$product->restore();
 			return response()->json(['message' => '商品を復元しました。'], 200);
 		}catch (\Exception $e) {
-			Log::error('商品の復元に失敗しました: ' . $e->getMessage());
-			return response()->json(['error' => '商品の復元に失敗しました。'], 500);
+			return $this->handleException($e, 'restoreFailed');
 		}
 	}
 
@@ -206,8 +209,7 @@ class ProductController extends Controller
 			$product->forceDelete();
 			return response()->json(['message' => '商品を完全に削除しました。'], 200);
 		}catch (\Exception $e) {
-			Log::error('商品の完全削除に失敗しました: ' . $e->getMessage());
-			return response()->json(['error' => '商品の完全削除に失敗しました。'], 500);
+			return $this->handleException($e, 'deleteFailed');
 		}
 	}
 
@@ -221,8 +223,7 @@ class ProductController extends Controller
 			$product->likes()->syncWithoutDetaching(Auth::id()); // detachせずにattach（重複なし）
 			return response()->json(['message' => 'お気に入りに登録しました。'], 200);
 		} catch (\Exception $e) {
-			Log::error('お気に入り登録に失敗しました: ' . $e->getMessage());
-			return response()->json(['error' => 'お気に入り登録に失敗しました。'], 500);
+			return $this->handleException($e, 'saveFailed');
 		}
 	}
 
@@ -236,8 +237,7 @@ class ProductController extends Controller
 			$product->likes()->detach(Auth::id()); //likesテーブルのいいねを削除する
 			return response()->json(['message' => 'お気に入りを解除しました。'], 200);
 		}catch(\Exception $e) {
-			Log::error('お気に入り解除に失敗しました: '. $e->getMessage());
-			return response()->json(['error' => 'お気に入り解除に失敗しました。'], 500);
+			return $this->handleException($e, 'deleteFailed');
 		}
 	}
 
@@ -245,16 +245,19 @@ class ProductController extends Controller
 	{
 		DB::beginTransaction(); //トランザクション開始
 		try {
-			$buyer  = Auth::user();
-			$seller = User::find($request->user_id);
-			if(!$buyer || !$seller) {
-				return response()->json(['error' => '購入者または販売者が見つかりません。'], 404);
+			$buyer   = Auth::user();
+			$seller  = User::find($request->user_id);
+			$product = Product::find($id);
+
+			if(!$buyer || !$seller || !$product) {
+				return response()->json(['message' => '必要な情報が見つかりません。'], 404);
 			}
 
-			$history = new History; //インスタンス生成
-			$history->buyer_id   = $buyer->id;
-			$history->seller_id  = $seller->id;
-			$history->product_id = $id;
+			$history = new History([
+				'buyer_id'   => $buyer->id,
+				'seller_id'  => $seller->id,
+				'product_id' => $product->id
+			]);
 			$history->save();
 
 			$params = [ //メール送信に必要な情報を用意
@@ -267,16 +270,22 @@ class ProductController extends Controller
 				'expire'       => $request->expire, //賞味期限
 				'purchased_at' => Carbon::now(),    //現在の日時
 			];
-			Mail::to($buyer->email)->send(new PurchasedBuyerNotification($params));   //買い手にメールを送信
-			Mail::to($seller->email)->send(new PurchasedSellerNotification($params)); //売り手にメールを送信
+
+			try {
+				Mail::to($buyer->email)->send(new PurchasedBuyerNotification($params));   //買い手にメールを送信
+				Mail::to($seller->email)->send(new PurchasedSellerNotification($params)); //売り手にメールを送信
+			}catch(\Exception $mailException) {
+				Log::error('メール送信に失敗しました: '. $mailException->getMessage());
+				DB::rollBack();
+				return response()->json(['message' => 'メール送信に失敗しました', 500]);
+			}
 
 			DB::commit(); //トランザクション確定
 			return response()->json(['product_id' => $id], 200);
 
 		}catch(\Exception $e) {
 			DB::rollBack(); //エラー発生時はトランザクションをロールバック
-			Log::error('商品購入処理に失敗しました: '. $e->getMessage());
-			return response()->json(['error' => '商品購入処理に失敗しました'],500);
+			return $this->handleException($e, 'purchaseFailed');
 		}
 	}
 
@@ -286,8 +295,7 @@ class ProductController extends Controller
 			$product = History::where('product_id', $id)->where('buyer_id', Auth::id())->get();
 			return $product;
 		}catch (\Exception $e) {
-			Log::error('購入したユーザーの取得に失敗しました: '. $e->getMessage());
-			return response()->json(['error' => '購入したユーザーの取得に失敗しました'], 500);
+			return $this->handleException($e, 'fetchFailed');
 		}
 	}
 
@@ -297,8 +305,7 @@ class ProductController extends Controller
 			$product = Cancel::where('product_id', $id)->where('cancel_user_id', Auth::id())->first();
 			return $product;
 		} catch (\Exception $e) {
-			Log::error('キャンセルしたユーザーの取得に失敗しました: ' . $e->getMessage());
-			return response()->json(['error' => 'キャンセルしたユーザーの取得に失敗しました。'], 500);
+			return $this->handleException($e, 'fetchFailed');
 		}
 	}
 
@@ -333,15 +340,22 @@ class ProductController extends Controller
 				'expire'       => $request->expire,
 				'canceled_at'  => Carbon::now()
 			];
-			Mail::to($buyer->email)->send(new CanceledBuyerNotification($params));   //買い手にメールを送信
-			Mail::to($seller->email)->send(new CanceledSellerNotification($params)); //売り手にメールを送信
+
+			try {
+				Mail::to($buyer->email)->send(new CanceledBuyerNotification($params));   //買い手にメールを送信
+				Mail::to($seller->email)->send(new CanceledSellerNotification($params)); //売り手にメールを送信
+			}catch(\Exception $mailException) {
+				Log::error('メール送信に失敗しました: '. $mailException->getMessage());
+				DB::rollBack();
+				return response()->json(['message' => 'メール送信に失敗しました', 500]);
+			}
 
 			DB::commit(); //トランザクション確定
 			return response()->json(['message' => '商品の購入をキャンセルしました。'], 200);
+
 		}catch(\Exception $e) {
 			DB::rollBack(); //トランザクションロールバック
-			Log::error('商品購入のキャンセル処理に失敗しました: ' . $e->getMessage());
-			return response()->json(['error' => '商品購入のキャンセル処理に失敗しました。'], 500);
+			return $this->handleException($e, 'saveFailed');
 		}
 	}
 
@@ -354,23 +368,7 @@ class ProductController extends Controller
 				->get();
 			return $review;
 		}catch (\Exception $e) {
-			Log::error('レビューの確認に失敗しました: ' . $e->getMessage());
-			return response()->json(['error' => 'レビューの確認に失敗しました。'], 500);
+			return $this->handleException($e, 'fetchFailed');
 		}
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

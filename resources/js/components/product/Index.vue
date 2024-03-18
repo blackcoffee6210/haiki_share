@@ -316,10 +316,10 @@ export default {
 			this.sortPrefecture = parseInt(query.sortPrefecture, 10) || 0;
 			
 			await Promise.all([
-					this.getProducts(),
-					this.getCategories(),
-					this.getPrefectures(),
-					this.getRecommend(),
+				this.getProducts(),
+				this.getCategories(),
+				this.getPrefectures(),
+				this.getRecommend(),
 			]);
 		},
 		clearFilters() { //絞り込みを解除する
@@ -340,13 +340,13 @@ export default {
 			this.$router.push({
 				name: 'index',
 				query: {
-					showExpired: this.showExpired,
-					showSale: this.showSale,
-					keyword: this.keyword,
-					sortPrice: this.sortPrice,
-					sortCategory: this.sortCategory,
+					showExpired:    this.showExpired,
+					showSale:       this.showSale,
+					keyword:        this.keyword,
+					sortPrice:      this.sortPrice,
+					sortCategory:   this.sortCategory,
 					sortPrefecture: this.sortPrefecture,
-					page: this.currentPage || 1 // 現在のページ番号を追加
+					page:           this.currentPage || 1 // 現在のページ番号を追加
 				}
 			}).catch(err => {});
 		},

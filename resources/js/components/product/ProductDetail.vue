@@ -14,9 +14,7 @@
 				
 				<div class="u-p-relative">
 					<!-- 商品の画像	-->
-					<img :src="product.image"
-							 alt=""
-							 class="p-product-detail__img">
+					<img :src="product.image" alt="" class="p-product-detail__img">
 					<!-- カテゴリー名 -->
 					<div class="p-product-detail__category">{{ product.category_name }}</div>
 				</div>
@@ -37,8 +35,7 @@
 					<div class="p-product-detail__user-info">
 						<!-- 詳細画面のリンク -->
 						<router-link class="c-card__link"
-												 :to="{ name: 'user.detail',
-																	params: { id: product.user_id.toString() }}"/>
+												 :to="{ name: 'user.detail', params: { id: product.user_id.toString() }}"/>
 						<!-- ユーザー画像 -->
 						<img :src="product.user_image"
 								 alt=""
@@ -119,8 +116,7 @@
 					<!-- レビュー投稿ボタン 購入したユーザーかつレビューを投稿していないときに表示 -->
 					<router-link class="c-btn p-product-detail__btn p-product-detail__btn--review"
 											 v-show="purchasedByUser && !isReviewed"
-											 :to="{ name: 'review.register',
-															params: { p_id: id.toString() }}">レビュー投稿
+											 :to="{ name: 'review.register', params: { p_id: id.toString() }}">レビュー投稿
 					</router-link>
 					
 					<!-- 購入キャンセルボタン 自分が購入した商品のときに表示	-->
@@ -282,6 +278,7 @@ export default {
 		},
 		async getProduct() { //商品詳細情報取得
 			this.loading = true; //loadingをtrueにする
+			
 			try {
 				const response = await axios.get(`/api/products/${ this.id }`); //API通信
 				
@@ -355,6 +352,7 @@ export default {
 				}else {
 					this.like(); //いいねしていなかったらいいねをつける
 				}
+				
 			}catch(error) {
 				console.error('お気に入りの切り替えに失敗しました', error);
 			}
@@ -367,7 +365,6 @@ export default {
 					this.product.likes_count += 1; //トータルのいいね数を1増やす
 					this.product.liked_by_user = true; //ログインユーザーが「いいね」をしたのでtrueをセット
 					this.isLike = true;
-					
 				}else {
 					this.$store.commit('error/setCode', response.status);
 					return false;
@@ -389,7 +386,6 @@ export default {
 				}else {
 					this.$store.commit('error/setCode', response.status);
 					return false;
-					
 				}
 				
 			}catch(error) {
@@ -440,24 +436,26 @@ export default {
 			this.$router.push({name: 'product.detail', params: {id: this.product.id}}).catch(err => {} ); //自画面(商品詳細)に遷移する
 		},
 		async cancel() { //購入キャンセル
-			if(confirm('購入をキャンセルしますか？(キャンセルした商品は再度購入できません)')) {
-				this.loading = true; //ローディングを表示する
-				
+			if(!confirm('購入をキャンセルしますか？(キャンセルした商品は再度購入できません)')) return;
+			this.loading = true; //ローディングを表示する
+			
+			try {
 				const response = await axios.post(`/api/products/${this.id}/cancel`, this.product); //API通信
 				
-				this.loading = false; //API通信が終わったらローディングを非表示にする
-				
-				if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
-					this.$store.commit('error/setCode', response.status);
+				if(response.status === OK) { //成功
+					this.$store.commit('message/setContent', { content: '購入をキャンセルしました' }); //メッセージ登録
+					this.$router.push({ name: 'user.mypage', params: { id: this.product.user_id.toString() } }); //マイページに遷移する
+					
+				}else { //失敗
+					this.$store.commit('error/setCode', response.status); //エラーコードをセット
 					return false;
 				}
 				
-				this.$store.commit('message/setContent', { //メッセージ登録
-					content: '購入をキャンセルしました'
-				});
+			}catch (error) {
+				console.error('キャンセル処理に失敗しました', error);
 				
-				this.$router.push({ name: 'user.mypage',
-					params: { id: this.product.user_id.toString() }}); //マイページに遷移する
+			}finally {
+				this.loading = false; //ローディングを非表示にする
 			}
 		},
 		async restore() { //論理削除した商品を復元する
@@ -465,13 +463,14 @@ export default {
 			try {
 				const response = await axios.post(`/api/products/${this.id}/restore`); //API通信
 				
-				if (response.status !== OK) { //失敗したら
+				if (response.status === OK) { //成功したら
+					this.$store.commit('message/setContent', { content: '商品を復元しました！' }); //メッセージ登録
+					this.$router.push({name: 'user.mypage', params: {id: this.product.user_id.toString()}}); //マイページに遷移する
+					
+				}else { //失敗したら
 					this.$store.commit('error/setCode', response.status);
 					return false;
 				}
-				
-				this.$store.commit('message/setContent', {content: '商品を復元しました！'}); //メッセージ登録
-				this.$router.push({name: 'user.mypage', params: {id: this.product.user_id.toString()}}); //マイページに遷移する
 				
 			}catch (error) {
 				console.error('復元に失敗しました', error);
@@ -483,13 +482,14 @@ export default {
 			try {
 				const response = await axios.post(`/api/products/${this.id}/forceDelete`); //API通信
 				
-				if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
-					this.$store.commit('error/setCode', response.status);
+				if (response.status === OK) { //成功
+					this.$store.commit('message/setContent', { content: '商品を完全に削除しました！' }); //メッセージ登録
+					this.$router.push({ name: 'user.mypage', params: { id: this.product.user_id.toString() }}); //マイページに遷移する
+					
+				}else { //失敗
+					this.$store.commit('error/setCode', response.status); //エラーコードをセット
 					return false;
 				}
-				
-				this.$store.commit('message/setContent', { content: '商品を完全に削除しました！' }); //メッセージ登録
-				this.$router.push({ name: 'user.mypage', params: { id: this.product.user_id.toString() }}); //マイページに遷移する
 				
 			}catch(error) {
 				console.error('商品の完全削除に失敗しました。', error);
@@ -499,11 +499,13 @@ export default {
 			try {
 				const response = await axios.get(`/api/products/${this.product.user_id}/isReviewed`); //API接続
 				
-				if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
+				if(response.status === OK) { //成功
+					this.isReviewed = response.data.isReviewed;
+					
+				}else { //失敗
 					this.$store.commit('error/setCode', response.status);
 					return false;
 				}
-				this.isReviewed = response.data.isReviewed;
 				
 			}catch(error) {
 				console.error('レビュー状態の取得に失敗しました', error);

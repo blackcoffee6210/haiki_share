@@ -73,36 +73,46 @@ export default {
 		async getProducts() {  //いいねした商品一覧
 			this.loading = true; //ローディングを表示する
 			
-			const response = await axios.get(`/api/users/${this.id}/liked`); //API通信
-			
-			this.loading = false; //API通信が終わったらローディングを非表示にする
-			
-			if (response.status !== OK) { //responseステータスがOKじゃなかったら後続の処理を行う
-				this.$store.commit('error/setCode', response.status);
-				return false;
-			}
-			this.products = response.data; //プロパティにデータをセット
-		},
-		async unlike(product) {   //お気に入りを削除する
-			this.product = product; //引数の値をプロパティにセット
-			
-			if(confirm('お気に入りを解除しますか?')) {
-				const response = await axios.delete(`/api/products/${this.product.id}/unlike`); //API通信
+			try {
+				const response = await axios.get(`/api/users/${this.id}/liked`); //API通信
 				
-				if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
+				if (response.status === OK) { //成功
+					this.products = response.data; //プロパティにデータをセット
+					
+				}else { //失敗
 					this.$store.commit('error/setCode', response.status);
 					return false;
 				}
 				
-				this.product.likes_count -= 1;      //お気に入りを解除したので、いいねの数を1個減らす
-				this.product.liked_by_user = false; //いいね解除したので、ユーザーのいいねをtrueからfalseにする
-				this.isLike = false;                //一覧表示に表示しない
+			}catch(error) {
+				console.error('商品一覧取得中にエラーが発生しました', error);
 				
-				this.$store.commit('message/setContent', { //メッセージ登録
-					content: 'お気に入りを解除しました',
-				});
+			}finally {
+				this.loading = false; //ローディングを非表示にする
+			}
+		},
+		async unlike(product) {   //お気に入りを削除する
+			this.product = product; //引数の値をプロパティにセット
+			
+			if(!confirm('お気に入りを解除しますか?')) return;
+			try {
+				const response = await axios.delete(`/api/products/${this.product.id}/unlike`); //API通信
 				
-				this.$router.push({name: 'user.mypage', params: {id: this.id.toString()}}); //マイページに遷移する
+				if(response.status === OK) { //成功
+					this.product.likes_count -= 1;      //お気に入りを解除したので、いいねの数を1個減らす
+					this.product.liked_by_user = false; //いいね解除したので、ユーザーのいいねをtrueからfalseにする
+					this.isLike = false;                //一覧表示に表示しない
+					
+					this.$store.commit('message/setContent', { content: 'お気に入りを解除しました' }); //メッセージ登録
+					this.$router.push({name: 'user.mypage', params: {id: this.id.toString()}}); //マイページに遷移する
+					
+				}else {
+					this.$store.commit('error/setCode', response.status);
+					return false;
+				}
+				
+			}catch (error) {
+				console.error('お気に入り解除処理中にエラーが発生しました', error);
 			}
 		}
 	},

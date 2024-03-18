@@ -22,8 +22,7 @@
 				<!-- エラーメッセージ -->
 				<div class="u-d-flex u-space-between">
 					<!-- エラーメッセージ（フロントエンド） -->
-					<div v-if="maxCounter(passResetForm.email,255) && !errors"
-							 class="p-error">
+					<div v-if="maxCounter(passResetForm.email,255) && !errors" class="p-error">
 						<p class="">Eメールは255文字以下で指定してください</p>
 					</div>
 					<!-- エラーメッセージ（バックエンド）	-->
@@ -70,24 +69,27 @@ export default {
 			return content.length > maxValue;
 		},
 		async submit() { //Email送信
-			
 			this.loading = true; //ローディングを表示する
 			
-			const response = await axios.post('/api/password/email', this.passResetForm); //API通信
-			
-			this.loading = false; //API通信が終わったらローディングを非表示にする
-			
-			if(response.status === UNPROCESSABLE_ENTITY) { //responseステータスがUNPROCESSABLE＿ENTITY(バリデーションエラー)なら後続の処理を行う
-				this.errors = response.data.errors;
-				return false;
-			}
-			
-			if(response.status === OK) { //responseステータスがOK(成功)ならメッセージを登録
-				this.$store.commit('message/setContent', {
-					content: 'パスワード再設定メールを送信しました',
-				})
+			try {
+				const response = await axios.post('/api/password/email', this.passResetForm); //API通信
 				
-				this.$router.push({name: 'index'}); //インデックス画面に移動する
+				if(response.status === OK) { //responseステータスがOK(成功)ならメッセージを登録
+					this.$store.commit('message/setContent', {
+						content: 'パスワード再設定メールを送信しました',
+					});
+					this.$router.push({name: 'index'}); //インデックス画面に移動する
+					
+				}else if(response.status === UNPROCESSABLE_ENTITY) { //responseステータスがUNPROCESSABLE＿ENTITY(バリデーションエラー)なら後続の処理を行う
+					this.errors = response.data.errors;
+					return false;
+				}
+				
+			}catch (error) {
+				console.error('Email送信処理中にエラーが発生しました ', error);
+				
+			}finally {
+				this.loading = false; //ローディングを非表示にする
 			}
 		}
 	}

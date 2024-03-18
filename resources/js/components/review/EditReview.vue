@@ -9,9 +9,7 @@
 				<Loading color="#f96204" v-show="loading" />
 				
 				<!-- レビュー編集フォーム -->
-				<form class="p-review-form__form"
-							v-show="!loading"
-							@submit.prevent="update">
+				<form class="p-review-form__form" v-show="!loading" @submit.prevent="update">
 					
 					<!-- 出品者の情報 -->
 					<div class="p-review-form__user-info">
@@ -81,9 +79,7 @@
 					</div>
 					
 					<!-- タイトル -->
-					<label for="title"
-								 class="c-label p-review-form__label">レビュータイトル
-					</label>
+					<label for="title" class="c-label p-review-form__label">レビュータイトル</label>
 					<input type="text"
 								 class="c-input p-review-form__input"
 								 :class="{ 'c-input__err': errors.title ||
@@ -94,8 +90,7 @@
 								 placeholder="もっとも伝いたいポイントはなんですか？">
 					<div class="u-d-flex u-space-between">
 						<!-- エラーメッセージ（フロントエンド） -->
-						<div v-if="maxCounter(reviewForm.title,50) && !errors.title"
-								 class="p-error">
+						<div v-if="maxCounter(reviewForm.title,50) && !errors.title" class="p-error">
 							<p class="u-mb20">レビュータイトルは50文字以下で指定してください</p>
 						</div>
 						<!-- エラーメッセージ（バックエンド）	-->
@@ -114,8 +109,7 @@
 					</div>
 					
 					<!-- レビューの内容 -->
-					<label for="detail"
-								 class="c-label p-review-form__label u-mt0">レビューの内容
+					<label for="detail" class="c-label p-review-form__label u-mt0">レビューの内容
 					</label>
 					<textarea class="c-input p-review-form__textarea"
 										:class="{ 'c-input__err': errors.detail ||
@@ -148,9 +142,7 @@
 					
 					<div class="p-review-form__btn-container">
 						<!-- ボタン -->
-						<a @click="$router.back()"
-							 class="c-btn c-btn--white p-review-form__btn">もどる
-						</a>
+						<a @click="$router.back()" class="c-btn c-btn--white p-review-form__btn">もどる</a>
 						<!-- 削除ボタン	-->
 						<button class="c-btn c-btn--white p-review-form__btn"
 										@click="deleteReview"
@@ -158,9 +150,7 @@
 						</button>
 						
 						<!-- 更新ボタン -->
-						<button class="c-btn p-review-form__btn"
-										type="submit">更新する
-						</button>
+						<button class="c-btn p-review-form__btn" type="submit">更新する</button>
 					</div>
 				</form>
 			</div>
@@ -202,11 +192,13 @@ export default {
 			try {
 				const response = await axios.get('/api/recommendations') //API接続
 				
-				if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
+				if(response.status === OK) { //成功
+					this.recommendations = response.data;
+					
+				}else { //失敗
 					this.$store.commit('error/setCode', response.status);
-					return;
+					return false;
 				}
-				this.recommendations = response.data;
 				
 			}catch (error) {
 				console.error('ユーザー評価取得中にエラーが発生しました', error);
@@ -215,21 +207,20 @@ export default {
 		async getReview() { //レビュー取得
 			try {
 				const response = await axios.get(`/api/reviews/${this.s_id}/${this.r_id}`);
-				if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
+				
+				if(response.status === OK) { //成功
+					this.reviewForm = response.data[0];
+				
+				}else { //失敗
 					this.$store.commit('error/setCode', response.status);
 					return false;
-				}
-				this.reviewForm = response.data[0];
-				
-				if(!this.reviewForm) { //投稿したレビューじゃなかったら商品一覧画面へ遷移する
-					this.$router.push({name: 'index'});
 				}
 				
 			}catch (error) {
 				console.error('レビュー取得処理中にエラーが発生しました', error);
 			}
 		},
-		async update() {       //レビュー更新
+		async update() { //レビュー更新
 			this.loading = true; //ローディングを表示する
 			
 			try {

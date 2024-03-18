@@ -9,9 +9,7 @@
 				<Loading v-show="loading" />
 				
 				<!-- 商品がなければ表示する -->
-				<div v-if="!products.length"
-						 class="p-list__no-product">削除した商品はありません
-				</div>
+				<div v-if="!products.length" class="p-list__no-product">削除した商品はありません</div>
 				
 				<div class="p-list__card-container" v-show="!loading">
 					
@@ -19,12 +17,9 @@
 					<Product v-for="product in products"
 									 :key="product.id"
 									 :product="product">
-						<div class="p-product__btn-container"
-								 slot="btn">
+						<div class="p-product__btn-container" slot="btn">
 							<!-- 論理削除された商品を復元するボタン	-->
-							<button class="c-btn p-list__btn"
-											@click="restore(product)">復元する
-							</button>
+							<button class="c-btn p-list__btn" @click="restore(product)">復元する</button>
 						</div>
 					</Product>
 				
@@ -66,32 +61,42 @@ export default {
 		async getProducts() { //削除した商品一覧取得
 			this.loading = true; //ローディングを表示する
 			
-			const response = await axios.get(`/api/users/${this.id}/deleted`); //API通信
-			
-			this.loading = false; //API通信が終わったらローディングを非表示にする
-			
-			if(response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
-				this.$store.commit('error/setCode', response.status);
-				return false;
-			}
-			this.products = response.data; //プロパティにresponseデータをセットする
-		},
-		async restore(product) { //論理削除した商品を復元する
-			this.product = product; //引数の値をプロパティにセット
-			
-			if(confirm('この商品を復元しますか？')) {
-				const response = await axios.post(`/api/products/${this.product.id}/restore`); //API通信
-				if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセット
+			try {
+				const response = await axios.get(`/api/users/${this.id}/deleted`); //API通信
+				
+				if(response.status === OK) {
+					this.products = response.data; //プロパティにresponseデータをセットする
+					
+				}else {
 					this.$store.commit('error/setCode', response.status);
 					return false;
 				}
 				
-				this.$store.commit('message/setContent', { //メッセージ登録
-					content: '商品を復元しました！'
-				});
+			}catch (error) {
+				console.error('削除した商品取得中にエラーが発生しました', error);
 				
-				this.$router.push({ name: 'user.mypage',
-														params: { id: this.id.toString() }}); //マイページに遷移する
+			}finally {
+				this.loading = false; //ローディングを非表示にする
+			}
+		},
+		async restore(product) { //論理削除した商品を復元する
+			this.product = product; //引数の値をプロパティにセット
+			
+			if(!confirm('この商品を復元しますか？')) return;
+			try {
+				const response = await axios.post(`/api/products/${this.product.id}/restore`); //API通信
+				
+				if(response.status === OK) { //成功
+					this.$store.commit('message/setContent', { content: '商品を復元しました！' }); //メッセージ登録
+					this.$router.push({ name: 'user.mypage', params: { id: this.id.toString() }}); //マイページに遷移する
+					
+				}else { //失敗
+					this.$store.commit('error/setCode', response.status);
+					return false;
+				}
+				
+			}catch (error) {
+				console.error('商品の復元処理に失敗しました', error);
 			}
 		}
 	},

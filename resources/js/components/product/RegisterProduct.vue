@@ -9,9 +9,7 @@
 				<Loading color="#f96204" v-show="loading"/>
 				
 				<!-- フォームエリア	-->
-				<form class="p-product-form__form"
-							v-show="!loading"
-							@submit.prevent="submit">
+				<form class="p-product-form__form" v-show="!loading" @submit.prevent="submit">
 					
 					<!-- 商品画像	-->
 					<div class="u-p-relative">
@@ -24,14 +22,13 @@
 									 @dragleave="dragLeave"
 									 @dragover.prevent
 									 @drop.stop="dropFile">
-							<span class="p-product-form__label-text"
-										v-if="!preview">ドラッグ&ドロップ<br>またはファイルを選択
+							<span class="p-product-form__label-text" v-if="!preview">
+								ドラッグ&ドロップ<br>またはファイルを選択
 							</span>
 							<input type="file"
 										 class="p-product-form__img"
 										 @change="onFileChange">
-							<output class="p-product-form__output"
-											v-if="preview">
+							<output class="p-product-form__output" v-if="preview">
 								<img :src="preview"
 										 class="p-product-form__output-img"
 										 alt="">
@@ -48,9 +45,7 @@
 					</div>
 					
 					<!-- カテゴリー -->
-					<label for="category_id"
-								 class="c-label p-product-form__label">カテゴリー
-					</label>
+					<label for="category_id" class="c-label p-product-form__label">カテゴリー</label>
 					<select class="c-select p-product-form__input"
 									:class="{ 'c-select__err': errors.category_id }"
 									id="category_id"
@@ -70,9 +65,7 @@
 					</div>
 					
 					<!-- 商品名	-->
-					<label for="name"
-								 class="c-label p-product-form__label">商品名
-					</label>
+					<label for="name" class="c-label p-product-form__label">商品名</label>
 					<input type="text"
 								 class="c-input p-product-form__input"
 								 :class="{ 'c-input__err': errors.name || maxCounter(product.name,50) }"
@@ -102,9 +95,7 @@
 					</div>
 					
 					<!-- 商品の内容	-->
-					<label for="detail"
-								 class="c-label p-product-form__label u-mt0">商品の内容
-					</label>
+					<label for="detail" class="c-label p-product-form__label u-mt0">商品の内容</label>
 					<textarea	class="c-input p-product-form__textarea"
 										 :class="{ 'c-input__err': errors.detail || maxCounter(product.detail, 255) }"
 										 id="detail"
@@ -126,16 +117,13 @@
 							</div>
 						</div>
 						<!-- 文字数カウンター -->
-						<p class="c-counter"
-							 :class="{ 'c-counter--err': maxCounter(product.detail,255) }">
+						<p class="c-counter" :class="{ 'c-counter--err': maxCounter(product.detail,255) }">
 							{{ product.detail.length }}/255
 						</p>
 					</div>
 					
 					<!-- 賞味期限 -->
-					<label for="expire_date"
-								 class="c-label p-product-form__label u-mt0">賞味期限
-					</label>
+					<label for="expire_date" class="c-label p-product-form__label u-mt0">賞味期限</label>
 					<input type="text"
 								 onfocusin="this.type='date'"
 								 onfocusout="this.type='text'"
@@ -155,9 +143,7 @@
 					</div>
 					
 					<!-- 金額	-->
-					<label for="price"
-								 class="c-label p-product-form__label">金額
-					</label>
+					<label for="price" class="c-label p-product-form__label">金額</label>
 					<div class="u-d-flex">
 						<input type="text"
 									 class="c-input p-product-form__input p-product-form__input--yen"
@@ -186,16 +172,14 @@
 						</div>
 					</div>
 					
-					
+					<!-- ボタンコンテナ -->
 					<div class="p-product-form__btn-container">
 						<!-- ボタン -->
 						<a @click="$router.back()"
 							 class="c-btn c-btn--white p-product-form__btn p-product-form__btn--back">もどる
 						</a>
 						<!-- ボタン	-->
-						<button class="c-btn p-product-form__btn"
-										type="submit">出品する
-						</button>
+						<button class="c-btn p-product-form__btn" type="submit">出品する</button>
 					</div>
 				</form>
 			</div>
@@ -266,14 +250,12 @@ export default {
 				if (event.dataTransfer.files.length !== 1) { // ドロップされたファイルがない、または複数ファイルがドロップされた場合は処理しない
 					return;
 				}
-				
 				const file = event.dataTransfer.files[0];
 				
 				if (!file.type.match('image.*')) { // ドロップされたファイルが画像であるかを確認
 					this.reset(); // ファイルが画像でなければリセット
 					return;
 				}
-				
 				const reader = new FileReader(); // FileReaderを使用して画像を読み込み、プレビューとして表示
 				reader.onload = e => {
 					this.preview = e.target.result; // プレビュー用のデータURLをセット
@@ -316,14 +298,12 @@ export default {
 				this.reset(); // 選択されたファイルがなければリセット
 				return;
 			}
-			
 			const file = event.target.files[0];
 			
 			if (!file.type.match('image.*')) { //ファイルが画像ではなかったら処理中断
 				this.reset(); // ファイルが画像でなければリセット
 				return;
 			}
-			
 			const reader = new FileReader();
 			reader.onload = e => {
 				this.preview = e.target.result; // プレビュー用のデータURLをセット
@@ -332,12 +312,13 @@ export default {
 			reader.readAsDataURL(file); // ファイルをデータURLとして読み込む
 		},
 		reset() { //入力欄の値とプレビュー表示をクリアするメソッド
-			this.preview = '';
+			this.preview = null;
 			this.product.image = null;
 			this.$el.querySelector('input[type="file"]').value = null;
 		},
 		async submit() { //商品登録メソッド
 			this.loading = true; //ローティングを表示する
+			
 			try {
 				const formData = new FormData;
 				formData.append('image',       this.product.image);
@@ -349,26 +330,25 @@ export default {
 				
 				const response = await axios.post('/api/products', formData); //商品登録APIを呼び出す
 				
-				this.loading = false; //API通信が終わったらローディングを非表示にする
-				
-				if(response.status === UNPROCESSABLE_ENTITY) { //responseステータスがバリデーションエラーなら後続の処理を行う
-					this.errors = response.data.errors;          //responseエラーメッセージをプロパティに格納する
-					return;                                      //後続の処理を抜ける
+				if(response.status === CREATED) { //成功なら
+					this.$store.commit('message/setContent', { content: '商品を登録しました！' });
+					this.$router.push({ name: 'index' }); //トップページへ移動する
+					
+				}else if(response.status === UNPROCESSABLE_ENTITY) { //バリデーションエラーなら後続の処理を行う
+					this.errors = response.data.errors; //responseエラーメッセージをプロパティに格納する
+					return;                             //後続の処理を抜ける
+					
+				}else {
+					this.$store.commit('error/setCode', response.status); //エラー情報を渡す
+					return;
 				}
 				this.reset(); //送信が完了したら入力値をクリアする
 				
-				if(response.status !== CREATED) { //responseステータスがCREATEDじゃなかったら(商品登録できなかったら)後続の処理を行う
-					this.$store.commit('error/setCode', response.status); //エラー情報を渡す
-					return;                                                     //後続の処理を抜ける
-				}
-				
-				this.$store.commit('message/setContent', { //上のif文を抜けたら登録成功なので、メッセージを登録する
-					content: '商品を登録しました！'
-				});
-				this.$router.push({ name: 'index' }); //トップページへ移動する
-				
 			}catch (error) {
 				console.error('商品出品処理に失敗しました', error);
+				
+			}finally {
+				this.loading = false; //ローディングを非表示にする
 			}
 		}
 	},

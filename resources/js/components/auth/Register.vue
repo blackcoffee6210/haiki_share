@@ -310,13 +310,20 @@ export default {
 			return content.length > maxValue;
 		},
 		async getPrefectures() { //都道府県取得
-			const response = await axios.get('/api/prefectures'); //API接続
-			
-			if(response.status !== OK) { //responseステータスがOKじゃなかったら
-				this.$store.commit('error/setCode', response.status);
-				return false;
+			try {
+				const response = await axios.get('/api/prefectures'); //API接続
+				
+				if(response.status === OK) {
+					this.prefectures = response.data; //プロパティに値をセットする
+					
+				}else {
+					this.$store.commit('error/setCode', response.status);
+					return false;
+				}
+				
+			}catch (error) {
+				console.error('都道府県取得処理中にエラーが発生しました ', error);
 			}
-			this.prefectures = response.data; //プロパティに値をセットする
 		},
 		async register() { //ユーザー登録
 			this.clearError(); //エラー状態を初期化
@@ -330,6 +337,7 @@ export default {
 						this.$router.push({ name: 'index' }); //トップページ(index画面)に移動する
 					}
 				}
+				
 			}catch(error) {
 				console.error('ユーザー登録処理でエラーが発生しました: ', error);
 			}

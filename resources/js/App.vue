@@ -27,7 +27,7 @@ export default {
 		})
 	},
 	watch: {
-		errorCode: {                                                 //errorモジュールのステートを監視する
+		errorCode: { //errorモジュールのステートを監視する
 			async handler(val) {
 				if (val === INTERNAL_SERVER_ERROR) {                     // INTERNAL_SERVER_ERRORだった場合にはエラーページに移動する
 					this.$router.push({ name: 'systemError' });            //500エラーページに遷移する

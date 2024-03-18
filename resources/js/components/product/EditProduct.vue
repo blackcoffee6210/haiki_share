@@ -100,9 +100,7 @@
 					</div>
 					
 					<!-- 商品の内容	-->
-					<label for="detail"
-								 class="c-label p-product-form__label u-mt0">商品の内容
-					</label>
+					<label for="detail" class="c-label p-product-form__label u-mt0">商品の内容</label>
 					<textarea	class="c-input p-product-form__textarea"
 										 :class="{ 'c-input__err': errors.detail || maxCounter(product.detail, 255) }"
 										 id="detail"
@@ -133,9 +131,7 @@
 					<!-- 賞味期限は変更できないようにする(不正防止)-->
 					
 					<!-- 金額	-->
-					<label for="price"
-								 class="c-label p-product-form__label u-mt0">金額
-					</label>
+					<label for="price" class="c-label p-product-form__label u-mt0">金額</label>
 					<div class="u-d-flex">
 						<input type="text"
 									 class="c-input p-product-form__input p-product-form__input--yen"
@@ -181,8 +177,8 @@
 </template>
 
 <script>
+import Loading from "../Loading";
 import { mapGetters } from 'vuex';
-import Loading        from "../Loading";
 import { OK, UNPROCESSABLE_ENTITY } from "../../util";
 
 export default {
@@ -227,28 +223,31 @@ export default {
 			this.isEnter = false;
 		},
 		dropFile(event) {
-			event.preventDefault(); // デフォルトのイベントを防ぐ
-			this.isEnter = false;
-			
-			if (event.dataTransfer.files.length !== 1) { // ドロップされたファイルがない、または複数ファイルがドロップされた場合は処理しない
-				alert('一度にドロップできるファイルは1つだけです。');
-				return;
+			try {
+				event.preventDefault(); // デフォルトのイベントを防ぐ
+				this.isEnter = false;
+				
+				if (event.dataTransfer.files.length !== 1) { // ドロップされたファイルがない、または複数ファイルがドロップされた場合は処理しない
+					alert('一度にドロップできるファイルは1つだけです。');
+					return;
+				}
+				const file = event.dataTransfer.files[0];
+				
+				if (!file.type.match('image.*')) { // ドロップされたファイルが画像であるかを確認
+					alert('ドロップされたファイルは画像ではありません。');
+					return;
+				}
+				// FileReaderを使用して画像を読み込み、プレビューとして表示
+				const reader = new FileReader();
+				reader.onload = e => {
+					this.preview = e.target.result; // プレビュー用のデータURLをセット
+					this.product.image = file; // 実際に送信するファイルをセット
+				};
+				reader.readAsDataURL(file); // ファイルをデータURLとして読み込む
+				
+			}catch (error) {
+				console.error('ドラッグ＆ドロップ処理にエラーが発生しました。', error);
 			}
-			
-			const file = event.dataTransfer.files[0];
-			
-			if (!file.type.match('image.*')) { // ドロップされたファイルが画像であるかを確認
-				alert('ドロップされたファイルは画像ではありません。');
-				return;
-			}
-			
-			// FileReaderを使用して画像を読み込み、プレビューとして表示
-			const reader = new FileReader();
-			reader.onload = e => {
-				this.preview = e.target.result; // プレビュー用のデータURLをセット
-				this.product.image = file; // 実際に送信するファイルをセット
-			};
-			reader.readAsDataURL(file); // ファイルをデータURLとして読み込む
 		},
 		maxCounter(content, maxValue) { //カウンターの文字数上限
 			return content.length > maxValue;
@@ -257,6 +256,7 @@ export default {
 			try {
 				const response = await axios.get('/api/categories'); //API通信
 				this.categories = response.data; //プロパティに値をセットする
+				
 			}catch(error) {
 				console.error('カテゴリーの取得に失敗しました', error);
 			}
@@ -277,11 +277,15 @@ export default {
 				
 				if(response.status === OK) { //成功なら
 					this.product = response.data; //プロパティに値をセットする
-				}else {
-					this.handleError({ response }, '商品情報取得時にエラーが発生しました');
+					
+				}else { //失敗なら
+					this.$store.commit('error/setCode', response.status); //エラーコードをセット
+					return false;
 				}
+				
 			}catch (error) {
 				console.error('商品情報取得時にエラーが発生しました', error);
+				
 			}finally {
 				this.loading = false; //ローディングを非表示
 			}
@@ -332,7 +336,7 @@ export default {
 					this.errors = response.data.errors;
 					return false;
 					
-				}else {
+				}else { //その他の失敗
 					this.$store.commit('error/setCode', response.status); //エラーコードをセット
 					return false;
 				}

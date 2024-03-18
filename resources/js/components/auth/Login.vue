@@ -134,6 +134,7 @@ export default {
 					this.$store.commit('message/setContent',{ content: 'ログインしました！'}); //メッセージ登録
 					this.$router.go(-1); //元々アクセスしたかったページにリダイレクトする
 				}
+				
 			}catch(error) {
 				console.error('ログイン処理でエラーが発生しました: ', error);
 				this.localApiStatus = false; //ローカルステータスを更新してエラーを反映

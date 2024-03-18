@@ -22,16 +22,13 @@
 				<input type="password"
 							 id="password"
 							 class="c-input p-auth-form__input"
-							 :class="{ 'c-input__err': errors.password ||
-												  maxCounter(passResetForm.password,255)
-							 }"
+							 :class="{ 'c-input__err': errors.password || maxCounter(passResetForm.password,255) }"
 							 v-model="passResetForm.password"
 							 placeholder="********">
 				<!-- エラーメッセージ -->
 				<div class="u-d-flex u-space-between">
 					<!-- エラーメッセージ（フロントエンド） -->
-					<div v-if="maxCounter(passResetForm.password,255) && !errors.password"
-							 class="p-error">
+					<div v-if="maxCounter(passResetForm.password,255) && !errors.password" class="p-error">
 						<p class="">新しいパスワードは255文字以下で指定してください</p>
 					</div>
 					<!-- エラーメッセージ（バックエンド）	-->
@@ -104,23 +101,27 @@ export default {
 			return content.length > maxValue;
 		},
 		async submit() {
-			const response = await axios.post('/api/password/reset', this.passResetForm); //API通信
-			
-			if(response.status === UNPROCESSABLE_ENTITY) { //responseステータスがUNPROCESSABLE_ENTITY(バリデーションエラー)なら以下の処理を行う
-				this.errors = response.data.errors;
-				return false;
+			try {
+				const response = await axios.post('/api/password/reset', this.passResetForm); //API通信
+				
+				if(response.status === OK) { //成功なら
+					this.$store.commit('message/setContent', { //メッセージ登録
+						content: 'パスワードを変更しました',
+					});
+					this.$router.push({ name: 'index' }); //インデックス画面に移動する
+					
+				}else if(response.status === UNPROCESSABLE_ENTITY) { //responseステータスがUNPROCESSABLE_ENTITY(バリデーションエラー)なら以下の処理を行う
+					this.errors = response.data.errors;
+					return false;
+					
+				}else {
+					this.$store.commit('error/setCode', response.status);
+					return false;
+				}
+				
+			}catch (error) {
+				console.error('パスワードリセット処理中にエラーが発生しました ', error);
 			}
-			
-			if(response.status !== OK) { //responseステータスがOKじゃなかったら後続の処理を行う
-				this.$store.commit('error/setCode', response.status);
-				return false;
-			}
-			
-			this.$store.commit('message/setContent', { //メッセージ登録
-				content: 'パスワードを変更しました',
-			});
-			
-			this.$router.push({ name: 'index' }); //インデックス画面に移動する
 		}
 	}
 }

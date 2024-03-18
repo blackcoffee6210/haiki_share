@@ -99,10 +99,11 @@ export default {
 	methods: {
 		async getReview() { //レビュー取得
 			this.loading = true; //loadingをtrueにする
+			
 			try {
 				const response = await axios.get(`/api/reviews/${this.s_id}/${this.r_id}`);
 				
-				if(response.status === OK && response.data) { //API通信が成功なら
+				if(response.status === OK) { //API通信が成功なら
 					this.review = response.data;
 					
 				}else { //失敗なら
@@ -118,12 +119,15 @@ export default {
 			}
 		},
 		async getOtherProducts() { //レビューしたユーザーの他の商品を取得
+			this.loading = true; //loadingをtrueにする
+			
 			try {
 				const response = await axios.get(`/api/reviews/${this.r_id}/otherProducts`);
 				
-				if(response.status === OK) {
+				if(response.status === OK) { //成功
 					this.otherProducts = response.data;
-				}else {
+					
+				}else { //失敗
 					this.$store.commit('error/setCode', response.status);
 					return false;
 				}
@@ -140,7 +144,6 @@ export default {
 		$route: {
 			async handler() {
 				await this.getReview();
-				// if(!this.isShopUser) await this.getOtherProducts();
 				await this.getOtherProducts();
 			},
 			immediate: true

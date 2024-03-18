@@ -3,238 +3,38 @@
 		<!-- メインコンテンツ -->
 		<main class="l-main__2column">
 			<div class="p-mypage">
-				
 				<!-- ローディング -->
 				<Loading v-show="loading" />
 				
+				<!-- ローディング中でなければセクションを表示 -->
 				<div v-show="!loading">
 					
-					<!-- お気に入りした商品(利用者) -->
-					<section class="p-mypge__section" v-show="!isShopUser">
+					<!-- 各セクションの表示 -->
+					<section v-for="section in sections"
+									 :key="section.key"
+									 class="p-mypage__section"
+									 v-show="section.condition">
 						<div class="p-mypage__title-container">
-							<h2 class="c-title p-mypage__title">お気に入りした商品</h2>
+							<!-- タイトル -->
+							<h2 class="c-title p-mypage__title">{{ section.title }}</h2>
 							<!-- 全件表示のリンク -->
-							<router-link class="p-mypage__link"
-													 :to="{ name: 'user.liked',
-																	params: { id: id.toString() }}"
-													 v-if="likedProducts.length">全件表示
+							<router-link v-if="section.products.length"
+													 class="p-mypage__link"
+													 :to="section.routerLink">全件表示
 							</router-link>
 						</div>
-						<!-- お気に入りした商品がなければ表示する -->
-						<div v-if="!likedProducts.length"
-								 class="p-mypage__no-product">お気に入りした商品はありません
-						</div>
+						<!-- 商品がない場合のメッセージ -->
+						<div v-if="!section.products.length" class="p-mypage__no-product">{{ section.noProductMessage }}</div>
+						<!-- 商品一覧 -->
 						<div v-else class="p-mypage__card-container">
-							<!-- Productコンポーネント -->
-							<Product v-show="!loading"
-											 v-for="product in likedProducts"
-											 :key="product.id"
-											 :product="product" />
+							<component v-for="item in section.products"
+												 :is="section.component"
+												 :key="item.id"
+												 v-bind="item"
+												 v-show="!loading" />
 						</div>
 					</section>
 					
-					<!-- 出品した商品(コンビニユーザー) -->
-					<section class="p-mypge__section" v-show="isShopUser">
-						<div class="p-mypage__title-container">
-							<h2 class="c-title p-mypage__title">出品した商品</h2>
-							<!-- 全件表示のリンク -->
-							<router-link class="p-mypage__link"
-													 :to="{ name: 'user.posted',
-																	params: { id: id.toString() }}"
-													 v-if="postedProducts.length">全件表示
-							</router-link>
-						</div>
-						<!-- 出品した商品がなければ表示する -->
-						<div v-if="!postedProducts.length"
-								 class="p-mypage__no-product">出品した商品はありません
-						</div>
-						<div v-else class="p-mypage__card-container">
-							<!-- Productコンポーネント -->
-							<Product v-show="!loading"
-											 v-for="product in postedProducts"
-											 :key="product.id"
-											 :product="product" />
-						</div>
-					</section>
-					
-					<!-- 購入した商品(利用者) -->
-					<section class="p-mypge__section" v-show="!isShopUser">
-						<div class="p-mypage__title-container">
-							<h2 class="c-title p-mypage__title">購入した商品</h2>
-							<!-- 全件表示のリンク -->
-							<router-link class="p-mypage__link"
-													 :to="{ name: 'user.purchased', params: { id: id.toString() }}"
-													 v-if="purchasedProducts.length">全件表示
-							</router-link>
-						</div>
-						<!-- 購入した商品がなければ表示する -->
-						<div v-if="!purchasedProducts.length"
-								 class="p-mypage__no-product">購入した商品はありません
-						</div>
-						<div v-else class="p-mypage__card-container">
-							<!-- Productコンポーネント -->
-							<Product v-show="!loading"
-											 v-for="product in purchasedProducts"
-											 :key="product.id"
-											 :product="product" />
-						</div>
-					</section>
-					
-					<!-- 購入された商品(コンビニユーザー) -->
-					<section class="p-mypage__section" v-show="isShopUser">
-						<div class="p-mypage__title-container">
-							<h2 class="c-title p-mypage__title">購入された商品</h2>
-							<!-- 全件表示のリンク -->
-							<router-link class="p-mypage__link"
-													 :to="{ name: 'user.purchased', params: { id: id.toString() }}"
-													 v-if="wasPurchasedProducts.length">全件表示
-							</router-link>
-						</div>
-						<!-- 購入された商品がなければ表示する -->
-						<div v-if="!wasPurchasedProducts.length"
-								 class="p-mypage__no-product">購入された商品はありません
-						</div>
-						<div v-else class="p-mypage__card-container">
-							<!-- Productコンポーネント -->
-							<Product v-show="!loading"
-											 v-for="product in wasPurchasedProducts"
-											 :key="product.id"
-											 :product="product" />
-						</div>
-					</section>
-					
-					<!-- キャンセルした商品一覧(利用者) -->
-					<section class="p-mypge__section" v-show="!isShopUser">
-						<div class="p-mypage__title-container">
-							<h2 class="c-title p-mypage__title">キャンセルした商品</h2>
-							<!-- 全件表示のリンク -->
-							<router-link class="p-mypage__link"
-													 :to="{ name: 'user.canceled',
-																	params: { id: id.toString() }}"
-													 v-if="canceledProducts.length">全件表示
-							</router-link>
-						</div>
-						<!-- キャンセルした商品がなければ表示する -->
-						<div v-if="!canceledProducts.length"
-								 class="p-mypage__no-product">キャンセルした商品はありません
-						</div>
-						<div v-else class="p-mypage__card-container">
-							<!-- Productコンポーネント -->
-							<Product v-show="!loading"
-											 v-for="product in canceledProducts"
-											 :key="product.id"
-											 :product="product" />
-						</div>
-					</section>
-					
-					
-					<!-- キャンセルされた商品一覧(コンビニ) -->
-					<section class="p-mypge__section" v-show="isShopUser">
-						<div class="p-mypage__title-container">
-							<h2 class="c-title p-mypage__title">キャンセルされた商品</h2>
-							<!-- 全件表示のリンク -->
-							<router-link class="p-mypage__link"
-													 :to="{ name: 'user.canceled',
-																	params: { id: id.toString() }}"
-													 v-if="wasCanceledProducts.length">全件表示
-							</router-link>
-						</div>
-						<!-- キャンセルされた商品がなければ表示する -->
-						<div v-if="!wasCanceledProducts.length"
-								 class="p-mypage__no-product">キャンセルされた商品はありません
-						</div>
-						<div v-else class="p-mypage__card-container">
-							<!-- Productコンポーネント -->
-							<Product v-show="!loading"
-											 v-for="product in wasCanceledProducts"
-											 :key="product.id"
-											 :product="product" >
-								<!-- キャンセルスロット -->
-								<!-- キャンセルされた数をカウントして表示（「いいね」みたいに） -->
-								<div class="p-product__cancel"
-										 slot="cancel_count"
-										 v-show="isShopUser">{{ product.cancels_count }}回
-								</div>
-							</Product>
-						</div>
-					</section>
-					
-					<!-- 削除した商品一覧(コンビニ) -->
-					<section class="p-mypge__section" v-show="isShopUser">
-						<div class="p-mypage__title-container">
-							<h2 class="c-title p-mypage__title">削除した商品</h2>
-							<!-- 全件表示のリンク -->
-							<router-link class="p-mypage__link"
-													 :to="{ name: 'user.deleted',
-																	params: { id: id.toString() }}"
-													 v-if="deletedProducts.length">全件表示
-							</router-link>
-						</div>
-						<!-- 削除した商品がなければ表示する -->
-						<div v-if="!deletedProducts.length"
-								 class="p-mypage__no-product">削除した商品はありません
-						</div>
-						<div v-else class="p-mypage__card-container">
-							<!-- Productコンポーネント -->
-							<Product v-show="!loading"
-											 v-for="product in deletedProducts"
-											 :key="product.id"
-											 :product="product" />
-						</div>
-					</section>
-					
-					<!-- 投稿したレビュー一覧 -->
-					<section class="p-mypge__section" v-show="!isShopUser">
-						<div class="p-mypage__title-container">
-							<h2 class="c-title p-mypage__title">投稿したレビュー</h2>
-							<!-- 全件表示のリンク -->
-							<router-link class="p-mypage__link"
-													 :to="{ name: 'user.reviewed',
-																	params: { id: id.toString() }}"
-													 v-if="reviewedUsers.length">全件表示
-							</router-link>
-						</div>
-						
-						<!-- 投稿したレビューがなければ表示する -->
-						<div v-if="!reviewedUsers.length"
-								 class="p-mypage__no-review">投稿したレビューはありません
-						</div>
-						
-						<div v-else class="p-mypage__card-container">
-							<!-- Reviewコンポーネント -->
-							<Review v-show="!loading"
-											v-for="review in reviewedUsers"
-											:key="review.id"
-											:review="review" />
-						</div>
-					</section>
-					
-					<!-- 投稿されたレビュー一覧 -->
-					<section class="p-mypge__section" v-show="isShopUser">
-						<div class="p-mypage__title-container">
-							<h2 class="c-title p-mypage__title">投稿されたレビュー</h2>
-							<!-- 全件表示のリンク -->
-							<router-link class="p-mypage__link"
-													 :to="{ name: 'user.reviewed',
-																	params: { id: id.toString() }}"
-													 v-if="wasReviewedUsers.length">全件表示
-							</router-link>
-						</div>
-						
-						<!-- 投稿されたレビューがなければ表示する -->
-						<div v-if="!wasReviewedUsers.length"
-								 class="p-mypage__no-review">投稿されたレビューはありません
-						</div>
-						
-						<div v-else class="p-mypage__card-container">
-							<!-- Reviewコンポーネント -->
-							<Review v-show="!loading"
-											v-for="review in wasReviewedUsers"
-											:key="review.id"
-											:review="review" />
-						</div>
-					</section>
-				
 				</div>
 			</div>
 		</main>
@@ -250,8 +50,9 @@ import Loading from "../Loading";
 import Product from "../product/Product";
 import Review  from "../review/Review";
 import Sidebar from "../Sidebar";
+import { OK }  from "../../util";
 import { mapGetters } from 'vuex';
-import { OK } from "../../util";
+
 export default {
 	name: "MyPage",
 	props: {
@@ -262,147 +63,149 @@ export default {
 	},
 	components: {
 		Loading,
-		Product,
-		Review,
-		Sidebar
+		Sidebar,
 	},
 	data() {
 		return {
-			loading: false,           //ローディング
-			likedProducts: {},        //お気に入りした商品(利用者)
-			postedProducts: {},       //出品した商品（コンビニ）
-			purchasedProducts: {},    //購入した商品（利用者）
-			wasPurchasedProducts: {}, //購入された商品（コンビニ）
-			canceledProducts: {},     //キャンセルした商品（利用者）
-			wasCanceledProducts: {},  //キャンセルされた商品（コンビニ）
-			deletedProducts: {},      //削除した商品（コンビニ）
-			reviewedUsers: {},        //投稿したレビュー（利用者）
-			wasReviewedUsers: {},     //投稿されたレビュー（コンビニ）
+			loading: false, //ローディング
+			sections: []    //各セクションのデータを格納する配列
 		}
 	},
 	computed: {
 		...mapGetters({
-			isShopUser: 'auth/isShopUser', //ログインユーザーがコンビニユーザーならtrueを返す
+			isShopUser: 'auth/isShopUser', //コンビニユーザーかどうか
 		}),
 	},
 	methods: {
-		async getLikedProducts() {                                   //お気に入りした商品(利用者)
-			this.loading   = true;                                     //ローディングを表示する
-			const response = await axios.get('/api/mypage/liked'); //API接続
-			this.loading   = false;                                    //API通信が終わったらローディングを非表示にする
-		
-			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
-				this.$store.commit('error/setCode', response.status);
-				return false; //後続の処理を抜ける
-			}
-			this.likedProducts = response.data; //responseデータをプロパティに代入
-		},
-		async getPostedProducts() {                                   //出品した商品(コンビニユーザー)
-			this.loading   = true;                                      //ローディングを表示する
-			const response = await axios.get('/api/mypage/posted'); //API接続
-			this.loading   = false;                                     //API通信が終わったらローディングを非表示にする
+		async fetchData(section) { //APIからデータを取得する共通メソッド
+			this.loading = true; //loadingを表示
 			
-			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
-				this.$store.commit('error/setCode', response.status);
-				return false; //後続の処理を抜ける
+			try {
+				const response = await axios.get(`/api/mypage/${section.apiEndpoint}`); //API接続
+				
+				if(response.status === OK) { //成功
+					this.$set(this.sections.find(s => s.key === section.key), 'products', response.data);
+					
+				}else { //失敗
+					this.$store.commit('error/setCode', response.status);
+				}
+				
+			}catch (error) {
+				console.error(`${section.apiEndpoint}取得中にエラーが発生しました`, error);
+				this.$store.commit('error/setCode', 500);
+				
+			}finally {
+				this.loading = false; //loadingを非表示
 			}
-			this.postedProducts = response.data; //responseデータをプロパティに代入
 		},
-		async getPurchasedProducts() { //購入した商品(利用者)
-			this.loading   = true; //ローディングを表示する
-			const response = await axios.get('/api/mypage/purchased');
-			this.loading   = false; //API通信が終わったらローディングを非表示にする
+		initializeSections() { //セクションデータを初期化し、データを取得する
+			this.sections = [
+				{
+					key: 'likedProducts',
+					title: 'お気に入りした商品',
+					noProductMessage: 'お気に入りした商品はありません',
+					routerLink: { name: 'user.liked', params: { id: this.id.toString() } },
+					condition: !this.isShopUser,
+					apiEndpoint: 'liked',
+					products: [],
+					component: 'Product'
+				},
+				{
+					key: 'postedProducts',
+					title: '出品した商品',
+					noProductMessage: '出品した商品はありません',
+					routerLink: { name: 'user.posted', params: { id: this.id.toString() } },
+					condition: this.isShopUser,
+					apiEndpoint: 'posted',
+					products: [],
+					component: 'Product'
+				},
+				{
+					key: 'purchasedProducts',
+					title: '購入した商品',
+					noProductMessage: '購入した商品はありません',
+					routerLink: { name: 'user.purchased', params: { id: this.id.toString() } },
+					condition: !this.isShopUser,
+					apiEndpoint: 'purchased',
+					products: [],
+					component: 'Product'
+				},
+				{
+					key: 'wasPurchasedProducts',
+					title: '購入された商品',
+					noProductMessage: '購入された商品はありません',
+					routerLink: { name: 'user.wasPurchased', params: { id: this.id.toString() } },
+					condition: this.isShopUser,
+					apiEndpoint: 'wasPurchased',
+					products: [],
+					component: 'Product'
+				},
+				{
+					key: 'canceledProducts',
+					title: 'キャンセルした商品',
+					noProductMessage: 'キャンセルした商品はありません',
+					routerLink: { name: 'user.canceled', params: { id: this.id.toString() } },
+					condition: !this.isShopUser,
+					apiEndpoint: 'canceled',
+					products: [],
+					component: 'Product'
+				},
+				{
+					key: 'wasCanceledProducts',
+					title: 'キャンセルされた商品',
+					noProductMessage: 'キャンセルされた商品はありません',
+					routerLink: { name: 'user.wasCanceled', params: { id: this.id.toString() } },
+					condition: this.isShopUser,
+					apiEndpoint: 'wasCanceled',
+					products: [],
+					component: 'Product'
+				},
+				{
+					key: 'deletedProducts',
+					title: '削除した商品',
+					noProductMessage: '削除した商品はありません',
+					routerLink: { name: 'user.deleted', params: { id: this.id.toString() } },
+					condition: this.isShopUser,
+					apiEndpoint: 'deleted',
+					products: [],
+					component: 'Product'
+				},
+				{
+					key: 'reviewedProducts',
+					title: '投稿したレビュー',
+					noProductMessage: '投稿したレビューはありません',
+					routerLink: { name: 'user.reviewed', params: { id: this.id.toString() } },
+					condition: !this.isShopUser,
+					apiEndpoint: 'reviewed',
+					products: [],
+					component: 'Review'
+				},
+				{
+					key: 'wasReviewedProducts',
+					title: '投稿されたレビュー',
+					noProductMessage: '投稿されたレビューはありません',
+					routerLink: { name: 'user.wasReviewed', params: { id: this.id.toString() } },
+					condition: this.isShopUser,
+					apiEndpoint: 'wasReviewed',
+					products: [],
+					component: 'Review'
+				},
+			];
 			
-			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
-				this.$store.commit('error/setCode', response.status);
-				return false; //後続の処理を抜ける
-			}
-			this.purchasedProducts = response.data; //responseデータをプロパティに代入
+			this.sections.forEach(section => {
+				if(section.condition) this.fetchData(section);
+			});
 		},
-		async getWasPurchasedProducts() { //購入された商品(コンビニユーザー)
-			this.loading   = true; //ローディングを表示する
-			const response = await axios.get('/api/mypage/wasPurchased');
-			this.loading   = false; //API通信が終わったらローディングを非表示にする
-			
-			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
-				this.$store.commit('error/setCode', response.status);
-				return false; //後続の処理を抜ける
-			}
-			this.wasPurchasedProducts = response.data; //responseデータをプロパティに代入
-		},
-		async getCanceledProducts() { //キャンセルした商品(利用者)
-			this.loading   = true; //ローディングを表示する
-			const response = await axios.get('/api/mypage/canceled');
-			this.loading   = false; //API通信が終わったらローディングを非表示にする
-			
-			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
-				this.$store.commit('error/setCode', response.status);
-				return false; //後続の処理を抜ける
-			}
-			this.canceledProducts = response.data; //responseデータをプロパティに代入
-		},
-		async getWasCanceledProducts() { //キャンセルされた商品(コンビニユーザー)
-			this.loading   = true; //ローディングを表示する
-			const response = await axios.get('/api/mypage/wasCanceled');
-			this.loading   = false; //API通信が終わったらローディングを非表示にする
-			
-			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
-				this.$store.commit('error/setCode', response.status);
-				return false; //後続の処理を抜ける
-			}
-			this.wasCanceledProducts = response.data; //responseデータをプロパティに代入
-		},
-		async getDeletedProducts() { //削除した商品(コンビニ)
-			this.loading   = true; //ローディングを表示する
-			const response = await axios.get('/api/mypage/deleted');
-			this.loading   = false; //API通信が終わったらローディングを非表示にする
-			
-			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
-				this.$store.commit('error/setCode', response.status);
-				return false; //後続の処理を抜ける
-			}
-			this.deletedProducts = response.data; //responseデータをプロパティに代入
-		},
-		async getReviewed() { //投稿したレビュー(利用者)
-			this.loading   = true; //ローディングを表示する
-			const response = await axios.get('/api/mypage/reviewed');
-			this.loading   = false; //API通信が終わったらローディングを非表示にする
-			
-			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
-				this.$store.commit('error/setCode', response.status);
-				return false; //後続の処理を抜ける
-			}
-			this.reviewedUsers = response.data; //responseデータをプロパティに代入
-		},
-		async getWasReviewed() { //投稿されたレビュー（コンビニユーザー）
-			this.loading   = true; //ローディングを表示する
-			const response = await axios.get('/api/mypage/wasReviewed');
-			this.loading   = false; //API通信が終わったらローディングを非表示にする
-			
-			if (response.status !== OK) { //responseステータスがOKじゃなかったらエラーコードをセットする
-				this.$store.commit('error/setCode', response.status);
-				return false; //後続の処理を抜ける
-			}
-			this.wasReviewedUsers = response.data; //responseデータをプロパティに代入
-		}
+	},
+	mounted() {
+		this.initializeSections(); //コンポーネントがマウントされたらセクションデータを初期化
 	},
 	watch: {
 		$route: { //$routerを監視してページが変わったときにメソッドが実行されるようにする
-			async handler() {
-				if(this.isShopUser) { //コンビニユーザーの場合
-					await this.getPostedProducts();
-					await this.getWasPurchasedProducts();
-					await this.getWasCanceledProducts();
-					await this.getDeletedProducts();
-					await this.getWasReviewed();
-				}else { //利用者の場合
-					await this.getLikedProducts();
-					await this.getPurchasedProducts();
-					await this.getCanceledProducts();
-					await this.getReviewed();
-				}
+			handler() {
+				this.initializeSections(); //ルートが変わったらセクションデータを再初期化
 			},
-			immediate: true //immediateをtrueにすると、コンポーネントが生成されたタイミングでも実行する
+			immediate: true
 		}
 	}
 }

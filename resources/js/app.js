@@ -33,8 +33,6 @@ Vue.use(ReadMore);         //もっと見る
 Vue.filter('readmore', function(text, length, suffix) {
   return text.substring(0, length) + suffix;
 });
-
-
 Vue.filter('numberFormat', function (price) { //金額にカンマ(,)と¥マークをつける
   return price.toLocaleString('ja-JP', { style: 'currency', currency: 'JPY'});
 });
