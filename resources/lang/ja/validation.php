@@ -76,6 +76,7 @@ return [
 		'file'    => ':attributeには、:value kB以下のファイルを指定してください。',
 		'string'  => ':attributeは、:value文字以下で指定してください。',
 		'array'   => ':attributeには、:value個以下のアイテムを指定してください。',
+
 	],
 	'max'                  => [
 		'numeric' => ':attributeには、:max以下の数字を指定してください。',

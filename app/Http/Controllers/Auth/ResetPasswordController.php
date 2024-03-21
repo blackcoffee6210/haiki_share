@@ -1,57 +1,87 @@
 <?php
 
+
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Carbon\Carbon;
+use App\User;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Password;
 
 class ResetPasswordController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Password Reset Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller is responsible for handling password reset requests
-    | and uses a simple trait to include this behavior. You're free to
-    | explore this trait and override any methods you wish to tweak.
-    |
-    */
+	use ResetsPasswords;
 
-    use ResetsPasswords;
-
-    /**
-     * Where to redirect users after resetting their password.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/home';
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('guest');
-    }
-
-	public function showResetForm(Request $request, $token)
+	public function __construct()
 	{
-		$reset = DB::table('password_resets')->where('token', $token)->first();
+		$this->middleware('guest');
+	}
 
-		if (!$reset || Carbon::parse($reset->created_at)->addMinutes(1)->isPast()) {
-			// パスワードリセットトークンが見つからないか、有効期限が切れている場合
-			return response()->json(['error' => 'パスワードリセットのリンクが有効期限切れです。再度リセットリクエストを送信してください。'], 422);
+	public function find($token) // トークンの有効性を確認するメソッド
+	{
+		$email = request()->query('email', '');
+		Log::info("検索されたメールアドレス: {$email}");
+
+		$user = User::where('email', $email)->first();
+
+		if (!$user) {
+			Log::info("ユーザーが見つかりません: {$email}");
+			return response()->json(['error' => 'ユーザーが見つかりません。'], 404);
 		}
 
-		//有効期限が切れていない場合は、パスワードリセットフォームを表示する
-		return view('auth.passwords.reset')->with(
-			['token' => $token, 'email' => $request->email]
-		);
+		if(Password::broker()->tokenExists($user, $token)) {
+			Log::info("トークンは有効です: {$token}");
+			return response()->json(['message' => 'トークンは有効です。']);
+		} else {
+			Log::info("トークンは無効、または期限が切れています: {$token}");
+			return response()->json(['error' => 'このトークンは無効、または期限が切れています。'], 401);
+		}
+	}
+
+	public function reset(Request $request)
+	{
+		$request->validate([
+			'token'    => 'required',
+			'email'    => 'required|email',
+			'password' => 'required|max:255|confirmed|min:8',
+		]);
+
+		$user = User::where('email', $request->email)->first(); //まずユーザーを特定します
+
+		if (!$user) { //ユーザーが見つからない場合はエラー
+			return response()->json(['message' => 'ユーザーが見つかりません。'], 404);
+		}
+
+		if (Hash::check($request->password, $user->password)) { //以前のパスワードと同じかチェック
+			return response()->json(['errors' => ['password' => ['新しいパスワードは以前のパスワードと異なるものを入力してください。']]], 422);
+		}
+
+//		if (Hash::check($request->password, $user->password)) { //以前のパスワードと同じかチェック
+//			return response()->json(['errors' => '新しいパスワードは以前のパスワードと異なるものを入力してください。'], 422);
+//		}
+
+		try {
+			$status = Password::reset(
+				$request->only('email', 'password', 'password_confirmation', 'token'),
+				function ($user, $password) {
+					$user->password = Hash::make($password);
+					$user->save();
+					Auth::login($user);
+				}
+			);
+			if ($status == Password::PASSWORD_RESET) {
+				return response()->json(['message' => 'パスワードがリセットされました。'], 200);
+			} else {
+				return response()->json(['error' => 'パスワードをリセットできませんでした。'], 400);
+			}
+
+		} catch (\Exception $e) {
+			Log::error('パスワードのリセット処理中にエラーが発生しました: ' . $e->getMessage());
+			return response()->json(['error' => 'パスワードのリセット処理中にエラーが発生しました。'], 500);
+		}
 	}
 }

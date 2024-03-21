@@ -24,6 +24,7 @@ export function getCookieValue(searchKey) { //クッキーの値を取得する
 export const OK                    = 200; //OK
 export const CREATED               = 201; //リソースの作成
 export const NOT_FOUND             = 404; //404エラー
+export const CONFLICT              = 409; //パスワード競合
 export const UNAUTHORIZED          = 419; //認証切れ
 export const UNPROCESSABLE_ENTITY  = 422; //laravelのバリデーションエラーは422
 export const TOO_MANY_REQUEST      = 429; //指定回数のリクエストを超えたとき

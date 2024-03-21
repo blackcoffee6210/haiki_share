@@ -6,28 +6,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Validation\ValidationException;
 
 class ForgotPasswordController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Password Reset Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller is responsible for handling password reset emails and
-    | includes a trait which assists in sending these notifications from
-    | your application to your users. Feel free to explore this trait.
-    |
-    */
-
     use SendsPasswordResetEmails;
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('guest');
@@ -35,40 +18,13 @@ class ForgotPasswordController extends Controller
 
 	public function sendResetLinkEmail(Request $request) //追記(オーバーライド)
 	{
-		$this->validateEmail($request);
+		$request->validate(['email' => 'required|email|max:255']); //メールアドレスのバリデーション
+		$response = Password::sendResetLink($request->only('email')); //パスワードリセットトークンメールの送信
 
-		$response = $this->broker()->sendResetLink(
-			$request->only('email')
-		);
-
-		return $response == Password::RESET_LINK_SENT
-			? response(['message' => 'パスワード再設定メールを送信しました'], 200)
-			: response()->json(
-				['message' => 'パスワード再設定メールを送信できませんでした',
-				 'status'  => false ],
-				401
-			);
+		if($response == Password::RESET_LINK_SENT) { //メール送信成功
+			return response(['message' => 'パスワード再設定メールを送信しました。'], 200);
+		}else {
+			return response()->json(['message' => 'メール送信に失敗しました。指定されたメールアドレスは見つかりません。'], 422);
+		}
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -6,11 +6,16 @@ use Illuminate\Support\Facades\Auth;
 //=================================================================
 // Auth
 //=================================================================
-Route::post('/register',       'Auth\RegisterController@register')->name('register');                       //ユーザー登録
-Route::post('/login',          'Auth\LoginController@login')->name('login');                                //ログイン
-Route::post('/logout',         'Auth\LoginController@logout')->name('logout');                              //ログアウト
-Route::post('/password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email'); //パスワードリセットメール送信
-Route::post('/password/reset', 'Auth\ResetPasswordController@reset')->name('password.reset');               //パスワードリセット処理
+//ユーザー認証関連のルート
+Route::post('/register', 'Auth\RegisterController@register')->name('register'); //ユーザー登録
+Route::post('/login',    'Auth\LoginController@login')->name('login');          //ログイン
+Route::post('/logout',   'Auth\LoginController@logout')->name('logout');        //ログアウト
+
+//パスワードリセット関連のルート
+Route::post('/password/email',       'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email'); //パスワードリセットメール送信
+Route::post('/password/reset',       'Auth\ResetPasswordController@reset')->name('password.reset');               //パスワードリセット処理
+Route::get('/password/find/{token}', 'Auth\ResetPasswordController@find');                                        //トークンが有効かチェック
+
 
 //=================================================================
 // Product

@@ -48,14 +48,12 @@ class PasswordResetNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
-	        ->subject('パスワード再設定')
-	        ->view('emails.passwordReset',
-	        ['reset_url' => url('/password/reset',
-	            ['token' => $this->token,
-	             'email' => $notifiable->getEmailForPasswordReset()
-	            ])
-	        ]);
+//	    $resetUrl = url(route('password.reset', ['token' => $this->token], false) . '?email=' . urlencode($notifiable->email));
+	    $resetUrl = url("password/reset/{$this->token}") . '?email=' . urlencode($notifiable->email);
+
+	    return (new MailMessage)
+		    ->subject('パスワード再設定')
+		    ->view('emails.passwordReset', ['reset_url' => $resetUrl]);
     }
 
     /**

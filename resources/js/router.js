@@ -64,7 +64,7 @@ const routes = [ //パスとコンポーネントのマッピング
     }
   },
   {
-    path: '/password/reset/:token/:email', //パスワードリセットリンク送信
+    path: '/password/reset/:token', //パスワードリセットリンク送信
     name: 'password.reset',
     component: PassResetForm,
     beforeEnter(to, from, next) { //ログイン状態でアクセスしたらトップページを表示する

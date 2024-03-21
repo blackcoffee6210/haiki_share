@@ -5,42 +5,32 @@
 			<!-- ローディング -->
 			<Loading color="#f96204" v-show="loading"/>
 			
-			<form class="p-auth-form__form"
-						v-show="!loading"
-						@submit.prevent="submit">
+			<form class="p-auth-form__form" v-show="!loading" @submit.prevent="submit">
 				
 				<!-- email-->
-				<label for="email"
-							 class="c-label p-auth-form__label">Eメール
-				</label>
+				<label for="email" class="c-label p-auth-form__label">Eメール</label>
 				<input type="text"
 							 id="email"
 							 class="c-input p-auth-form__input"
-							 :class="{ 'c-input__err': errors || maxCounter(passResetForm.email, 255)}"
+							 :class="{ 'c-input__err': errors.email || !isEmailValid }"
 							 v-model="passResetForm.email"
 							 placeholder="haiki_share@gmail.com">
 				<!-- エラーメッセージ -->
 				<div class="u-d-flex u-space-between">
 					<!-- エラーメッセージ（フロントエンド） -->
-					<div v-if="maxCounter(passResetForm.email,255) && !errors" class="p-error">
-						<p class="">Eメールは255文字以下で指定してください</p>
+					<div v-if="!isEmailValid && !errors.email" class="p-error">
+						<p>Eメールは255文字以下で指定してください</p>
 					</div>
 					<!-- エラーメッセージ（バックエンド）	-->
 					<div v-if="errors">
-						<div v-for="msg in errors.email"
-								 :key="msg"
-								 class="p-error">
-							{{ msg }}
-						</div>
+						<div v-for="msg in errors.email" :key="msg" class="p-error">{{ msg }}</div>
 					</div>
 				</div>
 				
 				<!-- Email送信ボタン -->
 				<button class="c-btn p-auth-form__btn" type="submit">Eメール送信</button>
 				<!-- 会員登録へ遷移	-->
-				<a @click="$router.back()"
-					 class="c-link">もどる
-				</a>
+				<a @click="$router.back()" class="c-link">もどる</a>
 			</form>
 		
 		</div>
@@ -60,14 +50,16 @@ export default {
 			passResetForm: {
 				email: '',
 			},
-			errors: null,
+			errors: {},
 			loading: false
 		}
 	},
+	computed: {
+		isEmailValid() { //Emailバリデーション
+			return this.passResetForm.email.length <= 255;
+		}
+	},
 	methods: {
-		maxCounter(content, maxValue) { //カウンターの文字数上限
-			return content.length > maxValue;
-		},
 		async submit() { //Email送信
 			this.loading = true; //ローディングを表示する
 			
