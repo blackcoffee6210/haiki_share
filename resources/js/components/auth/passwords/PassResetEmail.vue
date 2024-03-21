@@ -1,7 +1,7 @@
 <template>
 	<main class="l-main">
 		<div class="p-auth-form p-auth-form--password">
-			<h2 class="c-title p-auth-form__title">パスワードリセット</h2>
+			<h2 class="c-title p-auth-form__title">パスワードリセットリンク送信</h2>
 			<!-- ローディング -->
 			<Loading color="#f96204" v-show="loading"/>
 			

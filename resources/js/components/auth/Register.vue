@@ -271,7 +271,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import { OK } from "../../util";
+import {OK, UNPROCESSABLE_ENTITY} from "../../util";
 
 export default {
 	name: "Register",
@@ -288,7 +288,7 @@ export default {
 				password: '',             //パスワード
 				password_confirmation: '' //パスワード確認
 			},
-			checkAgree: false
+			checkAgree: false,
 		}
 	},
 	computed: {
@@ -326,20 +326,11 @@ export default {
 			}
 		},
 		async register() { //ユーザー登録
-			this.clearError(); //エラー状態を初期化
-			try {
-				const response = await this.$store.dispatch('auth/register', this.registerForm); //dispatchメソッドでauthストアのregisterアクションを呼び出す
-				if(response) {
-					if(this.apiStatus) { //apiStatusがtrue(通信成功)なら後続の処理を行う
-						this.$store.commit('message/setContent', { //メッセージを登録
-							content: 'ユーザー登録しました！',
-						});
-						this.$router.push({ name: 'index' }); //トップページ(index画面)に移動する
-					}
-				}
-				
-			}catch(error) {
-				console.error('ユーザー登録処理でエラーが発生しました: ', error);
+			await this.$store.dispatch('auth/register', this.registerForm); //dispatchメソッドでauthストアのregisterアクションを呼び出す
+			
+			if(this.apiStatus) { //成功なら
+				this.$store.commit('message/setContent', { content: 'ユーザー登録しました！', }); //メッセージを登録
+				this.$router.push({name: 'index'}); //トップページ(index画面)に移動する
 			}
 		},
 		clearError() { //エラーメッセージをクリアするメソッド
