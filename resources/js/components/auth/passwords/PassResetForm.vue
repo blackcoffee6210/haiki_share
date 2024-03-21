@@ -119,7 +119,7 @@ export default {
 			const response = await axios.get(`/api/password/find/${token}?email=${encodeURIComponent(email)}`); //トークンの有効性を確認するAPIを呼び出す
 			
 			if (response.status === 401) { // トークンの有効期限が切れている場合
-				alert('トークンの有効期限が過ぎました。パスワード再設定画面へ遷移します。'); //アラートを表示
+				alert('トークンの有効期限が過ぎました。パスワードリセットリンク送信画面へ遷移します。'); //アラートを表示
 				this.$router.push({name: 'password.email'}); // パスワードリセットEmail送信画面へ遷移
 				
 			}else { //トークンが有効な場合

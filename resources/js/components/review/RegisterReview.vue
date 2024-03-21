@@ -199,23 +199,24 @@ export default {
 		maxCounter(content, maxValue) { //カウンターの文字数上限
 			return content.length > maxValue;
 		},
-		async getPurchasedByUser() { //購入したユーザーを取得
-			this.loading = true;
-			try {
-				const response = await axios.get(`/api/products/${this.p_id}/purchasedByUser`); //API接続
-				this.purchasedByUser = response.data.purchased;
-				
-				if(!this.purchasedByUser) { //purchasedByUserがfalse(他人の購入した商品)だったら商品一覧画面に遷移する
-					this.$router.push({name: 'index'});
-				}
-				
-			}catch (error) {
-				console.error('購入ユーザー状態取得中にエラーが発生しました: ', error);
-				
-			}finally {
-				this.loading = false;
-			}
-		},
+		// async getPurchasedByUser() { //購入したユーザーを取得
+		// 	this.loading = true;
+		// 	try {
+		// 		const response = await axios.get(`/api/products/${this.p_id}/purchasedByUser`); //API接続
+		// 		this.purchasedByUser = response.data.purchased;
+		//
+		// 		if(!this.purchasedByUser) { //purchasedByUserがfalse(他人の購入した商品)だったら商品一覧画面に遷移する
+		// 			this.$router.push({name: 'index'});
+		// 			console.log('購入したユーザーじゃないため、Index.vueに遷移します')
+		// 		}
+		//
+		// 	}catch (error) {
+		// 		console.error('購入ユーザー状態取得中にエラーが発生しました: ', error);
+		//
+		// 	}finally {
+		// 		this.loading = false;
+		// 	}
+		// },
 		async getShopUser() { //商品idを元に出品ユーザーを取得
 			try {
 				const response = await axios.get(`/api/users/${this.p_id}/shopUser`); //API通信
@@ -241,6 +242,7 @@ export default {
 				
 				if(this.reviewedByUser) { //既にレビューしていたら商品一覧画面に遷移する
 					this.$router.push({name: 'index'});
+					console.log('既にレビュー済みです。');
 				}
 				
 			}catch (error) {
@@ -293,7 +295,7 @@ export default {
 	watch: {
 		$route: {
 			async handler() {
-				this.getPurchasedByUser();
+				// this.getPurchasedByUser();
 				this.getShopUser();
 				this.getReviewedByUser();
 				this.getRecommendation();

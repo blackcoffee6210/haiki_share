@@ -41,6 +41,7 @@
   }
   &__user-name {
     font-size: $font-size_l;
+    word-break: break-all;
   }
   &__recommendation {
     &__container {

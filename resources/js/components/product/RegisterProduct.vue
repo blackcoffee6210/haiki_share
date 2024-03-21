@@ -104,8 +104,7 @@
 					></textarea>
 					<div class="u-d-flex u-space-between">
 						<!-- エラーメッセージ（フロントエンド） -->
-						<div v-if="maxCounter(product.detail, 255) && !errors.detail"
-								 class="p-error">
+						<div v-if="maxCounter(product.detail, 255) && !errors.detail" class="p-error">
 							<p class="u-mb20">商品の内容は255文字以下で指定してください</p>
 						</div>
 						<!-- エラーメッセージ（バックエンド）	-->

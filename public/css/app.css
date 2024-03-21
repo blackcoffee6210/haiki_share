@@ -2996,6 +2996,7 @@ body {
 }
 .p-review-form__user-name {
   font-size: 1.8rem;
+  word-break: break-all;
 }
 .p-review-form__recommendation__container {
   width: 100%;

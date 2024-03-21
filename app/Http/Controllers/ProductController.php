@@ -261,13 +261,13 @@ class ProductController extends Controller
 			$history->save();
 
 			$params = [ //メール送信に必要な情報を用意
-				'product_id'   => $request->id,     //商品ID
+				'product_id'   => $product->id,     //商品ID
 				'user_name'    => $buyer->name,     //利用者の名前
 				'shop_name'    => $seller->name,    //コンビニ名
-				'product_name' => $request->name,   //商品名
-				'detail'       => $request->detail, //商品の内容
-				'price'        => $request->price,  //金額
-				'expire'       => $request->expire, //賞味期限
+				'product_name' => $product->name,   //商品名
+				'detail'       => $product->detail, //商品の内容
+				'price'        => $product->price,  //金額
+				'expire'       => $product->expire, //賞味期限
 				'purchased_at' => Carbon::now(),    //現在の日時
 			];
 
@@ -289,10 +289,10 @@ class ProductController extends Controller
 		}
 	}
 
-	public function purchasedByUser(string $id) //購入したユーザー取得
+	public function purchasedByUser(string $p_id) //購入したユーザー取得
 	{
 		try {
-			$product = History::where('product_id', $id)->where('buyer_id', Auth::id())->get();
+			$product = History::where('product_id', $p_id)->where('buyer_id', Auth::id())->get();
 			return $product;
 		}catch (\Exception $e) {
 			return $this->handleException($e, 'fetchFailed');
@@ -314,6 +314,7 @@ class ProductController extends Controller
 		DB::beginTransaction(); //トランザクション開始
 		try {
 			$history = History::where('product_id', $id)->where('buyer_id', Auth::id())->first(); //購入履歴を取得
+
 			if(!$history) { //購入履歴がなければ
 				return response()->json(['error' => '該当する購入履歴が見つかりません。'], 404);
 			}

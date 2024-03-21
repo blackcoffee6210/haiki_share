@@ -394,6 +394,7 @@ export default {
 				const response = await axios.get('/api/products/prefecture'); //API接続
 				
 				if(response.status === OK) {
+					this.prefectures = response.data; //プロパティに代入
 					this.prefectures = this.prefectures.filter((v1, i1, a1) => { //取得した都道府県を照準に並び替える
 						return a1.findIndex(v => v1.prefecture_id === v.prefecture_id) === i1;
 					});

@@ -45,9 +45,10 @@ class ResetPasswordController extends Controller
 	public function reset(Request $request)
 	{
 		$request->validate([
-			'token'    => 'required',
-			'email'    => 'required|email',
-			'password' => 'required|max:255|confirmed|min:8',
+			'token'                 => 'required',
+			'email'                 => 'required|email',
+			'password'              => 'required|min:8|max:255|confirmed',
+			'password_confirmation' => 'required|min:8|max:255'
 		]);
 
 		$user = User::where('email', $request->email)->first(); //まずユーザーを特定します
@@ -57,7 +58,7 @@ class ResetPasswordController extends Controller
 		}
 
 		if (Hash::check($request->password, $user->password)) { //以前のパスワードと同じかチェック
-			return response()->json(['errors' => ['password' => ['新しいパスワードは以前のパスワードと異なるものを入力してください。']]], 422);
+			return response()->json(['errors' => ['password' => ['以前のパスワードと異なるものを入力してください。']]], 422);
 		}
 
 //		if (Hash::check($request->password, $user->password)) { //以前のパスワードと同じかチェック
