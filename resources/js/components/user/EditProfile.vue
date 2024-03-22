@@ -304,7 +304,7 @@ export default {
 					// this.user = response.data; //responseデータをuserプロパティに代入
 					this.user = {
 						image: response.data.image || '',
-						group: `response.data.group` || '',
+						group: parseInt(response.data.group),
 						name: response.data.name || '',
 						branch: response.data.branch || '',
 						address: response.data.address || '',

@@ -35,6 +35,7 @@
 					<div class="p-product-detail__user-info">
 						<!-- 詳細画面のリンク -->
 						<router-link class="c-card__link"
+												 v-if="product && product.user_id"
 												 :to="{ name: 'user.detail', params: { id: product.user_id.toString() }}"/>
 						<!-- ユーザー画像 -->
 						<img :src="product.user_image"

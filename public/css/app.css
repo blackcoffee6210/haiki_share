@@ -1038,6 +1038,7 @@ body {
   }
 }
 .p-edit-profile__label-text {
+  text-align: center;
   font-size: 1.8rem;
   color: #999;
   position: absolute;
