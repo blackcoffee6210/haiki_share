@@ -2661,7 +2661,7 @@ body {
 }
 
 .p-profile-detail {
-  width: 680px;
+  width: 700px;
   margin: 0 auto;
   background: #fff;
   padding: 20px;
@@ -2882,11 +2882,7 @@ body {
   display: flex;
   align-items: center;
   margin-bottom: 20px;
-}
-@media screen and (max-width: 450px) {
-  .p-review-detail__user-info {
-    margin-bottom: 50px;
-  }
+  position: relative;
 }
 .p-review-detail__image {
   width: 80px;

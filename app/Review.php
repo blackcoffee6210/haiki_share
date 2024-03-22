@@ -15,15 +15,13 @@ class Review extends Model
 	//ユーザー画像、ユーザー名、投稿日、ユーザー評価、タイトル、コメント
 	//JSONに含めるアクセサ
 	protected $appends = [
-		'sender_name', 'sender_image', 'receiver_name', 'receiver_image',
-		'recommend'
+		'sender_name', 'sender_image', 'receiver_name', 'receiver_image', 'receiver_branch', 'recommend',
 	];
 
 	//$visibleはJSONに含める属性を定義する
 	protected $visible = [
 		'id', 'sender_id', 'receiver_id', 'recommendation_id', 'title', 'detail', 'created_at', 'updated_at',
-		'sender_name', 'receiver_name', 'sender_image', 'receiver_image',
-		'recommend'
+		'sender_name', 'receiver_name', 'sender_image', 'receiver_image', 'receiver_branch', 'recommend',
 	];
 
 	//======================================================
@@ -60,6 +58,14 @@ class Review extends Model
 	public function getReceiverImageAttribute() //出品者のユーザー画像を取得する
 	{
 		return $this->receiver->image;
+	}
+	/**
+	 * アクセサ - receiver_branch
+	 * @return string
+	 */
+	public function getReceiverBranchAttribute() //出品者の支店名を取得する
+	{
+		return $this->receiver->branch;
 	}
 	/**
 	 * アクセサ - recommend

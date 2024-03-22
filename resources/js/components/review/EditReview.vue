@@ -168,20 +168,25 @@ export default {
 		Loading
 	},
 	props: {
-		s_id: String, //利用者のユーザーid
-		r_id: String, //コンビニユーザーid
-		required: true
+		s_id: { //利用者のユーザーid
+			type: String,
+			required: true
+		},
+		r_id: { //コンビニユーザーid
+			type: String,
+			required: true
+		}
 	},
 	data() {
 		return {
 			loading: false, //ローディング
+			recommendations: {},
+			reviewForm: {},
 			errors: {       //エラーメッセージ
 				recommendation_id: null,
 				title: null,
 				detail: null
 			},
-			recommendations: {},
-			reviewForm: {}
 		}
 	},
 	methods: {
@@ -205,19 +210,23 @@ export default {
 			}
 		},
 		async getReview() { //レビュー取得
+			this.loading = true;
+			
 			try {
 				const response = await axios.get(`/api/reviews/${this.s_id}/${this.r_id}`);
 				
 				if(response.status === OK) { //成功
-					this.reviewForm = response.data[0];
+					this.reviewForm = response.data;
 				
 				}else { //失敗
 					this.$store.commit('error/setCode', response.status);
-					return false;
 				}
 				
 			}catch (error) {
 				console.error('レビュー取得処理中にエラーが発生しました', error);
+				
+			}finally {
+				this.loading = false;
 			}
 		},
 		async update() { //レビュー更新

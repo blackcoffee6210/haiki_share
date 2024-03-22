@@ -7,10 +7,10 @@
 				<h2 class="c-title p-review-detail__title">レビュー詳細</h2>
 				
 				<div class="p-review-detail__user-info">
-					<img v-if="getReviewerImage" :src="getReviewerImage" alt="" class="c-icon p-review-detail__image">
+					<img :src="ReviewerImage" alt="" class="c-icon p-review-detail__image">
 					<div>
 						<!-- 投稿した利用者名	-->
-						<div class="p-review-detail__name">{{ getReviewerName }}</div>
+						<div class="p-review-detail__name">{{ review.sender_name }}</div>
 						<!-- 投稿日	-->
 						<div class="p-review-detail__send_date">{{ review.created_at | moment }}</div>
 					</div>
@@ -34,8 +34,23 @@
 				<!-- レビューの内容	-->
 				<div class="p-review-detail__detail">{{ review.detail }}</div>
 				
+				<!-- 出品者の情報 -->
+				<h2 class="c-title p-product-detail__title">出品者情報</h2>
+				<div class="p-review-detail__user-info">
+					<!-- 詳細画面のリンク -->
+					<router-link class="c-card__link"
+											 v-if="review && review.receiver_id"
+											 :to="{ name: 'user.detail', params: { id: review.receiver_id.toString() }}"/>
+					<img :src="review.receiver_image || '/storage/images/no-image.png'" alt="" class="c-icon p-review-detail__image">
+					<div>
+						<div class="p-review-detail__name">{{ review.receiver_name }}</div>
+						<div class="p-review-detail__branch">{{ review.receiver_branch }}</div>
+					</div>
+					
+				</div>
+				
 				<!-- 出品者の購入されていない商品を表示 -->
-				<div class="c-title p-product-detail__title" v-if="otherProducts.length > 0">この出品者の商品</div>
+				<h2 class="c-title p-product-detail__title" v-if="otherProducts.length > 0">この出品者の商品</h2>
 				<div class="p-review-detail__product-container">
 					<Product v-for="product in otherProducts"
 									 :key="product.id"
@@ -80,17 +95,12 @@ export default {
 		isMyReview() {
 			return this.s_id == this.userId; //自分のレビューならtrueを返す
 		},
-		getReviewerImage() { //受信者の画像
-			if(this.isShopUser && this.review.sender_image) {
+		ReviewerImage() { //レビュー投稿者の画像
+			if (this.review && this.review.sender_image) {
 				return this.review.sender_image;
-			}else if(!this.isShopUser && this.review.receiver_image) {
-				return this.review.receiver_image;
 			}
 			return '/storage/images/no-image.png';
 		},
-		getReviewerName() {
-			return this.isShopUser ? this.review.sender_name : this.review.receiver_name;
-		}
 	},
 	async created() {
 		await this.getReview();
