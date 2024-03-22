@@ -58,7 +58,7 @@
 									 class="c-input p-edit-profile__input"
 									 :class="{ 'c-input__err': errors.name || maxCounter(user.name,50)}"
 									 v-model="user.name"
-									 :placeholder="name">
+									 :placeholder="placeholderText">
 						<div class="u-d-flex u-space-between">
 							<!-- エラーメッセージ（フロントエンド） -->
 							<div v-if="maxCounter(user.name, 50) && !errors.name" class="p-error">
@@ -257,13 +257,8 @@ export default {
 		...mapGetters({
 			isShopUser: 'auth/isShopUser', //コンビニユーザーならtrueを返す
 		}),
-		name() { //名前インプットエリアのplaceholderを利用者とお店で切り替える
-			switch (this.user.group) {
-				case 1: //利用者なら「ハイキ君」を返す
-					return 'ハイキ君';
-				case 2: //コンビニユーザーなら「ファミリーストア」を返す
-					return 'ファミリーストア';
-			}
+		placeholderText() {
+			return this.user.group === 1 ? 'ハイキ君' : 'ファミリーストア';
 		}
 	},
 	methods: {
@@ -299,14 +294,23 @@ export default {
 			}
 		},
 		maxCounter(content, maxValue) { //カウンターの文字数上限
-			return content.length > maxValue;
+			return (content ? content.length : 0) > maxValue;
 		},
 		async getUser() { //ユーザー情報取得
 			try {
 				const response = await axios.get(`/api/users/${this.id}`); //API接続
 				
 				if(response.status === OK) { //成功
-					this.user = response.data; //responseデータをuserプロパティに代入
+					// this.user = response.data; //responseデータをuserプロパティに代入
+					this.user = {
+						image: response.data.image || '',
+						group: `response.data.group` || '',
+						name: response.data.name || '',
+						branch: response.data.branch || '',
+						address: response.data.address || '',
+						email: response.data.email || '',
+						introduce: response.data.introduce || '',
+					};
 					
 				}else { //失敗
 					this.$store.commit('error/setCode', response.status);

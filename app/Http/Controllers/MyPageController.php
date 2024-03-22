@@ -45,10 +45,11 @@ class MyPageController extends Controller
 	{
 		try {
 			$user = $this->getUserOrFail();
-			$products = $user->likes()->with('product')->orderByDesc('likes.created_at')->take(5)->get();
+			$products = $user->likes()->orderByDesc('likes.created_at')->take(5)->get();
 			return response($products, 200);
 
 		} catch (\Exception $e) {
+			Log::error("お気に入り商品の取得に失敗しました: {$e->getMessage()}");
 			return $this->handleException($e, 'liked');
 		}
 	}

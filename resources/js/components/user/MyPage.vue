@@ -64,6 +64,8 @@ export default {
 	components: {
 		Loading,
 		Sidebar,
+		Review,
+		Product,
 	},
 	data() {
 		return {

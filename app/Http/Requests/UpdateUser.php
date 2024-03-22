@@ -25,15 +25,24 @@ class UpdateUser extends FormRequest
      */
     public function rules()
     {
-        return [
-            'image'     => 'nullable',
-            'name'      => 'required|string|max:50',
-            'branch'    => 'required|string|max:50',
-            'address'   => 'required|string|max:255',
-	        'email'     => ['required', 'string', 'email:filter', 'max:255',
-		                     Rule::unique('users')->ignore(Auth::user()->id)
-	                       ],
-            'introduce' => 'nullable|string|max:255'
-        ];
+    	$rules = [
+    		'image'     => 'nullable',
+		    'name'      => 'required|string|max:50',
+		    'email'     => 'required|string|email|max:255|unique:users,email,' . Auth::id(),
+		    'introduce' => 'nullable|string|max:255'
+	    ];
+
+	    //利用者ユーザー(group == 1)の場合、branchとaddressはnullable許容
+	    if ($this->input('group') == 1) {
+		    $rules['branch']  = 'nullable|string|max:50';
+		    $rules['address'] = 'nullable|string|max:255';
+
+	    //コンビニユーザー(group == 2)の場合、branchとaddressはnullableは必須
+	    }else if($this->input('group') == 2) {
+		    $rules['branch']  = 'required|string|max:50';
+		    $rules['address'] = 'required|string|max:255';
+	    }
+
+	    return $rules;
     }
 }
