@@ -36,7 +36,6 @@
 					<!-- Productコンポーネント -->
 					<Product v-show="!loading"
 									 v-for="product in filteredProducts"
-									 v-if="sortCategory === 0 || sortCategory === product.category_id"
 									 :key="product.id"
 									 :product="product" />
 				</div>
@@ -74,7 +73,7 @@
 				
 				<!-- 絞り込みを解除するボタン -->
 				<button v-if="isFiltered"
-								@click="clearFilters"
+								@click="resetFilters"
 								class="c-btn p-sidebar-index__clear-filter">
 					絞り込みを解除
 				</button>
@@ -108,7 +107,7 @@
 					<label for="sort_price" class="p-sidebar-index__title">金額</label>
 					<select id="sort_price"
 									class="c-select p-sidebar-index__select"
-									v-model.number="sortPrice">
+									v-model="sortPrice">
 						<option value="1">標準</option>
 						<option value="2">価格が安い順</option>
 						<option value="3">価格が高い順</option>
@@ -120,10 +119,10 @@
 					<label for="sort_category" class="p-sidebar-index__title">カテゴリー</label>
 					<select id="sort_category"
 									class="c-select p-sidebar-index__select"
-									v-model.number="sortCategory">
+									v-model="sortCategory">
 						<option value="0">選択してください</option>
 						<option v-for="category in categories"
-										:value="category.id"
+										:value="category.id.toString()"
 										:key="category.id">
 							{{ category.name }}
 						</option>
@@ -137,10 +136,10 @@
 					</label>
 					<select id="sort_prefecture"
 									class="c-select p-sidebar-index__select"
-									v-model.number="sortPrefecture">
+									v-model="sortPrefecture">
 						<option value="0">選択してください</option>
 						<option v-for="prefecture in ascPrefecture"
-										:value="prefecture.prefecture_id"
+										:value="prefecture.prefecture_id.toString()"
 										:key="prefecture.prefecture_id">
 							{{ prefecture.prefecture_name }}
 						</option>
@@ -232,44 +231,37 @@ export default {
 			showSale: false,       //販売中商品の表示フラグ
 			tempKeyword: '',       //検索文字列を一時保存するキーワード
 			keyword: '',           //実際の検索に使われるキーワード
-			sortPrice: 1,          //金額「並び替え」の選択値（1: 標準, 2: 安い順, 3: 高い順）
-			sortCategory: 0,       //「カテゴリー」絞り込みの初期値（0: 全て）
-			sortPrefecture: 0,     //「都道府県」絞り込みの初期値（0: 全て）
+			sortPrice: '1',          //金額「並び替え」の選択値（1: 標準, 2: 安い順, 3: 高い順）
+			sortCategory: '0',       //「カテゴリー」絞り込みの初期値（0: 全て）
+			sortPrefecture: '0',     //「都道府県」絞り込みの初期値（0: 全て）
 			categories: [],        //カテゴリーリスト
 			prefectures: [],       //出品したコンビニのある都道府県リスト
 			recommendProducts: [], //おすすめ商品
 			range: 5,              //ページネーション表示範囲
 			frontDot: false,       //前方のドット表示
 			endDot: false,         //後方のドット表示
-			isComposing: false,    // 日本語入力の確定状態を追跡するためのフラグ
+			isComposing: false,    //日本語入力の確定状態を追跡するためのフラグ
 		}
-	},
-	async beforeRouteEnter(to, from, next) {
-		next(vm => vm.updatePageAndData(to.query)); //ルートに入る前にデータを更新
-	},
-	beforeRouteUpdate(to, from, next) {
-		this.updatePageAndData(to.query); //ルートが更新されたときデータを更新
-		next();
 	},
 	computed: {
 		pages() { //ページネーションに表示するページ番号の計算
 			return [...Array(this.lastPage).keys()].map(i => i + 1);
 		},
 		isFiltered() { //絞り込みが行われているかどうか
-			return this.showExpired ||        // 賞味期限切れの商品が選択されている
-						 this.showSale ||           // 販売中の商品が選択されている
-						 this.keyword !== '' ||     // 検索キーワードが入力されている
-						 this.sortPrice !== 1 ||    // 金額ソートがデフォルト値以外
-						 this.sortCategory !== 0 || // カテゴリーが選択されている
-						 this.sortPrefecture !== 0; // 都道府県が選択されている
+			return this.showExpired ||          // 賞味期限切れの商品が選択されている
+						 this.showSale ||             // 販売中の商品が選択されている
+						 this.keyword !== '' ||       // 検索キーワードが入力されている
+						 this.sortPrice !== '1' ||    // 金額ソートがデフォルト値以外
+						 this.sortCategory !== '0' || // カテゴリーが選択されている
+						 this.sortPrefecture !== '0'; // 都道府県が選択されている
 		},
 		filteredProducts() { //絞り込み後の商品リスト
 			return this.products.filter(product => {
 				const today             = moment(new Date).format('YYYY-MM-DD');
 				const isExpired         = product.expire > today;
 				const isPurchased       = product.is_purchased;
-				const matchesCategory   = this.sortCategory === 0 || this.sortCategory === product.category_id;
-				const matchesPrefecture = this.sortPrefecture === 0 || this.sortPrefecture === product.prefecture_id;
+				const matchesCategory   = this.sortCategory === '0' || this.sortCategory === product.category_id.toString();
+				const matchesPrefecture = this.sortPrefecture === '0' || this.sortPrefecture === product.prefecture_id.toString();
 				const matchesKeyword    = this.katakanaToHiragana(product.name).includes(this.katakanaToHiragana(this.keyword.trim()));
 				
 				return(!this.showExpired || !isExpired) &&
@@ -277,9 +269,9 @@ export default {
 						  matchesCategory && matchesPrefecture && matchesKeyword;
 			}).sort((a, b) => { //金額でソート
 				switch(this.sortPrice) {
-					case 1: break;                    //選択なし（デフォルト）
-					case 2: return a.price - b.price; //価格が安い順
-					case 3: return b.price - a.price; //価格が高い順
+					case '1': break;                    //選択なし（デフォルト）
+					case '2': return a.price - b.price; //価格が安い順
+					case '3': return b.price - a.price; //価格が高い順
 				}
 			});
 		},
@@ -290,6 +282,11 @@ export default {
 		},
 	},
 	methods: {
+		katakanaToHiragana(str) { //カタカナをひらがなに変換する
+			return str.replace(/[\u30A1-\u30F6]/g, match => {
+				return String.fromCharCode(match.charCodeAt(0) - 0x60);
+			});
+		},
 		handleCompositionStart() { //日本語入力開始
 			this.isComposing = true;
 		},
@@ -297,7 +294,7 @@ export default {
 			this.isComposing = false;
 		},
 		handleEnter() { //Enterキー押下時の処理
-			if(!this.isComposing) { //日本語入力が確定していれば検索
+			if(!this.isComposing) { //日本語入力が確定していれば検索を実行
 				this.searchProducts();
 			}
 		},
@@ -306,58 +303,55 @@ export default {
 				this.deleteSearch();
 			}
 		},
-		async updatePageAndData(query) { // ページまたはクエリパラメータが変更された際にデータを更新
-			this.currentPage    = parseInt(query.page, 10) || 1;
-			this.showExpired    = query.showExpired === 'true';
-			this.showSale       = query.showSale === 'true';
-			this.keyword        = this.$route.query.keyword || '';
-			this.sortPrice      = parseInt(query.sortPrice, 10) || 1;
-			this.sortCategory   = parseInt(query.sortCategory, 10) || 0;
-			this.sortPrefecture = parseInt(query.sortPrefecture, 10) || 0;
-			
-			await Promise.all([
-				this.getProducts(),
-				this.getCategories(),
-				this.getPrefectures(),
-				this.getRecommend(),
-			]);
-		},
-		clearFilters() { //絞り込みを解除する
-			this.showExpired    = false; // 賞味期限切れの商品の表示をリセット
-			this.showSale       = false; // 販売中の商品の表示をリセット
-			this.tempKeyword    = '';    // 検索キーワードをリセット
-			this.keyword        = '';    // 検索キーワードをリセット
-			this.sortPrice      = 1;     // 金額ソートをデフォルトにリセット
-			this.sortCategory   = 0;     // カテゴリー絞り込みを全てにリセット
-			this.sortPrefecture = 0;     // 都道府県絞り込みを全てにリセット
-			
-			this.searchProducts(); // キーワードをクリアしてから検索を実行
-		},
 		searchProducts() { //商品を検索する
 			this.keyword = this.tempKeyword; // 一時キーワードを確定キーワードに設定
 		},
-		updateQueryParams() { // URLのクエリパラメータを更新する
-			this.$router.push({
-				name: 'index',
-				query: {
-					showExpired:    this.showExpired,
-					showSale:       this.showSale,
-					keyword:        this.keyword,
-					sortPrice:      this.sortPrice,
-					sortCategory:   this.sortCategory,
-					sortPrefecture: this.sortPrefecture,
-					page:           this.currentPage || 1 // 現在のページ番号を追加
-				}
-			}).catch(err => {});
+		deleteSearch() { //検索条件をクリアして再検索する
+			this.tempKeyword = '';
+			this.keyword = '';
+			this.searchProducts();
 		},
-		katakanaToHiragana(str) { //カタカナをひらがなに変換する
-			return str.replace(/[\u30A1-\u30F6]/g, match => {
-				return String.fromCharCode(match.charCodeAt(0) - 0x60);
-			});
+		isCurrent(page) { //現在のページかどうかを判定する
+			return page === this.currentPage;
+		},
+		changePage(page) { //ページネーションでページを変更する
+			if(page !== this.currentPage && page > 0 && page <= this.lastPage) {
+				this.currentPage = page;  //currentPageを更新
+				this.getProducts();       //商品リストを再取得する
+			}
+		},
+		resetFilters() { //絞り込み解除後、URLのクエリパラメータを更新
+			this.showExpired    = false;
+			this.showSale       = false;
+			this.tempKeyword    = '';
+			this.keyword        = '';
+			this.sortPrice      = '1';
+			this.sortCategory   = '0';
+			this.sortPrefecture = '0';
+			this.updateQueryParams();
 		},
 		sidebarExpireDate(product) { //商品の賞味期限が過ぎているかどうかを判定する
 			let dt = moment().format('YYYY-MM-DD');
 			return product.expire <= dt;
+		},
+		updateQueryParams() { //URLのクエリパラメータを更新する
+			const newQuery = {
+				showExpired:    this.showExpired ? 'true' : 'false',
+				showSale:       this.showSale ? 'true' : 'false',
+				keyword:        this.keyword,
+				sortPrice:      this.sortPrice,
+				sortCategory:   this.sortCategory,
+				sortPrefecture: this.sortPrefecture,
+				page:           this.currentPage || 1
+			};
+			
+			if(JSON.stringify(newQuery) === JSON.stringify(this.$route.query)) return; //現在のクエリと同じであればナビゲーションを行わない
+			
+			this.$router.push({ name: 'index', query: newQuery }).catch(err => {
+				if(err.name !== 'NavigationDuplicated') {
+					console.error;
+				}
+			});
 		},
 		async getRecommend() { //おすすめの商品を取得
 			try {
@@ -429,28 +423,32 @@ export default {
 				this.loading = false; //ローディングを非表示にする
 			}
 		},
-		deleteSearch() { //検索条件をクリアして再検索する
-			this.tempKeyword = '';
-			this.keyword = '';
-			this.searchProducts();
-		},
-		changePage(page) { //ページを変更する
-			if(page > 0 && page <= this.lastPage) {
-				this.$router.push({ query: { ...this.$route.query, page }}).catch(err => {});
-			}
-		},
-		isCurrent(page) { //現在のページかどうかを判定する
-			return page === this.currentPage;
-		},
 	},
 	watch: {
-		'$route.query': { //ルートクエリが変更された場合、データを更新
-			async handler(newQuery) {
-				await this.updatePageAndData(newQuery);
-			},
-			immediate: true,
-			deep: true
-		}
+		//絞り込み条件の変更をURLのクエリパラメータに即時反映
+		showExpired:    'updateQueryParams',
+		showSale:       'updateQueryParams',
+		keyword:        'updateQueryParams',
+		sortPrice:      'updateQueryParams',
+		sortCategory:   'updateQueryParams',
+		sortPrefecture: 'updateQueryParams',
+		currentPage:    'updateQueryParams',
+	},
+	mounted() {
+		//URLのクエリから絞り込み条件を読み込み、初期化
+		const { query }     = this.$route;
+		this.showExpired    = query.showExpired === 'true';
+		this.showSale       = query.showSale === 'true';
+		this.keyword        = query.keyword || '';
+		this.sortPrice      = query.sortPrice || '1';      //デフォルト値を文字列に変更
+		this.sortCategory   = query.sortCategory || '0';   //デフォルト値を文字列に変更
+		this.sortPrefecture = query.sortPrefecture || '0'; //デフォルト値を文字列に変更
+		
+		//初期データの読み込み
+		this.getProducts();
+		this.getCategories();
+		this.getPrefectures();
+		this.getRecommend();
 	}
 }
 </script>

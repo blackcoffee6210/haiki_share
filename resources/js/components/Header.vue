@@ -2,7 +2,7 @@
 	<header class="l-header">
 		<div class="p-header">
 			<!-- ロゴ -->
-			<div class="p-header__left" @click="navigateToHome">
+			<div class="p-header__left">
 				<router-link :to="{ name: 'index' }" class="p-header__logo">
 					Ha<span class="c-color__main">i</span>ki Share
 				</router-link>
@@ -80,9 +80,6 @@ export default {
 		}),
 	},
 	methods: {
-		navigateToHome() {
-			this.$router.push({ name: 'index' });
-		},
 		toggleNav() { //ハンバーガーメニューをtoggleで切り替える
 			this.active = !this.active;
 		},
