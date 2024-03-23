@@ -11,6 +11,7 @@ use App\Mail\CanceledSellerNotification;
 use App\Mail\PurchasedBuyerNotification;
 use App\Mail\PurchasedSellerNotification;
 use App\Product;
+use App\Review;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -359,17 +360,37 @@ class ProductController extends Controller
 			return $this->handleException($e, 'saveFailed');
 		}
 	}
-
-	public function isReviewed(string $id) { //ログインしたユーザーがレビューしたかどうか
+//
+	public function isReviewed($id)
+	{
 		try {
-			$review = DB::table('reviews')
-				->join('products', 'reviews.receiver_id', '=', 'products.user_id')
-				->where('reviews.sender_id', '=', Auth::id())
-				->where('products.user_id', $id)
-				->get();
-			return $review;
-		}catch (\Exception $e) {
-			return $this->handleException($e, 'fetchFailed');
+			$user_id = Auth::id(); // 現在のログインユーザーIDを取得
+			$product = Product::findOrFail($id); // 指定されたIDの商品を取得、存在しない場合は404エラー
+
+			// 商品の出品者に対して、現在のログインユーザーがレビューを投稿しているかどうかをチェック
+			$isReviewed = Review::where('receiver_id', $product->user_id)
+				->where('sender_id', $user_id)
+				->exists();
+
+			return response()->json(['isReviewed' => $isReviewed]);
+		} catch (\Exception $e) {
+			// 例外が発生した場合は、エラーメッセージとともに500エラーを返す
+			Log::error('レビュー状態の確認中にエラーが発生しました: ' . $e->getMessage());
+			return response()->json(['error' => 'レビュー状態の確認中にエラーが発生しました'], 500);
 		}
 	}
+//
+//
+//	public function isReviewed(string $id) { //ログインしたユーザーがレビューしたかどうか
+//		try {
+//			$review = DB::table('reviews')
+//				->join('products', 'reviews.receiver_id', '=', 'products.user_id')
+//				->where('reviews.sender_id', '=', Auth::id())
+//				->where('products.user_id', $id)
+//				->get();
+//			return $review;
+//		}catch (\Exception $e) {
+//			return $this->handleException($e, 'fetchFailed');
+//		}
+//	}
 }

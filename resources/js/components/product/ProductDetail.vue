@@ -245,6 +245,20 @@ export default {
 		}
 	},
 	methods: {
+		async checkReviewedByUser() { //レビューしたかどうかを返す
+			if (!this.userId || !this.product.user_id) return; // ユーザーIDまたは商品の出品者IDがない場合はチェックしない
+			
+			try {
+				const response = await axios.get(`/api/reviews/${this.product.user_id}/reviewedByUser`);
+				if (response.status === OK) {
+					this.isReviewed = response.data.isReviewed; // レビュー投稿状況を更新
+				} else {
+					console.error('レビュー状態の取得に失敗しました。');
+				}
+			} catch (error) {
+				console.error('レビュー状態の取得中にエラーが発生しました:', error);
+			}
+		},
 		async getPurchasedByUser() { //ログインユーザーが商品を購入したかどうかを返す
 			try {
 				const response = await axios.get(`/api/products/${this.id}/purchasedByUser`);
@@ -281,10 +295,12 @@ export default {
 			this.loading = true; //loadingをtrueにする
 			
 			try {
-				const response = await axios.get(`/api/products/${ this.id }`); //API通信
+				const response = await axios.get(`/api/products/${this.id}`); //API通信
 				
 				if(response.status === OK) { //成功なら
 					this.product = response.data; //responseデータをproductプロパティに代入
+					
+					await this.checkReviewedByUser();
 					
 					if(this.product.liked_by_user) { //ログインユーザーが既に「いいね」を押していたらtrueをセット
 						this.isLike = true;
@@ -528,6 +544,7 @@ export default {
 	watch: {
 		$route: {
 			async handler() {
+				await this.checkReviewedByUser();
 				await this.getPurchasedByUser();
 				await this.getCanceledByUser();
 				await this.getProduct();

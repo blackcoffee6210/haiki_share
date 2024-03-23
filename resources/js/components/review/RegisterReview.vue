@@ -9,9 +9,7 @@
 				<Loading color="#f96204" v-show="loading" />
 				
 				<!-- レビュー投稿フォーム -->
-				<form class="p-review-form__form"
-							v-show="!loading"
-							@submit.prevent="submit">
+				<form class="p-review-form__form" v-show="!loading" @submit.prevent="submit">
 					
 					<!-- 出品者の情報 -->
 					<div class="p-review-form__user-info">
@@ -172,7 +170,6 @@ export default {
 	data() {
 		return {
 			loading: false, //ローディング
-			purchasedByUser: false,
 			reviewedByUser: false,
 			errors: {       //エラーメッセージ
 				recommendation_id: null,
@@ -199,24 +196,29 @@ export default {
 		maxCounter(content, maxValue) { //カウンターの文字数上限
 			return content.length > maxValue;
 		},
-		// async getPurchasedByUser() { //購入したユーザーを取得
-		// 	this.loading = true;
-		// 	try {
-		// 		const response = await axios.get(`/api/products/${this.p_id}/purchasedByUser`); //API接続
-		// 		this.purchasedByUser = response.data.purchased;
-		//
-		// 		if(!this.purchasedByUser) { //purchasedByUserがfalse(他人の購入した商品)だったら商品一覧画面に遷移する
-		// 			this.$router.push({name: 'index'});
-		// 			console.log('購入したユーザーじゃないため、Index.vueに遷移します')
-		// 		}
-		//
-		// 	}catch (error) {
-		// 		console.error('購入ユーザー状態取得中にエラーが発生しました: ', error);
-		//
-		// 	}finally {
-		// 		this.loading = false;
-		// 	}
-		// },
+		async checkPurchased() { //購入履歴の確認
+			try {
+				const response = await axios.get(`/api/histories/checkPurchased/${this.p_id}`);
+				if (!response.data.purchased) { //購入履歴がない場合
+					this.$router.push({ name: 'index' }); // 購入履歴がない場合は商品一覧ページにリダイレクト
+				}
+			} catch (error) {
+				console.error('購入履歴の確認中にエラーが発生しました:', error);
+			}
+		},
+		async checkReviewedByUser() { //レビュー投稿状況の確認
+			try {
+				const response = await axios.get(`/api/reviews/${this.reviewForm.receiver_id}/reviewedByUser`);
+				this.reviewedByUser = response.data.isReviewed;
+				
+				if (response.data.isReviewed) {
+					alert('既にこの出品者にはレビューを投稿しています。');
+					this.$router.push({ name: 'index' }); // 例: トップページにリダイレクト
+				}
+			} catch (error) {
+				console.error('レビュー投稿状況の確認中にエラーが発生しました', error);
+			}
+		},
 		async getShopUser() { //商品idを元に出品ユーザーを取得
 			try {
 				const response = await axios.get(`/api/users/${this.p_id}/shopUser`); //API通信
@@ -295,13 +297,14 @@ export default {
 	watch: {
 		$route: {
 			async handler() {
-				// this.getPurchasedByUser();
+				this.checkReviewedByUser();
+				this.checkPurchased();
 				this.getShopUser();
 				this.getReviewedByUser();
 				this.getRecommendation();
 			},
 			immediate: true
 		}
-	}
+	},
 }
 </script>

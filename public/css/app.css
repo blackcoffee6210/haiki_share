@@ -2896,7 +2896,7 @@ body {
   color: #fff;
   position: absolute;
   top: 20px;
-  right: 20px;
+  right: 0;
   padding: 5px 10px;
 }
 @media screen and (max-width: 450px) {
