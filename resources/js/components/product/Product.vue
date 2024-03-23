@@ -72,6 +72,9 @@
 			
 			<!-- ボタン	-->
 			<slot name="btn"></slot>
+			
+			<!-- キャンセルされた回数を表示するスロット -->
+			<slot name="cancel_count"></slot>
 		</div>
 	</div>
 

@@ -14,7 +14,7 @@
 									 :key="section.key"
 									 class="p-mypage__section"
 									 v-show="section.condition">
-						<div class="p-mypage__title-container">
+						<div class="p-mypage__titleContainer">
 							<!-- タイトル -->
 							<h2 class="c-title p-mypage__title">{{ section.title }}</h2>
 							<!-- 全件表示のリンク -->
@@ -24,14 +24,20 @@
 							</router-link>
 						</div>
 						<!-- 商品がない場合のメッセージ -->
-						<div v-if="!section.products.length" class="p-mypage__no-product">{{ section.noProductMessage }}</div>
+						<div v-if="!section.products.length" class="p-mypage__noProduct">{{ section.noProductMessage }}</div>
 						<!-- 商品一覧 -->
-						<div v-else class="p-mypage__card-container">
+						<div v-else class="p-mypage__cardContainer">
 							<component v-for="item in section.products"
 												 :is="section.component"
 												 :key="item.id"
-												 v-bind="item"
-												 v-show="!loading" />
+												 :product="section.component === 'Product' ? item : undefined"
+												 :review="section.component === 'Review' ? item : undefined"
+												 v-show="!loading">
+								<!-- キャンセルされた回数の表示、キャンセルされた商品セクションでのみ表示 -->
+								<template v-slot:cancel_count v-if="section.key === 'wasCanceledProducts' && isShopUser">
+									<div class="p-product__cancel">{{ item.cancels_count }}回</div>
+								</template>
+							</component>
 						</div>
 					</section>
 					
@@ -93,7 +99,7 @@ export default {
 				}
 				
 			}catch (error) {
-				console.error(`${section.apiEndpoint}取得中にエラーが発生しました`, error);
+				console.error(`${section.apiEndpoint}取得中にエラーが発生しました`, error.response || error);
 				this.$store.commit('error/setCode', 500);
 				
 			}finally {
@@ -136,7 +142,7 @@ export default {
 					key: 'wasPurchasedProducts',
 					title: '購入された商品',
 					noProductMessage: '購入された商品はありません',
-					routerLink: { name: 'user.wasPurchased', params: { id: this.id.toString() } },
+					routerLink: { name: 'user.purchased', params: { id: this.id.toString() } },
 					condition: this.isShopUser,
 					apiEndpoint: 'wasPurchased',
 					products: [],
@@ -156,7 +162,7 @@ export default {
 					key: 'wasCanceledProducts',
 					title: 'キャンセルされた商品',
 					noProductMessage: 'キャンセルされた商品はありません',
-					routerLink: { name: 'user.wasCanceled', params: { id: this.id.toString() } },
+					routerLink: { name: 'user.canceled', params: { id: this.id.toString() } },
 					condition: this.isShopUser,
 					apiEndpoint: 'wasCanceled',
 					products: [],
@@ -186,7 +192,7 @@ export default {
 					key: 'wasReviewedProducts',
 					title: '投稿されたレビュー',
 					noProductMessage: '投稿されたレビューはありません',
-					routerLink: { name: 'user.wasReviewed', params: { id: this.id.toString() } },
+					routerLink: { name: 'user.reviewed', params: { id: this.id.toString() } },
 					condition: this.isShopUser,
 					apiEndpoint: 'wasReviewed',
 					products: [],

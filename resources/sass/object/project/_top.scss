@@ -302,19 +302,21 @@
     @include mq() {
       margin-bottom: $space_s;
     }
-    &-number {
-      font-size: $font-size_2xl;
+
+
+  }
+  &__stepNumber {
+    font-size: $font-size_2xl;
+  }
+  &__stepTitle {
+    text-align: center;
+    font-weight: bold;
+    font-size: $font-size_l;
+    @include mq() {
+      font-size: $font-size_m;
     }
-    &-title {
-      text-align: center;
-      font-weight: bold;
-      font-size: $font-size_l;
-      @include mq() {
-        font-size: $font-size_m;
-      }
-      @include mq('tab') {
-        font-size: $font-size_default;
-      }
+    @include mq('tab') {
+      font-size: $font-size_default;
     }
   }
   &__review {

@@ -4,7 +4,7 @@
     padding-right: $space_m;
     padding-left: $space_m;
   }
-  &__title-container {
+  &__titleContainer {
     display: flex;
     align-items: center;
     margin-bottom: $space_s;
@@ -16,13 +16,13 @@
     display: inline-block;
     color: $main-color;
   }
-  &__no-product,
-  &__no-review {
+  &__noProduct,
+  &__noReview {
     margin-top: $space_3xl;
     margin-bottom: $space_3xl;
     text-align: center;
   }
-  &__card-container {
+  &__cardContainer {
     width: 100%;
     display: grid;
     grid-template-columns: 33.3% 33.3% 33.3%;
@@ -55,155 +55,5 @@
         padding-right: $space_3xl;
       }
     }
-  }
-  &__card {
-    &--review {
-
-    }
-  }
-  &__product-info {
-    display: flex;
-    border-bottom: 1px solid $gray-color;
-  }
-  &__card--left {
-    width: 40%;
-  }
-  &__card--right {
-    width: 60%;
-    padding: $space_s;
-  }
-  &__image {
-    display: block;
-    height: 70px;
-    width: 100%;
-    @include mq() {
-      height: 100px;
-    }
-    @include mq('tab') {
-      height: 120px;
-    }
-    &--review {
-      display: block;
-      width: 100%;
-      height: 70px;
-    }
-  }
-  &__body {
-    padding: $space_s;
-    @include mq('tab') {
-      padding: $space_m;
-    }
-  }
-  &__product-name {
-    font-size: $font-size_m;
-    font-weight: bold;
-    word-wrap: break-word;
-    display: -webkit-box;
-    -webkit-line-clamp: 1; //1行に丸める
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    margin-top: -5px;
-    margin-bottom: -5px;
-    @include mq('tab') {
-      font-size: $font-size_default;
-    }
-    &--review {
-      width: 100%;
-      font-size: $font-size_m;
-      font-weight: bold;
-      word-wrap: break-word;
-      display: -webkit-box;
-      -webkit-line-clamp: 1; //1行に丸める
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-  }
-  &__summary {
-    font-size: $font-size_s;
-    word-wrap: break-word;
-    display: -webkit-box;
-    -webkit-line-clamp: 1; //1行に丸める
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    @include mq('tab') {
-      font-size: $font-size_m;
-    }
-  }
-  &__price {
-    font-size: $font-size_s;
-    font-weight: bold;
-    @include mq('tab') {
-      font-size: $font-size_m;
-    }
-  }
-
-  &__user-info {
-    display: flex;
-    align-items: center;
-    &--review {
-      display: flex;
-      align-items: center;
-      margin: $space_s;
-    }
-  }
-  &__icon {
-    margin-right: $space_s;
-    width: 25px;
-    height: 25px;
-    @include mq('tab') {
-      width: 40px;
-      height: 40px;
-      margin-right: $space_m;
-    }
-  }
-  &__user-name {
-    &--review {
-      font-size: $font-size_m;
-      width: 60%;
-      word-wrap: break-word;
-      display: -webkit-box;
-      -webkit-line-clamp: 1; //1行に丸める
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      @include mq() {
-        font-size: $font-size_s;
-        width: 50%;
-      }
-      @include mq('tab') {
-        width: 50%;
-      }
-    }
-  }
-  &__date {
-    font-size: $font-size_m;
-    @include mq() {
-      font-size: $font-size_s;
-    }
-  }
-  &__text {
-    font-size: $font-size_xs;
-    word-wrap: break-word;
-    display: -webkit-box;
-    -webkit-line-clamp: 1; //1行に丸める
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    @include mq('tab') {
-      font-size: $font-size_m;
-    }
-  }
-  &__review-info {
-    margin: $space_s;
-  }
-  &__review-title {
-    font-size: $font-size_m;
-    font-weight: bold;
-    margin-bottom: -$space_m;
-  }
-  &__review-comment {
-    font-size: $font-size_m;
-    margin-top: 3px;
-  }
-  &__sidebar {
-    margin-top: 44px;
   }
 }

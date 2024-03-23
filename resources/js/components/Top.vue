@@ -242,43 +242,43 @@
 					<div class="p-top__panel p-top__panel__step">
 						<div class="p-top__step">
 							STEP
-							<span class="p-top__step-number">1</span>
+							<span class="p-top__stepNumber">1</span>
 						</div>
-						<h3 class="p-top__step-title">カンタン！<br class="p-top__br">会員登録</h3>
+						<h3 class="p-top__stepTitle">カンタン！<br class="p-top__br">会員登録</h3>
 					</div>
 					<div class="p-top__panel p-top__panel__step">
 						<div class="p-top__step">
 							STEP
-							<span class="p-top__step-number">2</span>
+							<span class="p-top__stepNumber">2</span>
 						</div>
-						<h3 class="p-top__step-title">気になる商品を<br class="p-top__br">購入する</h3>
+						<h3 class="p-top__stepTitle">気になる商品を<br class="p-top__br">購入する</h3>
 					</div>
 					<div class="p-top__panel p-top__panel__step">
 						<div class="p-top__step">
 							STEP
-							<span class="p-top__step-number">3</span>
+							<span class="p-top__stepNumber">3</span>
 						</div>
-						<h3 class="p-top__step-title">コンビニで<br class="p-top__br">商品を受け取る</h3>
+						<h3 class="p-top__stepTitle">コンビニで<br class="p-top__br">商品を受け取る</h3>
 					</div>
 				</div>
 				
 				<div class="p-top__container p-top__container__step">
 					<div class="p-top__ornament p-top__ornament__step">コンビニユーザー</div>
 					<div class="p-top__panel p-top__panel__step">
-						<div class="p-top__step">STEP<span class="p-top__step-number">1</span></div>
-						<h3 class="p-top__step-title">
+						<div class="p-top__step">STEP<span class="p-top__stepNumber">1</span></div>
+						<h3 class="p-top__stepTitle">
 							カンタン！<br class="p-top__br">会員登録
 						</h3>
 					</div>
 					<div class="p-top__panel p-top__panel__step">
-						<div class="p-top__step">STEP<span class="p-top__step-number">2</span></div>
-						<h3 class="p-top__step-title">
+						<div class="p-top__step">STEP<span class="p-top__stepNumber">2</span></div>
+						<h3 class="p-top__stepTitle">
 							写真を撮って<br class="p-top__br">商品を出品
 						</h3>
 					</div>
 					<div class="p-top__panel p-top__panel__step">
-						<div class="p-top__step">STEP<span class="p-top__step-number">3</span></div>
-						<h3 class="p-top__step-title">
+						<div class="p-top__step">STEP<span class="p-top__stepNumber">3</span></div>
+						<h3 class="p-top__stepTitle">
 							購入された商品を<br class="p-top__br">用意する
 						</h3>
 					</div>

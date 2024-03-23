@@ -172,10 +172,10 @@
 					</div>
 					
 					<!-- ボタンコンテナ -->
-					<div class="p-productForm__btn-container">
+					<div class="p-productForm__btnContainer">
 						<!-- ボタン -->
 						<a @click="$router.back()"
-							 class="c-btn c-btn--white p-productForm__btn p-productForm__btn--back">もどる
+							 class="c-btn c-btn--white p-productForm__btn p-productForm__btn__back">もどる
 						</a>
 						<!-- ボタン	-->
 						<button class="c-btn p-productForm__btn" type="submit">出品する</button>

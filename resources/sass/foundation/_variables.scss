@@ -3,28 +3,28 @@ $line-height-base: 1.6;
 $font-family-base: -apple-system, BlinkMacSystemFont, sans-serif;
 
 // Colors
-$blue: #3490dc;
+$blue:   #3490dc;
 $indigo: #6574cd;
 $purple: #9561e2;
-$pink: #f66d9b;
-$red: #e3342f;
+$pink:   #f66d9b;
+$red:    #e3342f;
 $orange: #f6993f;
 $yellow: #ffed4a;
-$green: #38c172;
-$teal: #4dc0b5;
-$cyan: #6cb2eb;
-$white: #fff;
+$green:  #38c172;
+$teal:   #4dc0b5;
+$cyan:   #6cb2eb;
+$white:  #fff;
 
-$bg-color: #f8fafc;
-$font-color: #333;
-$main-color: #f96204;
-$sub-color: #fdbf99;
-$error-color: #ff5252;
+$bg-color:       #f8fafc;
+$font-color:     #333;
+$main-color:     #f96204;
+$sub-color:      #fdbf99;
+$error-color:    #ff5252;
 $error-color-bg: #ffebeb;
-$gray-color: rgba(0,0,0, .2);
-$img-color-bg: #e7e4e1;
-$link-color: #1b94e0;
-$shadow-color: #dfdfdf;
+$gray-color:     rgba(0,0,0, .2);
+$img-color-bg:   #e7e4e1;
+$link-color:     #1b94e0;
+$shadow-color:   #dfdfdf;
 
 //Site Width
 $site-width: 1000px;
@@ -46,19 +46,19 @@ $breakpoints: (
 }
 
 // Font size
-$font-size_xs: 1.0rem;
-$font-size_s: 1.2rem;
-$font-size_m: 1.4rem;
+$font-size_xs:      1.0rem;
+$font-size_s:       1.2rem;
+$font-size_m:       1.4rem;
 $font-size_default: 1.6rem;
-$font-size_l: 1.8rem;
-$font-size_xl: 2.4rem;
-$font-size_2xl: 3.0rem;
-$font-size_3xl: 3.8rem;
+$font-size_l:       1.8rem;
+$font-size_xl:      2.4rem;
+$font-size_2xl:     3.0rem;
+$font-size_3xl:     3.8rem;
 
 // Space
-$space_s: 5px;
-$space_m: 10px;
-$space_l: 15px;
-$space_xl: 20px;
+$space_s:    5px;
+$space_m:   10px;
+$space_l:   15px;
+$space_xl:  20px;
 $space_2xl: 30px;
 $space_3xl: 40px;
