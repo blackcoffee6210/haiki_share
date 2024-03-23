@@ -45,6 +45,8 @@ Route::get('/products/{id}/isReviewed',       'ProductController@isReviewed');  
 Route::get('/users/{id}',                 'UserController@index');          //ユーザー情報取得
 Route::get('/users/{id}/shopUser',        'UserController@shopUser');       //コンピニユーザー情報取得
 Route::post('/users/{id}/updateProfile',  'UserController@updateProfile');  //プロフィール更新
+Route::post('/users/{id}/updateEmail',    'UserController@updateEmail');    //Eメール更新
+Route::get('/email/confirm/{token}',      'UserController@confirmEmail')->name('email.confirm');
 Route::post('/users/{id}/updatePassword', 'UserController@updatePassword'); //パスワード更新
 Route::get('/users/{id}/posted',          'UserController@posted');         //出品した商品一覧(コンビニユーザー)
 Route::get('/users/{id}/purchased',       'UserController@purchased');      //購入した商品一覧(利用者)

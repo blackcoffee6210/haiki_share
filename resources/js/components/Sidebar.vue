@@ -28,6 +28,13 @@
 			<router-link class="p-sidebar__link"
 									 active-class="p-sidebar__link--active"
 									 exact
+									 :to="{ name: 'user.editEmail', params: { id: id.toString() }}">Eメール変更
+			</router-link>
+			
+			<!-- パスワード変更 -->
+			<router-link class="p-sidebar__link"
+									 active-class="p-sidebar__link--active"
+									 exact
 									 :to="{ name: 'user.editPassword', params: { id: id.toString() }}" >パスワード変更
 			</router-link>
 			

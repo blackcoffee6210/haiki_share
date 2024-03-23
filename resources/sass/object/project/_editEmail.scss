@@ -1,0 +1,46 @@
+.p-editEmail {
+  width: 100%;
+  @include mq('tab') {
+    padding-right: $space_l;
+  }
+  &__title {
+    background: $bg-color;
+    padding-bottom: $space_s;
+  }
+  &__background {
+    background: $white;
+  }
+  &__form {
+    width: 60%;
+    height: 472px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: $space_xl;
+    @include mq() {
+      width: 100%;
+      height: initial;
+      padding: $space_m;
+    }
+    @include mq('tab') {
+      width: 80%;
+      height: 445px;
+    }
+  }
+  &__label {
+    margin-top: $space_xl;
+    margin-bottom: $space_s;
+  }
+  &__input {
+    width: 100%;
+  }
+  &__btnContainer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: $space_xl;
+  }
+  &__btn {
+    &__back {
+      margin-right: $space_m;
+    }
+  }
+}

@@ -207,6 +207,13 @@ export default {
 	},
 	mounted() {
 		this.initializeSections(); //コンポーネントがマウントされたらセクションデータを初期化
+		
+		const queryParams    = new URLSearchParams(window.location.search); //window.location.searchからクエリパラメータを取得
+		const emailConfirmed = queryParams.get('emailConfirmed'); //emailConfirmedクエリパラメータの値を取得
+		
+		if(emailConfirmed === 'true') {
+			this.$router.commit('message/setContent', { content: 'Eメールを更新しました！' });
+		}
 	},
 	watch: {
 		$route: { //$routerを監視してページが変わったときにメソッドが実行されるようにする

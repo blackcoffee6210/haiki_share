@@ -1,34 +1,38 @@
-import Vue             from 'vue';
-import VueRouter       from 'vue-router';
-import store           from './store';
-import PassResetEmail  from "./components/auth/passwords/PassResetEmail"; // ↓コンポーネントをインポートする
-import PassResetForm   from "./components/auth/passwords/PassResetForm";
-import Register        from "./components/auth/Register";
-import Login           from "./components/auth/Login";
-import NotFound        from "./components/errors/NotFound";
-import System          from "./components/errors/System";
-import Agreement       from "./components/footer/Agreement";
-import Policy          from "./components/footer/Policy";
-import Tokutei         from "./components/footer/Tokutei";
-import EditProduct     from "./components/product/EditProduct";
-import Index           from "./components/product/Index";
-import ProductDetail   from "./components/product/ProductDetail";
-import RegisterProduct from "./components/product/RegisterProduct";
-import EditReview      from "./components/review/EditReview";
-import RegisterReview  from "./components/review/RegisterReview";
-import ReviewDetail    from "./components/review/ReviewDetail";
-import Canceled        from "./components/user/Canceled";
-import Deleted         from "./components/user/Deleted";
-import EditPassword    from "./components/user/EditPassword";
-import EditProfile     from "./components/user/EditProfile";
-import Liked           from "./components/user/Liked";
-import MyPage          from "./components/user/MyPage";
-import Posted          from "./components/user/Posted";
-import ProfileDetail   from "./components/user/ProfileDetail";
-import Purchased       from "./components/user/Purchased";
-import Reviewed        from "./components/user/Reviewed";
-import Withdrawal      from "./components/user/Withdrawal";
-import Top             from "./components/Top";                         // ↑ここまで
+import Vue               from 'vue';
+import VueRouter         from 'vue-router';
+import store             from './store';
+import PassResetEmail    from "./components/auth/passwords/PassResetEmail"; // ↓コンポーネントをインポートする
+import PassResetForm     from "./components/auth/passwords/PassResetForm";
+import Register          from "./components/auth/Register";
+import Login             from "./components/auth/Login";
+import NotFound          from "./components/errors/NotFound";
+import System            from "./components/errors/System";
+import Agreement         from "./components/footer/Agreement";
+import Policy            from "./components/footer/Policy";
+import Tokutei           from "./components/footer/Tokutei";
+import EditProduct       from "./components/product/EditProduct";
+import Index             from "./components/product/Index";
+import ProductDetail     from "./components/product/ProductDetail";
+import RegisterProduct   from "./components/product/RegisterProduct";
+import EditReview        from "./components/review/EditReview";
+import RegisterReview    from "./components/review/RegisterReview";
+import ReviewDetail      from "./components/review/ReviewDetail";
+import Canceled          from "./components/user/Canceled";
+import Deleted           from "./components/user/Deleted";
+import EditEmail         from "./components/user/EditEmail";
+import EditPassword      from "./components/user/EditPassword";
+import EditProfile       from "./components/user/EditProfile";
+import EmailConfirmation from "./components/user/EmailConfirmation";                           // ↑ここまで
+import Liked             from "./components/user/Liked";
+import MyPage            from "./components/user/MyPage";
+import Posted            from "./components/user/Posted";
+import ProfileDetail     from "./components/user/ProfileDetail";
+import Purchased         from "./components/user/Purchased";
+import Reviewed          from "./components/user/Reviewed";
+import Withdrawal        from "./components/user/Withdrawal";
+import Top               from "./components/Top";
+
+
 
 
 Vue.use(VueRouter); //VueRouterプラグインを利用する(<router-view>コンポーネントなどを使うことができる)
@@ -163,6 +167,22 @@ const routes = [ //パスとコンポーネントのマッピング
        to.params.id == store.getters['auth/userId']) ?
         next() : next({name: 'index'});
     }
+  },
+  {
+    path: '/users/:id/edit-email', //Eメール編集
+    name: 'user.editEmail',
+    component: EditEmail,
+    props: true,
+    beforeEnter(to, from ,next) { //ログイン状態、かつログインユーザーidでアクセスがあったらそのまま移動させる
+      (store.getters['auth/check'] &&
+        to.params.id == store.getters['auth/userId']) ?
+        next() : next({name: 'index'});
+    }
+  },
+  {
+    path: '/email-confirmation', //新しいEメール確認
+    name: 'email.confirmation',
+    component: EmailConfirmation
   },
   {
     path: '/users/:id/edit-password', //パスワード編集

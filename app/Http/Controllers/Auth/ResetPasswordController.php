@@ -61,10 +61,6 @@ class ResetPasswordController extends Controller
 			return response()->json(['errors' => ['password' => ['以前のパスワードと異なるものを入力してください。']]], 422);
 		}
 
-//		if (Hash::check($request->password, $user->password)) { //以前のパスワードと同じかチェック
-//			return response()->json(['errors' => '新しいパスワードは以前のパスワードと異なるものを入力してください。'], 422);
-//		}
-
 		try {
 			$status = Password::reset(
 				$request->only('email', 'password', 'password_confirmation', 'token'),

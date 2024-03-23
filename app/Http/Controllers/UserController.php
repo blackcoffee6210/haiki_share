@@ -2,16 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\EmailUpdate;
+use App\Http\Requests\UpdateEmail;
 use App\Http\Requests\UpdatePassword;
 use App\Http\Requests\UpdateUser;
+use App\Mail\OldEmailNotification;
 use App\Mail\UpdateEmailNotification;
 use App\Product;
 use App\Review;
 use App\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -92,15 +97,88 @@ class UserController extends Controller
 				];
 
 				Mail::to($old_email)->send(new UpdateEmailNotification($params));   //変更前のメールアドレスに送信
-				Mail::to($user->email)->send(new UpdateEmailNotification($params)); //変更後のメールアドレスに送信
-			}
 
-			return response($user, 200);
+				return response($user, 200);
+			}
 
 		}catch (\Exception $e) {
 			Log::error('プロフィール更新に失敗しました: ' . $e->getMessage()); // エラーをログに記録
-
 			return response()->json(['message' => 'プロフィールの更新に失敗しました。'], 500); //エラーメッセージを返す
+		}
+	}
+
+	public function updateEmail(UpdateEmail $request, $id) //Eメール変更
+	{
+		DB::beginTransaction(); //トランザクション開始
+
+		try {
+			$user     = User::findOrFail($id);
+			$newEmail = $request->email;
+			$oldEmail = $user->email;
+
+			if($oldEmail === $newEmail) { //新しいEメールアドレスが現在のものと異なることを確認
+				return response()->json(['errors' => ['email' => ['新しいEメールアドレスは現在のアドレスと同じです。']]], 422);
+			}
+
+			$token = Str::random(60); //Eメール更新確認用のトークン生成
+
+			EmailUpdate::create([ //DBに保存
+				'user_id'   => $user->id,
+				'new_email' => $newEmail,
+				'token'     => $token,
+			]);
+
+			try {
+				Mail::to($newEmail)->send(new UpdateEmailNotification($user, $token)); //確認メールを新しいEメールアドレスに送信
+			}catch (\Exception $e) {
+				Log::error('新しいEメールへの確認メール送信に失敗しました: ', ['error' => $e->getMessage()]);
+				return response()->json(['message' => '新しいEメールへの確認メール送信に失敗しました'], 500); //エラーメッセージを返す
+			}
+
+			try {
+				Mail::to($oldEmail)->send(new OldEmailNotification($user->name)); //更新通知を古いEメールアドレスに送信
+			}catch (\Exception $e) {
+				Log::error('古いEメールへの通知メール送信に失敗しました: ', ['error' => $e->getMessage()]);
+				return response()->json(['message' => '古いEメールへの通知メール送信に失敗しました'], 500); //エラーメッセージを返す
+			}
+
+			DB::commit(); //トランザクションをコミットし、変更を確定
+
+			return response()->json(['message' => '確認メールを送信しました。メール内のリンクからEメールの更新を完了してください。']);
+
+		}catch(\Exception $e) {
+			DB::rollBack(); //エラーが発生した場合は、トランザクションをロールバック
+			Log::error('Eメール変更に失敗しました: ', ['error' => $e->getMessage(), 'stack' => $e->getTraceAsString()]);
+			return response()->json(['message' => 'Eメールの変更に失敗しました。'], 500);
+		}
+	}
+
+	public function confirmEmail($token) //トークンを使ってEメール更新のリクエストを確認
+	{
+		DB::beginTransaction();
+
+		try {
+			$emailUpdate = EmailUpdate::where('token', $token)
+				->where('created_at', '>', now()->subMinutes(60))
+				->firstOrFail();
+
+			$user = User::findOrFail($emailUpdate->user_id); //ユーザーが見つからない場合はここで例外が発生
+			$user->email = $emailUpdate->new_email;
+			$user->save(); //Eメールアドレスを更新
+
+			$emailUpdate->delete(); //トークンを削除
+			DB::commit(); //トランザクションをコミットし、変更を確定
+
+			return response()->json(['message' => 'Eメールが更新されました'], 200);
+
+		}catch (ModelNotFoundException $e) {
+			DB::rollBack();
+			return response()->json(['message' => '無効なリクエストです'], 404);
+
+		}catch (\Exception $e) {
+			DB::rollBack();
+			Log::error('Eメールの更新処理に失敗しました: '. $e->getMessage());
+			return response()->json(['message' => 'Eメールの変更に失敗しました。'], 500);
 		}
 	}
 

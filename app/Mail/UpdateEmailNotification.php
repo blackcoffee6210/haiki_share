@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -11,27 +12,25 @@ class UpdateEmailNotification extends Mailable
 {
     use Queueable, SerializesModels;
 
-	private $_params = [];
+    public $user;
+    public $token;
 
-	/**
-	 * Create a new message instance.
-	 *
-	 * @return void
-	 */
-	public function __construct($_params)
+	public function __construct(User $user, $token)
 	{
-		$this->_params = $_params;
+		$this->user  = $user;
+		$this->token = $token;
 	}
 
-	/**
-	 * Build the message.
-	 *
-	 * @return $this
-	 */
 	public function build()
 	{
-		return $this->subject('Eメールアドレスが変更されました。')
-			->with('params', $this->_params)
-			->view('emails.updateEmail');
+		$url = "http://localhost:8000/email-confirmation?token={$this->token}";
+//		$url = config('app.url'). "/api/email/confirm/{$this->token}";
+
+		return $this->subject('Eメールアドレス更新の確認')
+					->view('emails.updateEmail')
+					->with([
+						'name' => $this->user->name,
+						'url'  => $url,
+					]);
 	}
 }

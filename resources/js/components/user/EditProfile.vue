@@ -145,29 +145,29 @@
 						</div>
 						
 						<!-- メール	-->
-						<label for="email" class="c-label p-editProfile__label">Eメール</label>
-						<input v-model="user.email"
-									 type="text"
-									 id="email"
-									 class="c-input p-editProfile__input"
-									 :class="{ 'c-input--err': errors.email ||
-									 					 maxCounter(user.email, 255)
-									 }"
-									 placeholder="mail@haiki_share.com">
-						<div class="u-d-flex u-space-between">
-							<!-- エラーメッセージ（フロントエンド） -->
-							<div v-if="maxCounter(user.email, 255) && !errors.email" class="p-error">
-								<p>Eメールアドレスは255文字以下で指定してください</p>
-							</div>
-							<!-- エラーメッセージ（バックエンド）	-->
-							<div v-if="errors">
-								<div v-for="msg in errors.email"
-										 :key="msg"
-										 class="p-error">
-									{{ msg }}
-								</div>
-							</div>
-						</div>
+						<!--<label for="email" class="c-label p-editProfile__label">Eメール</label>-->
+						<!--<input v-model="user.email"-->
+						<!--			 type="text"-->
+						<!--			 id="email"-->
+						<!--			 class="c-input p-editProfile__input"-->
+						<!--			 :class="{ 'c-input&#45;&#45;err': errors.email ||-->
+						<!--			 					 maxCounter(user.email, 255)-->
+						<!--			 }"-->
+						<!--			 placeholder="mail@haiki_share.com">-->
+						<!--<div class="u-d-flex u-space-between">-->
+						<!--	&lt;!&ndash; エラーメッセージ（フロントエンド） &ndash;&gt;-->
+						<!--	<div v-if="maxCounter(user.email, 255) && !errors.email" class="p-error">-->
+						<!--		<p>Eメールアドレスは255文字以下で指定してください</p>-->
+						<!--	</div>-->
+						<!--	&lt;!&ndash; エラーメッセージ（バックエンド）	&ndash;&gt;-->
+						<!--	<div v-if="errors">-->
+						<!--		<div v-for="msg in errors.email"-->
+						<!--				 :key="msg"-->
+						<!--				 class="p-error">-->
+						<!--			{{ msg }}-->
+						<!--		</div>-->
+						<!--	</div>-->
+						<!--</div>-->
 						
 						<!-- 自己紹介文	-->
 						<label for="introduce" class="c-label p-editProfile__label">自己紹介文</label>
@@ -374,7 +374,7 @@ export default {
 				}
 				
 			}catch (error) {
-				console.error('更新に失敗しました。', error);
+				console.error('プロフィールの更新に失敗しました。', error);
 				
 			}finally {
 				this.loading = false; //ローディングを非表示にする
