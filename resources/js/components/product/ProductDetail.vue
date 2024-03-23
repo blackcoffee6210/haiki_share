@@ -153,7 +153,7 @@
 													:title="product.name"
 													:hashtags="twitterHashTags.join(',')"
 													inline-template
-													class="c-btn c-btn--twitter">
+													class="c-btn c-btn__twitter">
 						<network network="twitter">
 							<font-awesome-icon :icon="['fab', 'twitter']" /> Twitter
 						</network>

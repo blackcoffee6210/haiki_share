@@ -7,7 +7,6 @@
   border-radius: 3px;
   box-shadow: 0 2px 0 #dcdcdc;
   font-size: $font-size_m;
-  //min-width: 125px;
   width: 125px;
   height: 35px;
   padding: $space_s $space_m;
@@ -21,7 +20,7 @@
     position: relative;
     top: 2px;
   }
-  &--twitter {
+  &__twitter {
     display: inline-block;
     background: #00acee;
     color: white;

@@ -278,6 +278,12 @@ export default {
 				if(response.status === OK) { //成功なら
 					this.product = response.data; //プロパティに値をセットする
 					
+					if (this.product.user_id !== this.userId) { // ログインしているユーザーのIDと商品のユーザーIDを比較
+						// ユーザーIDが一致しない場合、エラーメッセージを表示してリダイレクト
+						this.$store.commit('message/setContent', { content: '編集権限がありません。' });
+						this.$router.push({ name: 'index' });
+					}
+					
 				}else { //失敗なら
 					this.$store.commit('error/setCode', response.status); //エラーコードをセット
 					return false;

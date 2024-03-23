@@ -510,7 +510,7 @@ body {
   position: relative;
   top: 2px;
 }
-.c-btn--twitter {
+.c-btn__twitter {
   display: inline-block;
   background: #00acee;
   color: white;
