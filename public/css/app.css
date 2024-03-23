@@ -2901,11 +2901,15 @@ body {
 }
 @media screen and (max-width: 450px) {
   .p-review-detail__recommend {
-    width: 125px;
+    width: 100px;
+    font-size: 1rem;
     text-align: center;
-    top: 135px;
-    left: 10px;
+    top: -25px;
+    right: 0;
   }
+}
+.p-review-detail__name {
+  word-break: break-all;
 }
 .p-review-detail__container {
   display: flex;

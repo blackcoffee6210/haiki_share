@@ -116,7 +116,7 @@ class ReviewController extends Controller
 	public function destroy(string $s_id, string $r_id) //レビュー削除
 	{
 		try {
-			$review = Review::where(['sender_id', $s_id]) //レビューがあるか確認(なければ404を返す)
+			$review = Review::where('sender_id', $s_id) //レビューがあるか確認(なければ404を返す)
 							->where('receiver_id', $r_id)
 							->firstOrFail();
 			$review->delete();
@@ -194,24 +194,3 @@ class ReviewController extends Controller
 		return response()->json(['isReviewed' => $isReviewed]);
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

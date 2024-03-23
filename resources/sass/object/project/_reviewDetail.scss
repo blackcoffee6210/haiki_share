@@ -32,12 +32,32 @@
     right: 0;
     padding: $space_s $space_m;
     @include mq() {
-      width: 125px;
+      width: 100px;
+      font-size: $font-size_xs;
       text-align: center;
-      top: 135px;
-      left: 10px;
+      top: -25px;
+      right: 0;
     }
   }
+  &__name {
+    word-break: break-all;
+  }
+  //&__recommend {
+  //  font-weight: bold;
+  //  border-radius: 20px;
+  //  background: $sub-color;
+  //  color: $white;
+  //  position: absolute;
+  //  top: 20px;
+  //  right: 0;
+  //  padding: $space_s $space_m;
+  //  @include mq() {
+  //    width: 125px;
+  //    text-align: center;
+  //    top: 135px;
+  //    left: 10px;
+  //  }
+  //}
   &__container {
     display: flex;
     align-items: flex-end;
