@@ -9,7 +9,7 @@
   @include mq('tab') {
     min-height: 260px;
   }
-  &__user-info {
+  &__userInfo {
     display: flex;
     align-items: center;
   }
@@ -42,7 +42,7 @@
       max-width: 84px;
     }
   }
-  &__review-title {
+  &__reviewTitle {
     margin-top: $space_s;
     margin-bottom: $space_m;
     font-weight: bold;

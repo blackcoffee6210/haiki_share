@@ -25,7 +25,7 @@
 									 v-show="product.is_purchased"
 									 :key="product.id"
 									 :product="product">
-						<div class="p-product__btn-container" slot="btn">
+						<div class="p-product__btnContainer" slot="btn">
 							<!-- 購入キャンセルボタン(利用者の場合) -->
 							<button class="c-btn c-btn--white p-product__btn"
 											v-show="!isShopUser"

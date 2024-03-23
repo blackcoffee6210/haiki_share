@@ -1,32 +1,32 @@
 <template>
 	<div class="l-main">
-		<div class="p-auth-form">
+		<div class="p-authForm">
 			
 			<!-- 利用者とお店の方の切り替えをするタグ -->
-			<ul class="p-auth-form__group">
-				<li class="p-auth-form__group__item"
-						:class="{ 'p-auth-form__group__item--active': loginForm.group === 1 }"
+			<ul class="p-authForm__group">
+				<li class="p-authForm__group__item"
+						:class="{ 'p-authForm__group__item--active': loginForm.group === 1 }"
 						@click="loginForm.group = 1">利用者の方
 				</li>
-				<li class="p-auth-form__group__item"
-						:class="{ 'p-auth-form__group__item--active': loginForm.group === 2 }"
+				<li class="p-authForm__group__item"
+						:class="{ 'p-authForm__group__item--active': loginForm.group === 2 }"
 						@click="loginForm.group = 2">お店の方
 				</li>
 			</ul>
-			<h2 class="c-title p-auth-form__title" v-show="loginForm.group === 1">ログイン（利用者）</h2>
-			<h2 class="c-title p-auth-form__title" v-show="loginForm.group === 2">ログイン（お店の方）</h2>
+			<h2 class="c-title p-authForm__title" v-show="loginForm.group === 1">ログイン（利用者）</h2>
+			<h2 class="c-title p-authForm__title" v-show="loginForm.group === 2">ログイン（お店の方）</h2>
 			
 			<!-- preventをつけてデフォルトのフォーム送信の挙動をキャンセルする -->
-			<form class="p-auth-form__form" @submit.prevent="login">
+			<form class="p-authForm__form" @submit.prevent="login">
 				
 				<!-- Email	-->
 				<label for="email"
-							 class="c-label p-auth-form__label">Eメール
+							 class="c-label p-authForm__label">Eメール
 				</label>
 				<input type="text"
 							 v-model="loginForm.email"
-							 class="c-input p-auth-form__input"
-							 :class="{ 'c-input__err': (loginErrors) ? loginErrors.email : '' ||
+							 class="c-input p-authForm__input"
+							 :class="{ 'c-input--err': (loginErrors) ? loginErrors.email : '' ||
 							 					 maxCounter(loginForm.email,255)
 							 }"
 							 id="email"
@@ -50,12 +50,12 @@
 				
 				<!-- パスワード -->
 				<label for="password"
-							 class="c-label p-auth-form__label">パスワード(半角英数字)
+							 class="c-label p-authForm__label">パスワード(半角英数字)
 				</label>
 				<input type="password"
 							 v-model="loginForm.password"
-							 class="c-input p-auth-form__input"
-							 :class="{ 'c-input__err': (loginErrors) ? loginErrors.password : '' ||
+							 class="c-input p-authForm__input"
+							 :class="{ 'c-input--err': (loginErrors) ? loginErrors.password : '' ||
 							 					  maxCounter(loginForm.password,255)
 							 }"
 							 id="password"
@@ -78,22 +78,22 @@
 				</div>
 				
 				<!-- ログイン保持 -->
-				<div class="p-auth-form__check-container">
+				<div class="p-authForm__checkContainer">
 					<input type="checkbox"
 								 id="remember"
-								 class="p-auth-form__check"
+								 class="p-authForm__check"
 								 v-model="loginForm.remember">
 					<label for="remember">ログイン保持</label>
 				</div>
 				
 				<!-- ログインボタン -->
-				<button class="c-btn p-auth-form__btn" type="submit">ログイン</button>
+				<button class="c-btn p-authForm__btn" type="submit">ログイン</button>
 			</form>
 			
 			<!-- パスワードリマインダー	-->
 			<router-link :to="{ name: 'password.email' }"
 									 class="c-link">パスワードをお忘れの方はこちら</router-link>
-			<hr class="p-auth-form__u-line">
+			<hr class="p-authForm__uLine">
 			<!-- 会員登録へ遷移	-->
 			<router-link :to="{ name: 'register' }"
 									 class="c-link">会員登録はこちら

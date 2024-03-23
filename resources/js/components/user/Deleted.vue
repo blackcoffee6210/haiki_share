@@ -17,7 +17,7 @@
 					<Product v-for="product in products"
 									 :key="product.id"
 									 :product="product">
-						<div class="p-product__btn-container" slot="btn">
+						<div class="p-product__btnContainer" slot="btn">
 							<!-- 論理削除された商品を復元するボタン	-->
 							<button class="c-btn p-list__btn" @click="restore(product)">復元する</button>
 						</div>

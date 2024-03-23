@@ -1,4 +1,4 @@
-.p-product-detail {
+.p-productDetail {
   width: 680px;
   margin: 0 auto;
   @include mq() {
@@ -43,13 +43,13 @@
       padding: $space_s $space_m;
     }
   }
-  &__name-container {
+  &__nameContainer {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: $space_xl;
   }
-  &__product-name {
+  &__productName {
     font-size: $font-size_xl;
     font-weight: bold;
     word-break: break-all;
@@ -95,7 +95,7 @@
       }
     }
   }
-  &__user-info {
+  &__userInfo {
     display: flex;
     align-items: center;
     position: relative;
@@ -117,7 +117,7 @@
       border-radius: 50%;
     }
   }
-  &__shop-name {
+  &__shopName {
     margin-right: $space_m;
     overflow: hidden;
     max-width: 200px;
@@ -151,7 +151,7 @@
       text-align: right;
     }
   }
-  &__btn-container {
+  &__btnContainer {
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -169,7 +169,7 @@
       width: 50%;
       font-size: $font-size_s;
     }
-    &--like {
+    &__like {
       width: 160px;
       border-radius: 20px;
       margin-right: $space_l;
@@ -180,8 +180,8 @@
         width: 50%;
       }
     }
-    &--review,
-    &--delete {
+    &__review,
+    &__delete {
       margin-right: $space_xl;
       padding-top: 7px;
       @include mq() {
@@ -202,7 +202,7 @@
       padding: $space_m;
     }
   }
-  &__twitter-container {
+  &__twitterContainer {
     text-align: right;
     margin-top: $space_l;
   }
@@ -215,7 +215,7 @@
       font-size: $font-size_m;
     }
   }
-  &__products-container {
+  &__productsContainer {
     width: 100%;
     display: grid;
     grid-template-columns: 33.3% 33.3% 33.3%;
@@ -231,23 +231,6 @@
       grid-template-columns: 50% 50%;
       padding-right: $space_xl;
       gap: $space_xl;
-    }
-    @include mq('mon') {
-    }
-  }
-  &__go-top {
-    display: block;
-    width: 50px;
-    height: 50px;
-    border-radius: 50px;
-    text-align: center;
-    background: #ddd;
-    position: fixed;
-    bottom: 60px;
-    right: 60px;
-    @include mq() {
-      bottom: 20px;
-      right: 20px;
     }
   }
 }

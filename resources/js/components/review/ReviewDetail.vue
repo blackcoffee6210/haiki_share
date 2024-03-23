@@ -1,29 +1,29 @@
 <template>
 	<main class="l-main">
-		<div class="p-review-detail">
+		<div class="p-reviewDetail">
 			<Loading v-show="loading" />
 			
 			<div v-if="!loading && review">
-				<h2 class="c-title p-review-detail__title">レビュー詳細</h2>
+				<h2 class="c-title p-reviewDetail__title">レビュー詳細</h2>
 				
-				<div class="p-review-detail__user-info">
-					<img :src="ReviewerImage" alt="" class="c-icon p-review-detail__image">
+				<div class="p-reviewDetail__userInfo">
+					<img :src="ReviewerImage" alt="" class="c-icon p-reviewDetail__image">
 					<div>
 						<!-- 投稿した利用者名	-->
-						<div class="p-review-detail__name">{{ review.sender_name }}</div>
+						<div class="p-reviewDetail__name">{{ review.sender_name }}</div>
 						<!-- 投稿日	-->
-						<div class="p-review-detail__send_date">{{ review.created_at | moment }}</div>
+						<div class="p-reviewDetail__send_date">{{ review.created_at | moment }}</div>
 					</div>
-					<div class="p-review-detail__recommend">{{ review.recommend }}</div>
+					<div class="p-reviewDetail__recommend">{{ review.recommend }}</div>
 				</div>
 				
 				<!-- ユーザーの評価	-->
-				<div class="p-review-detail__container">
+				<div class="p-reviewDetail__container">
 					<!-- レビュータイトル	-->
-					<div class="p-review-detail__review-title">{{ review.title }}</div>
+					<div class="p-reviewDetail__reviewTitle">{{ review.title }}</div>
 					<!-- 編集ボタン(利用者) -->
 					<router-link v-if="isMyReview"
-											 class="c-btn p-review-detail__btn"
+											 class="c-btn p-reviewDetail__btn"
 											 :to="{ name: 'review.edit',
 															params: {
 																s_id: review.sender_id.toString(),
@@ -32,26 +32,26 @@
 					</router-link>
 				</div>
 				<!-- レビューの内容	-->
-				<div class="p-review-detail__detail">{{ review.detail }}</div>
+				<div class="p-reviewDetail__detail">{{ review.detail }}</div>
 				
 				<!-- 出品者の情報 -->
-				<h2 class="c-title p-product-detail__title">出品者情報</h2>
-				<div class="p-review-detail__user-info">
+				<h2 class="c-title p-productDetail__title">出品者情報</h2>
+				<div class="p-reviewDetail__userInfo">
 					<!-- 詳細画面のリンク -->
 					<router-link class="c-card__link"
 											 v-if="review && review.receiver_id"
 											 :to="{ name: 'user.detail', params: { id: review.receiver_id.toString() }}"/>
-					<img :src="review.receiver_image || '/storage/images/no-image.png'" alt="" class="c-icon p-review-detail__image">
+					<img :src="review.receiver_image || '/storage/images/no-image.png'" alt="" class="c-icon p-reviewDetail__image">
 					<div>
-						<div class="p-review-detail__name">{{ review.receiver_name }}</div>
-						<div class="p-review-detail__branch">{{ review.receiver_branch }}</div>
+						<div class="p-reviewDetail__name">{{ review.receiver_name }}</div>
+						<div class="p-reviewDetail__branch">{{ review.receiver_branch }}</div>
 					</div>
 					
 				</div>
 				
 				<!-- 出品者の購入されていない商品を表示 -->
-				<h2 class="c-title p-product-detail__title" v-if="otherProducts.length > 0">この出品者の商品</h2>
-				<div class="p-review-detail__product-container">
+				<h2 class="c-title p-productDetail__title" v-if="otherProducts.length > 0">この出品者の商品</h2>
+				<div class="p-reviewDetail__productContainer">
 					<Product v-for="product in otherProducts"
 									 :key="product.id"
 									 :product="product" />

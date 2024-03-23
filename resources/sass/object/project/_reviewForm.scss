@@ -1,4 +1,4 @@
-.p-review-form {
+.p-reviewForm {
   width: 500px;
   margin: 0 auto;
   @include mq() {
@@ -20,7 +20,7 @@
 
     }
   }
-  &__user-info {
+  &__userInfo {
     display: flex;
     align-items: center;
     margin-bottom: $space_xl;
@@ -39,7 +39,7 @@
       display: inline-block;
     }
   }
-  &__user-name {
+  &__userName {
     font-size: $font-size_l;
     word-break: break-all;
   }
@@ -88,13 +88,6 @@
   }
   &__input {
     width: 100%;
-    &__err {
-      border: 1px solid $error-color;
-      border-left: 0;
-      background: $error-color-bg;
-    }
-    @include mq() {
-    }
   }
   &__text {
     @include mq() {
@@ -108,7 +101,7 @@
     @include mq() {
     }
   }
-  &__btn-container {
+  &__btnContainer {
     display: flex;
     justify-content: flex-end;
     margin-top: $space_2xl;
@@ -124,14 +117,8 @@
     @include mq() {
       width: 50%;
     }
-    &--post {
+    &__post {
       margin-left: auto;
-    }
-    &--delete {
-      //margin: $space_2xl $space_m 0 0;
-    }
-    &--update {
-      //margin: $space_2xl 0 0 0;
     }
   }
 }

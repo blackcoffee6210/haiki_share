@@ -1,38 +1,38 @@
 <template>
 	<div class="l-main">
-		<div class="p-auth-form">
+		<div class="p-authForm">
 			
 			<!-- 利用者とお店の方の切り替えをするタグ -->
-			<ul class="p-auth-form__group">
-				<li class="p-auth-form__group__item"
-						:class="{ 'p-auth-form__group__item--active': registerForm.group === 1 }"
+			<ul class="p-authForm__group">
+				<li class="p-authForm__group__item"
+						:class="{ 'p-authForm__group__item--active': registerForm.group === 1 }"
 						@click="registerForm.group = 1">利用者の方
 				</li>
-				<li class="p-auth-form__group__item"
-						:class="{ 'p-auth-form__group__item--active': registerForm.group === 2 }"
+				<li class="p-authForm__group__item"
+						:class="{ 'p-authForm__group__item--active': registerForm.group === 2 }"
 						@click="registerForm.group = 2">お店の方
 				</li>
 			</ul>
 			
 			<!-- タイトル -->
-			<h2 class="c-title p-auth-form__title"
+			<h2 class="c-title p-authForm__title"
 					v-show="registerForm.group === 1">新規登録（利用者）
 			</h2>
-			<h2 class="c-title p-auth-form__title"
+			<h2 class="c-title p-authForm__title"
 					v-show="registerForm.group === 2">新規登録（お店の方）
 			</h2>
 			
-			<form class="p-auth-form__form" @submit.prevent="register">
+			<form class="p-authForm__form" @submit.prevent="register">
 				
 				<!-- name -->
-				<label for="name" class="c-label p-auth-form__label">
+				<label for="name" class="c-label p-authForm__label">
 					<span v-show="registerForm.group === 1">お名前</span>
 					<span v-show="registerForm.group === 2">コンビニ名</span>
 				</label>
 				<input type="text"
 							 id="name"
-							 class="c-input p-auth-form__input"
-							 :class="{ 'c-input__err': (registerErrors) ? registerErrors.name : '' ||
+							 class="c-input p-authForm__input"
+							 :class="{ 'c-input--err': (registerErrors) ? registerErrors.name : '' ||
 							 				 	 maxCounter(registerForm.name,50)
 							 }"
 							 v-model="registerForm.name"
@@ -66,11 +66,11 @@
 				
 				<!-- 支店（コンビニユーザーなら表示） -->
 				<div v-show="registerForm.group === 2">
-					<label for="branch" class="c-label p-auth-form__label u-mt0">支店名</label>
+					<label for="branch" class="c-label p-authForm__label u-mt0">支店名</label>
 					<input type="text"
 								 id="branch"
-								 class="c-input p-auth-form__input"
-								 :class="{ 'c-input__err': (registerErrors) ? registerErrors.branch : '' ||
+								 class="c-input p-authForm__input"
+								 :class="{ 'c-input--err': (registerErrors) ? registerErrors.branch : '' ||
 					 			 					 maxCounter(registerForm.branch,50)
 								 }"
 								 v-model="registerForm.branch"
@@ -101,10 +101,10 @@
 				
 				<!-- 都道府県（コンビニユーザーなら表示） -->
 				<div v-show="registerForm.group === 2">
-					<label for="prefecture" class="c-label p-auth-form__label u-mt0">都道府県</label>
+					<label for="prefecture" class="c-label p-authForm__label u-mt0">都道府県</label>
 					<select id="prefecture"
-									class="c-select p-auth-form__input"
-									:class="{ 'c-select__err': (registerErrors) ? registerErrors.prefecture_id : ''}"
+									class="c-select p-authForm__input"
+									:class="{ 'c-select--err': (registerErrors) ? registerErrors.prefecture_id : ''}"
 									v-model="registerForm.prefecture_id">
 						<option value="" disabled>都道府県を選択してください</option>
 						<option v-for="prefecture in prefectures" :value="prefecture.id" :key="prefecture.id">
@@ -123,12 +123,12 @@
 				<!-- 住所（コンビニユーザーなら表示） -->
 				<div v-show="registerForm.group === 2">
 					<label for="address"
-								 class="c-label p-auth-form__label">住所
+								 class="c-label p-authForm__label">住所
 					</label>
 					<input type="text"
 								 id="address"
-								 class="c-input p-auth-form__input"
-								 :class="{ 'c-input__err': (registerErrors) ? registerErrors.address : '' ||
+								 class="c-input p-authForm__input"
+								 :class="{ 'c-input--err': (registerErrors) ? registerErrors.address : '' ||
 													 maxCounter(registerForm.address,255)
 								 }"
 								 v-model="registerForm.address"
@@ -158,11 +158,11 @@
 				</div>
 				
 				<!-- email-->
-				<label for="email" class="c-label p-auth-form__label u-mt0">Eメール</label>
+				<label for="email" class="c-label p-authForm__label u-mt0">Eメール</label>
 				<input type="text"
 							 id="email"
-							 class="c-input p-auth-form__input"
-							 :class="{ 'c-input__err': (registerErrors) ? registerErrors.email : '' ||
+							 class="c-input p-authForm__input"
+							 :class="{ 'c-input--err': (registerErrors) ? registerErrors.email : '' ||
 							 					 maxCounter(registerForm.email,255)
 							 }"
 							 v-model="registerForm.email"
@@ -185,11 +185,11 @@
 				</div>
 				
 				<!-- パスワード -->
-				<label for="password" class="c-label p-auth-form__label">パスワード</label>
+				<label for="password" class="c-label p-authForm__label">パスワード</label>
 				<input type="password"
 							 id="password"
-							 class="c-input p-auth-form__input"
-							 :class="{ 'c-input__err': (registerErrors) ? registerErrors.password : '' ||
+							 class="c-input p-authForm__input"
+							 :class="{ 'c-input--err': (registerErrors) ? registerErrors.password : '' ||
 												 maxCounter(registerForm.password,255)
 							 }"
 							 v-model="registerForm.password"
@@ -213,12 +213,12 @@
 				
 				<!-- パスワード(確認) -->
 				<label for="password-confirmation"
-							 class="c-label p-auth-form__label u-mt0">パスワード(確認)
+							 class="c-label p-authForm__label u-mt0">パスワード(確認)
 				</label>
 				<input type="password"
 							 id="password-confirmation"
-							 class="c-input p-auth-form__input"
-							 :class="{ 'c-input__err': (registerErrors) ? registerErrors.password_confirmation : '' ||
+							 class="c-input p-authForm__input"
+							 :class="{ 'c-input--err': (registerErrors) ? registerErrors.password_confirmation : '' ||
 												 maxCounter(registerForm.password_confirmation,255)}"
 							 v-model="registerForm.password_confirmation"
 							 placeholder="8文字以上の半角英数字">
@@ -240,12 +240,12 @@
 				</div>
 				
 				<!-- 利用規約 -->
-				<div class="p-auth-form__check-container">
+				<div class="p-authForm__checkContainer">
 					<input type="checkbox"
 								 id="agreement"
 								 v-model="checkAgree"
 								 class="c-checkbox">
-					<router-link class="p-auth-form__agreement"
+					<router-link class="p-authForm__agreement"
 											 target="_blank"
 											 :to="{ name: 'agreement'}">利用規約
 					</router-link>
@@ -254,13 +254,13 @@
 				
 				<!-- ボタン -->
 				<div class="u-p-relative">
-					<button class="c-btn p-auth-form__btn"
+					<button class="c-btn p-authForm__btn"
 									:disabled="!checkAgree"
 									type="submit">登録する（無料）
 					</button>
 				</div>
 			</form>
-			<hr class="p-auth-form__u-line">
+			<hr class="p-authForm__uLine">
 			<!-- ログイン画面へ遷移	-->
 			<router-link :to="{ name: 'login' }"
 									 class="c-link">ログインはこちら

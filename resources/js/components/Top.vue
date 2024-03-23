@@ -6,25 +6,25 @@
 		<!-- ファーストビュー（共感） -->
 		<div class="p-top__bg">
 			<transition name="hero" appear>
-				<section class="p-top__section p-top__section--hero">
+				<section class="p-top__section p-top__section__hero">
 					<div class="p-top__title">そこのあなた！ <br class="u-br">
 						こう思ったことはありませんか？
 					</div>
-					<p class="p-top__think p-top__think--user">
-						コンビニは便利だけど<br class="p-top__br--think">
+					<p class="p-top__think p-top__think__user">
+						コンビニは便利だけど<br class="p-top__br__think">
 						スーパーより高い..<br>
 						もっと安く買えたらな...
 					</p>
 					<img src="/storage/images/expensive.png"
-							 class="p-top__think-img p-top__think-img--user"
+							 class="p-top__thinkImg p-top__thinkImg__user"
 							 alt="">
-					<p class="p-top__think p-top__think--shop">
+					<p class="p-top__think p-top__think__shop">
 						まだ食べられる食品を<br>
-						廃棄で捨てるのは<br class="p-top__br--think">
+						廃棄で捨てるのは<br class="p-top__br__think">
 						もったいないな...
 					</p>
 					<img src="/storage/images/trash.png"
-							 class="p-top__think-img p-top__think-img--shop"
+							 class="p-top__thinkImg p-top__thinkImg__shop"
 							 alt="">
 					<p class="p-top__title">
 						そのお悩み、<br>
@@ -75,14 +75,14 @@
 					<h2 class="p-top__title">Ha<span class="c-color__main">i</span>ki Share 3つのメリット!</h2>
 				</FadeIn>
 				
-				<div class="p-top__container p-top__container--2line">
+				<div class="p-top__container p-top__container__2line">
 					<div class="p-top__ornament">利用者の方</div>
 					<div class="c-card p-top__panel">
 						<h3 class="p-top__panel__title">
 							コンビニの食品を<br>安く購入できる！
 						</h3>
 						<img src="/storage/images/Discount-amico.png"
-								 class="p-top__merit-img"
+								 class="p-top__meritImg"
 								 alt="">
 					</div>
 					<div class="c-card p-top__panel">
@@ -90,7 +90,7 @@
 							お近くのコンビニから<br>探すことができる！
 						</h3>
 						<img src="/storage/images/near.png"
-								 class="p-top__merit-img"
+								 class="p-top__meritImg"
 								 alt="">
 					</div>
 					<div class="c-card p-top__panel">
@@ -98,7 +98,7 @@
 							たくさんの<br>カテゴリーから選べる！
 						</h3>
 						<img src="/storage/images/bunch.png"
-								 class="p-top__merit-img"
+								 class="p-top__meritImg"
 								 alt="">
 					</div>
 				</div>
@@ -110,7 +110,7 @@
 							今まで捨てていた食品<br>で売り上げUP！
 						</h3>
 						<img src="/storage/images/increase.png"
-								 class="p-top__merit-img"
+								 class="p-top__meritImg"
 								 alt="">
 					</div>
 					<div class="c-card p-top__panel">
@@ -119,7 +119,7 @@
 							スマホでもパソコンでも！
 						</h3>
 						<img src="/storage/images/device.png"
-								 class="p-top__merit-img"
+								 class="p-top__meritImg"
 								 alt="">
 					</div>
 					<div class="c-card p-top__panel">
@@ -127,7 +127,7 @@
 							賞味期限が近い、<br>過ぎている食品もOK!
 						</h3>
 						<img src="/storage/images/time.png"
-								 class="p-top__merit-img"
+								 class="p-top__meritImg"
 								 alt="">
 					</div>
 				</div>
@@ -237,23 +237,23 @@
 				<FadeIn>
 					<h2 class="p-top__title">カンタン！３ステップ</h2>
 				</FadeIn>
-				<div class="p-top__container p-top__container--step p-top__container--2line">
-					<div class="p-top__ornament p-top__ornament--step">利用者の方</div>
-					<div class="p-top__panel p-top__panel--step">
+				<div class="p-top__container p-top__container__step p-top__container__2line">
+					<div class="p-top__ornament p-top__ornament__step">利用者の方</div>
+					<div class="p-top__panel p-top__panel__step">
 						<div class="p-top__step">
 							STEP
 							<span class="p-top__step-number">1</span>
 						</div>
 						<h3 class="p-top__step-title">カンタン！<br class="p-top__br">会員登録</h3>
 					</div>
-					<div class="p-top__panel p-top__panel--step">
+					<div class="p-top__panel p-top__panel__step">
 						<div class="p-top__step">
 							STEP
 							<span class="p-top__step-number">2</span>
 						</div>
 						<h3 class="p-top__step-title">気になる商品を<br class="p-top__br">購入する</h3>
 					</div>
-					<div class="p-top__panel p-top__panel--step">
+					<div class="p-top__panel p-top__panel__step">
 						<div class="p-top__step">
 							STEP
 							<span class="p-top__step-number">3</span>
@@ -262,21 +262,21 @@
 					</div>
 				</div>
 				
-				<div class="p-top__container p-top__container--step">
-					<div class="p-top__ornament p-top__ornament--step">コンビニユーザー</div>
-					<div class="p-top__panel p-top__panel--step">
+				<div class="p-top__container p-top__container__step">
+					<div class="p-top__ornament p-top__ornament__step">コンビニユーザー</div>
+					<div class="p-top__panel p-top__panel__step">
 						<div class="p-top__step">STEP<span class="p-top__step-number">1</span></div>
 						<h3 class="p-top__step-title">
 							カンタン！<br class="p-top__br">会員登録
 						</h3>
 					</div>
-					<div class="p-top__panel p-top__panel--step">
+					<div class="p-top__panel p-top__panel__step">
 						<div class="p-top__step">STEP<span class="p-top__step-number">2</span></div>
 						<h3 class="p-top__step-title">
 							写真を撮って<br class="p-top__br">商品を出品
 						</h3>
 					</div>
-					<div class="p-top__panel p-top__panel--step">
+					<div class="p-top__panel p-top__panel__step">
 						<div class="p-top__step">STEP<span class="p-top__step-number">3</span></div>
 						<h3 class="p-top__step-title">
 							購入された商品を<br class="p-top__br">用意する
@@ -301,8 +301,8 @@
 		</div>
 		
 		<!-- TOPへ	-->
-		<transition name="c-go-top">
-			<button class="c-go-top p-top__go-top"
+		<transition name="c-goTop">
+			<button class="c-goTop p-top__goTop"
 							v-show="buttonActive"
 							@click="returnTop">TOP</button>
 		</transition>

@@ -1,61 +1,61 @@
 <template>
 	<main class="l-main">
-		<div class="p-profile-detail">
-			<h2 class="c-title p-profile-detail__a">プロフィール詳細</h2>
+		<div class="p-profileDetail">
+			<h2 class="c-title p-profileDetail__a">プロフィール詳細</h2>
 			
 			<!-- ユーザー情報	-->
-			<div class="p-profile-detail__container">
+			<div class="p-profileDetail__container">
 				<!-- 画像があればプロフィール画像を表示する -->
 				<img :src="user.image"
 						 v-if="user.image"
-						 class="p-profile-detail__image"
+						 class="p-profileDetail__image"
 						 alt="">
 				<!-- なければno-imgを表示 -->
-				<img class="p-profile-detail__image"
+				<img class="p-profileDetail__image"
 						 v-else
 						 src="/storage/images/no-image.png"
 						 alt="">
 				
 				<div>
 					<!-- ユーザー名（コンビニ名） -->
-					<div class="p-profile-detail__name">{{ user.name }}</div>
+					<div class="p-profileDetail__name">{{ user.name }}</div>
 					<!-- 支店名（コンビニユーザーのみ表示） -->
 					<div v-show="shopUser"
-							 class="p-profile-detail__branch">{{ user.branch }}
+							 class="p-profileDetail__branch">{{ user.branch }}
 					</div>
 					<!-- 住所（コンビニユーザーのみ表示） -->
-					<div class="p-profile-detail__address" v-show="shopUser">
+					<div class="p-profileDetail__address" v-show="shopUser">
 						{{ user.prefecture_name }}
 						{{ user.address }}
 					</div>
 					<!-- ユーザー評価 -->
-					<div class="p-profile-detail__recommend" v-show="shopUser">
+					<div class="p-profileDetail__recommend" v-show="shopUser">
 						{{ user.recommend }}
 					</div>
 				</div>
 			</div>
 			
 			<!-- 出品数 -->
-			<div class="p-profile-detail__container u-space-between">
+			<div class="p-profileDetail__container u-space-between">
 				<div>
-					<span class="p-profile-detail__count">{{ products.length }}</span>
-					<span class="p-profile-detail__text"
+					<span class="p-profileDetail__count">{{ products.length }}</span>
+					<span class="p-profileDetail__text"
 								v-show="shopUser">出品数
 					</span>
-					<span class="p-profile-detail__text"
+					<span class="p-profileDetail__text"
 								v-show="!shopUser">購入数
 					</span>
 					
-					<span class="p-profile-detail__count u-ml15">{{ reviews.length }}</span>
-					<span class="p-profile-detail__text"
+					<span class="p-profileDetail__count u-ml15">{{ reviews.length }}</span>
+					<span class="p-profileDetail__text"
 								v-show="shopUser">レビューされた数
 					</span>
-					<span class="p-profile-detail__text"
+					<span class="p-profileDetail__text"
 								v-show="!shopUser">レビューした数
 					</span>
 				</div>
 				<!-- プロフィール編集	-->
-				<router-link class="c-btn p-profile-detail__btn"
+				<router-link class="c-btn p-profileDetail__btn"
 										 v-show="isMyProfile"
 										 :to="{ name: 'user.editProfile',
 									  			params: { id: id.toString() }}" >プロフィール編集
@@ -63,7 +63,7 @@
 			</div>
 			
 			<!-- 自己紹介文 -->
-			<div class="p-profile-detail__introduce">{{ user.introduce }}</div>
+			<div class="p-profileDetail__introduce">{{ user.introduce }}</div>
 			
 			<!-- コンビニユーザーの出品した商品 -->
 			<div v-show="shopUser">
@@ -74,9 +74,9 @@
 							 v-model="showSale">
 				<label for="sale"
 							 v-show="products.length > 0"
-							 class="p-profile-detail__label">販売中のみ表示
+							 class="p-profileDetail__label">販売中のみ表示
 				</label>
-				<div class="p-profile-detail__product-container">
+				<div class="p-profileDetail__productContainer">
 					<Product v-show="!loading"
 									 v-for="product in filteredProducts"
 									 :key="product.id"
@@ -87,7 +87,7 @@
 			<!-- 投稿されたレビュー	-->
 			<div v-show="shopUser">
 				<div class="u-font-bold u-mt30" v-show="reviews.length > 0">投稿されたレビュー</div>
-				<div class="p-profile-detail__review-container">
+				<div class="p-profileDetail__reviewContainer">
 					<Review v-show="!loading"
 									v-for="review in reviews"
 									:key="review.id"
@@ -98,7 +98,7 @@
 			<!-- 利用者の購入した商品 -->
 			<div v-show="!shopUser">
 				<div class="u-font-bold">購入した商品</div>
-				<div class="p-profile-detail__product-container">
+				<div class="p-profileDetail__productContainer">
 					<Product v-show="!loading"
 									 v-for="product in products"
 									 :key="product.id"
@@ -109,7 +109,7 @@
 			<!-- 投稿したレビュー	-->
 			<div v-show="!shopUser">
 				<div class="u-font-bold u-mt30">投稿したレビュー</div>
-				<div class="p-profile-detail__review-container">
+				<div class="p-profileDetail__reviewContainer">
 					<Review v-show="!loading"
 									v-for="review in reviews"
 									:key="review.id"

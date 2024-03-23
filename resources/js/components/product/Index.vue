@@ -6,7 +6,7 @@
 				<!-- ローディング -->
 				<Loading v-show="loading" />
 				
-				<div class="p-index__sort-container">
+				<div class="p-index__sortContainer">
 					<!-- 検索件数 -->
 					<div class="p-index__total">
 						<span class="u-font-bold">検索結果</span>
@@ -25,14 +25,14 @@
 						<!-- 販売中の商品のみ表示 -->
 						<input type="checkbox"
 									 id="sale"
-									 class="c-checkbox p-index__checkbox--sale"
+									 class="c-checkbox p-index__checkbox p-index__checkbox__sale"
 									 v-model="showSale">
 						<label for="sale" class="p-index__label">販売中のみ表示</label>
 					</div>
 				</div>
 				
 				<!-- 商品コンテナ -->
-				<div class="p-index__product-container">
+				<div class="p-index__productContainer">
 					<!-- Productコンポーネント -->
 					<Product v-show="!loading"
 									 v-for="product in filteredProducts"
@@ -69,44 +69,44 @@
 		
 		<!-- サイドバー	-->
 		<aside class="l-sidebar" v-show="!loading">
-			<div class="p-sidebar-index">
+			<div class="p-sidebarIndex">
 				
 				<!-- 絞り込みを解除するボタン -->
 				<button v-if="isFiltered"
 								@click="resetFilters"
-								class="c-btn p-sidebar-index__clear-filter">
+								class="c-btn p-sidebarIndex__clearFilter">
 					絞り込みを解除
 				</button>
 				
 				<!-- 検索ボックス -->
-				<div class="p-sidebar-index__search">
-					<label class="p-sidebar-index__title" for="search">商品検索</label>
+				<div class="p-sidebarIndex__search">
+					<label class="p-sidebarIndex__title" for="search">商品検索</label>
 					<input type="text"
 								 placeholder="SEARCH"
 								 v-model="tempKeyword"
 								 id="search"
-								 class="c-input p-sidebar-index__input"
+								 class="c-input p-sidebarIndex__input"
 								 @keydown.enter="handleEnter"
 								 @compositionstart="handleCompositionStart"
 								 @compositionend="handleCompositionEnd"
 								 @input="handleInput">
 					<!-- 検索アイコン -->
 					<font-awesome-icon :icon="['fas', 'search']"
-														 class="p-sidebar-index__search-icon"
+														 class="p-sidebarIndex__searchIcon"
 														 @click="searchProducts"
 														 color="#ff6f80" />
 					<!-- ゴミ箱アイコン -->
 					<font-awesome-icon :icon="['fas', 'trash']"
 														 @click="deleteSearch"
-														 class="p-sidebar-index__trash-icon"
+														 class="p-sidebarIndex__trashIcon"
 														 color="#ff6f80" />
 				</div>
 				
 				<!-- 金額ソート -->
-				<div class="p-sidebar-index__sort">
-					<label for="sort_price" class="p-sidebar-index__title">金額</label>
+				<div class="p-sidebarIndex__sort">
+					<label for="sort_price" class="p-sidebarIndex__title">金額</label>
 					<select id="sort_price"
-									class="c-select p-sidebar-index__select"
+									class="c-select p-sidebarIndex__select"
 									v-model="sortPrice">
 						<option value="1">標準</option>
 						<option value="2">価格が安い順</option>
@@ -115,10 +115,10 @@
 				</div>
 				
 				<!-- カテゴリー -->
-				<div class="p-sidebar-index__sort">
-					<label for="sort_category" class="p-sidebar-index__title">カテゴリー</label>
+				<div class="p-sidebarIndex__sort">
+					<label for="sort_category" class="p-sidebarIndex__title">カテゴリー</label>
 					<select id="sort_category"
-									class="c-select p-sidebar-index__select"
+									class="c-select p-sidebarIndex__select"
 									v-model="sortCategory">
 						<option value="0">選択してください</option>
 						<option v-for="category in categories"
@@ -130,12 +130,12 @@
 				</div>
 				
 				<!-- 出品したコンビニのある都道府県 -->
-				<div class="p-sidebar-index__sort">
-					<label for="sort_prefecture" class="p-sidebar-index__title">
-						出品したコンビニの<br class="p-sidebar-index__br">都道府県
+				<div class="p-sidebarIndex__sort">
+					<label for="sort_prefecture" class="p-sidebarIndex__title">
+						出品したコンビニの<br class="p-sidebarIndex__br">都道府県
 					</label>
 					<select id="sort_prefecture"
-									class="c-select p-sidebar-index__select"
+									class="c-select p-sidebarIndex__select"
 									v-model="sortPrefecture">
 						<option value="0">選択してください</option>
 						<option v-for="prefecture in ascPrefecture"
@@ -147,34 +147,34 @@
 				</div>
 				
 				<!-- おすすめの商品 -->
-				<h2 class="c-title p-sidebar-index__title">おすすめの商品</h2>
-				<div class="p-sidebar-index__card-container">
-					<div class="c-card p-sidebar-index__card u-space-between"
+				<h2 class="c-title p-sidebarIndex__title">おすすめの商品</h2>
+				<div class="p-sidebarIndex__cardContainer">
+					<div class="c-card p-sidebarIndex__card u-space-between"
 							 v-for="product in recommendProducts"
 							 v-show="!product.is_purchased"
 							 :key="product.id">
 						<router-link class="c-card__link"
 												 :to="{ name: 'product.detail', params: { id: product.id.toString() }}" />
 						<!-- 商品画像 -->
-						<img class="p-sidebar-index__img"
+						<img class="p-sidebarIndex__img"
 								 :src="product.image"
 								 alt="">
-						<div class="p-sidebar-index__right">
+						<div class="p-sidebarIndex__right">
 							<!-- 商品名 -->
-							<div class="p-sidebar-index__card-title">{{ product.name }}</div>
-							<div class="p-sidebar-index__price-container">
+							<div class="p-sidebarIndex__cardTitle">{{ product.name }}</div>
+							<div class="p-sidebarIndex__priceContainer">
 								<!-- 金額 -->
-								<div class="p-sidebar-index__price">{{ product.price | numberFormat }}</div>
+								<div class="p-sidebarIndex__price">{{ product.price | numberFormat }}</div>
 								
 								<!-- 賞味期限 -->
-								<div class="p-sidebar-index__expire" v-if="sidebarExpireDate(product)">
+								<div class="p-sidebarIndex__expire" v-if="sidebarExpireDate(product)">
 									<span class="u-color__main u-font-bold">切れ</span>
 									<span class="p-product__expire__date">
 										{{ product.expire | fromExpire }}
 									</span>
 									日
 								</div>
-								<div class="p-sidebar-index__expire" v-else>
+								<div class="p-sidebarIndex__expire" v-else>
 									残り
 									<span class="p-product__expire__date">
 										{{ product.expire | momentExpire }}
@@ -184,10 +184,10 @@
 							</div>
 							<!-- ユーザー情報 -->
 							<div class="c-flex">
-								<img class="c-icon p-sidebar-index__icon"
+								<img class="c-icon p-sidebarIndex__icon"
 										 :src="product.user_image"
 										 alt="">
-								<div class="p-sidebar-index__name">{{ product.user_name }}</div>
+								<div class="p-sidebarIndex__name">{{ product.user_name }}</div>
 							</div>
 							
 						</div>

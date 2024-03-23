@@ -2,42 +2,44 @@
 	<div class="l-main">
 		<!-- プロフィール編集	-->
 		<main class="l-main__2column">
-			<div class="p-edit-profile">
+			<div class="p-editProfile">
 				
 				<!-- タイトル -->
-				<h2 class="c-title p-edit-profile__title">プロフィール編集</h2>
+				<h2 class="c-title p-editProfile__title">プロフィール編集</h2>
 				
-				<div class="p-edit-profile__background">
+				<div class="p-editProfile__background">
 					<!-- ローディング -->
 					<Loading v-show="loading" />
 					
-					<form class="p-edit-profile__form" v-show="!loading" @submit.prevent="update">
+					<form class="p-editProfile__form" v-show="!loading" @submit.prevent="update">
 						
 						<!-- ユーザー画像	-->
 						<div class="u-p-relative">
-							<label class="p-edit-profile__label-img"
-										 :class="{ 'p-edit-profile__label-img__err': errors.image,
-										  				 'p-edit-profile__img--enter': isEnter
+							<label class="p-editProfile__labelImg"
+										 :class="{ 'p-editProfile__labelImg--err': errors.image,
+										  				 'p-editProfile__img--enter': isEnter
 										 }"
 										 @dragenter="dragEnter"
 										 @dragleave="dragLeave"
 										 @dragover.prevent
 										 @drop.stop="dropFile">
-								<span class="p-edit-profile__label-text" v-if="!preview">ドラッグ&ドロップ<br>またはファイルを選択</span>
+								<span class="p-editProfile__imgTxt" v-if="!preview">
+									ドラッグ&ドロップ<br>またはファイルを選択
+								</span>
 								<input type="file"
-											 class="p-edit-profile__img"
+											 class="p-editProfile__img"
 											 @change="onFileChange">
-								<output class="p-edit-profile__output"
+								<output class="p-editProfile__output"
 												v-if="preview">
 									<img :src="preview"
-											 class="p-edit-profile__output-img"
+											 class="p-editProfile__output-img"
 											 alt="">
 								</output>
 								<img :src="user.image"
 										 v-if="!preview"
 										 alt=""
-										 class="p-edit-profile__img"
-										 :class="{ 'p-edit-profile__hasImg': user.image }">
+										 class="p-editProfile__img"
+										 :class="{ 'p-editProfile__hasImg': user.image }">
 							</label>
 						</div>
 						<!-- エラーメッセージ	-->
@@ -49,14 +51,14 @@
 						</div>
 						
 						<!-- 名前	-->
-						<label for="name" class="c-label p-edit-profile__label">
+						<label for="name" class="c-label p-editProfile__label">
 							<span v-show="user.group === 1">お名前</span>
 							<span v-show="user.group === 2">コンビニ名</span>
 						</label>
 						<input type="text"
 									 id="name"
-									 class="c-input p-edit-profile__input"
-									 :class="{ 'c-input__err': errors.name || maxCounter(user.name,50)}"
+									 class="c-input p-editProfile__input"
+									 :class="{ 'c-input--err': errors.name || maxCounter(user.name,50)}"
 									 v-model="user.name"
 									 :placeholder="placeholderText">
 						<div class="u-d-flex u-space-between">
@@ -86,12 +88,12 @@
 						
 						<!-- 支店名	-->
 						<div v-if="isShopUser">
-							<label for="branch" class="c-label p-edit-profile__label">支店名</label>
+							<label for="branch" class="c-label p-editProfile__label">支店名</label>
 							<input v-model="user.branch"
 										 type="text"
 										 id="branch"
-										 class="c-input p-edit-profile__input"
-										 :class="{ 'c-input__err': errors.branch || maxCounter(user.branch, 50) }"
+										 class="c-input p-editProfile__input"
+										 :class="{ 'c-input--err': errors.branch || maxCounter(user.branch, 50) }"
 										 placeholder="渋谷支店">
 							<div class="u-d-flex u-space-between">
 								<!-- エラーメッセージ（フロントエンド） -->
@@ -115,12 +117,12 @@
 						
 						<!-- 住所	-->
 						<div v-if="isShopUser">
-							<label for="address" class="c-label p-edit-profile__label">住所</label>
+							<label for="address" class="c-label p-editProfile__label">住所</label>
 							<input v-model="user.address"
 										 type="text"
 										 id="address"
-										 class="c-input p-edit-profile__input"
-										 :class="{ 'c-input__err': errors.address || maxCounter(user.address, 255) }"
+										 class="c-input p-editProfile__input"
+										 :class="{ 'c-input--err': errors.address || maxCounter(user.address, 255) }"
 										 placeholder="渋谷１丁目">
 							<div class="u-d-flex u-space-between">
 								<!-- エラーメッセージ（フロントエンド） -->
@@ -143,12 +145,12 @@
 						</div>
 						
 						<!-- メール	-->
-						<label for="email" class="c-label p-edit-profile__label">Eメール</label>
+						<label for="email" class="c-label p-editProfile__label">Eメール</label>
 						<input v-model="user.email"
 									 type="text"
 									 id="email"
-									 class="c-input p-edit-profile__input"
-									 :class="{ 'c-input__err': errors.email ||
+									 class="c-input p-editProfile__input"
+									 :class="{ 'c-input--err': errors.email ||
 									 					 maxCounter(user.email, 255)
 									 }"
 									 placeholder="mail@haiki_share.com">
@@ -168,11 +170,11 @@
 						</div>
 						
 						<!-- 自己紹介文	-->
-						<label for="introduce" class="c-label p-edit-profile__label">自己紹介文</label>
+						<label for="introduce" class="c-label p-editProfile__label">自己紹介文</label>
 						<textarea v-model="user.introduce"
 											id="introduce"
-											class="c-input p-edit-profile__textarea"
-											:class="{ 'c-input__err': errors.introduce || maxCounter(user.introduce, 255) }"
+											class="c-input p-editProfile__textarea"
+											:class="{ 'c-input--err': errors.introduce || maxCounter(user.introduce, 255) }"
 											placeholder="こんにちは。よろしくお願いします。"></textarea>
 						<div class="u-d-flex u-space-between">
 							<!-- エラーメッセージ（フロントエンド） -->
@@ -194,8 +196,8 @@
 						</div>
 						
 						<!-- ボタン -->
-						<div class="p-edit-profile__btn-container">
-							<a @click="$router.back()" class="c-btn c-btn--white p-edit-profile__btn--back">もどる</a>
+						<div class="p-editProfile__btnContainer">
+							<a @click="$router.back()" class="c-btn c-btn--white p-editProfile__btn__back">もどる</a>
 							<button class="c-btn" type="submit">更新する</button>
 						</div>
 						

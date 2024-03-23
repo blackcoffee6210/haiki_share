@@ -1,73 +1,73 @@
 <template>
 	<main class="l-main">
-		<div class="p-review-form" v-cloak>
+		<div class="p-reviewForm" v-cloak>
 			
-			<h2 class="c-title p-review-form__title">レビュー投稿</h2>
+			<h2 class="c-title p-reviewForm__title">レビュー投稿</h2>
 			
-			<div class="p-review-form__background">
+			<div class="p-reviewForm__background">
 				<!-- ローディング -->
 				<Loading color="#f96204" v-show="loading" />
 				
 				<!-- レビュー投稿フォーム -->
-				<form class="p-review-form__form" v-show="!loading" @submit.prevent="submit">
+				<form class="p-reviewForm__form" v-show="!loading" @submit.prevent="submit">
 					
 					<!-- 出品者の情報 -->
-					<div class="p-review-form__user-info">
+					<div class="p-reviewForm__userInfo">
 						<!-- 出品者の画像 -->
 						<img :src="reviewForm.shopUser.image"
 								 alt=""
 								 v-if="reviewForm.shopUser.image"
-								 class="c-icon p-review-form__icon">
+								 class="c-icon p-reviewForm__icon">
 						<!-- no-img -->
-						<img class="c-icon p-review-form__icon"
+						<img class="c-icon p-reviewForm__icon"
 								 v-else
 								 src="/storage/images/no-image.png"
 								 alt="">
 						<!-- 出品者の名前 -->
-						<div class="p-review-form__user-name">{{ reviewForm.shopUser.name }}</div>
+						<div class="p-reviewForm__userName">{{ reviewForm.shopUser.name }}</div>
 					</div>
 					
 					<!-- ユーザーの評価 -->
 					<div>ユーザーの評価</div>
-					<div class="p-review-form__recommendation__container">
+					<div class="p-reviewForm__recommendation__container">
 						<input type="radio"
 									 :id="'recommend' + recommendations[0].id"
-									 class="p-review-form__recommendation__input"
+									 class="p-reviewForm__recommendation__input"
 									 name="recommend"
 									 :value="recommendations[0].id"
 									 v-model.number="reviewForm.recommendation_id">
 						<label :for="'recommend' + recommendations[0].id"
-									 class="p-review-form__recommendation__label">
-							<font-awesome-icon class="p-review-form__fa"
+									 class="p-reviewForm__recommendation__label">
+							<font-awesome-icon class="p-reviewForm__fa"
 																 :icon="['far', 'laugh-beam']"
 																 color="#ff6f80" />
-							<span class="p-review-form__text">{{ recommendations[0].name }}</span>
+							<span class="p-reviewForm__text">{{ recommendations[0].name }}</span>
 						</label>
 						<input type="radio"
 									 :id="'recommend' + recommendations[1].id"
-									 class="p-review-form__recommendation__input"
+									 class="p-reviewForm__recommendation__input"
 									 name="recommend"
 									 :value="recommendations[1].id"
 									 v-model.number="reviewForm.recommendation_id">
 						<label :for="'recommend' + recommendations[1].id"
-									 class="p-review-form__recommendation__label">
-							<font-awesome-icon class="p-review-form__fa"
+									 class="p-reviewForm__recommendation__label">
+							<font-awesome-icon class="p-reviewForm__fa"
 																 :icon="['far', 'smile']"
 																 color="#ff6f80" />
-							<span class="p-review-form__text">{{ recommendations[1].name }}</span>
+							<span class="p-reviewForm__text">{{ recommendations[1].name }}</span>
 						</label>
 						<input type="radio"
 									 :id="'recommend' + recommendations[2].id"
-									 class="p-review-form__recommendation__input"
+									 class="p-reviewForm__recommendation__input"
 									 name="recommend"
 									 :value="recommendations[2].id"
 									 v-model.number="reviewForm.recommendation_id">
 						<label :for="'recommend' + recommendations[2].id"
-									 class="p-review-form__recommendation__label">
-							<font-awesome-icon class="p-review-form__fa"
+									 class="p-reviewForm__recommendation__label">
+							<font-awesome-icon class="p-reviewForm__fa"
 																 :icon="['far', 'meh']"
 																 color="#ff6f80" />
-							<span class="p-review-form__text">{{ recommendations[2].name }}</span>
+							<span class="p-reviewForm__text">{{ recommendations[2].name }}</span>
 						</label>
 					</div>
 	
@@ -80,10 +80,10 @@
 					</div>
 					
 					<!-- タイトル -->
-					<label for="title" class="c-label p-review-form__label">レビュータイトル</label>
+					<label for="title" class="c-label p-reviewForm__label">レビュータイトル</label>
 					<input type="text"
-								 class="c-input p-review-form__input"
-								 :class="{ 'c-input__err': errors.title ||
+								 class="c-input p-reviewForm__input"
+								 :class="{ 'c-input--err': errors.title ||
 								  				 maxCounter(reviewForm.title, 50)
 								 }"
 								 id="title"
@@ -111,9 +111,9 @@
 					</div>
 					
 					<!-- レビューの内容 -->
-					<label for="detail" class="c-label p-review-form__label u-mt0">レビューの内容</label>
-					<textarea class="c-input p-review-form__textarea"
-										:class="{ 'c-input__err': errors.detail ||
+					<label for="detail" class="c-label p-reviewForm__label u-mt0">レビューの内容</label>
+					<textarea class="c-input p-reviewForm__textarea"
+										:class="{ 'c-input--err': errors.detail ||
 					 										maxCounter(reviewForm.detail, 255)
 														}"
 										id="detail"
@@ -141,9 +141,9 @@
 						</p>
 					</div>
 					
-					<div class="p-review-form__btn-container">
+					<div class="p-reviewForm__btnContainer">
 						<!-- 投稿ボタン -->
-						<button class="c-btn p-review-form__btn--post" type="submit">投稿する</button>
+						<button class="c-btn p-reviewForm__btn__post" type="submit">投稿する</button>
 					</div>
 				</form>
 			</div>

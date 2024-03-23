@@ -1,3 +1,13 @@
+.u-sp-mt0 {
+  @include mq() {
+    margin-top: 0;
+  }
+}
+.u-tab-mt0 {
+  @include mq('tab') {
+    margin-top: 0;
+  }
+}
 .u-mr5 {
   margin-right: 5px;
 }

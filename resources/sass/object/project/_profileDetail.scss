@@ -1,4 +1,4 @@
-.p-profile-detail {
+.p-profileDetail {
   width: 700px;
   margin: 0 auto;
   background: $white;
@@ -77,8 +77,8 @@
   &__label {
     font-weight: bold;
   }
-  &__product-container,
-  &__review-container {
+  &__productContainer,
+  &__reviewContainer {
     margin-top: $space_s;
     width: 100%;
     display: grid;

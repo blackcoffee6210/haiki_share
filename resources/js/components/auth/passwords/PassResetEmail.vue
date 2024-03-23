@@ -1,18 +1,18 @@
 <template>
 	<main class="l-main">
-		<div class="p-auth-form p-auth-form--password">
-			<h2 class="c-title p-auth-form__title">パスワードリセットリンク送信</h2>
+		<div class="p-authForm u-sp-mt0 u-tab-mt0">
+			<h2 class="c-title p-authForm__title">パスワードリセットリンク送信</h2>
 			<!-- ローディング -->
 			<Loading color="#f96204" v-show="loading"/>
 			
-			<form class="p-auth-form__form" v-show="!loading" @submit.prevent="submit">
+			<form class="p-authForm__form" v-show="!loading" @submit.prevent="submit">
 				
 				<!-- email-->
-				<label for="email" class="c-label p-auth-form__label">Eメール</label>
+				<label for="email" class="c-label p-authForm__label">Eメール</label>
 				<input type="text"
 							 id="email"
-							 class="c-input p-auth-form__input"
-							 :class="{ 'c-input__err': errors.email || !isEmailValid }"
+							 class="c-input p-authForm__input"
+							 :class="{ 'c-input--err': errors.email || !isEmailValid }"
 							 v-model="passResetForm.email"
 							 placeholder="haiki_share@gmail.com">
 				<!-- エラーメッセージ -->
@@ -28,7 +28,7 @@
 				</div>
 				
 				<!-- Email送信ボタン -->
-				<button class="c-btn p-auth-form__btn" type="submit">Eメール送信</button>
+				<button class="c-btn p-authForm__btn" type="submit">Eメール送信</button>
 				<!-- 会員登録へ遷移	-->
 				<a @click="$router.back()" class="c-link">もどる</a>
 			</form>

@@ -6,19 +6,14 @@
   position: relative;
   padding: 0 $space_xl;
   border-bottom: 1px solid $gray-color;
-  //margin-bottom: 50px;
-  //スマートフォンのスタイル
   @include mq() {
     height: 50px;
     padding: 0 $space_m;
-    //margin-bottom: $space_l;
   }
-  //ヘッダーの左側
   &__left {
     display: flex;
     align-items: center;
   }
-  //ロゴ
   &__logo {
     font-size: $font-size_3xl;
     font-weight: bold;
@@ -27,9 +22,6 @@
     &:hover {
       color: $font-color;
       cursor: pointer;
-    }
-    &--catch {
-      color: $main-color;
     }
     @include mq() {
       font-size: $font-size_l;

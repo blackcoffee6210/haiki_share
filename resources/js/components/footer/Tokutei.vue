@@ -80,7 +80,7 @@
 			
 			<!-- TOPへ	-->
 			<transition name="c-to-top">
-				<button class="c-go-top"
+				<button class="c-goTop"
 								v-show="buttonActive"
 								@click="returnTop">TOP</button>
 			</transition>

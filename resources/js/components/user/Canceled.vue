@@ -26,7 +26,7 @@
 									 :key="product.id"
 									 :product="product">
 						<!-- btnスロット -->
-						<div class="p-product__btn-container" slot="btn">
+						<div class="p-product__btnContainer" slot="btn">
 							<!-- 編集ボタン -->
 							<router-link class="c-btn c-btn--white p-list__btn"
 													 v-show="!product.is_purchased && isShopUser"

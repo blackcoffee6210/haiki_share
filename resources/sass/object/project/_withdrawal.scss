@@ -31,7 +31,7 @@
       text-align: center;
     }
   }
-  &__btn-container {
+  &__btnContainer {
     display: flex;
     justify-content: space-around;
     margin-top: $space_xl;
@@ -40,7 +40,7 @@
     @include mq() {
       width: 50%;
     }
-    &--back {
+    &__back {
       margin-right: $space_m;
     }
   }

@@ -1,11 +1,11 @@
 <template>
 	<main class="l-main">
-		<div class="p-auth-form p-auth-form--password">
+		<div class="p-authForm u-sp-mt0 u-tab-mt0">
 			
 			<!-- タイトル -->
-			<h2 class="c-title p-auth-form__title">パスワードリセット</h2>
+			<h2 class="c-title p-authForm__title">パスワードリセット</h2>
 			
-			<form class="c-form p-auth-form__form"
+			<form class="c-form p-authForm__form"
 						@submit.prevent="submit">
 				
 				<!-- token -->
@@ -15,12 +15,12 @@
 				<input type="hidden" v-model="passResetForm.email">
 				
 				<!-- password-->
-				<label for="password" class="c-label p-auth-form__label">新しいパスワード</label>
+				<label for="password" class="c-label p-authForm__label">新しいパスワード</label>
 				<!-- 新しいパスワード -->
 				<input type="password"
 							 id="password"
-							 class="c-input p-auth-form__input"
-							 :class="{ 'c-input__err': errors.password || maxCounter(passResetForm.password,255) }"
+							 class="c-input p-authForm__input"
+							 :class="{ 'c-input--err': errors.password || maxCounter(passResetForm.password,255) }"
 							 v-model="passResetForm.password"
 							 placeholder="********">
 				<!-- エラーメッセージ -->
@@ -37,12 +37,12 @@
 				
 				<!-- 新しいパスワード(確認) -->
 				<label for="password-confirmation"
-							 class="c-label p-auth-form__label">新しいパスワード(確認)
+							 class="c-label p-authForm__label">新しいパスワード(確認)
 				</label>
 				<input type="password"
 							 id="password-confirmation"
-							 class="c-input p-auth-form__input"
-							 :class="{ 'c-input__err': errors.password_confirmation ||
+							 class="c-input p-authForm__input"
+							 :class="{ 'c-input--err': errors.password_confirmation ||
 							  				 maxCounter(passResetForm.password_confirmation,255)
 							 }"
 							 v-model="passResetForm.password_confirmation"
@@ -60,7 +60,7 @@
 				</div>
 				
 				<!-- パスワード変更ボタン -->
-				<button class="c-btn p-auth-form__btn" type="submit">パスワードを変更する</button>
+				<button class="c-btn p-authForm__btn" type="submit">パスワードを変更する</button>
 			</form>
 		</div>
 	</main>

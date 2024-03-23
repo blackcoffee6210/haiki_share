@@ -11,7 +11,7 @@
 		</div>
 		
 		<!-- 商品の画像	-->
-		<div class="p-product__img-container">
+		<div class="p-product__imgContainer">
 			<img :src="product.image"
 					 alt=""
 					 class="p-product__img">
@@ -24,7 +24,7 @@
 		</div>
 		
 		<!-- カードボディ -->
-		<div class="p-product__card-body">
+		<div class="p-product__cardBody">
 			<div class="p-product__container">
 				<!-- 商品の名前	-->
 				<div class="p-product__name">{{ product.name }}</div>
@@ -48,7 +48,7 @@
 			</div>
 
 			<!-- ユーザーの情報	-->
-			<div class="p-product__user-info">
+			<div class="p-product__userInfo">
 				<!-- 出品したユーザーの画像	-->
 				<img class="c-icon p-product__icon"
 						 v-if="product.user_image"
@@ -58,9 +58,9 @@
 						 v-else
 						 src="/storage/images/no-image.png"
 						 alt="">
-				<div class="p-product__user-info--right">
+				<div class="p-product__userInfo__right">
 					<!-- 出品したユーザー名 -->
-					<div class="p-product__usr-name">{{ product.user_name }}</div>
+					<div class="p-product__userName">{{ product.user_name }}</div>
 					<div class="c-flex u-space-between">
 						<!-- 出品日	-->
 						<div class="p-product__date">{{ product.created_at | moment }}</div>

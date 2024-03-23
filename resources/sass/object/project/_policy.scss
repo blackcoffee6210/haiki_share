@@ -17,22 +17,7 @@
       margin-bottom: $space_xl;
     }
   }
-  &__sub-title {
+  &__subTitle {
     font-weight: bold;
-  }
-  &__go-top {
-    display: block;
-    width: 50px;
-    height: 50px;
-    border-radius: 50px;
-    text-align: center;
-    background: #ddd;
-    position: fixed;
-    bottom: 60px;
-    right: 60px;
-    @include mq() {
-      bottom: 20px;
-      right: 20px;
-    }
   }
 }

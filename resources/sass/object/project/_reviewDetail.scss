@@ -1,4 +1,4 @@
-.p-review-detail {
+.p-reviewDetail {
   width: 680px;
   margin: 0 auto;
   background: $white;
@@ -11,7 +11,7 @@
   }
   &__btn {
   }
-  &__user-info {
+  &__userInfo {
     display: flex;
     align-items: center;
     margin-bottom: $space_xl;
@@ -42,29 +42,13 @@
   &__name {
     word-break: break-all;
   }
-  //&__recommend {
-  //  font-weight: bold;
-  //  border-radius: 20px;
-  //  background: $sub-color;
-  //  color: $white;
-  //  position: absolute;
-  //  top: 20px;
-  //  right: 0;
-  //  padding: $space_s $space_m;
-  //  @include mq() {
-  //    width: 125px;
-  //    text-align: center;
-  //    top: 135px;
-  //    left: 10px;
-  //  }
-  //}
   &__container {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
     margin-bottom: $space_m;
   }
-  &__review-title {
+  &__reviewTitle {
     font-weight: bold;
     margin-right: $space_m;
     word-break: break-all;
@@ -75,7 +59,7 @@
   &__detail {
     word-break: break-all;
   }
-  &__product-container {
+  &__productContainer {
     width: 100%;
     display: grid;
     grid-template-columns: 33.3% 33.3% 33.3%;

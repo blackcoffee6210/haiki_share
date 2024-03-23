@@ -20,7 +20,7 @@
 									 v-if="isLike"
 									 :key="product.id"
 									 :product="product">
-						<div class="p-product__btn-container" slot="btn">
+						<div class="p-product__btnContainer" slot="btn">
 							<!-- いいね解除ボタン -->
 							<button class="c-btn c-btn--white p-product__btn"
 											@click="unlike(product)">お気に入り解除

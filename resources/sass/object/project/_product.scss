@@ -1,7 +1,7 @@
 .p-product {
   width: 100%;
   position: relative;
-  &__img-container {
+  &__imgContainer {
     position: relative;
   }
   &__img {
@@ -36,7 +36,7 @@
       padding: 3px $space_l;
     }
   }
-  &__card-body {
+  &__cardBody {
     padding: $space_s;
   }
   &__container {
@@ -83,7 +83,7 @@
       }
     }
   }
-  &__user-info {
+  &__userInfo {
     width: 100%;
     display: flex;
     align-items: center;
@@ -92,7 +92,7 @@
     @include mq() {
       font-size: $font-size_xs;
     }
-    &--right {
+    &__right {
       width: 75%;
     }
   }
@@ -109,7 +109,7 @@
       margin-right: $space_s;
     }
   }
-  &__usr-name {
+  &__userName {
     word-wrap: break-word;
     -webkit-line-clamp: 1;
     display: -webkit-box;
@@ -134,7 +134,7 @@
       padding: 2px 4px;
     }
   }
-  &__btn-container {
+  &__btnContainer {
     display: flex;
     justify-content: space-between;
     width: 100%;

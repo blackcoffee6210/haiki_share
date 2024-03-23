@@ -25,7 +25,7 @@
 									v-for="review in reviews"
 									:key="review.id"
 									:review="review" >
-						<div class="p-product__btn-container" slot="btn">
+						<div class="p-product__btnContainer" slot="btn">
 									<!-- 詳細を見るボタン(コンビニユーザー) -->
 									<router-link class="c-btn p-list__btn p-list__btn--detail"
 															 v-show="isShopUser"

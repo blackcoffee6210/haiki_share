@@ -2,22 +2,22 @@
 	<div class="l-main">
 		
 		<main class="l-main__2column">
-			<div class="p-edit-password">
+			<div class="p-editPassword">
 				<!-- タイトル -->
-				<h2 class="c-title p-edit-password__title">パスワード変更</h2>
+				<h2 class="c-title p-editPassword__title">パスワード変更</h2>
 				
-				<div class="p-edit-password__background">
+				<div class="p-editPassword__background">
 					<!-- ローディング -->
 					<Loading v-show="loading" />
 					
-					<form class="p-edit-password__form" v-show="!loading" @submit.prevent="update">
+					<form class="p-editPassword__form" v-show="!loading" @submit.prevent="update">
 						
 						<!-- 現在のパスワード	-->
-						<label for="current_password" class="c-label p-edit-password__label u-mt0">現在のパスワード</label>
+						<label for="current_password" class="c-label p-editPassword__label u-mt0">現在のパスワード</label>
 						<input type="password"
 									 id="current_password"
-									 class="c-input p-edit-password__input"
-									 :class="{ 'c-input__err': errors.current_password }"
+									 class="c-input p-editPassword__input"
+									 :class="{ 'c-input--err': errors.current_password }"
 									 v-model="passwordForm.current_password"
 									 placeholder="*********">
 						<!-- エラーメッセージ	-->
@@ -29,11 +29,11 @@
 						</div>
 						
 						<!-- 新しいパスワード	-->
-						<label for="new_password" class="c-label p-edit-password__label">新しいパスワード</label>
+						<label for="new_password" class="c-label p-editPassword__label">新しいパスワード</label>
 						<input type="password"
 									 id="new_password"
-									 class="c-input p-edit-password__input"
-									 :class="{ 'c-input__err': errors.new_password }"
+									 class="c-input p-editPassword__input"
+									 :class="{ 'c-input--err': errors.new_password }"
 									 v-model="passwordForm.new_password"
 									 placeholder="8文字以上の半角英数字">
 						<!-- エラーメッセージ	-->
@@ -45,11 +45,11 @@
 						</div>
 						
 						<!-- 新しいパスワード(確認)	-->
-						<label for="new_password-confirmation" class="c-label p-edit-password__label">新しいパスワード(確認)</label>
+						<label for="new_password-confirmation" class="c-label p-editPassword__label">新しいパスワード(確認)</label>
 						<input type="password"
 									 id="new_password-confirmation"
-									 class="c-input p-edit-password__input"
-									 :class="{ 'c-input__err': errors.new_password_confirmation }"
+									 class="c-input p-editPassword__input"
+									 :class="{ 'c-input--err': errors.new_password_confirmation }"
 									 v-model="passwordForm.new_password_confirmation"
 									 placeholder="8文字以上の半角英数字">
 						<!-- エラーメッセージ	-->
@@ -61,9 +61,9 @@
 						</div>
 						
 						<!-- ボタン	-->
-						<div class="p-edit-password__btn-container">
-							<a @click="$router.back()" class="c-btn c-btn--white p-edit-password__btn--back">もどる</a>
-							<button class="c-btn p-edit-password__btn" type="submit">更新する</button>
+						<div class="p-editPassword__btnContainer">
+							<a @click="$router.back()" class="c-btn c-btn--white p-editPassword__btn__back">もどる</a>
+							<button class="c-btn p-editPassword__btn" type="submit">更新する</button>
 						</div>
 					</form>
 				</div>

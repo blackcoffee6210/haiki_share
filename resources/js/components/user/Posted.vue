@@ -22,7 +22,7 @@
 									 :key="product.id"
 									 :product="product">
 						
-						<div class="p-product__btn-container"
+						<div class="p-product__btnContainer"
 								 slot="btn">
 							<!-- 編集ボタン -->
 							<router-link class="c-btn c-btn--white p-list__btn"

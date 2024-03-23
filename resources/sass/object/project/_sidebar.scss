@@ -8,9 +8,6 @@
     padding-top: $space_s;
     padding-bottom: $space_s;
   }
-  &--mypage {
-
-  }
   &__link {
     background: #fff;
     text-align: left;
@@ -47,7 +44,7 @@
   }
 }
 
-.p-sidebar-index {
+.p-sidebarIndex {
   width: 100%;
   background: $white;
   padding: $space_xl;
@@ -59,7 +56,7 @@
     margin-top: 73px;
     padding: $space_l;
   }
-  &__clear-filter {
+  &__clearFilter {
     width: 100%;
     margin-bottom: $space_xl;
     @include mq() {
@@ -73,7 +70,7 @@
       margin-bottom: $space_m;
     }
   }
-  &__search-icon {
+  &__searchIcon {
     position: absolute;
     right: 35px;
     top: 42px;
@@ -89,13 +86,12 @@
       cursor: pointer;
     }
   }
-  &__trash-icon {
+  &__trashIcon {
     position: absolute;
     right: 10px;
     top: 42px;
     font-size: $font-size_l;
     color: $sub-color;
-    //color: #ccc;
     @include mq() {
       top: 35px;
     }
@@ -128,7 +124,7 @@
       font-size: initial;
     }
   }
-  &__card-container {
+  &__cardContainer {
     margin-bottom: 40px;
     &:last-child {
       margin-bottom: initial;
@@ -174,7 +170,7 @@
       width: 55%;
     }
   }
-  &__card-title {
+  &__cardTitle {
     font-size: $font-size_s;
     font-weight: bold;
     word-wrap: break-word;
@@ -183,7 +179,7 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-  &__price-container {
+  &__priceContainer {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -226,10 +222,6 @@
     height: 36px;
     &::placeholder {
       color: $sub-color;
-    }
-    @include mq() {
-      //margin-right: $space_m;
-      //margin-left: $space_m;
     }
   }
 }

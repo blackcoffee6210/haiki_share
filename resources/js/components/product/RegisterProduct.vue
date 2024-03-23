@@ -1,36 +1,36 @@
 <template>
 	<main class="l-main">
-		<div class="p-product-form">
+		<div class="p-productForm">
 			
-			<h2 class="c-title p-product-form__title">商品出品</h2>
+			<h2 class="c-title p-productForm__title">商品出品</h2>
 			
-			<div class="p-product-form__background">
+			<div class="p-productForm__background">
 				<!-- ローディング -->
 				<Loading color="#f96204" v-show="loading"/>
 				
 				<!-- フォームエリア	-->
-				<form class="p-product-form__form" v-show="!loading" @submit.prevent="submit">
+				<form class="p-productForm__form" v-show="!loading" @submit.prevent="submit">
 					
 					<!-- 商品画像	-->
 					<div class="u-p-relative">
-						<label class="p-product-form__label-img"
+						<label class="p-productForm__labelImg"
 									 :class="{
-											'p-product-form__label-img__err': errors.image,
-											'p-product-form__img--enter': isEnter
+											'p-productForm__labelImg--err': errors.image,
+											'p-productForm__img--enter': isEnter
 									 }"
 									 @dragenter="dragEnter"
 									 @dragleave="dragLeave"
 									 @dragover.prevent
 									 @drop.stop="dropFile">
-							<span class="p-product-form__label-text" v-if="!preview">
+							<span class="p-productForm__imgTxt" v-if="!preview">
 								ドラッグ&ドロップ<br>またはファイルを選択
 							</span>
 							<input type="file"
-										 class="p-product-form__img"
+										 class="p-productForm__img"
 										 @change="onFileChange">
-							<output class="p-product-form__output" v-if="preview">
+							<output class="p-productForm__output" v-if="preview">
 								<img :src="preview"
-										 class="p-product-form__output-img"
+										 class="p-productForm__output-img"
 										 alt="">
 							</output>
 						</label>
@@ -45,9 +45,9 @@
 					</div>
 					
 					<!-- カテゴリー -->
-					<label for="category_id" class="c-label p-product-form__label">カテゴリー</label>
-					<select class="c-select p-product-form__input"
-									:class="{ 'c-select__err': errors.category_id }"
+					<label for="category_id" class="c-label p-productForm__label">カテゴリー</label>
+					<select class="c-select p-productForm__input"
+									:class="{ 'c-select--err': errors.category_id }"
 									id="category_id"
 									v-model="product.category_id">
 						<option value="" disabled>カテゴリーを選択してください</option>
@@ -65,10 +65,10 @@
 					</div>
 					
 					<!-- 商品名	-->
-					<label for="name" class="c-label p-product-form__label">商品名</label>
+					<label for="name" class="c-label p-productForm__label">商品名</label>
 					<input type="text"
-								 class="c-input p-product-form__input"
-								 :class="{ 'c-input__err': errors.name || maxCounter(product.name,50) }"
+								 class="c-input p-productForm__input"
+								 :class="{ 'c-input--err': errors.name || maxCounter(product.name,50) }"
 								 id="name"
 								 v-model="product.name"
 								 placeholder="商品名を入力してください">
@@ -95,9 +95,9 @@
 					</div>
 					
 					<!-- 商品の内容	-->
-					<label for="detail" class="c-label p-product-form__label u-mt0">商品の内容</label>
-					<textarea	class="c-input p-product-form__textarea"
-										 :class="{ 'c-input__err': errors.detail || maxCounter(product.detail, 255) }"
+					<label for="detail" class="c-label p-productForm__label u-mt0">商品の内容</label>
+					<textarea	class="c-input p-productForm__textarea"
+										 :class="{ 'c-input--err': errors.detail || maxCounter(product.detail, 255) }"
 										 id="detail"
 										 v-model="product.detail"
 										 placeholder="商品の内容を入力してください"
@@ -122,12 +122,12 @@
 					</div>
 					
 					<!-- 賞味期限 -->
-					<label for="expire_date" class="c-label p-product-form__label u-mt0">賞味期限</label>
+					<label for="expire_date" class="c-label p-productForm__label u-mt0">賞味期限</label>
 					<input type="text"
 								 onfocusin="this.type='date'"
 								 onfocusout="this.type='text'"
-								 class="c-input p-product-form__input"
-								 :class="{ 'c-input__err': errors.expire }"
+								 class="c-input p-productForm__input"
+								 :class="{ 'c-input--err': errors.expire }"
 								 id="expire_date"
 								 :min="tomorrow"
 								 :max="maxDate"
@@ -142,17 +142,17 @@
 					</div>
 					
 					<!-- 金額	-->
-					<label for="price" class="c-label p-product-form__label">金額</label>
+					<label for="price" class="c-label p-productForm__label">金額</label>
 					<div class="u-d-flex">
 						<input type="text"
-									 class="c-input p-product-form__input p-product-form__input--yen"
-									 :class="{ 'c-input__err': errors.price || errorMessage }"
+									 class="c-input p-productForm__input p-productForm__input--yen"
+									 :class="{ 'c-input--err': errors.price || errorMessage }"
 									 id="price"
 									 v-model="product.price"
 									 @input="validatePrice"
 									 placeholder="50〜10000円の間で入力してください">
-						<div class="p-product-form__yen"
-								 :class="{'p-product-form__yen__err': errors.price || errorMessage }">円
+						<div class="p-productForm__yen"
+								 :class="{'p-productForm__yen__err': errors.price || errorMessage }">円
 						</div>
 					</div>
 					<div class="u-d-flex u-space-between">
@@ -172,13 +172,13 @@
 					</div>
 					
 					<!-- ボタンコンテナ -->
-					<div class="p-product-form__btn-container">
+					<div class="p-productForm__btn-container">
 						<!-- ボタン -->
 						<a @click="$router.back()"
-							 class="c-btn c-btn--white p-product-form__btn p-product-form__btn--back">もどる
+							 class="c-btn c-btn--white p-productForm__btn p-productForm__btn--back">もどる
 						</a>
 						<!-- ボタン	-->
-						<button class="c-btn p-product-form__btn" type="submit">出品する</button>
+						<button class="c-btn p-productForm__btn" type="submit">出品する</button>
 					</div>
 				</form>
 			</div>

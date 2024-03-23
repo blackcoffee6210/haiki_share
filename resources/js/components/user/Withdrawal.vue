@@ -18,9 +18,9 @@
 						</p>
 
 						<!-- ボタン	-->
-						<div class="p-withdrawal__btn-container">
+						<div class="p-withdrawal__btnContainer">
 							<a @click="$router.back()"
-								 class="c-btn c-btn--white p-withdrawal__btn p-withdrawal__btn--back">もどる
+								 class="c-btn c-btn--white p-withdrawal__btn p-withdrawal__btn__back">もどる
 							</a>
 							<button class="c-btn p-withdrawal__btn"
 											type="submit">退会する

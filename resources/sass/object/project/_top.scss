@@ -24,15 +24,11 @@
       width: 95%;
       padding: $space_2xl $space_l;
     }
-    &--hero {
+    &__hero {
       min-height: 100vh;
       position: relative;
       z-index: 2;
     }
-  }
-  &__hero-img {
-    position: absolute;
-    box-shadow: 0 20px 25px -10px $shadow-color;
   }
   &__title {
     font-size: $font-size_2xl;
@@ -45,7 +41,7 @@
       font-size: $font-size_xl;
     }
   }
-  &__think-img {
+  &__thinkImg {
     position: absolute;
     width: 150px;
     height: 150px;
@@ -57,7 +53,7 @@
       width: 120px;
       height: 120px;
     }
-    &--user {
+    &__user {
       top: 120px;
       right: 0;
       @include mq() {
@@ -69,7 +65,7 @@
         right: 30px;
       }
     }
-    &--shop {
+    &__shop {
       top: 320px;
       left: 0;
       @include mq() {
@@ -98,7 +94,7 @@
     @include mq('tab') {
       font-size: $font-size_l;
     }
-    &--user {
+    &__user {
       margin: 60px auto 80px 0;
       @include mq() {
         margin-top: 30px;
@@ -118,7 +114,7 @@
         border-left: 15px solid $white;
       }
     }
-    &--shop {
+    &__shop {
       margin-left: auto;
       margin-bottom: 80px;
       @include mq() {
@@ -157,14 +153,14 @@
     @include mq('tab') {
       left: -20px;
     }
-    &--step {
+    &__step {
       left: 60px;
       @include mq() {
         left: 20px;
       }
     }
   }
-  &__merit-img {
+  &__meritImg {
     width: 100%;
     height: 190px;
     @include mq() {
@@ -211,14 +207,11 @@
     @include mq() {
       display: block;
     }
-    &--2line {
+    &__2line {
       margin-top: 30px;
       margin-bottom: 80px;
-      //@include mq() {
-      //  margin-bottom: 60px;
-      //}
     }
-    &--step {
+    &__step {
       justify-content: center;
       margin-left: -60px;
       @include mq() {
@@ -247,7 +240,7 @@
         margin-right: auto;
       }
     }
-    &--step {
+    &__step {
       background: $white;
       width: 20%;
       height: 160px;
@@ -382,14 +375,14 @@
     @include mq() {
       display: none;
     }
-    &--think {
+    &__think {
       display: none;
       @include mq() {
         display: initial;
       }
     }
   }
-  &__go-top {
+  &__goTop {
     border: 1px solid $white;
   }
 }

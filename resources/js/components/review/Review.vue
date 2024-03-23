@@ -8,7 +8,7 @@
 								 					r_id: review.receiver_id.toString()
 								 				}}" />
 		
-		<div class="p-review__user-info">
+		<div class="p-review__userInfo">
 			<!-- 利用者ユーザーの画像	-->
 			<img class="c-icon p-review__icon"
 					 :src="review.sender_image"
@@ -45,7 +45,7 @@
 		</div>
 		
 		<!-- レビュータイトル -->
-		<div class="p-review__review-title">{{ review.title }}</div>
+		<div class="p-review__reviewTitle">{{ review.title }}</div>
 		<!-- レビューの内容 -->
 		<div class="p-review__detail">{{ review.detail }}</div>
 		

@@ -1,6 +1,6 @@
 <template>
 	<main class="l-main">
-		<div class="p-product-detail">
+		<div class="p-productDetail">
 			
 			<!-- ローディング -->
 			<Loading v-show="loading" />
@@ -14,25 +14,25 @@
 				
 				<div class="u-p-relative">
 					<!-- 商品の画像	-->
-					<img :src="product.image" alt="" class="p-product-detail__img">
+					<img :src="product.image" alt="" class="p-productDetail__img">
 					<!-- カテゴリー名 -->
-					<div class="p-product-detail__category">{{ product.category_name }}</div>
+					<div class="p-productDetail__category">{{ product.category_name }}</div>
 				</div>
 				
 				
 				
 				<!-- 商品名と金額のコンテナ	-->
-				<div class="p-product-detail__name-container">
+				<div class="p-productDetail__nameContainer">
 					<!-- 商品名 -->
-					<h2 class="p-product-detail__product-name">{{ product.name }}</h2>
+					<h2 class="p-productDetail__productName">{{ product.name }}</h2>
 					<!-- 金額 -->
-					<div class="p-product-detail__price" v-if="product.price">{{ product.price | numberFormat }}</div>
+					<div class="p-productDetail__price" v-if="product.price">{{ product.price | numberFormat }}</div>
 				</div>
 				
 				<!-- ユーザー情報と賞味期限のコンテナ -->
-				<div class="p-product-detail__flex">
+				<div class="p-productDetail__flex">
 					<!-- ユーザー情報のコンテナ(左側) -->
-					<div class="p-product-detail__user-info">
+					<div class="p-productDetail__userInfo">
 						<!-- 詳細画面のリンク -->
 						<router-link class="c-card__link"
 												 v-if="product && product.user_id"
@@ -41,45 +41,45 @@
 						<img :src="product.user_image"
 								 alt=""
 								 v-if="product.user_image"
-								 class="c-icon p-product-detail__icon">
+								 class="c-icon p-productDetail__icon">
 						<!-- no-img -->
 						<img src="/storage/images/no-image.png"
 								 alt=""
 								 v-else
-								 class="c-icon p-product-detail__icon">
+								 class="c-icon p-productDetail__icon">
 						<div>
 							<div class="c-flex">
 								<!-- コンビニ名	-->
-								<div class="p-product-detail__shop-name">{{ product.user_name }}</div>
+								<div class="p-productDetail__shopName">{{ product.user_name }}</div>
 								<!-- 支店名	-->
-								<div class="p-product-detail__branch">{{ product.branch }}</div>
+								<div class="p-productDetail__branch">{{ product.branch }}</div>
 							</div>
 							<!-- 商品登録日 -->
-							<div class="p-product-detail__date">{{ product.created_at | moment }}</div>
+							<div class="p-productDetail__date">{{ product.created_at | moment }}</div>
 						</div>
 					</div>
 					<!-- 賞味期限 -->
-					<div class="p-product-detail__expire">
+					<div class="p-productDetail__expire">
 						<!-- 賞味期限が過ぎていたときの表示 -->
 						<div v-if="expireDate">
 							<span class="u-font-bold u-color__main">賞味期限切れ</span>
-							<span class="p-product-detail__expire__date">{{ product.expire | fromExpire }}</span>
+							<span class="p-productDetail__expire__date">{{ product.expire | fromExpire }}</span>
 							日
 						</div>
 						<!-- 正味期限内のときの表示 -->
 						<div v-else>
 							<span >賞味期限 残り</span>
-							<span class="p-product-detail__expire__date">{{ product.expire | momentExpire }}</span>
+							<span class="p-productDetail__expire__date">{{ product.expire | momentExpire }}</span>
 							日
 						</div>
 					</div>
 				</div>
 				
 				<!-- ボタンコンテナ	-->
-				<div class="p-product-detail__btn-container">
+				<div class="p-productDetail__btnContainer">
 					<!-- お気に入りボタン	-->
 					<!-- 自分の商品または購入されている商品は押せない -->
-					<button class="c-btn c-btn--white p-product-detail__btn p-product-detail__btn--like"
+					<button class="c-btn c-btn--white p-productDetail__btn p-productDetail__btn__like"
 									:style="{
 										'border-color': [isLike ? '#ff3c53' : 'lightgray'],
 										'background'  : [isLike ? '#ffd5da' : 'white']
@@ -98,7 +98,7 @@
 					</button>
 					
 					<!-- 商品編集ボタン(自分の商品のときだけ & 購入されていない) -->
-					<router-link class="c-btn p-product-detail__btn"
+					<router-link class="c-btn p-productDetail__btn"
 											 v-show="product.is_my_product && !product.is_purchased && !product.deleted_at"
 											 :to="{ name: 'product.edit', params: {id: id.toString() } }">編集する
 					</router-link>
@@ -106,7 +106,7 @@
 					<!-- 商品購入ボタン	-->
 					<!-- 利用者ユーザー、かつ自分の商品じゃない、かつ自分が購入してないときに出す -->
 					<!-- コンビニユーザー、または自分の商品、または購入されている商品は押せない -->
-					<button class="c-btn p-product-detail__btn"
+					<button class="c-btn p-productDetail__btn"
 									@click="purchase"
 									v-show="!isShopUser && !product.is_my_product && !purchasedByUser"
 									:disabled="isShopUser || product.is_my_product || product.is_purchased">
@@ -115,7 +115,7 @@
 					</button>
 					
 					<!-- レビュー投稿ボタン 購入したユーザーかつレビューを投稿していないときに表示 -->
-					<router-link class="c-btn p-product-detail__btn p-product-detail__btn--review"
+					<router-link class="c-btn p-productDetail__btn p-productDetail__btn__review"
 											 v-show="purchasedByUser && !isReviewed"
 											 :to="{ name: 'review.register', params: { p_id: id.toString() }}">レビュー投稿
 					</router-link>
@@ -123,13 +123,13 @@
 					<!-- 購入キャンセルボタン 自分が購入した商品のときに表示	-->
 					<button v-show="purchasedByUser"
 									@click="cancel"
-									class="c-btn c-btn--white p-product-detail__btn">購入キャンセル
+									class="c-btn c-btn--white p-productDetail__btn">購入キャンセル
 					</button>
 					
 					
 					<!-- 論理削除された商品を完全削除するボタン	-->
 					<button v-show="isShopUser && product.deleted_at"
-									class="c-btn c-btn--white p-product-detail__btn--delete"
+									class="c-btn c-btn--white p-productDetail__btn__delete"
 									@click="forceDelete">完全に削除
 					</button>
 					
@@ -141,12 +141,12 @@
 				</div>
 				
 				<!-- 商品の詳細	-->
-				<div class="p-product-detail__detail">{{ product.detail }}</div>
+				<div class="p-productDetail__detail">{{ product.detail }}</div>
 				
 				
 				<!-- twitterシェアボタン(自分の商品のときは表示しない) -->
 				<!-- todo: URL修正 -->
-				<div class="p-product-detail__twitter-container"
+				<div class="p-productDetail__twitterContainer"
 						 v-show="!product.is_my_product">
 					<social-sharing url="localhost:8000/products/48"
 													v-show="isLogin"
@@ -161,10 +161,10 @@
 				</div>
 				
 				<!-- 出品者の他の商品-->
-				<div class="c-title p-product-detail__title"
+				<div class="c-title p-productDetail__title"
 						 v-show="otherProducts.length > 0">この出品者の他の商品
 				</div>
-				<div class="p-product-detail__products-container">
+				<div class="p-productDetail__productsContainer">
 					<Product v-show="!loading"
 									 v-for="product in otherProducts"
 									 v-if="!product.is_purchased"
@@ -173,10 +173,10 @@
 				</div>
 				
 				<!-- この商品に似た商品-->
-				<div class="c-title p-product-detail__title"
+				<div class="c-title p-productDetail__title"
 						 v-show="similarProducts.length > 0">同じカテゴリーの商品
 				</div>
-				<div class="p-product-detail__products-container">
+				<div class="p-productDetail__productsContainer">
 					<Product v-show="!loading"
 									 v-for="product in similarProducts"
 									 v-if="!product.is_purchased"
@@ -185,8 +185,8 @@
 				</div>
 				
 				<!-- TOPへ	-->
-				<transition name="c-go-top">
-					<button class="c-go-top"
+				<transition name="c-goTop">
+					<button class="c-goTop"
 									v-show="buttonActive"
 									@click="returnTop">TOP</button>
 				</transition>

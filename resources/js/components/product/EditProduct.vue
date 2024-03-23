@@ -1,42 +1,42 @@
 <template>
 	<main class="l-main">
-		<div class="p-product-form">
+		<div class="p-productForm">
 			<!-- タイトル -->
-			<h2 class="c-title p-product-form__title">商品の編集</h2>
-			<div class="p-product-form__background">
+			<h2 class="c-title p-productForm__title">商品の編集</h2>
+			<div class="p-productForm__background">
 				<!-- ローディング -->
 				<Loading color="#f96204" v-show="loading"/>
 				
-				<form class="p-product-form__form"
+				<form class="p-productForm__form"
 							v-show="!loading"
 							@submit.prevent="update">
 					
 					<!-- 画像	-->
 					<div class="u-p-relative">
-						<label class="p-product-form__label-img"
-									 :class="{ 'p-product-form__label-img__err': errors.image,
-									  				 'p-product-form__img--enter': isEnter
+						<label class="p-productForm__label-img"
+									 :class="{ 'p-productForm__label-img__err': errors.image,
+									  				 'p-productForm__img--enter': isEnter
 									 }"
 									 @dragenter="dragEnter"
 									 @dragleave="dragLeave"
 									 @dragover.prevent
 									 @drop.stop="dropFile">
-							<span class="p-product-form__label-text"
+							<span class="p-productForm__label-text"
 										v-if="!preview">ドラッグ&ドロップ<br>またはファイルを選択
 							</span>
 							<input type="file"
-										 class="p-product-form__img"
+										 class="p-productForm__img"
 										 @change="onFileChange">
-							<output class="p-product-form__output"
+							<output class="p-productForm__output"
 											v-if="preview">
 								<img :src="preview"
-										 class="p-product-form__output-img"
+										 class="p-productForm__output-img"
 										 alt="">
 							</output>
 							<img :src="product.image"
 									 v-if="!preview"
 									 alt=""
-									 class="p-product-form__img p-product-form__img--edit">
+									 class="p-productForm__img p-productForm__img__edit">
 						</label>
 					</div>
 					<!-- エラーメッセージ	-->
@@ -49,10 +49,10 @@
 					
 					<!-- カテゴリー -->
 					<label for="category_id"
-								 class="c-label p-product-form__label">カテゴリー
+								 class="c-label p-productForm__label">カテゴリー
 					</label>
-					<select class="c-select p-product-form__input"
-									:class="{ 'c-select__err': errors.category_id }"
+					<select class="c-select p-productForm__input"
+									:class="{ 'c-select--err': errors.category_id }"
 									id="category_id"
 									v-model="product.category_id">
 						<option value="" disabled>カテゴリーを選択してください</option>
@@ -70,11 +70,11 @@
 					
 					<!-- 商品名	-->
 					<label for="name"
-								 class="c-label p-product-form__label">商品名
+								 class="c-label p-productForm__label">商品名
 					</label>
 					<input type="text"
-								 class="c-input p-product-form__input"
-								 :class="{ 'c-input__err': errors.name || maxCounter(product.name,50)}"
+								 class="c-input p-productForm__input"
+								 :class="{ 'c-input--err': errors.name || maxCounter(product.name,50)}"
 								 id="name"
 								 v-model="product.name"
 								 placeholder="商品の名前を入力してください">
@@ -100,9 +100,9 @@
 					</div>
 					
 					<!-- 商品の内容	-->
-					<label for="detail" class="c-label p-product-form__label u-mt0">商品の内容</label>
-					<textarea	class="c-input p-product-form__textarea"
-										 :class="{ 'c-input__err': errors.detail || maxCounter(product.detail, 255) }"
+					<label for="detail" class="c-label p-productForm__label u-mt0">商品の内容</label>
+					<textarea	class="c-input p-productForm__textarea"
+										 :class="{ 'c-input--err': errors.detail || maxCounter(product.detail, 255) }"
 										 id="detail"
 										 v-model="product.detail"
 										 placeholder="商品の内容を入力してください"
@@ -131,17 +131,17 @@
 					<!-- 賞味期限は変更できないようにする(不正防止)-->
 					
 					<!-- 金額	-->
-					<label for="price" class="c-label p-product-form__label u-mt0">金額</label>
+					<label for="price" class="c-label p-productForm__label u-mt0">金額</label>
 					<div class="u-d-flex">
 						<input type="text"
-									 class="c-input p-product-form__input p-product-form__input--yen"
-									 :class="{ 'c-input__err': errors.price || errorMessage }"
+									 class="c-input p-productForm__input p-productForm__input__yen"
+									 :class="{ 'c-input--err': errors.price || errorMessage }"
 									 id="price"
 									 v-model="product.price"
 									 @input="validatePrice"
 									 placeholder="1000">
-						<div class="p-product-form__yen"
-								 :class="{ 'p-product-form__yen__err': errors.price || errorMessage }">円</div>
+						<div class="p-productForm__yen"
+								 :class="{ 'p-productForm__yen--err': errors.price || errorMessage }">円</div>
 					</div>
 					<div class="u-d-flex u-space-between">
 						<!-- エラーメッセージ（フロントエンド） -->
@@ -159,14 +159,14 @@
 						</div>
 					</div>
 					
-					<div class="p-product-form__btn-container">
+					<div class="p-productForm__btnContainer">
 						<!-- 削除ボタン	-->
-						<button class="c-btn c-btn--white p-product-form__btn"
+						<button class="c-btn c-btn--white p-productForm__btn"
 										@click="deleteProduct"
 										type="button">削除する
 						</button>
 						<!-- 更新ボタン -->
-						<button class="c-btn p-product-form__btn p-product-form__btn--update"
+						<button class="c-btn p-productForm__btn p-productForm__btn--update"
 										type="submit">更新する
 						</button>
 					</div>
