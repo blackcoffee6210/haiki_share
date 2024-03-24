@@ -51,7 +51,7 @@
 						</div>
 						
 						<!-- 名前	-->
-						<label for="name" class="c-label p-editProfile__label">
+						<label for="name" class="c-label p-editProfile__label u-mt0">
 							<span v-show="user.group === 1">お名前</span>
 							<span v-show="user.group === 2">コンビニ名</span>
 						</label>
@@ -74,7 +74,7 @@
 							<div v-if="errors">
 								<div v-for="msg in errors.name"
 										 :key="msg"
-										 class="p-error">
+										 class="p-error u-mb20">
 									{{ msg }}
 								</div>
 							</div>
@@ -88,7 +88,7 @@
 						
 						<!-- 支店名	-->
 						<div v-if="isShopUser">
-							<label for="branch" class="c-label p-editProfile__label">支店名</label>
+							<label for="branch" class="c-label p-editProfile__label u-mt0">支店名</label>
 							<input v-model="user.branch"
 										 type="text"
 										 id="branch"
@@ -104,7 +104,7 @@
 								<div v-if="errors">
 									<div v-for="msg in errors.branch"
 											 :key="msg"
-											 class="p-error">
+											 class="p-error u-mb20">
 										{{ msg }}
 									</div>
 								</div>
@@ -117,7 +117,7 @@
 						
 						<!-- 住所	-->
 						<div v-if="isShopUser">
-							<label for="address" class="c-label p-editProfile__label">住所</label>
+							<label for="address" class="c-label p-editProfile__label u-mt0">住所</label>
 							<input v-model="user.address"
 										 type="text"
 										 id="address"
@@ -133,7 +133,7 @@
 								<div v-if="errors">
 									<div v-for="msg in errors.address"
 											 :key="msg"
-											 class="p-error">
+											 class="p-error u-mb20">
 										{{ msg }}
 									</div>
 								</div>
@@ -144,33 +144,8 @@
 							</div>
 						</div>
 						
-						<!-- メール	-->
-						<!--<label for="email" class="c-label p-editProfile__label">Eメール</label>-->
-						<!--<input v-model="user.email"-->
-						<!--			 type="text"-->
-						<!--			 id="email"-->
-						<!--			 class="c-input p-editProfile__input"-->
-						<!--			 :class="{ 'c-input&#45;&#45;err': errors.email ||-->
-						<!--			 					 maxCounter(user.email, 255)-->
-						<!--			 }"-->
-						<!--			 placeholder="mail@haiki_share.com">-->
-						<!--<div class="u-d-flex u-space-between">-->
-						<!--	&lt;!&ndash; エラーメッセージ（フロントエンド） &ndash;&gt;-->
-						<!--	<div v-if="maxCounter(user.email, 255) && !errors.email" class="p-error">-->
-						<!--		<p>Eメールアドレスは255文字以下で指定してください</p>-->
-						<!--	</div>-->
-						<!--	&lt;!&ndash; エラーメッセージ（バックエンド）	&ndash;&gt;-->
-						<!--	<div v-if="errors">-->
-						<!--		<div v-for="msg in errors.email"-->
-						<!--				 :key="msg"-->
-						<!--				 class="p-error">-->
-						<!--			{{ msg }}-->
-						<!--		</div>-->
-						<!--	</div>-->
-						<!--</div>-->
-						
 						<!-- 自己紹介文	-->
-						<label for="introduce" class="c-label p-editProfile__label">自己紹介文</label>
+						<label for="introduce" class="c-label p-editProfile__label u-mt0">自己紹介文</label>
 						<textarea v-model="user.introduce"
 											id="introduce"
 											class="c-input p-editProfile__textarea"

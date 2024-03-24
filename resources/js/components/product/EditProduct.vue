@@ -13,15 +13,15 @@
 					
 					<!-- 画像	-->
 					<div class="u-p-relative">
-						<label class="p-productForm__label-img"
-									 :class="{ 'p-productForm__label-img__err': errors.image,
+						<label class="p-productForm__labelImg"
+									 :class="{ 'p-productForm__labelImg--err': errors.image,
 									  				 'p-productForm__img--enter': isEnter
 									 }"
 									 @dragenter="dragEnter"
 									 @dragleave="dragLeave"
 									 @dragover.prevent
 									 @drop.stop="dropFile">
-							<span class="p-productForm__label-text"
+							<span class="p-productForm__imgTxt"
 										v-if="!preview">ドラッグ&ドロップ<br>またはファイルを選択
 							</span>
 							<input type="file"
@@ -195,7 +195,13 @@ export default {
 	data() {
 		return {
 			loading: false, //ローディングを表示するかどうかを判定するプロパティ
-			product: {},    //商品情報
+			product: { //商品情報
+				image: '',
+				category_id: '',
+				name: '',
+				detail: '',
+				price: '',
+			},
 			categories: [], //カテゴリー
 			preview: null,  //画像プレビュー
 			errors: {       //エラーメッセージを格納するプロパティ
