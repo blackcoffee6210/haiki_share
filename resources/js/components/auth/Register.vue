@@ -38,10 +38,10 @@
 							 v-model="registerForm.name"
 							 :placeholder="name">
 				<!-- エラーメッセージ -->
-				<div class="u-d-flex u-space-between u-mb20">
+				<div class="u-d-flex u-space-between">
 					<!-- エラーメッセージ（フロントエンド） -->
 					<div v-if="maxCounter(registerForm.name,50) && !registerErrors"
-							 class="p-error">
+							 class="p-error u-mb20">
 						<p class="">
 							<span v-show="registerForm.group === 1">お名前</span>
 							<span v-show="registerForm.group === 2">コンビニ名</span>
@@ -49,9 +49,17 @@
 						</p>
 					</div>
 					<!-- エラーメッセージ（バックエンド）	-->
-					<div v-if="registerErrors && registerErrors.name" class="p-error">
-						<div v-for="msg in registerErrors.name" :key="msg">{{ msg }}</div>
+					<div v-if="registerErrors && registerErrors.name" class="p-error u-mb20">
+						<div v-for="msg in registerErrors.name" :key="msg">
+							<!--{{ msg }}-->
+							{{ msg.replace('お名前', registerForm.group === 1 ? 'お名前' : 'コンビニ名') }}
+						</div>
 					</div>
+					<div v-if="!registerErrors"></div>
+					<!-- 文字数カウンター -->
+					<p class="c-counter" :class="{ 'c-counter--err': maxCounter(registerForm.name,50) }">
+						{{ registerForm.name.length }}/50
+					</p>
 				</div>
 				
 				<!-- 支店（コンビニユーザーなら表示） -->
