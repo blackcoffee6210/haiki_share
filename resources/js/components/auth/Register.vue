@@ -51,7 +51,6 @@
 					<!-- エラーメッセージ（バックエンド）	-->
 					<div v-if="registerErrors && registerErrors.name" class="p-error u-mb20">
 						<div v-for="msg in registerErrors.name" :key="msg">
-							<!--{{ msg }}-->
 							{{ msg.replace('お名前', registerForm.group === 1 ? 'お名前' : 'コンビニ名') }}
 						</div>
 					</div>

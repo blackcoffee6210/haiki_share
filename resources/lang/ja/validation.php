@@ -157,7 +157,7 @@ return [
 		'image'                     => '画像',
 		'category_id'               => 'カテゴリー',
 		'detail'                    => '商品の内容',
-		'price'                     => '料金',
+		'price'                     => '金額',
 		'expire'                    => '賞味期限',
 		'current_password'          => '現在のパスワード',
 		'new_password'              => '新しいパスワード',

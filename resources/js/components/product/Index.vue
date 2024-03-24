@@ -151,7 +151,6 @@
 				<div class="p-sidebarIndex__cardContainer">
 					<div class="c-card p-sidebarIndex__card u-space-between"
 							 v-for="product in recommendProducts"
-							 v-show="!product.is_purchased"
 							 :key="product.id">
 						<router-link class="c-card__link"
 												 :to="{ name: 'product.detail', params: { id: product.id.toString() }}" />

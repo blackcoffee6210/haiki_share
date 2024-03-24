@@ -145,14 +145,14 @@
 					<label for="price" class="c-label p-productForm__label">金額</label>
 					<div class="u-d-flex">
 						<input type="text"
-									 class="c-input p-productForm__input p-productForm__input--yen"
+									 class="c-input p-productForm__input p-productForm__input__yen"
 									 :class="{ 'c-input--err': errors.price || errorMessage }"
 									 id="price"
 									 v-model="product.price"
 									 @input="validatePrice"
 									 placeholder="50〜10000円の間で入力してください">
 						<div class="p-productForm__yen"
-								 :class="{'p-productForm__yen__err': errors.price || errorMessage }">円
+								 :class="{'p-productForm__yen--err': errors.price || errorMessage }">円
 						</div>
 					</div>
 					<div class="u-d-flex u-space-between">
