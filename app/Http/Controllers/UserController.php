@@ -159,8 +159,12 @@ class UserController extends Controller
 
 		try {
 			$emailUpdate = EmailUpdate::where('token', $token)
-				->where('created_at', '>', now()->subMinutes(60))
+				->where('created_at', '>', now()->subMinutes(1)) //60分
 				->firstOrFail();
+
+//			$emailUpdate = EmailUpdate::where('token', $token)
+//				->where('created_at', '>', now()->subMinutes(1)) //60分
+//				->firstOrFail();
 
 			$user = User::findOrFail($emailUpdate->user_id); //ユーザーが見つからない場合はここで例外が発生
 			$user->email = $emailUpdate->new_email;
@@ -173,7 +177,8 @@ class UserController extends Controller
 
 		}catch (ModelNotFoundException $e) {
 			DB::rollBack();
-			return response()->json(['message' => '無効なリクエストです'], 404);
+			Log::error('このリクエストは期限切れか、無効です: '. $e->getMessage());
+			return response()->json(['message' => 'このリクエストは期限切れか、無効です'], 404);
 
 		}catch (\Exception $e) {
 			DB::rollBack();

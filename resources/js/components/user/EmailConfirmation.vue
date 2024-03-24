@@ -5,10 +5,16 @@
 </template>
 
 <script>
-import { OK } from "../../util";
+import {NOT_FOUND, OK, UNPROCESSABLE_ENTITY} from "../../util";
+import { mapGetters } from "vuex";
 
 export default {
 	name: "EmailConfirmation",
+	computed: {
+		...mapGetters({
+			userId: 'auth/userId' //ユーザーID
+		})
+	},
 	data() {
 		return {
 			message: '',
@@ -21,11 +27,17 @@ export default {
 				
 				if(response.status === OK) {
 					this.$store.commit('message/setContent', { content: 'Eメールを更新しました！' }); //メッセージ登録
-					this.$router.push({ name: 'user.mypage', params: { id: this.id }}); //マイページに移動する
+					this.$router.push({ name: 'user.mypage', params: { id: this.userId }}); //マイページに移動する
 				}
 				
 			}catch(error) {
-				console.error('Eメールの更新に失敗しました。もう一度試してください。');
+				if(error.response && error.response.status === NOT_FOUND) {
+					alert('リンクの有効期限が切れています。もう一度メール更新手続きを行ってください。');
+					this.$router.push({ name: 'user.editEmail', params: { id: this.userId } });
+				
+				}else {
+					console.error('Eメールの更新に失敗しました。もう一度試してください。');
+				}
 			}
 		}
 	},

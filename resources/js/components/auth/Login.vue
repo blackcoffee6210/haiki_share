@@ -39,12 +39,8 @@
 						<p class="">Eメールは255文字以下で指定してください</p>
 					</div>
 					<!-- エラーメッセージ（バックエンド）	-->
-					<div v-if="loginErrors">
-						<div v-for="msg in loginErrors.email"
-								 :key="msg"
-								 class="p-error">
-							{{ msg }}
-						</div>
+					<div v-if="loginErrors && loginErrors.email" class="p-error">
+						<div v-for="msg in loginErrors.email" :key="msg">{{ msg }}</div>
 					</div>
 				</div>
 				
@@ -68,12 +64,8 @@
 						<p class="">パスワードは255文字以下で指定してください</p>
 					</div>
 					<!-- エラーメッセージ（バックエンド）	-->
-					<div v-if="loginErrors">
-						<div v-for="msg in loginErrors.password"
-								 :key="msg"
-								 class="p-error">
-							{{ msg }}
-						</div>
+					<div v-if="loginErrors && loginErrors.password" class="p-error">
+						<div v-for="msg in loginErrors.password" :key="msg">{{ msg }}</div>
 					</div>
 				</div>
 				

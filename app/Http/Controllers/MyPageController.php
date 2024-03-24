@@ -97,13 +97,14 @@ class MyPageController extends Controller
 	public function canceled() //キャンセルした商品を5件取得（利用者）
 	{
 		try {
-			$user = $this->getUserOrFail();
-			$products = $user->products()->whereHas('cancels', function($q) use ($user) {
-				$q->where('cancel_user_id', $user->id);
+			$products =  Product::whereHas('cancels', function($q) {
+				$q->where('cancel_user_id', Auth::id());
 			})->take(5)->get();
+			Log::info('キャンセルした商品取得成功', ['products_count' => count($products)]);
 			return response($products, 200);
 
 		}catch(\Exception $e) {
+			Log::error('キャンセルした商品取得中にエラー発生', ['message' => $e->getMessage()]);
 			return $this->handleException($e, 'canceled');
 		}
 	}

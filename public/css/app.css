@@ -1153,6 +1153,15 @@ body {
   margin-right: 10px;
 }
 
+.p-emailConfirm {
+  width: 680px;
+  margin: 0 auto;
+}
+.p-emailConfirm__title {
+  text-align: center;
+  margin-top: 200px;
+}
+
 .p-error {
   color: #ff5252;
   margin-top: 5px;
