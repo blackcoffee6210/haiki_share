@@ -44,10 +44,7 @@
 						</div>
 						<!-- エラーメッセージ	-->
 						<div v-if="errors">
-							<div v-for="msg in errors.image"
-									 :key="msg"
-									 class="p-error">{{ msg }}
-							</div>
+							<div v-for="msg in errors.image" :key="msg" class="p-error">{{ msg }}</div>
 						</div>
 						
 						<!-- 名前	-->
@@ -61,9 +58,10 @@
 									 :class="{ 'c-input--err': errors.name || maxCounter(user.name,50)}"
 									 v-model="user.name"
 									 :placeholder="placeholderText">
+						
 						<div class="u-d-flex u-space-between">
 							<!-- エラーメッセージ（フロントエンド） -->
-							<div v-if="maxCounter(user.name, 50) && !errors.name" class="p-error">
+							<div v-if="maxCounter(user.name, 50) && !errors.name" class="p-error u-mb20">
 								<p>
 									<span v-show="user.group === 1">お名前</span>
 									<span v-show="user.group === 2">コンビニ名</span>
@@ -72,11 +70,7 @@
 							</div>
 							<!-- エラーメッセージ（バックエンド）	-->
 							<div v-if="errors">
-								<div v-for="msg in errors.name"
-										 :key="msg"
-										 class="p-error u-mb20">
-									{{ msg }}
-								</div>
+								<div v-for="msg in errors.name" :key="msg" class="p-error u-mb20">{{ msg }}</div>
 							</div>
 							<!-- 文字数カウンター -->
 							<p class="c-counter" :class="{ 'c-counter--err': maxCounter(user.name,50) }">
@@ -97,16 +91,12 @@
 										 placeholder="渋谷支店">
 							<div class="u-d-flex u-space-between">
 								<!-- エラーメッセージ（フロントエンド） -->
-								<div v-if="maxCounter(user.branch, 50) && !errors.branch" class="p-error">
+								<div v-if="maxCounter(user.branch, 50) && !errors.branch" class="p-error u-mb20">
 									<p>支店名は50文字以下で指定してください</p>
 								</div>
 								<!-- エラーメッセージ（バックエンド）	-->
 								<div v-if="errors">
-									<div v-for="msg in errors.branch"
-											 :key="msg"
-											 class="p-error u-mb20">
-										{{ msg }}
-									</div>
+									<div v-for="msg in errors.branch" :key="msg" class="p-error u-mb20">{{ msg }}</div>
 								</div>
 								<!-- 文字数カウンター -->
 								<p class="c-counter" :class="{ 'c-counter--err': maxCounter(user.branch,50) }">
@@ -126,16 +116,12 @@
 										 placeholder="渋谷１丁目">
 							<div class="u-d-flex u-space-between">
 								<!-- エラーメッセージ（フロントエンド） -->
-								<div v-if="maxCounter(user.address, 255) && !errors.address" class="p-error">
+								<div v-if="maxCounter(user.address, 255) && !errors.address" class="p-error u-mb20">
 									<p>住所は255文字以下で指定してください</p>
 								</div>
 								<!-- エラーメッセージ（バックエンド）	-->
 								<div v-if="errors">
-									<div v-for="msg in errors.address"
-											 :key="msg"
-											 class="p-error u-mb20">
-										{{ msg }}
-									</div>
+									<div v-for="msg in errors.address" :key="msg" class="p-error u-mb20">{{ msg }}</div>
 								</div>
 								<!-- 文字数カウンター -->
 								<p class="c-counter" :class="{ 'c-counter--err': maxCounter(user.address,255) }">
@@ -158,11 +144,7 @@
 							</div>
 							<!-- エラーメッセージ（バックエンド）	-->
 							<div v-if="errors">
-								<div v-for="msg in errors.introduce"
-										 :key="msg"
-										 class="p-error">
-									{{ msg }}
-								</div>
+								<div v-for="msg in errors.introduce" :key="msg" class="p-error">{{ msg }}</div>
 							</div>
 							<!-- 文字数カウンター -->
 							<p class="c-counter" :class="{ 'c-counter--err': maxCounter(user.introduce,255) }">
@@ -214,7 +196,6 @@ export default {
 				name: '',     //ユーザー名またはコンビニ名
 				branch: '',   //支店名（コンビニユーザー）
 				address: '',  //住所（コンビニユーザー）
-				email: '',    //Eメール
 				introduce: '' //自己紹介文
 			},
 			errors: {       //エラーメッセージ
@@ -222,7 +203,6 @@ export default {
 				name: null,
 				branch: null,
 				address: null,
-				email: null,
 				introduce: null
 			},
 			isEnter: false, //画像のクラスバインドを行う
@@ -285,7 +265,6 @@ export default {
 						name: response.data.name || '',
 						branch: response.data.branch || '',
 						address: response.data.address || '',
-						email: response.data.email || '',
 						introduce: response.data.introduce || '',
 					};
 					
@@ -330,7 +309,6 @@ export default {
 				formData.append('name',      this.user.name);
 				formData.append('branch',    this.user.branch);
 				formData.append('address',   this.user.address);
-				formData.append('email',     this.user.email);
 				formData.append('introduce', this.user.introduce);
 				
 				const response = await axios.post(`/api/users/${this.id}/updateProfile`, formData); //API通信

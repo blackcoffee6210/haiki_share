@@ -161,23 +161,6 @@ class ReviewController extends Controller
 		}
 	}
 
-//	public function reviewedByUser(string $receiver_id) //ログインユーザーがレビューしたかどうか
-//	{
-//		try {
-//			$sender_id = Auth::id(); // 現在ログインしているユーザーIDを取得
-//			$isReviewed = Review::where('receiver_id', $receiver_id)
-//								->where('sender_id', $sender_id)
-//								->exists(); // 指定した受信者に対するレビューが存在するかチェック
-//
-//			return response()->json(['isReviewed' => $isReviewed]);
-//		} catch (\Exception $e) { // 例外が発生した場合の処理
-//
-//			Log::error('レビュー状態の確認中にエラーが発生しました: ' . $e->getMessage());
-//			return response()->json(['error' => 'レビュー状態の確認中にエラーが発生しました'], 500);
-//		}
-//	}
-
-	// `ReviewController` 内に新しいメソッドを追加
 	public function reviewedByUser($user_id)
 	{
 		// ユーザーがログインしていない場合はエラーレスポンスを返す

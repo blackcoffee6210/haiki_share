@@ -56,6 +56,8 @@ class UserController extends Controller
 
 	public function updateProfile(UpdateUser $request) //プロフィール更新
 	{
+		DB::beginTransaction(); //トランザクション開始
+
 		try {
 			$user = User::find($request->id); //DBからユーザー情報を取得する
 			if(!$user) { //取得できなかったら
@@ -78,30 +80,19 @@ class UserController extends Controller
 				$image_path = $user->image;
 			}
 
-			$old_email = $user->getOriginal('email'); //変更前のEmailアドレスを変数に入れる
-
 			$user->image     = $image_path;
 			$user->name      = $request->name;
 			$user->branch    = $request->branch;
 			$user->address   = $request->address;
-			$user->email     = $request->email;
 			$user->introduce = $request->introduce ?? '';
 			$user->save();
 
-			if($old_email !== $request->email) { //Eメールが変更されていたら確認メールを送る
-				$params = [ //メール送信に必要な情報を用意
-					'user_id'   => Auth::id(),
-					'name'      => $user->name,
-					'old_email' => $old_email,
-					'new_email' => $user->email
-				];
+			DB::commit(); //トランザクションをコミットして変更を確定
 
-				Mail::to($old_email)->send(new UpdateEmailNotification($params));   //変更前のメールアドレスに送信
-
-				return response($user, 200);
-			}
+			return response($user, 200);
 
 		}catch (\Exception $e) {
+			DB::rollBack(); //何か問題が発生した場合は変更をロールバック
 			Log::error('プロフィール更新に失敗しました: ' . $e->getMessage()); // エラーをログに記録
 			return response()->json(['message' => 'プロフィールの更新に失敗しました。'], 500); //エラーメッセージを返す
 		}
@@ -325,6 +316,7 @@ class UserController extends Controller
 				return response()->json(['message' => 'ユーザーが見つかりません。'], 404);
 			}
 			$user->delete();
+
 			return response()->json(['message' => 'ユーザーを削除しました。'], 200);
 		} catch (\Exception $e) {
 			Log::error('ユーザー削除に失敗しました: ' . $e->getMessage());
