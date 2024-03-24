@@ -17,48 +17,82 @@
 						<input type="password"
 									 id="current_password"
 									 class="c-input p-editPassword__input"
-									 :class="{ 'c-input--err': errors.current_password }"
+									 :class="{ 'c-input--err': errors.current_password || maxCounter(passwordForm.current_password, 255) }"
 									 v-model="passwordForm.current_password"
 									 placeholder="*********">
-						<!-- エラーメッセージ	-->
-						<div v-if="errors">
-							<div v-for="msg in errors.current_password"
-									 :key="msg"
-									 class="p-error">{{ msg }}
+						
+						<div class="u-d-flex u-space-between">
+							<!-- エラーメッセージ（フロントエンド） -->
+							<div v-if="maxCounter(passwordForm.current_password, 255) && !errors.current_password" class="p-error">
+								<p class="">現在のパスワードは255文字以下で指定してください</p>
+							</div>
+							<!-- エラーメッセージ（バックエンド）	-->
+							<div v-if="errors">
+								<div v-for="msg in errors.current_password" :key="msg" class="p-error">{{ msg }}</div>
 							</div>
 						</div>
+						<!--&lt;!&ndash; エラーメッセージ	&ndash;&gt;-->
+						<!--<div v-if="errors">-->
+						<!--	<div v-for="msg in errors.current_password"-->
+						<!--			 :key="msg"-->
+						<!--			 class="p-error">{{ msg }}-->
+						<!--	</div>-->
+						<!--</div>-->
 						
 						<!-- 新しいパスワード	-->
 						<label for="new_password" class="c-label p-editPassword__label">新しいパスワード</label>
 						<input type="password"
 									 id="new_password"
 									 class="c-input p-editPassword__input"
-									 :class="{ 'c-input--err': errors.new_password }"
+									 :class="{ 'c-input--err': errors.new_password || maxCounter(passwordForm.new_password, 255) }"
 									 v-model="passwordForm.new_password"
 									 placeholder="8文字以上の半角英数字">
-						<!-- エラーメッセージ	-->
-						<div v-if="errors">
-							<div v-for="msg in errors.new_password"
-									 :key="msg"
-									 class="p-error">{{ msg }}
+						
+						<div class="u-d-flex u-space-between">
+							<!-- エラーメッセージ（フロントエンド） -->
+							<div v-if="maxCounter(passwordForm.new_password, 255) && !errors.new_password" class="p-error">
+								<p class="">新しいパスワードは255文字以下で指定してください</p>
+							</div>
+							<!-- エラーメッセージ（バックエンド）	-->
+							<div v-if="errors">
+								<div v-for="msg in errors.new_password" :key="msg" class="p-error">{{ msg }}</div>
 							</div>
 						</div>
+						<!--&lt;!&ndash; エラーメッセージ	&ndash;&gt;-->
+						<!--<div v-if="errors">-->
+						<!--	<div v-for="msg in errors.new_password"-->
+						<!--			 :key="msg"-->
+						<!--			 class="p-error">{{ msg }}-->
+						<!--	</div>-->
+						<!--</div>-->
 						
 						<!-- 新しいパスワード(確認)	-->
 						<label for="new_password-confirmation" class="c-label p-editPassword__label">新しいパスワード(確認)</label>
 						<input type="password"
 									 id="new_password-confirmation"
 									 class="c-input p-editPassword__input"
-									 :class="{ 'c-input--err': errors.new_password_confirmation }"
+									 :class="{ 'c-input--err': errors.new_password_confirmation || maxCounter(passwordForm.new_password_confirmation, 255) }"
 									 v-model="passwordForm.new_password_confirmation"
 									 placeholder="8文字以上の半角英数字">
-						<!-- エラーメッセージ	-->
-						<div v-if="errors">
-							<div v-for="msg in errors.new_password_confirmation"
-									 :key="msg"
-									 class="p-error">{{ msg }}
+						
+						<div class="u-d-flex u-space-between">
+							<!-- エラーメッセージ（フロントエンド） -->
+							<div v-if="maxCounter(passwordForm.new_password_confirmation, 255) && !errors.new_password_confirmation"
+									 class="p-error">
+								<p class="">新しいパスワード(確認)は255文字以下で指定してください</p>
+							</div>
+							<!-- エラーメッセージ（バックエンド）	-->
+							<div v-if="errors">
+								<div v-for="msg in errors.new_password_confirmation" :key="msg" class="p-error">{{ msg }}</div>
 							</div>
 						</div>
+						<!--&lt;!&ndash; エラーメッセージ	&ndash;&gt;-->
+						<!--<div v-if="errors">-->
+						<!--	<div v-for="msg in errors.new_password_confirmation"-->
+						<!--			 :key="msg"-->
+						<!--			 class="p-error">{{ msg }}-->
+						<!--	</div>-->
+						<!--</div>-->
 						
 						<!-- ボタン	-->
 						<div class="p-editPassword__btnContainer">
@@ -109,6 +143,9 @@ export default {
 		}
 	},
 	methods: {
+		maxCounter(content, maxValue) { //カウンターの文字数上限
+			return content.length > maxValue;
+		},
 		async update() { //パスワード更新処理
 			this.loading = true; //ローディングを表示する
 			

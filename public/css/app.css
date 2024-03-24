@@ -923,7 +923,7 @@ body {
   background: #fff;
 }
 .p-editEmail__form {
-  width: 60%;
+  width: 65%;
   height: 472px;
   margin-left: auto;
   margin-right: auto;
@@ -974,7 +974,7 @@ body {
   background: #fff;
 }
 .p-editPassword__form {
-  width: 60%;
+  width: 65%;
   height: 472px;
   margin-left: auto;
   margin-right: auto;
@@ -2013,7 +2013,7 @@ body {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  margin-top: 10px;
+  margin-top: 5px;
 }
 .p-product__btn {
   width: 100%;
@@ -3651,6 +3651,7 @@ body {
   }
 }
 .p-top__review {
+  height: 287px;
   margin-right: 20px;
 }
 @media screen and (max-width: 450px) {

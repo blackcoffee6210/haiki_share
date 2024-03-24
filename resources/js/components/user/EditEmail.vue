@@ -22,11 +22,11 @@
 						<div class="u-d-flex u-space-between">
 							<!-- エラーメッセージ（フロントエンド） -->
 							<div v-if="maxCounter(email, 255) && !errors.email" class="p-error">
-								<p class="u-mb20">Eメールは255文字以下で指定してください</p>
+								<p class="">Eメールは255文字以下で指定してください</p>
 							</div>
 							<!-- エラーメッセージ（バックエンド）	-->
 							<div v-if="errors">
-								<div v-for="msg in errors.email" :key="msg" class="p-error u-mb20">{{ msg }}</div>
+								<div v-for="msg in errors.email" :key="msg" class="p-error">{{ msg }}</div>
 							</div>
 						</div>
 						

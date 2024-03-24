@@ -25,12 +25,20 @@ class UpdateUser extends FormRequest
      */
     public function rules()
     {
-    	return [
-    		'image'     => 'nullable',
+    	$rules = [
+		    'image'     => 'nullable',
 		    'name'      => 'required|string|max:50',
-		    'branch'    => 'sometimes|required|string|max:50',
-		    'address'   => 'sometimes|required|string|max:255',
 		    'introduce' => 'nullable|string|max:255'
 	    ];
+
+	    if ($this->input('group') == 2) { //コンビニユーザー(groupが2)の場合は、branchとaddressを必須にする
+		    $rules['branch']  = 'required|string|max:50';
+		    $rules['address'] = 'required|string|max:255';
+	    } else if($this->input('group') == 1) { //利用者ユーザー(groupが1)の場合は、branchとaddressをnullableにする
+		    $rules['branch']  = 'nullable|string|max:50';
+		    $rules['address'] = 'nullable|string|max:255';
+	    }
+
+    	return $rules;
     }
 }

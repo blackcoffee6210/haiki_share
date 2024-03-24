@@ -66,11 +66,9 @@ class UserController extends Controller
 
 			if($request->file('image')) { //画像が送信されていたらバリデーションを行う
 				$request->validate([ 'image' => 'file|mimes:jpg,jpeg,png' ]);
-				$original_name = $request->file('image')
-										 ->getClientOriginalName(); //formDataから画像の名前を取得する
+				$original_name = $request->file('image')->getClientOriginalName(); //formDataから画像の名前を取得する
 				$file_name     = date('Ymd_His'). '_'. $original_name; //保存する画像名を作成
-				$image_path    = $request->file('image')
-										 ->storeAs('public/images', $file_name); //名前を変更して保存
+				$image_path    = $request->file('image')->storeAs('public/images', $file_name); //名前を変更して保存
 				$image_path    = str_replace( //HTML出力用の整形とパスの修正
 					'public/images/',
 					'/storage/images/',
@@ -150,12 +148,8 @@ class UserController extends Controller
 
 		try {
 			$emailUpdate = EmailUpdate::where('token', $token)
-				->where('created_at', '>', now()->subMinutes(1)) //60分
+				->where('created_at', '>', now()->subMinutes(1)) //60分 todo: 60分に修正する
 				->firstOrFail();
-
-//			$emailUpdate = EmailUpdate::where('token', $token)
-//				->where('created_at', '>', now()->subMinutes(1)) //60分
-//				->firstOrFail();
 
 			$user = User::findOrFail($emailUpdate->user_id); //ユーザーが見つからない場合はここで例外が発生
 			$user->email = $emailUpdate->new_email;
@@ -178,7 +172,7 @@ class UserController extends Controller
 		}
 	}
 
-	public function updatePassword(UpdatePassword $request) //パスワード変更
+	public function updatePassword(UpdatePassword $request, $id) //パスワード変更
 	{
 		try {
 			$user = Auth::user();

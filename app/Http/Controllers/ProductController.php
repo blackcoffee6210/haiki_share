@@ -66,7 +66,7 @@ class ProductController extends Controller
 		}
 	}
 
-	public function ranking() //お気に入りが多い５件を取得(おすすめ商品)
+	public function ranking() //未購入のお気に入りが多い５件を取得(おすすめ商品)
 	{
 		try {
 			$products = Product::whereDoesntHave('history')
@@ -79,19 +79,6 @@ class ProductController extends Controller
 			return $this->handleException($e, 'fetchFailed');
 		}
 	}
-//	public function ranking() //お気に入りが多い５件を取得(おすすめ商品)
-//	{
-//		try {
-//			$products = Product::withCount('likes')
-//							   ->where('is_purchased', false)
-//							   ->orderByDesc('likes_count')
-//							   ->take(5)
-//							   ->get(); //購入されていない（is_purchasedがfalse）商品のみ取得
-//			return $products;
-//		} catch (\Exception $e) {
-//			return $this->handleException($e, 'fetchFailed');
-//		}
-//	}
 
 	public function prefecture() //出品したユーザーの都道府県IDを取得
 	{

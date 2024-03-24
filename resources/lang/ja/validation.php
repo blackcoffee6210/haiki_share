@@ -32,7 +32,7 @@ return [
 	],
 	'boolean'              => ':attributeは、trueかfalseを指定してください。',
 //	'confirmed'            => ':attributeと、確認フィールドとが、一致していません。',
-	'confirmed'            => ':attributeと:attribute(確認)が一致していません。',
+	'confirmed'            => ':attributeと:attribute(確認)が一致しません。',
 	'date'                 => ':attributeには有効な日付を指定してください。',
 	'date_equals'          => ':attributeには、:dateと同じ日付けを指定してください。',
 	'date_format'          => ':attributeは:format形式で指定してください。',
@@ -81,7 +81,7 @@ return [
 	'max'                  => [
 		'numeric' => ':attributeには、:max以下の数字を指定してください。',
 		'file'    => ':attributeには、:max kB以下のファイルを指定してください。',
-		'string'  => ':attributeは、:max文字以下で指定してください。',
+		'string'  => ':attributeは:max文字以下で指定してください。',
 		'array'   => ':attributeは:max個以下指定してください。',
 	],
 	'mimes'                => ':attributeには:valuesタイプのファイルを指定してください。',

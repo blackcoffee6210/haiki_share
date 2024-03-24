@@ -9,36 +9,19 @@
 								 				}}" />
 		
 		<div class="p-review__userInfo">
-			<!-- 利用者ユーザーの画像	-->
+			<!-- アイコン -->
 			<img class="c-icon p-review__icon"
 					 :src="review.sender_image"
-					 v-show="isShopUser"
 					 v-if="review.sender_image"
 					 alt="">
 			<!-- no-img -->
 			<img class="c-icon p-review__icon"
 					 src="/storage/images/no-image.png"
-					 v-show="isShopUser"
-					 v-else
-					 alt="">
-			<!-- コンビニユーザーの画像	-->
-			<img class="c-icon p-review__icon"
-					 :src="review.receiver_image"
-					 v-show="!isShopUser"
-					 v-if="review.receiver_image"
-					 alt="">
-			<!-- no-img -->
-			<img class="c-icon p-review__icon"
-					 src="/storage/images/no-image.png"
-					 v-show="!isShopUser"
 					 v-else
 					 alt="">
 			<div>
 				<!-- レビュー相手の名前	-->
-				<div class="p-review__name">
-					<span v-show="isShopUser">{{ review.sender_name }}</span>
-					<span v-show="!isShopUser">{{ review.receiver_name }}</span>
-				</div>
+				<div class="p-review__name">{{ review.sender_name }}</div>
 				<!-- ユーザーの評価 -->
 				<div class="p-review__recommendation">{{ review.recommend }}</div>
 			</div>

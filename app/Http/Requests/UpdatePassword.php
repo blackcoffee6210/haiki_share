@@ -41,6 +41,11 @@ class UpdatePassword extends FormRequest
 				&& !$this->input('current_password') == '') {
 				$validator->errors()->add('current_password', '現在のパスワードが違います');
 			}
+
+
+			if(Hash::check($this->input('new_password'), $auth->password)) { //新しいパスワードが現在のパスワードと同じであればエラー
+				$validator->errors()->add('new_password', '新しいパスワードが現在のパスワードと同じです。');
+			}
 		});
 	}
 }

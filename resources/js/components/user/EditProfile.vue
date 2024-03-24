@@ -47,7 +47,7 @@
 							<div v-for="msg in errors.image" :key="msg" class="p-error">{{ msg }}</div>
 						</div>
 						
-						<!-- 名前	-->
+						<!-- 名前(コンビニ名)	-->
 						<label for="name" class="c-label p-editProfile__label u-mt0">
 							<span v-show="user.group === 1">お名前</span>
 							<span v-show="user.group === 2">コンビニ名</span>
@@ -70,7 +70,10 @@
 							</div>
 							<!-- エラーメッセージ（バックエンド）	-->
 							<div v-if="errors">
-								<div v-for="msg in errors.name" :key="msg" class="p-error u-mb20">{{ msg }}</div>
+								<div v-for="msg in errors.name" :key="msg" class="p-error u-mb20">
+									{{ msg.replace('お名前', user.group === 1 ? 'お名前' : 'コンビニ名') }}
+									<!--{{ msg }}-->
+								</div>
 							</div>
 							<!-- 文字数カウンター -->
 							<p class="c-counter" :class="{ 'c-counter--err': maxCounter(user.name,50) }">
@@ -307,9 +310,13 @@ export default {
 				const formData = new FormData;
 				formData.append('image',     this.user.image);
 				formData.append('name',      this.user.name);
-				formData.append('branch',    this.user.branch);
-				formData.append('address',   this.user.address);
 				formData.append('introduce', this.user.introduce);
+				formData.append('group',     this.user.group);
+				
+				if(this.user.group === 2) { //コンビニユーザー(groupが2)の場合はbranchとaddressを追加
+					formData.append('branch',  this.user.branch);
+					formData.append('address', this.user.address);
+				}
 				
 				const response = await axios.post(`/api/users/${this.id}/updateProfile`, formData); //API通信
 				

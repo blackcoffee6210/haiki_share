@@ -34,9 +34,13 @@
 							</router-link>
 							<!-- 詳細を見るボタン -->
 							<router-link class="c-btn p-product__btn"
-													 v-show="!isShopUser"
+													 v-show="product.is_purchased"
 													 :to="{ name: 'product.detail', params: { id: product.id.toString() }}">詳細を見る
 							</router-link>
+							<!--<router-link class="c-btn p-product__btn"-->
+							<!--						 v-show="!isShopUser"-->
+							<!--						 :to="{ name: 'product.detail', params: { id: product.id.toString() }}">詳細を見る-->
+							<!--</router-link>-->
 						</div>
 						<!-- キャンセルスロット -->
 						<div class="p-product__cancel"

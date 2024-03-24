@@ -320,6 +320,7 @@
     }
   }
   &__review {
+    height: 287px;
     margin-right: $space_xl;
     @include mq() {
       width: 70%;
