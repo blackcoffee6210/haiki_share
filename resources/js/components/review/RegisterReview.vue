@@ -29,7 +29,7 @@
 					
 					<!-- ユーザーの評価 -->
 					<div>ユーザーの評価</div>
-					<div class="p-reviewForm__recommendation__container">
+					<div class="p-reviewForm__recommendation__container" v-if="recommendations.length > 0">
 						<input type="radio"
 									 :id="'recommend' + recommendations[0].id"
 									 class="p-reviewForm__recommendation__input"
@@ -176,7 +176,7 @@ export default {
 				title: null,
 				detail: null
 			},
-			recommendations: {},
+			recommendations: [],
 			reviewForm: {              //レビューフォーム
 				sender_id: null,         //送信者のユーザーid
 				receiver_id: null,       //受信者のユーザーid
@@ -206,27 +206,17 @@ export default {
 				console.error('購入履歴の確認中にエラーが発生しました:', error);
 			}
 		},
-		async checkReviewedByUser() { //レビュー投稿状況の確認
-			try {
-				const response = await axios.get(`/api/reviews/${this.reviewForm.receiver_id}/reviewedByUser`);
-				this.reviewedByUser = response.data.isReviewed;
-				
-				if (response.data.isReviewed) {
-					alert('既にこの出品者にはレビューを投稿しています。');
-					this.$router.push({ name: 'index' }); // 例: トップページにリダイレクト
-				}
-			} catch (error) {
-				console.error('レビュー投稿状況の確認中にエラーが発生しました', error);
-			}
-		},
 		async getShopUser() { //商品idを元に出品ユーザーを取得
 			try {
 				const response = await axios.get(`/api/users/${this.p_id}/shopUser`); //API通信
 				
 				if(response.status === OK) { //成功
 					this.reviewForm.shopUser    = response.data[0];                 //出品者の情報
+					console.log(this.reviewForm.shopUser);
 					this.reviewForm.sender_id   = this.userId;                      //送信者（レビュー投稿者）のユーザーid
 					this.reviewForm.receiver_id = this.reviewForm.shopUser.user_id; //受信者（出品者）のユーザーid
+					
+					this.getReviewedByUser(); //成功後に呼び出す
 					
 				}else { //失敗
 					this.$store.commit('error/setCode', response.status);
@@ -237,18 +227,19 @@ export default {
 				console.error('出品ユーザー取得処理中にエラーが発生しました');
 			}
 		},
-		async getReviewedByUser() { //ログインユーザーが既にレビューを投稿済みかどうか取得する
-			try {
-				const response = await axios.get(`/api/reviews/${this.reviewForm.receiver_id}/reviewedByUser`);
-				this.reviewedByUser = response.data[0] ? true : false;
-				
-				if(this.reviewedByUser) { //既にレビューしていたら商品一覧画面に遷移する
-					this.$router.push({name: 'index'});
-					console.log('既にレビュー済みです。');
+		async getReviewedByUser() { //レビュー投稿状況の確認
+			if(this.reviewForm.receiver_id) {
+				try {
+					const response = await axios.get(`/api/reviews/${this.reviewForm.receiver_id}/reviewedByUser`);
+					this.reviewedByUser = response.data.isReviewed;
+					console.log(response.data)
+					if (this.reviewedByUser) {
+						alert('既にこの出品者にはレビューを投稿しています。');
+						this.$router.push({ name: 'index' }); // 例: トップページにリダイレクト
+					}
+				} catch (error) {
+					console.error('レビュー投稿状況の確認中にエラーが発生しました', error);
 				}
-				
-			}catch (error) {
-				console.error('レビュー状態取得中にエラーが発生しました', error);
 			}
 		},
 		async getRecommendation() { //ユーザー評価取得
@@ -294,17 +285,15 @@ export default {
 			}
 		}
 	},
-	watch: {
-		$route: {
-			async handler() {
-				this.checkReviewedByUser();
-				this.checkPurchased();
-				this.getShopUser();
-				this.getReviewedByUser();
-				this.getRecommendation();
-			},
-			immediate: true
+	mounted() {
+		if(!this.p_id) {
+			console.error("商品IDが指定されていません。");
+			// 適切なエラーハンドリングやリダイレクト処理
+			return;
 		}
+		this.checkPurchased();
+		this.getShopUser();
+		this.getRecommendation();
 	},
 }
 </script>

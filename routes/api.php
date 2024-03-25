@@ -76,13 +76,12 @@ Route::get('/mypage/wasReviewed',  'MyPageController@wasReviewed');  //投稿さ
 // Review
 //=================================================================
 Route::post('/reviews',                      'ReviewController@store');          //レビュー投稿
-//Route::get('/reviews/{r_id}/reviewedByUser', 'ReviewController@reviewedByUser'); //利用者にレビューされたかどうか
 Route::get('/reviews/{r_id}/otherProducts',  'ReviewController@otherProducts');  //コンビニユーザーの他の商品
 Route::get('/reviews/{s_id}/{r_id}',         'ReviewController@show');           //レビュー取得
 Route::post('/reviews/update',               'ReviewController@update');         //レビュー更新
 Route::delete('/reviews/{s_id}/{r_id}',      'ReviewController@destroy');        //レビュー削除
 Route::get('/reviews/topPageReview',         'ReviewController@topPageReview');  //TOPページに表示するレビューを3件取得
-Route::get('/reviews/{user_id}/reviewedByUser', 'ReviewController@reviewedByUser');  //利用者にレビューされたかどうか
+Route::get('/reviews/{r_id}/reviewedByUser', 'ReviewController@reviewedByUser');  //利用者にレビューされたかどうか
 
 
 //=================================================================

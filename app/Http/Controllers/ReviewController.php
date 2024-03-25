@@ -161,19 +161,30 @@ class ReviewController extends Controller
 		}
 	}
 
-	public function reviewedByUser($user_id)
+	public function reviewedByUser(string $r_id)
 	{
-		// ユーザーがログインしていない場合はエラーレスポンスを返す
-		if (!Auth::check()) {
-			return response()->json(['error' => 'ユーザーがログインしていません'], 401);
+		try {
+			$sender_id = Auth::id();
+			$isReviewed = Review::where('receiver_id', $r_id)
+								->where('sender_id', $sender_id)
+								->exists();
+
+			return response()->json(['isReviewed' => $isReviewed]);
+
+		} catch (\Throwable $e) { // \Exception の代わりに \Throwable を捕捉する
+			// エラーログに詳細情報を含める
+			Log::error('レビュー状態の確認中にエラーが発生しました: ', [
+				'error'      => get_class($e), // 例外のクラス名
+				'message'    => $e->getMessage(), // エラーメッセージ
+				'stackTrace' => $e->getTraceAsString(), // スタックトレース
+			]);
+
+			// クライアントには一般的なエラーメッセージを返す
+			return response()->json(['error' => '内部サーバーエラーが発生しました。'], 500);
 		}
-		$user_id = intval($user_id);
-		$logged_in_user_id = Auth::id();
-
-		$isReviewed = Review::where('receiver_id', $user_id)
-			->where('sender_id', $logged_in_user_id)
-			->exists();
-
-		return response()->json(['isReviewed' => $isReviewed]);
+// catch (\Exception $e) {
+//			Log::error('レビュー状態の確認中にエラーが発生しました: ' . $e->getMessage());
+//			return response()->json(['error' => 'レビュー状態の確認中にエラーが発生しました'], 500);
+//		}
 	}
 }
