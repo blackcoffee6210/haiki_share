@@ -10,22 +10,32 @@
 		
 		<div class="p-review__userInfo">
 			<!-- アイコン -->
-			<img class="c-icon p-review__icon"
-					 :src="review.sender_image"
-					 v-if="review.sender_image"
-					 alt="">
-			<!-- no-img -->
-			<img class="c-icon p-review__icon"
-					 src="/storage/images/no-image.png"
-					 v-else
-					 alt="">
+			<img class="c-icon p-review__icon" :src="imageSrc" alt="">
 			<div>
 				<!-- レビュー相手の名前	-->
-				<div class="p-review__name">{{ review.sender_name }}</div>
+				<div class="p-review__name">{{ reviewName }}</div>
 				<!-- ユーザーの評価 -->
 				<div class="p-review__recommendation">{{ review.recommend }}</div>
 			</div>
 		</div>
+		<!--<div class="p-review__userInfo">-->
+		<!--	&lt;!&ndash; アイコン &ndash;&gt;-->
+		<!--	<img class="c-icon p-review__icon"-->
+		<!--			 :src="review.sender_image"-->
+		<!--			 v-if="review.sender_image"-->
+		<!--			 alt="">-->
+		<!--	&lt;!&ndash; no-img &ndash;&gt;-->
+		<!--	<img class="c-icon p-review__icon"-->
+		<!--			 src="/storage/images/no-image.png"-->
+		<!--			 v-else-->
+		<!--			 alt="">-->
+		<!--	<div>-->
+		<!--		&lt;!&ndash; レビュー相手の名前	&ndash;&gt;-->
+		<!--		<div class="p-review__name">{{ review.sender_name }}</div>-->
+		<!--		&lt;!&ndash; ユーザーの評価 &ndash;&gt;-->
+		<!--		<div class="p-review__recommendation">{{ review.recommend }}</div>-->
+		<!--	</div>-->
+		<!--</div>-->
 		
 		<!-- レビュータイトル -->
 		<div class="p-review__reviewTitle">{{ review.title }}</div>
@@ -49,8 +59,15 @@ export default {
 	},
 	computed: {
 		...mapGetters({
-			isShopUser: 'auth/isShopUser', //コンビニユーザーならtrueを返す
-		})
+			userId: 'auth/userId', // ログインユーザーのIDを取得
+		}),
+		imageSrc() { //投稿者=ログインユーザーなら出品者の画像を表示、それ以外は投稿者の画像を表示
+			let image = this.review.sender_id === this.userId ? this.review.receiver_image : this.review.sender_image;
+			return image || '/storage/images/no-image.png'; //画像がなければno-imageを表示
+		},
+		reviewName() {
+			return this.review.sender_id === this.userId ? this.review.receiver_name : this.review.sender_name;
+		}
 	}
 }
 </script>
