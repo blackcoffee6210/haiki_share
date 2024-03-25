@@ -28,7 +28,7 @@
 					
 					<!-- ユーザーの評価 -->
 					<div>ユーザーの評価</div>
-					<div class="p-reviewForm__recommendation__container">
+					<div class="p-reviewForm__recommendation__container" v-if="recommendations && recommendations.length > 0">
 						<input type="radio"
 									 :id="'recommend' + recommendations[0].id"
 									 class="p-reviewForm__recommendation__input"
@@ -180,8 +180,11 @@ export default {
 	data() {
 		return {
 			loading: false, //ローディング
-			recommendations: {},
-			reviewForm: {},
+			recommendations: [],
+			reviewForm: {
+				title: '',
+				detail: ''
+			},
 			errors: {       //エラーメッセージ
 				recommendation_id: null,
 				title: null,
