@@ -250,6 +250,12 @@ class ProductController extends Controller
 	{
 		DB::beginTransaction(); //トランザクション開始
 		try {
+			// キャンセルされた商品の再購入チェック
+			$cancel = Cancel::where('product_id', $id)->where('cancel_user_id', Auth::id())->first();
+			if ($cancel) {
+				return response()->json(['message' => '一度キャンセルした商品は購入できません'], 403);
+			}
+
 			$buyer   = Auth::user();
 			$seller  = User::find($request->user_id);
 			$product = Product::find($id);
@@ -296,9 +302,12 @@ class ProductController extends Controller
 
 	public function purchasedByUser(string $p_id) //購入したユーザー取得
 	{
+		$userId = Auth::id();
+
 		try {
-			$product = History::where('product_id', $p_id)->where('buyer_id', Auth::id())->get();
-			return $product;
+			$purchased = History::where('product_id', $p_id)->where('buyer_id', $userId)->exists();
+			return response()->json($purchased);
+
 		}catch (\Exception $e) {
 			return $this->handleException($e, 'fetchFailed');
 		}
@@ -307,8 +316,8 @@ class ProductController extends Controller
 	public function canceledByUser(string $id) //ログインユーザーがキャンセルしたかを取得
 	{
 		try {
-			$product = Cancel::where('product_id', $id)->where('cancel_user_id', Auth::id())->first();
-			return $product;
+			$canceled = Cancel::where('product_id', $id)->where('cancel_user_id', Auth::id())->exists();
+			return response()->json($canceled);
 		} catch (\Exception $e) {
 			return $this->handleException($e, 'fetchFailed');
 		}
@@ -368,33 +377,27 @@ class ProductController extends Controller
 	public function isReviewed($id)
 	{
 		try {
-			$user_id = Auth::id(); // 現在のログインユーザーIDを取得
-			$product = Product::findOrFail($id); // 指定されたIDの商品を取得、存在しない場合は404エラー
+			$user_id = Auth::id(); //現在のログインユーザーIDを取得
+			if(!$user_id) {
+				return response()->json(['error' => 'ユーザーが認証されていません'], 404);
+			}
 
-			// 商品の出品者に対して、現在のログインユーザーがレビューを投稿しているかどうかをチェック
+			$product = Product::find($id); //指定されたIDの商品を取得
+			if(!$product) {
+				return response()->json(['error' => '商品が見つかりませんでした。'], 404);
+			}
+
+			//商品の出品者に対して、現在のログインユーザーがレビューを投稿しているかどうかをチェック
 			$isReviewed = Review::where('receiver_id', $product->user_id)
-				->where('sender_id', $user_id)
-				->exists();
+								->where('sender_id', $user_id)
+								->exists();
 
 			return response()->json(['isReviewed' => $isReviewed]);
+
 		} catch (\Exception $e) {
 			// 例外が発生した場合は、エラーメッセージとともに500エラーを返す
 			Log::error('レビュー状態の確認中にエラーが発生しました: ' . $e->getMessage());
 			return response()->json(['error' => 'レビュー状態の確認中にエラーが発生しました'], 500);
 		}
 	}
-//
-//
-//	public function isReviewed(string $id) { //ログインしたユーザーがレビューしたかどうか
-//		try {
-//			$review = DB::table('reviews')
-//				->join('products', 'reviews.receiver_id', '=', 'products.user_id')
-//				->where('reviews.sender_id', '=', Auth::id())
-//				->where('products.user_id', $id)
-//				->get();
-//			return $review;
-//		}catch (\Exception $e) {
-//			return $this->handleException($e, 'fetchFailed');
-//		}
-//	}
 }

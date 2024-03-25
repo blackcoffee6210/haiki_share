@@ -245,30 +245,18 @@ export default {
 		}
 	},
 	methods: {
-		async checkReviewedByUser() { //レビューしたかどうかを返す
-			if (!this.userId || !this.product.user_id) return; // ユーザーIDまたは商品の出品者IDがない場合はチェックしない
+		async getPurchasedByUser() { //ログインユーザーが商品を購入したかどうかを返す
+			if(!this.isLogin) return; //ログインしていない場合は処理を行わない
+			this.loading = true;
 			
 			try {
-				const response = await axios.get(`/api/reviews/${this.product.user_id}/reviewedByUser`);
-				if (response.status === OK) {
-					this.isReviewed = response.data.isReviewed; // レビュー投稿状況を更新
-				} else {
-					console.error('レビュー状態の取得に失敗しました。');
-				}
-			} catch (error) {
-				console.error('レビュー状態の取得中にエラーが発生しました:', error);
-			}
-		},
-		async getPurchasedByUser() { //ログインユーザーが商品を購入したかどうかを返す
-			try {
 				const response = await axios.get(`/api/products/${this.id}/purchasedByUser`);
+				this.loading = false;
 				
 				if(response.status === OK) { //成功なら
-					this.purchasedByUser = !!response.data[0];
-					
+					this.purchasedByUser = response.data;
 				}else { //失敗なら
-					this.$store.commit('error/setCode', response.status);
-					return false;
+					this.purchasedByUser = false;
 				}
 				
 			}catch(error) {
@@ -276,11 +264,13 @@ export default {
 			}
 		},
 		async getCanceledByUser() { //ログインユーザーが商品をキャンセルしたかどうかを返す
+			if(!this.isLogin) return; //ログインしていない場合は処理を行わない
+			
 			try {
 				const response = await axios.get(`/api/products/${this.id}/canceledByUser`);
 				
 				if(response.status === OK) { //成功なら
-					this.canceledByUser = !!response.data[0];
+					this.canceledByUser = response.data;
 					
 				}else { //失敗なら
 					this.$store.commit('error/setCode', response.status);
@@ -299,8 +289,6 @@ export default {
 				
 				if(response.status === OK) { //成功なら
 					this.product = response.data; //responseデータをproductプロパティに代入
-					
-					await this.checkReviewedByUser();
 					
 					if(this.product.liked_by_user) { //ログインユーザーが既に「いいね」を押していたらtrueをセット
 						this.isLike = true;
@@ -359,8 +347,12 @@ export default {
 		},
 		async onLikeClick() { //「お気に入りボタン」を押したときの処理を行うメソッド
 			
-			if(!this.isLogin && confirm('いいね機能を使うにはログインしてください')) {
-				this.$router.push({ name: 'login' }); //ログインしていない場合、ログインページに遷移
+			if(!this.isLogin) { //ログインしていない場合はアラートを表示
+				const confirmed = confirm('いいね機能を使うにはログインしてください');
+				if(confirmed) {
+					this.$router.push({name: 'login'}); //ログインしていない場合、ログインページに遷移
+				}
+				return; //「キャンセル」が選択された場合、処理をここで中断
 			}
 			
 			try {
@@ -369,11 +361,27 @@ export default {
 				}else {
 					this.like(); //いいねしていなかったらいいねをつける
 				}
-				
 			}catch(error) {
 				console.error('お気に入りの切り替えに失敗しました', error);
 			}
 		},
+		// async onLikeClick() { //「お気に入りボタン」を押したときの処理を行うメソッド
+		//
+		// 	if(!this.isLogin && confirm('いいね機能を使うにはログインしてください')) {
+		// 		this.$router.push({name: 'login'}); //ログインしていない場合、ログインページに遷移
+		// 	}
+		//
+		// 	try {
+		// 		if(this.product.liked_by_user) {
+		// 			await this.unlike(); //すでにいいねを押していたらいいねを外す
+		// 		}else {
+		// 			this.like(); //いいねしていなかったらいいねをつける
+		// 		}
+		//
+		// 	}catch(error) {
+		// 		console.error('お気に入りの切り替えに失敗しました', error);
+		// 	}
+		// },
 		async like() { //お気に入り登録メソッド
 			try {
 				const response = await axios.post(`/api/products/${this.id}/like`);
@@ -512,16 +520,20 @@ export default {
 				console.error('商品の完全削除に失敗しました。', error);
 			}
 		},
-		async getMyReview() { //レビュー投稿済みかどうか
+		async getMyReview() { //利用者ユーザーがレビュー投稿済みかどうか
+			if(this.isShopUser || !this.isLogin) return; //コンビニユーザーのまたは未ログインの場合は何もしない
+			this.loading = true;
+			
 			try {
-				const response = await axios.get(`/api/products/${this.product.user_id}/isReviewed`); //API接続
+				const response = await axios.get(`/api/products/${this.id}/isReviewed`); //API接続
+				
+				this.loading = false;
 				
 				if(response.status === OK) { //成功
 					this.isReviewed = response.data.isReviewed;
 					
 				}else { //失敗
-					this.$store.commit('error/setCode', response.status);
-					return false;
+					this.isReviewed = false;
 				}
 				
 			}catch(error) {
@@ -544,7 +556,6 @@ export default {
 	watch: {
 		$route: {
 			async handler() {
-				await this.checkReviewedByUser();
 				await this.getPurchasedByUser();
 				await this.getCanceledByUser();
 				await this.getProduct();

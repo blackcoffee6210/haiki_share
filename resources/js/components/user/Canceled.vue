@@ -34,7 +34,7 @@
 							</router-link>
 							<!-- 詳細を見るボタン -->
 							<router-link class="c-btn p-product__btn"
-													 v-show="product.is_purchased"
+													 v-show="product.is_purchased || !isShopUser"
 													 :to="{ name: 'product.detail', params: { id: product.id.toString() }}">詳細を見る
 							</router-link>
 							<!--<router-link class="c-btn p-product__btn"-->
