@@ -147,9 +147,13 @@ class UserController extends Controller
 		DB::beginTransaction();
 
 		try {
+			Log::info('confirmEmail started.', ['token' => $token]);
+
 			$emailUpdate = EmailUpdate::where('token', $token)
-				->where('created_at', '>', now()->subMinutes(1)) //60分 todo: 60分に修正する
+				->where('created_at', '>', now()->subMinutes(60)) //60分
 				->firstOrFail();
+
+			Log::info('$emailUpdateの中身: ', ['emailUpdate' => $emailUpdate]);
 
 			$user = User::findOrFail($emailUpdate->user_id); //ユーザーが見つからない場合はここで例外が発生
 			$user->email = $emailUpdate->new_email;
@@ -162,12 +166,12 @@ class UserController extends Controller
 
 		}catch (ModelNotFoundException $e) {
 			DB::rollBack();
-			Log::error('このリクエストは期限切れか、無効です: '. $e->getMessage());
+			Log::error('このリクエストは期限切れか、無効です: ', ['exception' => $e->getMessage() ]);
 			return response()->json(['message' => 'このリクエストは期限切れか、無効です'], 404);
 
 		}catch (\Exception $e) {
 			DB::rollBack();
-			Log::error('Eメールの更新処理に失敗しました: '. $e->getMessage());
+			Log::error('Eメールの更新処理に失敗しました: ', ['exception' => $e->getMessage() ]);
 			return response()->json(['message' => 'Eメールの変更に失敗しました。'], 500);
 		}
 	}

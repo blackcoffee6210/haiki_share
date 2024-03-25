@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import {NOT_FOUND, OK, UNPROCESSABLE_ENTITY} from "../../util";
+import {NOT_FOUND, OK } from "../../util";
 import { mapGetters } from "vuex";
 
 export default {
@@ -28,16 +28,14 @@ export default {
 				if(response.status === OK) {
 					this.$store.commit('message/setContent', { content: 'Eメールを更新しました！' }); //メッセージ登録
 					this.$router.push({ name: 'user.mypage', params: { id: this.userId }}); //マイページに移動する
+					
+				}else if(response.status === NOT_FOUND) {
+					alert('リンクの有効期限が切れています。もう一度メール更新手続きを行ってください。');
+					this.$router.push({ name: 'user.editEmail', params: { id: this.userId.toString() } });
 				}
 				
 			}catch(error) {
-				if(error.response && error.response.status === NOT_FOUND) {
-					alert('リンクの有効期限が切れています。もう一度メール更新手続きを行ってください。');
-					this.$router.push({ name: 'user.editEmail', params: { id: this.userId } });
-				
-				}else {
-					console.error('Eメールの更新に失敗しました。もう一度試してください。');
-				}
+				console.error('Eメールの更新に失敗しました。もう一度試してください。');
 			}
 		}
 	},
