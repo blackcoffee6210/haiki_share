@@ -24,6 +24,7 @@ class UpdateEmailNotification extends Mailable
 	public function build()
 	{
 		$url = "https://haiki-share.net/email-confirmation?token={$this->token}";
+//		$url = "http://localhost:8000/email-confirmation?token={$this->token}";
 
 		return $this->subject('Eメールアドレス更新の確認')
 					->view('emails.updateEmail')

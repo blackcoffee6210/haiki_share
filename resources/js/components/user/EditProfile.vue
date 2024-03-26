@@ -48,7 +48,7 @@
 						</div>
 						
 						<!-- 名前(コンビニ名)	-->
-						<label for="name" class="c-label p-editProfile__label u-mt0">
+						<label for="name" class="c-label p-editProfile__label">
 							<span v-show="user.group === 1">お名前</span>
 							<span v-show="user.group === 2">コンビニ名</span>
 						</label>

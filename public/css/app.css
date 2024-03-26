@@ -705,6 +705,7 @@ body {
 }
 .c-pagination--inactive {
   color: #f96204;
+  background-color: #fff;
 }
 
 .c-select {
