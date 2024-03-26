@@ -54,13 +54,14 @@
 							{{ msg.replace('お名前', registerForm.group === 1 ? 'お名前' : 'コンビニ名') }}
 						</div>
 					</div>
-					<div v-if="!registerErrors"></div>
+					<div v-else class="p-error u-mb20 u-invisible"></div>
+					<!--<div v-if="!registerErrors"></div>-->
 					<!-- 文字数カウンター -->
 					<p class="c-counter" :class="{ 'c-counter--err': maxCounter(registerForm.name,50) }">
 						{{ registerForm.name.length }}/50
 					</p>
 				</div>
-				
+
 				<!-- 支店（コンビニユーザーなら表示） -->
 				<div v-show="registerForm.group === 2">
 					<label for="branch" class="c-label p-authForm__label u-mt0">支店名</label>
@@ -83,7 +84,7 @@
 						<div v-if="registerErrors && registerErrors.branch" class="p-error u-mb20">
 							<div v-for="msg in registerErrors.branch" :key="msg">{{ msg }}</div>
 						</div>
-						<div v-if="!registerErrors"></div>
+						<div v-else class="p-error u-mb20 u-invisible"></div>
 						<!-- 文字数カウンター -->
 						<p class="c-counter"
 							 :class="{ 'c-counter--err': maxCounter(registerForm.branch,50) }">
@@ -134,7 +135,7 @@
 						<div v-if="registerErrors && registerErrors.address" class="p-error u-mb20">
 							<div v-for="msg in registerErrors.address" :key="msg">{{ msg }}</div>
 						</div>
-						<div v-if="!registerErrors"></div>
+						<div v-else class="p-error u-mb20 u-invisible"></div>
 						<!-- 文字数カウンター -->
 						<p class="c-counter"
 							 :class="{ 'c-counter--err': maxCounter(registerForm.address,255) }">
@@ -281,7 +282,9 @@ export default {
 	},
 	methods: {
 		maxCounter(content, maxValue) { //カウンターの文字数上限
-			return content.length > maxValue;
+			if(this.registerForm) {
+				return content.length > maxValue;
+			}
 		},
 		async getPrefectures() { //都道府県取得
 			try {
