@@ -96,7 +96,5 @@
       grid-template-columns: 50% 50%;
       padding-right: $space_l;
     }
-    @include mq('mon') {
-    }
   }
 }

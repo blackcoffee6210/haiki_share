@@ -40,20 +40,5 @@
       gap: $space_l;
       padding-right: $space_2xl;
     }
-    &--review {
-      width: 80%;
-      display: grid;
-      grid-template-columns: 50% 50%;
-      gap: $space_m;
-      padding-right: 12px;
-      @include mq() {
-        width: 100%;
-      }
-      @include mq('tab') {
-        width: 100%;
-        gap: $space_xl;
-        padding-right: $space_3xl;
-      }
-    }
   }
 }

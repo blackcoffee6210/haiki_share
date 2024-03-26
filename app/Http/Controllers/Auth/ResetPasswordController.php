@@ -23,22 +23,28 @@ class ResetPasswordController extends Controller
 
 	public function find($token) // トークンの有効性を確認するメソッド
 	{
-		$email = request()->query('email', '');
-		Log::info("検索されたメールアドレス: {$email}");
+		try {
+			$email = request()->query('email', '');
+			Log::info("検索されたメールアドレス: {$email}");
 
-		$user = User::where('email', $email)->first();
+			$user = User::where('email', $email)->first();
 
-		if (!$user) {
-			Log::info("ユーザーが見つかりません: {$email}");
-			return response()->json(['error' => 'ユーザーが見つかりません。'], 404);
-		}
+			if (!$user) {
+				Log::info("ユーザーが見つかりません: {$email}");
+				return response()->json(['error' => 'ユーザーが見つかりません。'], 404);
+			}
 
-		if(Password::broker()->tokenExists($user, $token)) {
-			Log::info("トークンは有効です: {$token}");
-			return response()->json(['message' => 'トークンは有効です。']);
-		} else {
-			Log::info("トークンは無効、または期限が切れています: {$token}");
-			return response()->json(['error' => 'このトークンは無効、または期限が切れています。'], 401);
+			if (Password::broker()->tokenExists($user, $token)) {
+				Log::info("トークンは有効です: {$token}");
+				return response()->json(['message' => 'トークンは有効です。']);
+			} else {
+				Log::info("トークンは無効、または期限が切れています: {$token}");
+				return response()->json(['error' => 'このトークンは無効、または期限が切れています。'], 401);
+			}
+
+		}catch (\Exception $e) {
+			Log::error("エラーが発生しました: {$e->getMessage()}");
+			return response()->json(['error' => '予期せぬエラーが発生しました。'], 500);
 		}
 	}
 
