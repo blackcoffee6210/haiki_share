@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { UNPROCESSABLE_ENTITY, OK } from "../../../util";
+import {UNPROCESSABLE_ENTITY, OK, NOT_FOUND} from "../../../util";
 import Loading from "../../Loading";
 export default {
 	name: "PassResetEmail",
@@ -84,6 +84,30 @@ export default {
 				this.loading = false; //ローディングを非表示にする
 			}
 		}
+		// async submit() { //Email送信
+		// 	this.loading = true; //ローディングを表示する
+		//
+		// 	try {
+		// 		const response = await axios.post('/api/password/email', this.passResetForm); //API通信
+		//
+		// 		if(response.status === OK) { //responseステータスがOK(成功)ならメッセージを登録
+		// 			this.$store.commit('message/setContent', {
+		// 				content: 'パスワード再設定メールを送信しました',
+		// 			});
+		// 			this.$router.push({name: 'index'}); //インデックス画面に移動する
+		//
+		// 		}else if(response.status === UNPROCESSABLE_ENTITY) { //responseステータスがUNPROCESSABLE＿ENTITY(バリデーションエラー)なら後続の処理を行う
+		// 			this.errors = response.data.errors;
+		// 			return false;
+		// 		}
+		//
+		// 	}catch (error) {
+		// 		console.error('Email送信処理中にエラーが発生しました ', error);
+		//
+		// 	}finally {
+		// 		this.loading = false; //ローディングを非表示にする
+		// 	}
+		// }
 	}
 }
 </script>

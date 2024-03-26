@@ -24,7 +24,8 @@ class ForgotPasswordController extends Controller
 		if($response == Password::RESET_LINK_SENT) { //メール送信成功
 			return response(['message' => 'パスワード再設定メールを送信しました。'], 200);
 		}else {
-			return response()->json(['message' => 'メール送信に失敗しました。指定されたメールアドレスは見つかりません。'], 422);
+//			return response()->json(['message' => 'メール送信に失敗しました。指定されたメールアドレスは見つかりません。'], 404);
+			return response()->json(['errors' => ['email' => ['メール送信に失敗しました。指定されたメールアドレスは見つかりません。']]], 422);
 		}
 	}
 }
