@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreReview;
 use App\Http\Requests\UpdateReview;
 use App\Mail\ReviewedReceiverNotification;
-use App\Mail\reviewedSenderNotification;
+use App\Mail\ReviewedSenderNotification;
 use App\Product;
 use App\Recommendation;
 use App\Review;
