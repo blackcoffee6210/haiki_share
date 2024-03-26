@@ -145,7 +145,6 @@
 				
 				
 				<!-- twitterシェアボタン(自分の商品のときは表示しない) -->
-				<!-- todo: URL修正 -->
 				<div class="p-productDetail__twitterContainer"
 						 v-show="!product.is_my_product">
 					<social-sharing :url="url"
