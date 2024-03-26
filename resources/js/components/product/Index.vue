@@ -442,6 +442,7 @@ export default {
 		this.sortPrice      = query.sortPrice || '1';      //デフォルト値を文字列に変更
 		this.sortCategory   = query.sortCategory || '0';   //デフォルト値を文字列に変更
 		this.sortPrefecture = query.sortPrefecture || '0'; //デフォルト値を文字列に変更
+		this.currentPage    = parseInt(query.page, 10) || 1; //ページ番号をクエリから読み込む
 		
 		//初期データの読み込み
 		this.getProducts();
