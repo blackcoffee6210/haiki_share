@@ -148,7 +148,7 @@
 				<!-- todo: URL修正 -->
 				<div class="p-productDetail__twitterContainer"
 						 v-show="!product.is_my_product">
-					<social-sharing url="localhost:8000/products/48"
+					<social-sharing :url="url"
 													v-show="isLogin"
 													:title="product.name"
 													:hashtags="twitterHashTags.join(',')"
@@ -229,6 +229,7 @@ export default {
 			otherProducts: [],      //出品者の他の商品
 			similarProducts: [],    //出品した商品に似た商品
 			twitterHashTags: [],    //Twitterのハッシュタグで表示する
+			url: '',                //URL
 		}
 	},
 	computed: {
@@ -245,6 +246,12 @@ export default {
 		}
 	},
 	methods: {
+		generateUrl() {
+			if(this.product && this.product.id) { //商品がある&商品IDがあればURLを生成
+				const productId = this.product.id;
+				return `https://haiki-share.net/products/${productId}`;
+			}
+		},
 		async getPurchasedByUser() { //ログインユーザーが商品を購入したかどうかを返す
 			if(!this.isLogin) return; //ログインしていない場合は処理を行わない
 			this.loading = true;
@@ -293,6 +300,9 @@ export default {
 					if(this.product.liked_by_user) { //ログインユーザーが既に「いいね」を押していたらtrueをセット
 						this.isLike = true;
 					}
+					
+					this.url = this.generateUrl(); //TwitterのURL生成
+					
 					this.twitterHashTags.push(  //Twitterのハッシュタグに追加
 							this.product.name,
 							'HaikiShare',
